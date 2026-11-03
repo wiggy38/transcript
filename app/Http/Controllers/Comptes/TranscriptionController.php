@@ -2,38 +2,21 @@
 
 namespace App\Http\Controllers\Comptes;
 
-use App\Exceptions\ErreurVideo;
 use App\Http\Controllers\Controller;
-use App\Services\Traitement\LancerTranscription;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Transcription;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 
 /**
- * Lancement d'une transcription depuis l'application. Réservé aux comptes dont l'email
- * est vérifié (route « verified »). Seules les adresses http(s) sont acceptées : un chemin
- * de fichier local ne vient jamais du web.
+ * Page d'une transcription. Le lancement passe par le composant Livewire NouvelleTranscription ;
+ * cette page ne sert qu'à suivre le statut. Une transcription d'un autre compte renvoie 404.
  */
 class TranscriptionController extends Controller
 {
-    public function store(Request $request, LancerTranscription $lancement): RedirectResponse
+    public function show(Request $request, Transcription $transcription): View
     {
-        $donnees = $request->validate([
-            'lien' => ['required', 'string', 'max:2048', 'url:http,https'],
-            'langue' => ['nullable', 'string', 'max:10'],
-        ], [
-            'lien.required' => __('comptes.lien.vide'),
-            'lien.url' => __('comptes.lien.invalide'),
-        ]);
+        abort_unless($transcription->user_id === $request->user()->getKey(), 404);
 
-        try {
-            $lancement->lancer($request->user(), trim($donnees['lien']), $donnees['langue'] ?? null);
-        } catch (ErreurVideo $erreur) {
-            return back()->withInput()->withErrors(['lien' => $erreur->messageUtilisateur()]);
-        } catch (InvalidArgumentException) {
-            return back()->withInput()->withErrors(['lien' => __('comptes.lien.invalide')]);
-        }
-
-        return redirect()->route('tableau-de-bord')->with('statut', 'transcription-lancee');
+        return view('app.transcription', ['transcription' => $transcription]);
     }
 }

@@ -15,10 +15,10 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 
 ### F1 — Transcription depuis un lien ou un fichier
 
-- [ ] Un lien public valide de 10 minutes donne une transcription sans autre action que le lancement. *(Partiel : chaîne complète testée avec les faux services ; aucun lien réel essayé, yt-dlp absent, voir P16.)*
-- [ ] Une vidéo privée, supprimée, bloquée dans la région ou un live en cours affiche un message clair et ne décompte rien. *(Partiel : messages et motifs faits et testés, arrêt avant téléchargement pour le live ; le décompte de quota reste à écrire.)*
+- [ ] Un lien public valide de 10 minutes donne une transcription sans autre action que le lancement. *(Partiel : chaîne complète et écran de lancement testés avec les faux services ; aucun lien réel essayé, yt-dlp absent, voir P16.)*
+- [ ] Une vidéo privée, supprimée, bloquée dans la région ou un live en cours affiche un message clair et ne décompte rien. *(Partiel : messages et motifs affichés sur l'écran avant tout lancement, testés ; arrêt avant téléchargement pour le live ; le décompte de quota reste à écrire.)*
 - [ ] Un échec technique ne décompte rien du quota. *(Partiel : échec à chaque étape testé, fichiers temporaires supprimés, aucune ligne de consommation écrite ; le décompte lui-même reste à écrire, voir le point d'accroche `TranscriptionCompleted`.)*
-- [ ] Un lien déjà transcrit par le même utilisateur renvoie vers la transcription existante. *(Partiel : vérifié pour YouTube et TikTok avec identifiant connu. Un lien court `vm.tiktok.com` n'a pas d'identifiant avant résolution, donc pas de contrôle à la création, voir P32.)*
+- [ ] Un lien déjà transcrit par le même utilisateur renvoie vers la transcription existante. *(Partiel : vérifié pour YouTube et TikTok avec identifiant connu, et l'écran affiche la transcription existante avant lancement (testé). Un lien court `vm.tiktok.com` n'a pas d'identifiant avant résolution, donc pas de contrôle à la création, voir P32.)*
 
 ### F2 — Transcription horodatée avec ponctuation propre
 
@@ -58,7 +58,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 *Le cahier ne numérote pas ces règles : chacune a son test dans `tests/Feature/Comptes/`. Suite complète : 228 tests passent, 4 ignorés comme avant.*
 
 - [x] Inscription par email et mot de passe, lien de vérification envoyé. *(InscriptionTest)*
-- [x] Vérification de l'email exigée avant la première transcription (route `verified`). *(VerificationEmailTest)*
+- [x] Vérification de l'email exigée avant la première transcription (lancement Livewire et envoi de fichier). *(VerificationEmailTest, VerificationLancementTest)*
 - [x] Connexion, mot de passe oublié, nouveau mot de passe par lien. *(ConnexionTest)*
 - [x] Lien collé par un visiteur conservé pendant l'inscription et la vérification, puis repris à l'arrivée dans l'application. *(LienEnAttenteTest, dont la conservation à la connexion et la non-relance)*
 - [x] Connexion Google (Socialite), désactivée par défaut par `VOXIA_GOOGLE_LOGIN`. *(ConnexionGoogleTest)* *(Partiel : Socialite simulé, aucun essai avec un vrai client Google, voir P52.)*
@@ -81,6 +81,19 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - Langue : middleware `DefinirLangue` (langue du compte, sinon défaut de l'application). Fichiers `lang/fr/validation.php`, `passwords.php`, `auth.php` ajoutés, car le framework ne fournit que l'anglais.
 - Emails : thème Markdown `signal` (`resources/views/vendor/mail/html/themes/signal.css`), sans police externe.
 - Environnement Windows : `composer require` échoue sans `--ignore-platform-req=ext-pcntl --ignore-platform-req=ext-posix` (Horizon, P38). Le lock n'a fait qu'ajouter des paquets, aucune version existante n'a bougé.
+
+- Écran « Nouvelle transcription » (F1) : composant Livewire `App\Livewire\NouvelleTranscription` dans `resources/views/app/tableau-de-bord.blade.php`, sur la mise en page `app`. Le formulaire POST `/transcriptions` est remplacé par ce composant ; la page de statut est `/transcriptions/{id}`.
+  - Aperçu d'un lien : les métadonnées sont lues par la file (`RecupererApercu`), jamais par une requête web. L'état vit en cache 15 minutes (`voxia.apercu.cache_secondes`) et l'écran l'interroge toutes les 1,5 s tant qu'il est « en cours ». Les liens invalides sont refusés localement, sans aucune lecture.
+  - Lancement refusé, avant tout décompte, pour : aperçu non prêt, motif d'erreur de l'aperçu (privée, supprimée, région, live, échec technique), durée au-delà du plan (`trop_longue`). Le lancement exige un email vérifié, comme l'ancienne route.
+  - Langue : liste `voxia.langues_forcables` (fr, en, es, de, it, pt), défaut « détection automatique ». Proposition, à valider (P61).
+- Envoi d'un fichier de 2 Go : **envoi découpé**, pas envoi direct. Raisons : Livewire 3.8 n'envoie pas par morceaux et sa limite par défaut est de 12 Mo ; PHP est en 2 Mo par défaut ici, donc un envoi d'un seul bloc de 2 Go imposait de modifier `php.ini` sur chaque poste ; un envoi par morceaux reprend après une coupure (relance du fichier depuis le début, voir P63). Un envoi direct vers un stockage objet (URL signées) restera la bonne voie en production avec S3 : à faire quand le disque S3 est configuré.
+  - Morceaux de 1 Mo (`voxia.uploads.morceau_octets`), route `POST /televersements/morceaux` (email vérifié, `Televersement`). Le dernier morceau réassemble le fichier sous un nom nettoyé (`NomFichierAudio`), contrôle sa taille, puis supprime les morceaux. Le navigateur (`resources/js/televersement.js`) affiche la progression et ne transmet à Livewire que le nom final.
+  - Contrôles avant écriture : extension (`voxia.uploads.extensions`), taille annoncée (`voxia.uploads.max_size_mb`, 2048), nombre de morceaux cohérent, identifiant d'envoi au format UUID (sinon un chemin pourrait sortir du dossier).
+  - Un fichier reçu est relu par son nom pour le compte connecté seulement : `Televersement::cheminFichier`.
+- `QuotaService` : appelé par `LancerTranscription` avant chaque création (lien ou fichier), jamais pour une transcription déjà existante. Il autorise tout pour l'instant ; le décompte reste à écrire (F6).
+- E-mail « vidéo prête » (F1) : écouteur `PrevenirFinVideoLongue` sur `TranscriptionCompleted`, en file, seuil `voxia.notifications.long_video_email_after_seconds` (900 s). Mailable `TranscriptionPrete`, style Signal, textes dans `courriels.transcription_prete`.
+- Tests : 37 tests dans `tests/Feature/Transcriptions` (écran, envoi, e-mail, page de statut, lancement sans email vérifié). `VerificationEmailTest` adapté au composant : mêmes attentes, le lancement passe maintenant par Livewire. Suite complète : 262 tests passent, 4 ignorés comme avant.
+- Bug trouvé par l'essai réel sur serveur, et corrigé : les champs de formulaire arrivent en chaînes, la comparaison stricte du nombre de morceaux refusait donc tout envoi réel. Les tests envoient désormais des champs en chaînes, comme le navigateur.
 
 ## 4. Points ouverts
 
@@ -215,3 +228,13 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P54 — Traduction française du framework partielle (`lang/fr/validation.php`) : les règles non listées restent en anglais.
 - [ ] P55 — Emails : pas encore vus dans Mailpit ni dans une boîte réelle. Pas de pied de page légal (CGU, confidentialité, voir P10).
 - [ ] P56 — Écrans de compte non vérifiés dans un navigateur : rendu seulement contrôlé par tests (même statut que P44).
+- [ ] P57 — PostgreSQL (127.0.0.1:5433) ne répond pas sur ce poste (délai dépassé à la connexion). Tests faits sur SQLite. Le serveur de démonstration de l'écran tourne sur SQLite, file synchrone, cache et sessions en fichiers, sans modifier `.env`. À refaire sur PostgreSQL et Redis quand le service répond.
+- [ ] P58 — Rendu de l'écran à 375 px et 1440 px : non vérifié par moi (pas de contrôle visuel dans cette session). À regarder sur `http://127.0.0.1:8000/tableau-de-bord` (compte de test local, hors dépôt).
+- [ ] P59 — Morceaux orphelins : un envoi interrompu laisse son dossier de morceaux dans `storage/app/televersements`. Pas de nettoyage encore ; à rattacher à la purge de rétention (P2).
+- [ ] P60 — Fichiers importés : lus par le worker sur le même disque (P31). La rétention de 30 jours (P2) n'est pas branchée pour ces fichiers.
+- [ ] P61 — Liste des langues forçables (fr, en, es, de, it, pt) : proposition. À confirmer avec les langues réellement acceptées par ElevenLabs Scribe v2.
+- [ ] P62 — Aperçu via la file : sans worker, l'écran reste sur « Lecture des informations de la vidéo… ». Sur Windows, Horizon ne démarre pas (P38) ; il faut `php artisan queue:work` pour le voir se remplir.
+- [ ] P63 — Envoi interrompu : pas de reprise, le fichier repart du début avec un nouvel identifiant. Une reprise par morceau demanderait de garder la liste des morceaux reçus côté serveur.
+- [ ] P64 — Gratuit, vidéo de plus de 10 minutes : l'écran la refuse au lancement (`trop_longue`), comme le faisait déjà la chaîne (P34). Le cahier (F6) veut un aperçu de 10 minutes avec upgrade : à reprendre avec F6.
+- [ ] P65 — Décompte : aucune ligne `usage_records` n'est écrite par le lancement. Un échec technique ne décompte donc rien, mais parce que le décompte n'existe pas encore : le critère ne sera vraiment vérifié qu'avec F6.
+- [ ] P66 — E-mail « vidéo prête » : vérifié par tests (Mail::fake) seulement, jamais reçu dans Mailpit ni une boîte réelle (même statut que P55).

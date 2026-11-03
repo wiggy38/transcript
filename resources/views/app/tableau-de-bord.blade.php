@@ -13,16 +13,11 @@
                 <a href="{{ route('verification.notice') }}" class="text-accent hover:underline">{{ __('comptes.verification.renvoyer') }}</a>
             </p>
         @endunless
-
-        <form method="post" action="{{ route('transcriptions.store') }}" class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end" novalidate>
-            @csrf
-            <div class="min-w-0 flex-1">
-                <x-champ id="lien-transcription" name="lien" type="url" :label="__('comptes.tableau.champ')" :placeholder="'https://'"
-                    :value="old('lien')" mono required :erreur="$errors->first('lien')" />
-            </div>
-            <x-bouton type="submit" class="sm:mb-[26px]">{{ __('comptes.tableau.bouton') }}</x-bouton>
-        </form>
     </section>
+
+    <div class="mt-8">
+        <livewire:nouvelle-transcription />
+    </div>
 
     <section aria-labelledby="titre-historique" class="mt-16">
         <h2 id="titre-historique" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('comptes.tableau.historique') }}</h2>
@@ -33,7 +28,7 @@
             <ul class="mt-4 flex flex-col divide-y divide-filet rounded-panneau border border-filet bg-panneau">
                 @foreach ($transcriptions as $transcription)
                     <li class="flex flex-wrap items-center justify-between gap-4 px-5 py-4">
-                        <span class="min-w-0 truncate">{{ $transcription->titre ?? $transcription->url_origine ?? '—' }}</span>
+                        <a href="{{ route('transcriptions.show', $transcription) }}" class="min-w-0 truncate text-texte no-underline hover:text-accent">{{ $transcription->titre ?? $transcription->url_origine ?? '—' }}</a>
                         <x-badge-statut :statut="$transcription->statut" />
                     </li>
                 @endforeach

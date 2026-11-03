@@ -25,6 +25,14 @@ return [
         'ignorer' => 'Si tu n\'es pas à l\'origine de cette suppression, réponds à ce message dès que possible.',
     ],
 
+    'transcription_prete' => [
+        'objet' => 'Ta transcription est prête',
+        'titre' => 'Transcription terminée',
+        'texte' => 'Bonjour :nom, la vidéo « :titre » (:duree) est transcrite. Tu peux la lire et exporter le texte dès maintenant.',
+        'bouton' => 'Voir la transcription',
+        'ignorer' => 'Tu reçois ce message parce que tu as lancé une vidéo de plus de 15 minutes.',
+    ],
+
     'signature' => 'L\'équipe Voxia',
 
 ];

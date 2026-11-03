@@ -14,3 +14,10 @@ import '@fontsource/geist-mono/latin-ext-400.css';
 import '@fontsource/geist-mono/latin-ext-500.css';
 import '@fontsource/instrument-serif/latin-400-italic.css';
 import '@fontsource/instrument-serif/latin-ext-400-italic.css';
+
+// Envoi de fichiers en morceaux (écran Nouvelle transcription). Alpine est fourni par Livewire.
+import televersement from './televersement.js';
+
+document.addEventListener('alpine:init', () => {
+    window.Alpine.data('televersement', televersement);
+});

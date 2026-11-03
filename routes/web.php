@@ -5,6 +5,7 @@ use App\Http\Controllers\Comptes\GoogleController;
 use App\Http\Controllers\Comptes\LienController;
 use App\Http\Controllers\Comptes\ReglagesController;
 use App\Http\Controllers\Comptes\TableauDeBordController;
+use App\Http\Controllers\Comptes\TeleversementController;
 use App\Http\Controllers\Comptes\TranscriptionController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,10 +20,14 @@ Route::get('/auth/google/callback', [GoogleController::class, 'retour'])->name('
 Route::middleware('auth')->group(function () {
     Route::get('/tableau-de-bord', TableauDeBordController::class)->name('tableau-de-bord');
 
-    // Lancement d'une transcription : email vérifié exigé (route « verified » de Fortify).
-    Route::post('/transcriptions', [TranscriptionController::class, 'store'])
+    // Lancement : depuis l'écran Livewire NouvelleTranscription. Email vérifié exigé.
+    Route::get('/transcriptions/{transcription}', [TranscriptionController::class, 'show'])
+        ->name('transcriptions.show');
+
+    // Morceaux d'un fichier importé (2 Go par défaut, envoi découpé). Email vérifié exigé.
+    Route::post('/televersements/morceaux', [TeleversementController::class, 'morceau'])
         ->middleware('verified')
-        ->name('transcriptions.store');
+        ->name('televersements.morceau');
 
     Route::get('/reglages', [ReglagesController::class, 'afficher'])->name('reglages');
     Route::put('/reglages/langue', [ReglagesController::class, 'langue'])->name('reglages.langue');

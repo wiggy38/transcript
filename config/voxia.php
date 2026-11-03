@@ -97,7 +97,37 @@ return [
     'uploads' => [
         'extensions' => ['mp3', 'm4a', 'wav', 'mp4', 'mov', 'webm'],
         'max_size_mb' => (int) env('VOXIA_UPLOAD_MAX_SIZE_MB', 2048),
+        // Envoi découpé : taille d'un morceau, sous la limite par défaut de PHP (2 Mo).
+        'morceau_octets' => (int) env('VOXIA_UPLOAD_CHUNK_BYTES', 1024 * 1024),
+        // Dossier des morceaux et des fichiers reçus, un sous-dossier par utilisateur.
+        'dossier' => env('VOXIA_UPLOAD_DIRECTORY', storage_path('app/televersements')),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Aperçu d'un lien (titre, durée, miniature)
+    |--------------------------------------------------------------------------
+    |
+    | Les métadonnées sont lues par la file ; l'écran interroge le résultat.
+    | « cache_secondes » : durée de conservation de l'aperçu.
+    |
+    */
+
+    'apercu' => [
+        'cache_secondes' => (int) env('VOXIA_APERCU_CACHE_SECONDS', 900),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Langues forçables
+    |--------------------------------------------------------------------------
+    |
+    | Liste proposée à l'utilisateur ; la détection automatique reste le défaut.
+    | Proposition, à valider avec le moteur de transcription.
+    |
+    */
+
+    'langues_forcables' => ['fr', 'en', 'es', 'de', 'it', 'pt'],
 
     /*
     |--------------------------------------------------------------------------

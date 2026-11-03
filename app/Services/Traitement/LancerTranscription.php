@@ -10,16 +10,19 @@ use App\Exceptions\ErreurVideo;
 use App\Jobs\ProcessTranscription;
 use App\Models\Transcription;
 use App\Models\User;
+use App\Services\Quota\QuotaService;
 use InvalidArgumentException;
 
 /**
  * Crée la transcription (lien ou fichier local) et la met en file. Aucune attente
- * ici : le traitement se fait dans la tâche ProcessTranscription.
+ * ici : le traitement se fait dans la tâche ProcessTranscription. Le quota est vérifié
+ * avant toute création, jamais pour une transcription déjà existante.
  */
 final class LancerTranscription
 {
     public function __construct(
         private readonly VideoFetcher $videos,
+        private readonly QuotaService $quotas,
     ) {}
 
     /**
@@ -54,6 +57,8 @@ final class LancerTranscription
             }
         }
 
+        $this->quotas->verifier($utilisateur);
+
         $transcription = $utilisateur->transcriptions()->create([
             'source' => $lien->source,
             'url_origine' => $lien->url,
@@ -78,6 +83,8 @@ final class LancerTranscription
         if (! in_array($extension, (array) config('voxia.uploads.extensions'), true)) {
             throw new ErreurVideo(MotifEchec::FormatNonSupporte, '.'.$extension);
         }
+
+        $this->quotas->verifier($utilisateur);
 
         $transcription = $utilisateur->transcriptions()->create([
             'source' => SourceTranscription::Fichier,

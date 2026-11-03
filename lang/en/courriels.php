@@ -25,6 +25,14 @@ return [
         'ignorer' => 'If you did not request this deletion, reply to this message as soon as possible.',
     ],
 
+    'transcription_prete' => [
+        'objet' => 'Your transcription is ready',
+        'titre' => 'Transcription complete',
+        'texte' => 'Hello :nom, the video “:titre” (:duree) is transcribed. You can read it and export the text now.',
+        'bouton' => 'View the transcription',
+        'ignorer' => 'You are receiving this message because you started a video longer than 15 minutes.',
+    ],
+
     'signature' => 'The Voxia team',
 
 ];
