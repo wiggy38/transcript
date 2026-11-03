@@ -154,4 +154,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P33 — Étape « paragraphes » : aucun échec métier possible, donc pas de test d'échec pour elle (seulement le succès).
 - [ ] P34 — Durée maximale sur le plan gratuit : la chaîne applique `max_video_seconds` (10 min en Gratuit). Confirmer que refuser une vidéo de 15 min en Gratuit est bien le comportement voulu (cahier F1 parle d'un email au-delà de 15 min, pas d'un refus).
 - [ ] P35 — Noms de files codés en dur dans `config/horizon.php` (`high`, `default`), à garder synchronisés avec `voxia.traitement.files`.
-- [ ] P36 — Aucun essai réel : yt-dlp absent et pas de lien de test fourni (même point que P16). La chaîne réelle (yt-dlp, FFmpeg, ElevenLabs) n'a été exercée que par ses propres tests existants et les faux services.
+- [x] P36 — Essai réel de la chaîne sur 5 liens publics (3 YouTube, 2 TikTok) : 5 transcriptions terminées, voir `docs/mesures-etape-1.md`. Reste à faire : vidéo d'une heure (compte Pro), vidéo privée, vrai lien cassé, et un échantillon d'environ 60 liens pour valider la cible de 95 %.
+- [ ] P37 — `voxia:transcribe` plante au premier suivi : import `Illuminate\Support\Facades\Sleep` inexistant (à remplacer par `Illuminate\Support\Sleep`). Les transcriptions aboutissent quand même dans la file.
+- [ ] P38 — Horizon ne démarre pas sous Windows (`pcntl_async_signals` absente). Tests faits avec `queue:work`. Horizon à vérifier sous Linux ou WSL.
+- [ ] P39 — Une erreur « Object of class SourceTranscription could not be converted to string » est apparue une fois dans le worker, sans trace dans `laravel.log`. Non reproduite ; à surveiller.
