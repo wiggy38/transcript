@@ -198,6 +198,18 @@ return [
         'ffmpeg_binary' => env('FFMPEG_BINARY', 'ffmpeg'),
         'ffprobe_binary' => env('FFPROBE_BINARY', 'ffprobe'),
         'proxy_url' => env('VOXIA_PROXY_URL'),
+        'download' => [
+            // Délai maximal par appel yt-dlp (secondes).
+            'timeout_seconds' => (int) env('VOXIA_DOWNLOAD_TIMEOUT_SECONDS', 900),
+            'metadata_timeout_seconds' => (int) env('VOXIA_METADATA_TIMEOUT_SECONDS', 60),
+            // Tentatives par téléchargement, uniquement sur erreur technique.
+            'attempts' => (int) env('VOXIA_DOWNLOAD_ATTEMPTS', 3),
+            // Dossier parent des dossiers temporaires, un par tâche.
+            'temp_directory' => env('VOXIA_TEMP_DIRECTORY', storage_path('app/temp')),
+        ],
+        // Mise à jour quotidienne de yt-dlp (heure locale, format HH:MM).
+        'ytdlp_update_at' => env('VOXIA_YTDLP_UPDATE_AT', '04:00'),
+        'ytdlp_update_timeout_seconds' => (int) env('VOXIA_YTDLP_UPDATE_TIMEOUT_SECONDS', 300),
     ],
 
 ];

@@ -16,8 +16,8 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 ### F1 — Transcription depuis un lien ou un fichier
 
 - [ ] Un lien public valide de 10 minutes donne une transcription sans autre action que le lancement.
-- [ ] Une vidéo privée, supprimée, bloquée dans la région ou un live en cours affiche un message clair et ne décompte rien.
-- [ ] Un échec technique ne décompte rien du quota.
+- [ ] Une vidéo privée, supprimée, bloquée dans la région ou un live en cours affiche un message clair et ne décompte rien. *(Partiel : messages et motifs faits et testés ; le décompte de quota reste à écrire.)*
+- [ ] Un échec technique ne décompte rien du quota. *(Partiel : aucune tentative sur erreur définitive, dossier nettoyé ; le décompte reste à écrire.)*
 - [ ] Un lien déjà transcrit par le même utilisateur renvoie vers la transcription existante.
 
 ### F2 — Transcription horodatée avec ponctuation propre
@@ -61,6 +61,16 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - MP3 inclus dans tous les plans ; mention Pro reformulée « tous les exports, dont PDF et VTT » (cahier §7).
 - Base de données : PostgreSQL (demande du projet ; le cahier indique « MySQL ou PostgreSQL »).
 - File : Redis + Laravel Horizon, une tâche par vidéo (cahier §8).
+- Récupération des vidéos (F1, étape 1) derrière `App\Contracts\VideoFetcher`, implémentée par `YtDlpVideoFetcher` (yt-dlp via `Process`, arguments en tableau).
+  - Reconnaissance locale (`ReconnaissanceLien`) : YouTube (watch, youtu.be, Shorts, m.youtube.com) et TikTok (`/@user/video/ID`, `vm.tiktok.com`). Seuls `http` et `https` sont acceptés ; un lien sans schéma est refusé.
+  - Lien court `vm.tiktok.com` : l'identifiant reste nul jusqu'aux métadonnées ; le dédoublonnage (F1, 4e critère) devra donc se faire après résolution.
+  - Métadonnées avec `--skip-download` ; statut live lu dans `is_live` ou `live_status`.
+  - Téléchargement : `-f bestaudio` (pas de conversion, le MP3 est l'étape F3), `--match-filter !is_live` pour ne jamais capturer un live en cours, `--no-playlist`, dossier temporaire par tâche (`voxia.tools.download.temp_directory`), supprimé en cas d'échec.
+  - Délais, tentatives et proxy lus dans `config/voxia.php`. Les tentatives ne visent que les erreurs techniques.
+  - Traduction des erreurs (`TraducteurErreurYtdlp`) : seules les lignes `ERROR:` sont analysées, pour qu'un titre de vidéo ne fausse pas le motif. Par défaut : `erreur_technique`. La sortie brute va dans les journaux, jamais à l'écran.
+  - Commande `voxia:ytdlp-update` (`yt-dlp --update`), planifiée chaque jour à `VOXIA_YTDLP_UPDATE_AT` (04:00 par défaut).
+  - Tests : 40 tests (15 formes de liens, traduction des sorties dans `tests/fixtures/ytdlp`, processus simulés). Aucun appel réseau.
+  - **Fixtures non enregistrées** : yt-dlp n'était pas installé au moment de l'écriture. Les sorties de `tests/fixtures/ytdlp` sont écrites à partir des messages connus de yt-dlp (voir P17).
 - Modèle de données posé (étape 1) : 7 migrations, 7 modèles, 7 enums PHP, factories.
   - Enums : valeurs stockées en `varchar` avec cast Eloquent (pas de type `enum` PostgreSQL, pour ajouter une valeur sans migration lourde). Valeurs en français, comme dans le cahier.
   - Colonnes du domaine en français (`est_apercu`, `motif_echec`…), colonnes techniques en anglais (`user_id`, `created_at`).
@@ -91,3 +101,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P13 — Recherche sans accents ni racinisation : la configuration `simple` ne reconnaît ni « école » pour « ecole », ni les formes conjuguées. Pistes : configuration `french` / `english` selon la langue détectée, ou extension `unaccent`. À trancher avec des données réelles.
 - [ ] P14 — Statuts de l'analyse de script (`en_attente`, `analyse`, `termine`, `echec`) : proposés par le modèle, absents du cahier. À valider.
 - [ ] P15 — Langue de l'interface par défaut (`fr` dans le modèle, `APP_LOCALE=en` dans `.env`). À confirmer avec P5.
+- [ ] P16 — Essai réel de F1 non fait : yt-dlp absent de la machine et téléchargement refusé. Reste à lancer `voxia:ytdlp-update` puis une lecture de métadonnées sur un lien YouTube public et un lien TikTok public. Les liens de test n'ont pas été fournis (placeholders restés dans la demande).
+- [ ] P17 — Fixtures yt-dlp écrites à partir des messages connus, pas enregistrées. À remplacer par de vraies sorties (privée, supprimée, région, live).
+- [ ] P18 — Vidéos avec restriction d'âge ou connexion requise : classées en erreur technique (aucun décompte). Faut-il un motif dédié ?
+- [ ] P19 — Erreurs génériques « Video unavailable » ou « not available » : classées en erreur technique par prudence. Affiner quand une vraie sortie sera enregistrée.

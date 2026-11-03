@@ -1,0 +1,4 @@
+[youtube] Vb2nF6gYjKo: Downloading webpage
+[youtube] Vb2nF6gYjKo: Downloading m3u8 information
+[info] Vb2nF6gYjKo: Downloading 1 format(s): 251
+[download] Vb2nF6gYjKo has been filtered out: does not pass filter (!is_live), skipping

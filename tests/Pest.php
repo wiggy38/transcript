@@ -48,3 +48,23 @@ function something()
 {
     // ..
 }
+
+/*
+|--------------------------------------------------------------------------
+| Helpers vidéo
+|--------------------------------------------------------------------------
+*/
+
+/** Contenu d'une sortie yt-dlp ou d'un JSON de métadonnées enregistré dans tests/fixtures/ytdlp. */
+function fixtureYtdlp(string $nom): string
+{
+    return file_get_contents(base_path('tests/fixtures/ytdlp/'.$nom));
+}
+
+/** Valeur qui suit une option dans un tableau d'arguments de commande. */
+function argumentApresOption(array $commande, string $option): ?string
+{
+    $position = array_search($option, $commande, true);
+
+    return $position === false ? null : ($commande[$position + 1] ?? null);
+}
