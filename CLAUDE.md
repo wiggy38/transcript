@@ -1,47 +1,69 @@
-<laravel-boost-guidelines>
-# Laravel Application
+# Voxia — instructions pour Claude
 
-This repository contains a Laravel application. Complete the following setup before working on the user's request.
+## 1. Projet
 
-## Prerequisites
+Voxia transforme une vidéo YouTube, une vidéo TikTok ou un fichier en transcription horodatée, sous-titres (SRT, VTT) et MP3.
+Cibles principales : créateurs de contenu, marketeurs et e-commerçants.
+MVP = fonctionnalités F1 à F7 (cahier §3). Plans : Gratuit, Pro, Pack (Business reporté en V2).
+Interface en français (tutoiement) et en anglais.
 
-Verify that PHP and Composer are available:
+## 2. Documents de référence
 
-```sh
-php -v
-composer -V
-```
+- `docs/cahier-des-charges.md` : **source de vérité** (fonctionnalités, critères, planning §9).
+- `docs/voxia-offre.md` : plans, quotas, prix.
+- `docs/maquette-signal.html` : référence visuelle (page d'accueil, puis écrans de l'app).
+- `docs/voxia-personas.md` : personas.
+- `docs/avancement.md` : suivi des critères, décisions, points ouverts.
 
-If either command is unavailable, detect the user's operating system and install the prerequisites with the appropriate command:
+En cas de conflit entre documents, le cahier prime. Pour une valeur absente des documents, demander.
 
-macOS:
+## 3. Stack
 
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/mac/8.5)"
-```
+- Laravel (PHP), PostgreSQL.
+- Redis + Laravel Horizon pour les files.
+- Livewire 3 + Alpine.js ; Tailwind CSS v4 ; Vite.
+- Pest pour les tests.
+- yt-dlp (téléchargement), FFmpeg (extraction MP3).
+- ElevenLabs Scribe v2 (transcription).
+- API Claude (analyse de script, F7).
+- Filament pour `/admin`.
+- Paiement : Stripe ou Paddle, à décider (cahier §8).
 
-Windows PowerShell:
+## 4. Charte Signal (cahier §7)
 
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://php.new/install/windows/8.5'))
-```
+- Fond `#0E0F0E` ; panneaux `#121311` à `#161715` ; filets `#2A2B28`.
+- Texte `#EDEBE6` ; secondaire `#BDBBB5` ; discret `#8B8A85`.
+- Accent `#FF6A3D` (variantes testées : `#C8F542`, `#6E8BFF`).
+- Typographies : Geist (texte, titres) ; Geist Mono (horodatages, libellés, données) ; Instrument Serif italique (mots d'accent des titres).
+- Rayons : 4 px boutons, 6 px champs, 10 px panneaux.
+- Animations : onde audio, bandeau défilant, frappe du texte ; toutes coupées sous `prefers-reduced-motion`.
 
-Linux:
+## 5. Règles de code
 
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.5)"
-```
+- Toute valeur métier (quotas, durées, prix, tailles, limites) vient de `config/voxia.php`, jamais en dur.
+- Chaque service externe (téléchargement, transcription, analyse de script, paiement) est appelé derrière une interface dans `app/Contracts`, avec une fausse implémentation pour les tests. Aucun test n'appelle une API réelle.
+- Aucune requête web n'attend un traitement : tout passe par la file.
+- Un échec technique ne décompte jamais de quota.
+- Commandes externes via le composant `Process` de Laravel, arguments échappés. Jamais `shell_exec`.
+- Textes visibles dans `lang/fr` et `lang/en`. Tutoiement en français.
+- Accessibilité : vrais boutons et labels, contraste 4,5:1, animations coupées sous `prefers-reduced-motion`.
+- Un test Pest par critère d'acceptation.
+- Avant chaque commit : `php artisan test` et `./vendor/bin/pint`.
+- Commits en français, préfixes `feat:`, `fix:` ou `chore:`.
 
-After installation, ask the user to restart their terminal. If the agent needs the restarted shell to continue, ask the user to reopen their terminal and rerun their original prompt.
+## 6. Fin de tâche
 
-## Agent Setup
+1. Mettre à jour `docs/avancement.md` : fait, critères cochés, décisions, points ouverts.
+2. Commit, avec `docs/avancement.md` inclus.
 
-Install Laravel Boost from the application root before making application changes:
+## 7. Interdits
 
-```sh
-composer require laravel/boost --dev
-php artisan boost:install
-```
+- Committer `.env` ou une clé d'API.
+- Désactiver ou supprimer un test pour le faire passer.
+- Inventer une valeur d'offre (prix, quota) ou un texte juridique définitif (CGU, confidentialité) : demander.
 
-Boost replaces these bootstrap instructions with guidelines tailored to the application. After installation, read `AGENTS.md` again and continue with the user's original request using the generated guidelines.
-</laravel-boost-guidelines>
+## 8. Commandes utiles
+
+- `php artisan test` : tests Pest.
+- `./vendor/bin/pint` : formatage (`--test` pour vérifier seulement).
+- `php artisan horizon` : worker de la file.
