@@ -1,0 +1,960 @@
+{
+    "_avertissement": "Fixture écrite à la main au format documenté de Scribe v2 : NON enregistrée (voir avancement, point P22).",
+    "language_code": "eng",
+    "language_probability": 0.95,
+    "text": "We start with a short sentence that ends right here and then keeps going with a few more words before the next stop today. Second sentence is also long enough to end the paragraph here because we have crossed the minimum number of words in total. mot1 mot2 mot3 mot4 mot5 mot6 mot7 mot8 mot9 mot10 mot11 mot12 mot13 mot14 mot15 mot16 mot17 mot18 mot19 mot20 mot21 mot22 mot23 mot24 mot25 mot26 mot27 mot28 mot29 mot30 mot31 mot32 mot33 mot34 mot35 mot36 mot37 mot38 mot39 mot40 mot41 mot42 mot43 mot44 mot45 mot46 mot47 mot48 mot49 mot50 mot51 mot52 mot53 mot54 mot55 mot56 mot57 mot58 mot59 mot60 mot61 mot62 mot63 mot64 mot65 mot66 mot67 mot68 mot69 final. Then the speaker wraps up quickly and finishes the thought in a last short clause with no break at all.",
+    "words": [
+        {
+            "text": "We",
+            "start": 0.1,
+            "end": 0.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "start",
+            "start": 0.5,
+            "end": 0.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "with",
+            "start": 0.9,
+            "end": 1.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "a",
+            "start": 1.3,
+            "end": 1.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "short",
+            "start": 1.7,
+            "end": 2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "sentence",
+            "start": 2.1,
+            "end": 2.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "that",
+            "start": 2.5,
+            "end": 2.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "ends",
+            "start": 2.9,
+            "end": 3.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "right",
+            "start": 3.3,
+            "end": 3.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "here",
+            "start": 3.7,
+            "end": 4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "and",
+            "start": 4.1,
+            "end": 4.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "then",
+            "start": 4.5,
+            "end": 4.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "keeps",
+            "start": 4.9,
+            "end": 5.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "going",
+            "start": 5.3,
+            "end": 5.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "with",
+            "start": 5.7,
+            "end": 6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "a",
+            "start": 6.1,
+            "end": 6.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "few",
+            "start": 6.5,
+            "end": 6.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "more",
+            "start": 6.9,
+            "end": 7.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "words",
+            "start": 7.3,
+            "end": 7.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "before",
+            "start": 7.7,
+            "end": 8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "the",
+            "start": 8.1,
+            "end": 8.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "next",
+            "start": 8.5,
+            "end": 8.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "stop",
+            "start": 8.9,
+            "end": 9.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "today.",
+            "start": 9.3,
+            "end": 9.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Second",
+            "start": 9.7,
+            "end": 10,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "sentence",
+            "start": 10.1,
+            "end": 10.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "is",
+            "start": 10.5,
+            "end": 10.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "also",
+            "start": 10.9,
+            "end": 11.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "long",
+            "start": 11.3,
+            "end": 11.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "enough",
+            "start": 11.7,
+            "end": 12,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "to",
+            "start": 12.1,
+            "end": 12.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "end",
+            "start": 12.5,
+            "end": 12.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "the",
+            "start": 12.9,
+            "end": 13.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "paragraph",
+            "start": 13.3,
+            "end": 13.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "here",
+            "start": 13.7,
+            "end": 14,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "because",
+            "start": 14.1,
+            "end": 14.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "we",
+            "start": 14.5,
+            "end": 14.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "have",
+            "start": 14.9,
+            "end": 15.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "crossed",
+            "start": 15.3,
+            "end": 15.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "the",
+            "start": 15.7,
+            "end": 16,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "minimum",
+            "start": 16.1,
+            "end": 16.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "number",
+            "start": 16.5,
+            "end": 16.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "of",
+            "start": 16.9,
+            "end": 17.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "words",
+            "start": 17.3,
+            "end": 17.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "in",
+            "start": 17.7,
+            "end": 18,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "total.",
+            "start": 18.1,
+            "end": 18.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot1",
+            "start": 18.5,
+            "end": 18.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot2",
+            "start": 18.9,
+            "end": 19.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot3",
+            "start": 19.3,
+            "end": 19.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot4",
+            "start": 19.7,
+            "end": 20,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot5",
+            "start": 20.1,
+            "end": 20.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot6",
+            "start": 20.5,
+            "end": 20.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot7",
+            "start": 20.9,
+            "end": 21.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot8",
+            "start": 21.3,
+            "end": 21.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot9",
+            "start": 21.7,
+            "end": 22,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot10",
+            "start": 22.1,
+            "end": 22.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot11",
+            "start": 22.5,
+            "end": 22.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot12",
+            "start": 22.9,
+            "end": 23.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot13",
+            "start": 23.3,
+            "end": 23.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot14",
+            "start": 23.7,
+            "end": 24,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot15",
+            "start": 24.1,
+            "end": 24.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot16",
+            "start": 24.5,
+            "end": 24.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot17",
+            "start": 24.9,
+            "end": 25.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot18",
+            "start": 25.3,
+            "end": 25.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot19",
+            "start": 25.7,
+            "end": 26,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot20",
+            "start": 26.1,
+            "end": 26.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot21",
+            "start": 26.5,
+            "end": 26.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot22",
+            "start": 26.9,
+            "end": 27.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot23",
+            "start": 27.3,
+            "end": 27.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot24",
+            "start": 27.7,
+            "end": 28,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot25",
+            "start": 28.1,
+            "end": 28.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot26",
+            "start": 28.5,
+            "end": 28.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot27",
+            "start": 28.9,
+            "end": 29.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot28",
+            "start": 29.3,
+            "end": 29.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot29",
+            "start": 29.7,
+            "end": 30,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot30",
+            "start": 30.1,
+            "end": 30.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot31",
+            "start": 30.5,
+            "end": 30.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot32",
+            "start": 30.9,
+            "end": 31.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot33",
+            "start": 31.3,
+            "end": 31.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot34",
+            "start": 31.7,
+            "end": 32,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot35",
+            "start": 32.1,
+            "end": 32.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot36",
+            "start": 32.5,
+            "end": 32.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot37",
+            "start": 32.9,
+            "end": 33.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot38",
+            "start": 33.3,
+            "end": 33.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot39",
+            "start": 33.7,
+            "end": 34,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot40",
+            "start": 34.1,
+            "end": 34.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot41",
+            "start": 34.5,
+            "end": 34.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot42",
+            "start": 34.9,
+            "end": 35.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot43",
+            "start": 35.3,
+            "end": 35.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot44",
+            "start": 35.7,
+            "end": 36,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot45",
+            "start": 36.1,
+            "end": 36.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot46",
+            "start": 36.5,
+            "end": 36.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot47",
+            "start": 36.9,
+            "end": 37.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot48",
+            "start": 37.3,
+            "end": 37.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot49",
+            "start": 37.7,
+            "end": 38,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot50",
+            "start": 38.1,
+            "end": 38.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot51",
+            "start": 38.5,
+            "end": 38.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot52",
+            "start": 38.9,
+            "end": 39.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot53",
+            "start": 39.3,
+            "end": 39.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot54",
+            "start": 39.7,
+            "end": 40,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot55",
+            "start": 40.1,
+            "end": 40.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot56",
+            "start": 40.5,
+            "end": 40.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot57",
+            "start": 40.9,
+            "end": 41.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot58",
+            "start": 41.3,
+            "end": 41.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot59",
+            "start": 41.7,
+            "end": 42,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot60",
+            "start": 42.1,
+            "end": 42.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot61",
+            "start": 42.5,
+            "end": 42.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot62",
+            "start": 42.9,
+            "end": 43.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot63",
+            "start": 43.3,
+            "end": 43.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot64",
+            "start": 43.7,
+            "end": 44,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot65",
+            "start": 44.1,
+            "end": 44.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot66",
+            "start": 44.5,
+            "end": 44.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot67",
+            "start": 44.9,
+            "end": 45.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot68",
+            "start": 45.3,
+            "end": 45.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "mot69",
+            "start": 45.7,
+            "end": 46,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "final.",
+            "start": 46.1,
+            "end": 46.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Then",
+            "start": 46.5,
+            "end": 46.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "the",
+            "start": 46.9,
+            "end": 47.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "speaker",
+            "start": 47.3,
+            "end": 47.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "wraps",
+            "start": 47.7,
+            "end": 48,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "up",
+            "start": 48.1,
+            "end": 48.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "quickly",
+            "start": 48.5,
+            "end": 48.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "and",
+            "start": 48.9,
+            "end": 49.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "finishes",
+            "start": 49.3,
+            "end": 49.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "the",
+            "start": 49.7,
+            "end": 50,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "thought",
+            "start": 50.1,
+            "end": 50.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "in",
+            "start": 50.5,
+            "end": 50.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "a",
+            "start": 50.9,
+            "end": 51.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "last",
+            "start": 51.3,
+            "end": 51.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "short",
+            "start": 51.7,
+            "end": 52,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "clause",
+            "start": 52.1,
+            "end": 52.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "with",
+            "start": 52.5,
+            "end": 52.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "no",
+            "start": 52.9,
+            "end": 53.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "break",
+            "start": 53.3,
+            "end": 53.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "at",
+            "start": 53.7,
+            "end": 54,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "all.",
+            "start": 54.1,
+            "end": 54.4,
+            "type": "word",
+            "logprob": -0.1
+        }
+    ]
+}

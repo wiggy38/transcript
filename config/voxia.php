@@ -175,6 +175,45 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Transcription (moteur derrière App\Contracts\TranscriptionEngine)
+    |--------------------------------------------------------------------------
+    |
+    | Limites lues dans la documentation ElevenLabs (Speech-to-Text) : 3 Go et
+    | 10 heures par fichier en mode standard. Les tentatives ne servent qu'aux
+    | échecs d'appel ; une limite locale dépassée échoue sans appel.
+    |
+    */
+
+    'transcription' => [
+        'attempts' => (int) env('VOXIA_TRANSCRIPTION_ATTEMPTS', 3),
+        'retry_delay_ms' => (int) env('VOXIA_TRANSCRIPTION_RETRY_DELAY_MS', 2000),
+        'timeout_seconds' => (int) env('VOXIA_TRANSCRIPTION_TIMEOUT_SECONDS', 900),
+        'connect_timeout_seconds' => (int) env('VOXIA_TRANSCRIPTION_CONNECT_TIMEOUT_SECONDS', 10),
+        'max_size_mb' => (int) env('VOXIA_TRANSCRIPTION_MAX_SIZE_MB', 3072),
+        'max_duration_seconds' => (int) env('VOXIA_TRANSCRIPTION_MAX_DURATION_SECONDS', 10 * 3600),
+        'error_body_log_chars' => 500,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paragraphes (regroupement des mots transcrits)
+    |--------------------------------------------------------------------------
+    |
+    | Valeurs proposées, à valider (avancement, point P12). Une pause égale ou
+    | supérieure à « pause_ms » coupe toujours le paragraphe. Une fin de phrase
+    | ne coupe qu'à partir de « fin_de_phrase_min_mots ». « max_mots » coupe
+    | un discours sans pause.
+    |
+    */
+
+    'paragraphes' => [
+        'pause_ms' => (int) env('VOXIA_PARAGRAPHE_PAUSE_MS', 1200),
+        'fin_de_phrase_min_mots' => (int) env('VOXIA_PARAGRAPHE_FIN_DE_PHRASE_MIN_MOTS', 20),
+        'max_mots' => (int) env('VOXIA_PARAGRAPHE_MAX_MOTS', 60),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Surveillance
     |--------------------------------------------------------------------------
     |

@@ -22,6 +22,8 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 
 ### F2 — Transcription horodatée avec ponctuation propre
 
+*(Partiel : moteur et regroupement en paragraphes faits et testés ; affichage, lecteur, recherche et copie restent à faire.)*
+
 - [ ] Le clic sur un horodatage positionne la lecture à 1 seconde près.
 - [ ] Une transcription de 3 heures s'affiche et reste fluide au défilement.
 
@@ -71,6 +73,13 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
   - Commande `voxia:ytdlp-update` (`yt-dlp --update`), planifiée chaque jour à `VOXIA_YTDLP_UPDATE_AT` (04:00 par défaut).
   - Tests : 40 tests (15 formes de liens, traduction des sorties dans `tests/fixtures/ytdlp`, processus simulés). Aucun appel réseau.
   - **Fixtures non enregistrées** : yt-dlp n'était pas installé au moment de l'écriture. Les sorties de `tests/fixtures/ytdlp` sont écrites à partir des messages connus de yt-dlp (voir P17).
+- Transcription (F2) derrière `App\Contracts\TranscriptionEngine`, implémentée par `ElevenLabsScribeEngine` (POST `/v1/speech-to-text`, multipart, `model_id` `scribe_v2`, `timestamps_granularity` `word`, en-tête `xi-api-key`). Langue forcée envoyée en `language_code`, sinon absente (détection automatique).
+  - Résultat neutre : `TranscriptionBrute` (langue détectée, `MotTranscrit` en millisecondes, texte, coût). Seuls les éléments `word` deviennent des mots ; `spacing` et `audio_event` sont écartés.
+  - Tout échec d'appel (clé, quota, taille, délai, réseau, serveur, réponse illisible) est retenté `voxia.transcription.attempts` fois (3), puis devient `erreur_technique`. Choix : les erreurs permanentes sont aussi retentées, comme le demande la consigne ; ne retenter que les erreurs passagères se règle en une ligne.
+  - Limites locales (clé absente, fichier au-delà de `max_size_mb`, durée au-delà de `max_duration_seconds`) : échec immédiat, aucun appel.
+  - Coût estimé : durée du fichier × `voxia.costs.transcription_usd_per_hour` (0,22), arrondi à 4 décimales.
+- Regroupement en paragraphes (`ParagraphBuilder`), séparé du moteur : coupure à une pause ≥ `voxia.paragraphes.pause_ms`, à une fin de phrase une fois `fin_de_phrase_min_mots` atteint, et à `max_mots`. Le paragraphe porte l'horodatage de son premier mot. Les mots sont joints tels quels ; la ponctuation isolée reste collée au mot précédent. Aucune réécriture.
+- Tests : `FakeTranscriptionEngine` liée à tous les tests dans `tests/TestCase.php`, avec `Http::preventStrayRequests()`. Les tests du moteur simulent HTTP, sans appel réseau.
 - Modèle de données posé (étape 1) : 7 migrations, 7 modèles, 7 enums PHP, factories.
   - Enums : valeurs stockées en `varchar` avec cast Eloquent (pas de type `enum` PostgreSQL, pour ajouter une valeur sans migration lourde). Valeurs en français, comme dans le cahier.
   - Colonnes du domaine en français (`est_apercu`, `motif_echec`…), colonnes techniques en anglais (`user_id`, `created_at`).
@@ -106,7 +115,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P9 — Durée maximale d'une vidéo analysable (proposition : 3 minutes).
 - [ ] P10 — Avis juridique sur la récupération des vidéos YouTube et TikTok, et rédaction des CGU et de la politique de confidentialité (texte définitif à demander, ne pas inventer).
 - [ ] P11 — Suppression du compte : les lignes de consommation (`usage_records`) sont supprimées avec le compte, comme le demande le cahier §5. Faut-il les conserver pour la facturation ou les obligations comptables ? Question juridique, à trancher avec l'avis du P10.
-- [ ] P12 — Règle de regroupement en paragraphes (taille cible en mots ou pause maximale). Les valeurs iront dans `config/voxia.php`. À proposer quand le service de regroupement sera écrit.
+- [ ] P12 — Règle de regroupement en paragraphes : valeurs proposées, à valider. Pause 1 200 ms, fin de phrase à partir de 20 mots, longueur maximale 60 mots (`voxia.paragraphes`).
 - [ ] P13 — Recherche sans accents ni racinisation : la configuration `simple` ne reconnaît ni « école » pour « ecole », ni les formes conjuguées. Pistes : configuration `french` / `english` selon la langue détectée, ou extension `unaccent`. À trancher avec des données réelles.
 - [ ] P14 — Statuts de l'analyse de script (`en_attente`, `analyse`, `termine`, `echec`) : proposés par le modèle, absents du cahier. À valider.
 - [ ] P15 — Langue de l'interface par défaut (`fr` dans le modèle, `APP_LOCALE=en` dans `.env`). À confirmer avec P5.
@@ -116,3 +125,10 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P19 — Erreurs génériques « Video unavailable » ou « not available » : classées en erreur technique par prudence. Affiner quand une vraie sortie sera enregistrée.
 - [ ] P20 — Formats hors liste (MKV, OGG, AAC brut) refusés par contenu avec `format_non_supporte`. Le 3GP passe avec la famille MP4, faute de moyen fiable de le distinguer. Le cahier ne dit rien de ces formats ; à confirmer.
 - [ ] P21 — Nom de fichier : « Partie 1/2 » devient « Partie 12 » (caractère retiré, pas remplacé). Le cahier demande de retirer ; une alternative serait un tiret. À confirmer.
+- [ ] P22 — Fixtures de F2 : `francais_redige.json`, `anglais_redige.json` et `discours_sans_pause_redige.json` sont écrites à la main au format documenté, non enregistrées (même statut que P17). Seule `muette_enregistree.json` vient d'un vrai appel (un bip de 2 s). À remplacer dès qu'un MP3 parlé est disponible.
+- [ ] P23 — Essai réel de F2 sur 5 paragraphes : non fait. Le MP3 disponible (`storage/framework/testing/audio/sortie/CON vidéo test.mp3`, 2 s) ne contient qu'un bip ; ElevenLabs renvoie `[beep]` sans mot, donc aucun paragraphe. Il faut un MP3 parlé (français, puis anglais).
+- [ ] P24 — Une clé ElevenLabs a été collée dans la conversation. Elle est enregistrée dans `.env` (ignoré par Git, jamais commitée). À régénérer si la conversation est partagée.
+- [ ] P25 — Codes d'erreur de Scribe : `invalid_api_key` (401), `quota_exceeded` et `too_many_concurrent_requests` / `system_busy` (429) viennent d'articles d'aide ElevenLabs. Les codes 413 et 422 ne sont pas documentés pour la transcription ; la page des erreurs de la doc a renvoyé 403. À vérifier sur les réponses réelles.
+- [ ] P26 — Taille maximale d'un fichier transcrit : 3 Go (FAQ officielle, retenu) contre 5 Go (page API). Durée maximale : 10 h en mode standard.
+- [ ] P27 — Espace typographique française (« Bonjour ? ») : les mots sont joints par une espace et le moteur ne renvoie pas les espaces. À vérifier sur un vrai texte français.
+- [ ] P28 — Abréviations (« M. Dupont », « etc. ») : une fin de phrase peut couper à tort. Non géré.

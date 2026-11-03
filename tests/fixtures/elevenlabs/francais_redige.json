@@ -1,0 +1,477 @@
+{
+    "_avertissement": "Fixture écrite à la main au format documenté de Scribe v2 : NON enregistrée (voir avancement, point P22).",
+    "language_code": "fra",
+    "language_probability": 0.95,
+    "text": "Bonjour à tous, bienvenue sur Voxia. Aujourd'hui, on va voir comment transformer une vidéo en texte horodaté, en quelques secondes, sans rien installer. Il suffit de coller un lien. Vous pouvez aussi importer un fichier audio ou une vidéo depuis votre ordinateur. Le texte arrive ensuite, ponctué, avec des majuscules. Chaque paragraphe commence par son horodatage, et un clic lance la lecture. Essayez, c'est gratuit. Bonne découverte.",
+    "words": [
+        {
+            "text": "Bonjour",
+            "start": 0.1,
+            "end": 0.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "à",
+            "start": 0.5,
+            "end": 0.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "tous,",
+            "start": 0.9,
+            "end": 1.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "bienvenue",
+            "start": 1.3,
+            "end": 1.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "sur",
+            "start": 1.7,
+            "end": 2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Voxia.",
+            "start": 2.1,
+            "end": 2.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Aujourd'hui,",
+            "start": 2.8,
+            "end": 3.1,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "on",
+            "start": 3.2,
+            "end": 3.5,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "va",
+            "start": 3.6,
+            "end": 3.9,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "voir",
+            "start": 4,
+            "end": 4.3,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "comment",
+            "start": 4.4,
+            "end": 4.7,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "transformer",
+            "start": 4.8,
+            "end": 5.1,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "une",
+            "start": 5.2,
+            "end": 5.5,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "vidéo",
+            "start": 5.6,
+            "end": 5.9,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "en",
+            "start": 6,
+            "end": 6.3,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "texte",
+            "start": 6.4,
+            "end": 6.7,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "horodaté,",
+            "start": 6.8,
+            "end": 7.1,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "en",
+            "start": 7.2,
+            "end": 7.5,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "quelques",
+            "start": 7.6,
+            "end": 7.9,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "secondes,",
+            "start": 8,
+            "end": 8.3,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "sans",
+            "start": 8.4,
+            "end": 8.7,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "rien",
+            "start": 8.8,
+            "end": 9.1,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "installer.",
+            "start": 9.2,
+            "end": 9.5,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Il",
+            "start": 11.4,
+            "end": 11.7,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "suffit",
+            "start": 11.8,
+            "end": 12.1,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "de",
+            "start": 12.2,
+            "end": 12.5,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "coller",
+            "start": 12.6,
+            "end": 12.9,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "un",
+            "start": 13,
+            "end": 13.3,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "lien.",
+            "start": 13.4,
+            "end": 13.7,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Vous",
+            "start": 14.1,
+            "end": 14.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "pouvez",
+            "start": 14.5,
+            "end": 14.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "aussi",
+            "start": 14.9,
+            "end": 15.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "importer",
+            "start": 15.3,
+            "end": 15.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "un",
+            "start": 15.7,
+            "end": 16,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "fichier",
+            "start": 16.1,
+            "end": 16.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "audio",
+            "start": 16.5,
+            "end": 16.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "ou",
+            "start": 16.9,
+            "end": 17.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "une",
+            "start": 17.3,
+            "end": 17.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "vidéo",
+            "start": 17.7,
+            "end": 18,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "depuis",
+            "start": 18.1,
+            "end": 18.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "votre",
+            "start": 18.5,
+            "end": 18.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "ordinateur.",
+            "start": 18.9,
+            "end": 19.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Le",
+            "start": 19.6,
+            "end": 19.9,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "texte",
+            "start": 20,
+            "end": 20.3,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "arrive",
+            "start": 20.4,
+            "end": 20.7,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "ensuite,",
+            "start": 20.8,
+            "end": 21.1,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "ponctué,",
+            "start": 21.2,
+            "end": 21.5,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "avec",
+            "start": 21.6,
+            "end": 21.9,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "des",
+            "start": 22,
+            "end": 22.3,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "majuscules.",
+            "start": 22.4,
+            "end": 22.7,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Chaque",
+            "start": 24.3,
+            "end": 24.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "paragraphe",
+            "start": 24.7,
+            "end": 25,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "commence",
+            "start": 25.1,
+            "end": 25.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "par",
+            "start": 25.5,
+            "end": 25.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "son",
+            "start": 25.9,
+            "end": 26.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "horodatage,",
+            "start": 26.3,
+            "end": 26.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "et",
+            "start": 26.7,
+            "end": 27,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "un",
+            "start": 27.1,
+            "end": 27.4,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "clic",
+            "start": 27.5,
+            "end": 27.8,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "lance",
+            "start": 27.9,
+            "end": 28.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "la",
+            "start": 28.3,
+            "end": 28.6,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "lecture.",
+            "start": 28.7,
+            "end": 29,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Essayez,",
+            "start": 29.4,
+            "end": 29.7,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "c'est",
+            "start": 29.8,
+            "end": 30.1,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "gratuit.",
+            "start": 30.2,
+            "end": 30.5,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "Bonne",
+            "start": 30.9,
+            "end": 31.2,
+            "type": "word",
+            "logprob": -0.1
+        },
+        {
+            "text": "découverte.",
+            "start": 31.3,
+            "end": 31.6,
+            "type": "word",
+            "logprob": -0.1
+        }
+    ]
+}
