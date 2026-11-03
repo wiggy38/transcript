@@ -6,7 +6,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 ## 1. Planning (cahier §9)
 
 - [ ] Étape 1 — Chaîne de traitement : lien, téléchargement, MP3, transcription, en ligne de commande (2 à 3 semaines)
-- [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines) *(Comptes faits, voir §2 ; historique et affichage restent à faire.)*
+- [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines) *(Comptes et F5 faits, voir §2 ; F2 partiel : lecture faite, exports à l'étape 3.)*
 - [ ] Étape 3 — Exports (F4), lecteur synchronisé et analyse de script (F7) (2 à 3 semaines)
 - [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines)
 - [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines)
@@ -49,8 +49,10 @@ Points ouverts :
 
 ### F5 — Historique et recherche
 
-- [ ] Une recherche sur 500 transcriptions répond en moins d'une seconde.
-- [ ] Une transcription supprimée disparaît de la liste et de la recherche.
+- [x] Une recherche sur 500 transcriptions répond en moins d'une seconde. *(Mesuré : 150 à 185 ms pour la page complète, 500 transcriptions de 40 paragraphes chacune, PostgreSQL 18 sur le poste de développement, sans statistiques fraîches. Test `ChargeRechercheTest`. Mesure sur un poste de développement, pas sur le serveur de production, voir P69.)*
+- [x] Une transcription supprimée disparaît de la liste et de la recherche. *(SuppressionTranscriptionTest, dont le test de recherche sur PostgreSQL.)*
+
+Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri par date, pagination, recherche plein texte réservée au Pro et au Pack (extrait surligné, lien vers l'horodatage ouvert dans le lecteur), suppression avec confirmation et MP3, conservation du plan Gratuit (purge à 30 jours, rappel à 3 jours), purge des MP3 et des fichiers importés. Tests : `tests/Feature/Historique`.
 
 ### F6 — Offre gratuite limitée
 
@@ -106,6 +108,15 @@ Points ouverts :
 - `QuotaService` : appelé par `LancerTranscription` avant chaque création (lien ou fichier), jamais pour une transcription déjà existante. Il autorise tout pour l'instant ; le décompte reste à écrire (F6).
 - E-mail « vidéo prête » (F1) : écouteur `PrevenirFinVideoLongue` sur `TranscriptionCompleted`, en file, seuil `voxia.notifications.long_video_email_after_seconds` (900 s). Mailable `TranscriptionPrete`, style Signal, textes dans `courriels.transcription_prete`.
 - Tests : 37 tests dans `tests/Feature/Transcriptions` (écran, envoi, e-mail, page de statut, lancement sans email vérifié). `VerificationEmailTest` adapté au composant : mêmes attentes, le lancement passe maintenant par Livewire. Suite complète : 262 tests passent, 4 ignorés comme avant.
+- F5 — Historique et recherche (`tests/Feature/Historique`) :
+  - Recherche par langue : chaque paragraphe garde `config_recherche`, copie de la langue de sa transcription (`App\Support\ConfigurationRecherche`, liste dans `voxia.recherche.configurations` : fr, en, es, de, it, pt ; le reste utilise `simple`). Un index GIN partiel existe par configuration (`transcription_paragraphs_recherche_french`, etc.), migration `2026_11_03_240000`. Un terme est donc racinisé selon la langue du passage (« école » trouve « écoles » en français).
+  - Requête en deux temps : les paragraphes trouvés sont isolés dans un CTE `MATERIALIZED` (recherche d'index en premier), puis joints aux transcriptions du compte, triés par date. L'extrait (`ts_headline`) n'est calculé que pour la page affichée. Sans le CTE, PostgreSQL pouvait choisir une jointure par transcription de 1,2 s juste après un import massif (statistiques absentes) ; avec le CTE, 0,15 s, sans `ANALYZE`.
+  - Extrait : le texte est échappé, puis seuls les marqueurs de surlignage deviennent `<mark>`. `ts_headline` écarte certaines balises : l'extrait peut donc différer de la transcription brute (P74).
+  - Droits : service `App\Services\Plans\PlanFeatures`. Tant que `VOXIA_PLAN_REEL` est faux (défaut), tout le monde est Gratuit et `users.plan` est ignoré. Pro et Pack ont la recherche, l'historique illimité ; Gratuit a 30 jours et le rappel à 3 jours (`voxia.plans`). L'étape 4 remplacera le drapeau.
+  - Suppression : page de confirmation (GET), puis `DELETE`. Les lignes partent dans une transaction ; le MP3 et son dossier partent par `SupprimerFichiersTranscriptions` (file). Un autre compte reçoit 404.
+  - Conservation (`voxia:purger-historique`, `voxia:rappeler-suppression`, `voxia:purger-medias`, planifiées dans `routes/console.php`) : purge des transcriptions Gratuit de plus de 30 jours ; un email par compte, une seule fois par transcription (`date_rappel_suppression`), 3 jours avant ; MP3 (`mp3_chemin` remis à null) et fichiers importés de plus de `voxia.retention.media_days`, par date de modification, pour tous les plans. Dossiers vides et morceaux incomplets compris (P59).
+  - Lien depuis la recherche : `?t=` en millisecondes, borné à la durée. Le lecteur se place sur ce moment sans lancer la lecture (MP3 après `loadedmetadata`, YouTube à `onReady`).
+  - Nouvelles clés de config : `voxia.recherche`, `voxia.conservation`, `voxia.droits`, `voxia.historique.par_page` (20).
 - Bug trouvé par l'essai réel sur serveur, et corrigé : les champs de formulaire arrivent en chaînes, la comparaison stricte du nombre de morceaux refusait donc tout envoi réel. Les tests envoient désormais des champs en chaînes, comme le navigateur.
 
 ## 4. Points ouverts
@@ -186,7 +197,7 @@ Points ouverts :
 
 - [ ] P0 — Critères d'acceptation de F6 (offre gratuite) : à rédiger, le cahier n'en fournit pas.
 - [ ] P1 — L'extraction MP3 seule, sans transcription, décompte-t-elle une vidéo en gratuit ?
-- [ ] P2 — Durée de conservation des MP3 et des fichiers importés (proposition : 30 jours).
+- [ ] P2 — Durée de conservation des MP3 et des fichiers importés (proposition : 30 jours). Branchée dans `voxia.retention.media_days` (30 jours par défaut) ; la valeur reste à valider.
 - [ ] P3 — Taille maximale d'un fichier importé (proposition : 2 Go).
 - [ ] P4 — Prestataire de paiement et structure juridique qui encaisse (Stripe ou Paddle ; Stripe semble fermé aux entreprises du Burkina Faso, à vérifier).
 - [ ] P5 — Langues de l'interface au lancement (proposition : anglais et français).
@@ -243,8 +254,8 @@ Points ouverts :
 - [ ] P56 — Écrans de compte non vérifiés dans un navigateur : rendu seulement contrôlé par tests (même statut que P44).
 - [ ] P57 — PostgreSQL (127.0.0.1:5433) ne répond pas sur ce poste (délai dépassé à la connexion). Tests faits sur SQLite. Le serveur de démonstration de l'écran tourne sur SQLite, file synchrone, cache et sessions en fichiers, sans modifier `.env`. À refaire sur PostgreSQL et Redis quand le service répond.
 - [ ] P58 — Rendu de l'écran à 375 px et 1440 px : non vérifié par moi (pas de contrôle visuel dans cette session). À regarder sur `http://127.0.0.1:8000/tableau-de-bord` (compte de test local, hors dépôt).
-- [ ] P59 — Morceaux orphelins : un envoi interrompu laisse son dossier de morceaux dans `storage/app/televersements`. Pas de nettoyage encore ; à rattacher à la purge de rétention (P2).
-- [ ] P60 — Fichiers importés : lus par le worker sur le même disque (P31). La rétention de 30 jours (P2) n'est pas branchée pour ces fichiers.
+- [x] P59 — Morceaux orphelins : un envoi interrompu laisse son dossier de morceaux dans `storage/app/televersements`. Résolu par `voxia:purger-medias` (même règle d'âge que les fichiers importés, dossiers vides retirés).
+- [x] P60 — Fichiers importés : rétention branchée par `voxia:purger-medias` (durée `voxia.retention.media_days`, par date de modification). Voir P71 pour la limite de cette règle.
 - [x] P61 — Liste des langues forçables (fr, en, es, de, it, pt) : validée avec ElevenLabs Scribe v2 (codes ISO 639-1, acceptés par `language_code`). Scribe v2 couvre plus de 90 langues, donc la liste est un sous-ensemble.
 - [ ] P62 — Aperçu via la file : sans worker, l'écran reste sur « Lecture des informations de la vidéo… ». Sur Windows, Horizon ne démarre pas (P38) ; il faut `php artisan queue:work` pour le voir se remplir.
 - [ ] P63 — Envoi interrompu : pas de reprise, le fichier repart du début avec un nouvel identifiant. Une reprise par morceau demanderait de garder la liste des morceaux reçus côté serveur.
@@ -252,3 +263,13 @@ Points ouverts :
 - [ ] P67 — Gratuit : une vidéo longue dont ffprobe ne donne pas la durée source (0 s) est transcrite sur 10 minutes sans marque d'aperçu. Cas rare, à surveiller sur les vrais fichiers.
 - [ ] P65 — Décompte : aucune ligne `usage_records` n'est écrite par le lancement. Un échec technique ne décompte donc rien, mais parce que le décompte n'existe pas encore : le critère ne sera vraiment vérifié qu'avec F6.
 - [ ] P66 — E-mail « vidéo prête » : vérifié par tests (Mail::fake) seulement, jamais reçu dans Mailpit ni une boîte réelle (même statut que P55).
+- [ ] P68 — PostgreSQL du poste : le port 5433 du `.env` est relayé par Docker Desktop, arrêté ce jour-là, et le mot de passe du `.env` n'est plus accepté. Les tests PostgreSQL ont tourné sur une instance temporaire (PostgreSQL 18, port 5434, données dans le dossier scratchpad de la session, hors dépôt). À relancer sur la base du projet avec les bons identifiants.
+- [ ] P69 — Test de charge F5 : 150 à 185 ms mesurés sur le poste de développement (Windows, PostgreSQL 18 local, pas de serveur de production). À repasser sur la base de recette avant la bêta.
+- [ ] P70 — Statistiques PostgreSQL : après un import massif et avant `ANALYZE`, le planificateur peut choisir un plan lent pour d'autres requêtes. La recherche est protégée par le CTE `MATERIALIZED` ; autovacuum doit tourner en production (à vérifier au déploiement).
+- [ ] P71 — Fichiers importés : la rétention se fait par date de modification, car le chemin source n'est pas enregistré sur la transcription. Un fichier envoyé il y a 31 jours et transcrit hier serait donc retiré. Enregistrer le chemin à la création si la règle doit viser la transcription.
+- [ ] P72 — Suppression pendant le traitement : la chaîne peut encore écrire le MP3 d'une transcription supprimée (retiré si l'écriture en base échoue). Non testé sur la file réelle (P29).
+- [ ] P73 — Rappel avant suppression : textes d'email à valider (ton, mention des 30 jours). Jamais reçu dans Mailpit ni une boîte réelle (même statut que P55 et P66).
+- [ ] P74 — Extrait de recherche : `ts_headline` écarte certaines balises HTML de la transcription, si bien que l'extrait peut différer du texte brut. Sans effet sur la sécurité (le texte est échappé) ; à valider sur de vrais textes.
+- [ ] P75 — Droits par plan : tout le monde est Gratuit tant que `VOXIA_PLAN_REEL` est faux. Le test des plans Pro et Pack se fait avec ce drapeau ; l'étape 4 le remplacera.
+- [ ] P76 — Historique : écrans non vérifiés dans un navigateur à 375 px (mêmes statuts que P44 et P58), dont le bouton de confirmation de suppression.
+- [ ] P77 — Pagination : précédente et suivante seulement (pas de numéros de page) pour rester lisible au téléphone. À confirmer avec la maquette.

@@ -27,7 +27,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" @if (($actif ?? null) === 'historique') aria-current="page" @endif
+                        <a href="{{ route('historique') }}" @if (($actif ?? null) === 'historique') aria-current="page" @endif
                            class="{{ ($actif ?? null) === 'historique' ? 'text-accent' : 'text-texte-secondaire hover:text-texte' }} no-underline">
                             {{ __('interface.application.historique') }}
                         </a>

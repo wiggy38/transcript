@@ -47,6 +47,8 @@ return [
             'exports' => ['txt', 'srt'],
             'history_days' => (int) env('VOXIA_FREE_HISTORY_DAYS', 30),
             'history_reminder_days_before' => (int) env('VOXIA_FREE_HISTORY_REMINDER_DAYS_BEFORE', 3),
+            // Recherche plein texte dans l'historique : réservée aux plans payants (offre).
+            'recherche' => false,
             'ai_credits_per_month' => 0,
         ],
 
@@ -58,6 +60,9 @@ return [
             'hours_per_month' => (int) env('VOXIA_PRO_HOURS_PER_MONTH', 30),
             'max_video_seconds' => (int) env('VOXIA_PRO_MAX_VIDEO_SECONDS', 3 * 3600),
             'exports' => ['txt', 'pdf', 'srt', 'vtt'],
+            // Historique illimité (null) et recherche incluse (offre).
+            'history_days' => null,
+            'recherche' => true,
             // Provisoire : à fixer avant la mise en vente.
             'ai_credits_per_month' => (int) env('VOXIA_PRO_AI_CREDITS_PER_MONTH', 30),
         ],
@@ -70,6 +75,8 @@ return [
             'validity_months' => (int) env('VOXIA_PACK_VALIDITY_MONTHS', 6),
             'max_video_seconds' => (int) env('VOXIA_PACK_MAX_VIDEO_SECONDS', 3 * 3600),
             'exports' => ['txt', 'pdf', 'srt', 'vtt'],
+            'history_days' => null,
+            'recherche' => true,
             'ai_credits_per_month' => 0,
         ],
 
@@ -82,10 +89,83 @@ return [
             // Valeur de l'offre (5 h) ; le cahier ne la fixe pas, à confirmer.
             'max_video_seconds' => (int) env('VOXIA_BUSINESS_MAX_VIDEO_SECONDS', 5 * 3600),
             'exports' => ['txt', 'pdf', 'srt', 'vtt'],
+            'history_days' => null,
+            'recherche' => true,
             // Non fixé dans l'offre : « crédits IA élevés », à chiffrer en V2.
             'ai_credits_per_month' => (int) env('VOXIA_BUSINESS_AI_CREDITS_PER_MONTH', 0),
         ],
 
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Droits par plan (service App\Services\Plans\PlanFeatures)
+    |--------------------------------------------------------------------------
+    |
+    | Tant que la facturation (étape 4) n'est pas branchée, tout le monde est
+    | au plan Gratuit. « plan_reel » à true sert aux tests et à la démo : le plan
+    | enregistré sur le compte (users.plan) est alors pris en compte.
+    |
+    */
+
+    'droits' => [
+        'plan_reel' => filter_var(env('VOXIA_PLAN_REEL', false), FILTER_VALIDATE_BOOLEAN),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Historique
+    |--------------------------------------------------------------------------
+    */
+
+    'historique' => [
+        'par_page' => (int) env('VOXIA_HISTORY_PER_PAGE', 20),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Recherche plein texte (PostgreSQL)
+    |--------------------------------------------------------------------------
+    |
+    | Chaque langue de transcription a une configuration de recherche PostgreSQL
+    | (stemming, mots vides). Un index GIN partiel existe par configuration
+    | (migration create_transcription_paragraphs / ajouter_recherche). Une langue
+    | absente de la liste utilise « simple » : pas de racinisation, mais la
+    | recherche reste exacte.
+    |
+    | « extrait_mots » : nombre de mots affichés autour du terme trouvé.
+    |
+    */
+
+    'recherche' => [
+        'configurations' => [
+            'fr' => 'french',
+            'en' => 'english',
+            'es' => 'spanish',
+            'de' => 'german',
+            'it' => 'italian',
+            'pt' => 'portuguese',
+        ],
+        'configuration_defaut' => 'simple',
+        'extrait_mots' => (int) env('VOXIA_SEARCH_SNIPPET_WORDS', 24),
+        'longueur_max_terme' => 200,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Conservation de l'historique et des fichiers
+    |--------------------------------------------------------------------------
+    |
+    | Les transcriptions du plan Gratuit sont supprimées après « history_days »
+    | (config « plans.free »), avec un email « rappel » « history_reminder_days_before »
+    | jours avant. Les MP3 et les fichiers importés suivent « retention.media_days »,
+    | pour tous les plans. « heure » : heure locale des commandes planifiées.
+    |
+    */
+
+    'conservation' => [
+        'heure_purge' => env('VOXIA_CONSERVATION_AT', '03:30'),
+        'heure_rappel' => env('VOXIA_CONSERVATION_REMINDER_AT', '09:00'),
     ],
 
     /*

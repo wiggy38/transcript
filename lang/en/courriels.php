@@ -33,6 +33,15 @@ return [
         'ignorer' => 'You are receiving this message because you started a video longer than 15 minutes.',
     ],
 
+    'rappel_suppression' => [
+        'objet' => 'Some transcriptions will be deleted soon',
+        'titre' => 'Deletion coming up',
+        'texte' => 'Hello :nom, :nombre transcription(s) on your Free plan will be deleted in :avant days. The Free plan keeps transcriptions for :jours days. Here are the dates:',
+        'le' => 'deleted on',
+        'bouton' => 'View my history',
+        'ignorer' => 'You receive this message once per transcription, :avant days before it is deleted.',
+    ],
+
     'signature' => 'The Voxia team',
 
 ];

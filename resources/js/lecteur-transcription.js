@@ -168,6 +168,10 @@ export default function lecteurTranscription(config) {
                 this.initYoutube();
             }
 
+            if (Number.isInteger(config.positionInitiale)) {
+                this.placerInitiale(config.positionInitiale);
+            }
+
             this.synchroniser();
         },
 
@@ -183,6 +187,11 @@ export default function lecteurTranscription(config) {
                     events: {
                         onReady: (evenement) => {
                             evenement.target.getIframe().setAttribute('title', config.libelles.lecteur);
+
+                            if (Number.isInteger(config.positionInitiale)) {
+                                evenement.target.seekTo(config.positionInitiale / 1000, false);
+                            }
+
                             intervalleYoutube ??= setInterval(() => this.synchroniser(), 250);
                         },
                         onStateChange: (evenement) => {
@@ -212,6 +221,30 @@ export default function lecteurTranscription(config) {
             const ms = this.positionMs();
             this.temps = ms;
             this.suivreLecture(ms);
+        },
+
+        /**
+         * Lien depuis la recherche : le texte et le lecteur se placent sur ce moment, sans lancer
+         * la lecture. Pour le MP3, on attend les métadonnées, sans quoi la position n'est pas acceptée.
+         */
+        placerInitiale(ms) {
+            this.temps = ms;
+            this.suivreLecture(ms);
+
+            const audio = this.$refs.audio;
+
+            if (audio) {
+                const appliquer = () => {
+                    audio.currentTime = ms / 1000;
+                    this.synchroniser();
+                };
+
+                if (audio.readyState >= 1) {
+                    appliquer();
+                } else {
+                    audio.addEventListener('loadedmetadata', appliquer, { once: true });
+                }
+            }
         },
 
         /** Clic sur un horodatage : lecture à ce moment, à la milliseconde près. */

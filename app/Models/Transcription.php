@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
     'date_transcription',
     'date_termine',
     'date_echec',
+    'date_rappel_suppression',
 ])]
 class Transcription extends Model
 {
@@ -58,6 +59,7 @@ class Transcription extends Model
             'date_telechargement' => 'datetime',
             'date_extraction_audio' => 'datetime',
             'date_transcription' => 'datetime',
+            'date_rappel_suppression' => 'datetime',
             'date_termine' => 'datetime',
             'date_echec' => 'datetime',
         ];

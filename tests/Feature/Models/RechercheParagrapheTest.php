@@ -72,5 +72,6 @@ test('la recherche utilise l\'index GIN et non un parcours complet de la table',
         DB::statement('SET enable_seqscan = on');
     }
 
-    expect($plan)->toContain('transcription_paragraphs_recherche_index');
+    // Un index partiel par configuration : celui de « simple » sert ici.
+    expect($plan)->toContain('transcription_paragraphs_recherche_simple');
 })->skip($pasPostgres, 'Recherche plein texte : PostgreSQL uniquement.');

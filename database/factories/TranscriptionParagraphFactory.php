@@ -24,6 +24,7 @@ class TranscriptionParagraphFactory extends Factory
             'debut_ms' => $debut,
             'fin_ms' => $debut + fake()->numberBetween(5_000, 60_000),
             'texte' => fake()->sentence(12),
+            'config_recherche' => 'simple',
         ];
     }
 }

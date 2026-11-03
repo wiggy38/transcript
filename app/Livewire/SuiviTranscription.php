@@ -16,9 +16,13 @@ class SuiviTranscription extends Component
 {
     public int $transcriptionId;
 
-    public function mount(Transcription $transcription): void
+    /** Position de départ de la lecture, en millisecondes (lien depuis la recherche). */
+    public ?int $positionInitiale = null;
+
+    public function mount(Transcription $transcription, ?int $positionInitiale = null): void
     {
         $this->transcriptionId = $transcription->getKey();
+        $this->positionInitiale = $positionInitiale;
     }
 
     public function render()
@@ -35,6 +39,7 @@ class SuiviTranscription extends Component
             'transcription' => $transcription,
             'enCours' => ! $termine && $transcription->statut !== StatutTranscription::Echec,
             'termine' => $termine,
+            'positionInitiale' => $this->positionInitiale,
         ]);
     }
 }

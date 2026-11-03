@@ -3,5 +3,5 @@
         <a href="{{ route('tableau-de-bord') }}" class="text-texte-secondaire hover:text-accent">← {{ __('transcriptions.page.retour') }}</a>
     </p>
 
-    <livewire:suivi-transcription :transcription="$transcription" />
+    <livewire:suivi-transcription :transcription="$transcription" :position-initiale="$positionInitiale" />
 </x-layouts::app>

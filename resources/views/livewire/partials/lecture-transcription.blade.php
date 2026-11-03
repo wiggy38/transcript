@@ -15,6 +15,7 @@
         'source' => $youtube ? 'youtube' : 'audio',
         'idVideo' => $youtube ? $transcription->id_video : null,
         'dureeMs' => $dureeMs,
+        'positionInitiale' => $positionInitiale,
         'libelles' => [
             'lecteur' => __('transcriptions.lecture.lecteur_youtube'),
             'copieOk' => __('transcriptions.lecture.copie_ok'),

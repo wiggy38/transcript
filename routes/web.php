@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\Comptes\GoogleController;
+use App\Http\Controllers\Comptes\HistoriqueController;
 use App\Http\Controllers\Comptes\LienController;
 use App\Http\Controllers\Comptes\ReglagesController;
 use App\Http\Controllers\Comptes\TableauDeBordController;
@@ -23,6 +24,15 @@ Route::middleware('auth')->group(function () {
     // Lancement : depuis l'écran Livewire NouvelleTranscription. Email vérifié exigé.
     Route::get('/transcriptions/{transcription}', [TranscriptionController::class, 'show'])
         ->name('transcriptions.show');
+
+    // Historique (F5) : liste, tri par date, pagination, recherche plein texte (Pro et Pack).
+    Route::get('/historique', HistoriqueController::class)->name('historique');
+
+    // Suppression : une page de confirmation, puis la suppression elle-même (DELETE).
+    Route::get('/transcriptions/{transcription}/supprimer', [TranscriptionController::class, 'confirmerSuppression'])
+        ->name('transcriptions.supprimer');
+    Route::delete('/transcriptions/{transcription}', [TranscriptionController::class, 'supprimer'])
+        ->name('transcriptions.destroy');
 
     // MP3 de la transcription, pour le lecteur audio (TikTok et fichiers). Propriétaire seulement.
     Route::get('/transcriptions/{transcription}/audio', [TranscriptionController::class, 'audio'])

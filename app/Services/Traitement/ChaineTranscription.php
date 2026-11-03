@@ -23,6 +23,7 @@ use App\Models\Transcription;
 use App\Models\TranscriptionParagraph;
 use App\Models\TranscriptionWord;
 use App\Services\Transcription\ParagraphBuilder;
+use App\Support\ConfigurationRecherche;
 use Closure;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\DB;
@@ -322,6 +323,8 @@ final class ChaineTranscription
         TranscriptionParagraph::where('transcription_id', $transcription->getKey())->delete();
 
         $lignes = [];
+        // Configuration de recherche de la langue de la transcription (détectée, sinon forcée).
+        $configuration = ConfigurationRecherche::pourLangue($transcription->langue_detectee ?? $transcription->langue_forcee);
 
         foreach ($paragraphes as $index => $paragraphe) {
             $lignes[] = [
@@ -330,6 +333,7 @@ final class ChaineTranscription
                 'debut_ms' => $paragraphe->debutMs,
                 'fin_ms' => $paragraphe->finMs,
                 'texte' => $paragraphe->texte,
+                'config_recherche' => $configuration,
             ];
         }
 

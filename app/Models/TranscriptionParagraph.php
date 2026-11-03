@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Support\ConfigurationRecherche;
 use Database\Factories\TranscriptionParagraphFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use InvalidArgumentException;
 
-#[Fillable(['transcription_id', 'position', 'debut_ms', 'fin_ms', 'texte'])]
+#[Fillable(['transcription_id', 'position', 'debut_ms', 'fin_ms', 'texte', 'config_recherche'])]
 class TranscriptionParagraph extends Model
 {
     /** @use HasFactory<TranscriptionParagraphFactory> */
@@ -32,15 +34,21 @@ class TranscriptionParagraph extends Model
     }
 
     /**
-     * Recherche plein texte PostgreSQL. L'expression doit être identique à
-     * celle de l'index GIN (migration create_transcription_paragraphs) pour
-     * que l'index serve la requête.
+     * Recherche plein texte PostgreSQL pour une configuration donnée. L'expression et la
+     * configuration doivent être celles de l'index partiel de cette langue (migration
+     * ajouter_recherche_par_langue) pour que l'index serve la requête. La configuration
+     * n'est écrite dans le SQL qu'après vérification dans la liste fermée.
      */
-    public function scopeRecherche(Builder $query, string $terme): void
+    public function scopeRecherche(Builder $query, string $terme, string $configuration = 'simple'): void
     {
-        $query->whereRaw(
-            "to_tsvector('simple', transcription_paragraphs.texte) @@ plainto_tsquery('simple', ?)",
-            [$terme]
-        );
+        if (! in_array($configuration, ConfigurationRecherche::toutes(), true)) {
+            throw new InvalidArgumentException("Configuration de recherche inconnue : {$configuration}");
+        }
+
+        $query->whereRaw("transcription_paragraphs.config_recherche = '{$configuration}'")
+            ->whereRaw(
+                "to_tsvector('{$configuration}', transcription_paragraphs.texte) @@ plainto_tsquery('{$configuration}', ?)",
+                [$terme]
+            );
     }
 }
