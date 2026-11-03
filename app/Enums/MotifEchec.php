@@ -11,5 +11,6 @@ enum MotifEchec: string
     case LiveEnCours = 'live_en_cours';
     case TropLongue = 'trop_longue';
     case SansAudio = 'sans_audio';
+    case FormatNonSupporte = 'format_non_supporte';
     case ErreurTechnique = 'erreur_technique';
 }

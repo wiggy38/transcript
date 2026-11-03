@@ -27,8 +27,8 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 
 ### F3 — Extraction de l'audio en MP3
 
-- [ ] Le MP3 téléchargé a la même durée que la vidéo source, à 1 seconde près.
-- [ ] Le nom du fichier ne contient que des caractères valides sous Windows, macOS et Linux.
+- [ ] Le MP3 téléchargé a la même durée que la vidéo source, à 1 seconde près. *(Partiel : `AudioExtractor` testé sur une vidéo et un bip générés, 1 s près, débit 192 kbit/s vérifié ; reste à le brancher sur le téléchargement réel, étape 1.)*
+- [x] Le nom du fichier ne contient que des caractères valides sous Windows, macOS et Linux. *(Service `NomFichierAudio` testé sur 10 titres piégés.)*
 
 ### F4 — Export TXT, PDF, SRT, VTT
 
@@ -82,6 +82,15 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
   - Suppression d'une transcription : mots, paragraphes, analyse et journaux supprimés ; la ligne de consommation reste, avec `transcription_id` nul, pour que le quota ne se libère pas.
   - `is_admin` n'est pas assignable en masse. Langue de l'interface par défaut : `fr` (à confirmer, voir P15).
   - Tests : 32 tests de modèle. Sur SQLite (config par défaut), 28 passent et 4 recherche plein texte sont ignorés. Sur PostgreSQL 16 (base `voxia_test`), les 32 passent.
+- Extraction audio (F3) derrière `App\Contracts\AudioExtractor`, implémentée par `FfmpegAudioExtractor` (ffprobe et FFmpeg via `Process`, arguments en tableau). Pas de fausse implémentation : FFmpeg est local et les tests génèrent de vrais petits fichiers, sans réseau.
+  - Format vérifié par ffprobe, jamais par l'extension. Familles acceptées : MP3, WAV, WEBM (matroska), et MP4/M4A/MOV, avec 3GP (ffprobe ne les distingue pas, donc une seule famille). Un fichier illisible ou hors liste donne `format_non_supporte`.
+  - Motif `format_non_supporte` ajouté (hors cahier) : texte fr et en dans `lang/`. À valider (P20).
+  - Sans piste audio : `sans_audio`. Source absente ou échec de FFmpeg : `erreur_technique`, aucun fichier partiel.
+  - Première piste audio seulement (`-map 0:a:0`) : pas de vidéo ni d'image de couverture. Titre écrit dans les métadonnées `title`, sans autres métadonnées.
+  - Débit : `voxia.audio.mp3_bitrate_kbps` (192). Durée du MP3 mesurée par ffprobe, arrondie à la seconde.
+  - Découpe aux N premières secondes (`-t`) : sert à l'aperçu de 10 minutes du plan gratuit. Pas encore branchée au plan ; la limite de 10 minutes n'est pas encore appliquée par ce service.
+  - Nom de fichier (`NomFichierAudio`) : accents conservés en forme composée (NFC, pour macOS) ; caractères `< > : " / \ | ? *` et contrôles retirés (pas remplacés) ; espaces réduits ; points et espaces retirés en début et fin ; noms réservés Windows (CON, PRN, AUX, NUL, COM1-9, LPT1-9) préfixés par « _ » ; titre vide : `audio.mp3`. Longueur limitée à 200 octets (`voxia.audio.filename_max_bytes`), sans couper un caractère UTF-8.
+  - Tests : 39 tests (23 sur le nom, dont 10 titres piégés ; 16 sur l'extraction). Réglages des délais dans `voxia.audio`.
 
 ## 4. Points ouverts
 
@@ -105,3 +114,5 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P17 — Fixtures yt-dlp écrites à partir des messages connus, pas enregistrées. À remplacer par de vraies sorties (privée, supprimée, région, live).
 - [ ] P18 — Vidéos avec restriction d'âge ou connexion requise : classées en erreur technique (aucun décompte). Faut-il un motif dédié ?
 - [ ] P19 — Erreurs génériques « Video unavailable » ou « not available » : classées en erreur technique par prudence. Affiner quand une vraie sortie sera enregistrée.
+- [ ] P20 — Formats hors liste (MKV, OGG, AAC brut) refusés par contenu avec `format_non_supporte`. Le 3GP passe avec la famille MP4, faute de moyen fiable de le distinguer. Le cahier ne dit rien de ces formats ; à confirmer.
+- [ ] P21 — Nom de fichier : « Partie 1/2 » devient « Partie 12 » (caractère retiré, pas remplacé). Le cahier demande de retirer ; une alternative serait un tiret. À confirmer.

@@ -120,6 +120,10 @@ return [
 
     'audio' => [
         'mp3_bitrate_kbps' => (int) env('VOXIA_MP3_BITRATE_KBPS', 192),
+        // Longueur maximale du nom de fichier, en octets (les systèmes limitent à 255).
+        'filename_max_bytes' => (int) env('VOXIA_AUDIO_FILENAME_MAX_BYTES', 200),
+        'probe_timeout_seconds' => (int) env('VOXIA_AUDIO_PROBE_TIMEOUT_SECONDS', 30),
+        'extraction_timeout_seconds' => (int) env('VOXIA_AUDIO_EXTRACTION_TIMEOUT_SECONDS', 900),
     ],
 
     /*

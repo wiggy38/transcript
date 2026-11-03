@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Process;
 use Tests\TestCase;
 
 /*
@@ -59,6 +61,58 @@ function something()
 function fixtureYtdlp(string $nom): string
 {
     return file_get_contents(base_path('tests/fixtures/ytdlp/'.$nom));
+}
+
+/*
+|--------------------------------------------------------------------------
+| Helpers audio (FFmpeg réel, fichiers générés, aucun réseau)
+|--------------------------------------------------------------------------
+*/
+
+/** Dossier de travail des tests audio, vidé à chaque test. */
+function dossierAudioTest(): string
+{
+    $dossier = storage_path('framework/testing/audio');
+
+    File::deleteDirectory($dossier);
+    File::makeDirectory($dossier, 0775, true);
+
+    return $dossier;
+}
+
+/**
+ * Génère un média de test avec FFmpeg. $arguments contient les entrées et les
+ * options de codec ; le format de sortie est imposé pour ne pas dépendre de l'extension.
+ *
+ * @param  list<string>  $arguments
+ */
+function genererMediaTest(string $chemin, string $format, array $arguments): string
+{
+    $resultat = Process::run([
+        (string) config('voxia.tools.ffmpeg_binary'),
+        '-nostdin', '-hide_banner', '-loglevel', 'error', '-y',
+        ...$arguments,
+        '-f', $format,
+        $chemin,
+    ]);
+
+    if ($resultat->failed()) {
+        throw new RuntimeException('FFmpeg (test) a échoué : '.$resultat->errorOutput());
+    }
+
+    return $chemin;
+}
+
+/** Sonde ffprobe indépendante de l'application, pour vérifier les résultats. @return array<string, mixed> */
+function sondeMediaTest(string $chemin): array
+{
+    $resultat = Process::run([
+        (string) config('voxia.tools.ffprobe_binary'),
+        '-v', 'error', '-print_format', 'json', '-show_format', '-show_streams',
+        $chemin,
+    ]);
+
+    return json_decode($resultat->output(), true, 512, JSON_THROW_ON_ERROR);
 }
 
 /** Valeur qui suit une option dans un tableau d'arguments de commande. */

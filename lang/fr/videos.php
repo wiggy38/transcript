@@ -10,6 +10,7 @@ return [
         'live_en_cours' => 'Ce live est en cours ou n’a pas encore commencé. Réessaie quand il sera terminé.',
         'trop_longue' => 'Cette vidéo dépasse la durée autorisée par ton plan.',
         'sans_audio' => 'Aucune piste audio exploitable n’a été trouvée dans cette vidéo.',
+        'format_non_supporte' => 'Ce fichier n’est pas dans un format accepté : MP3, M4A, WAV, MP4, MOV ou WEBM.',
         'erreur_technique' => 'Un problème technique est survenu. Rien n’a été décompté : réessaie dans quelques minutes.',
     ],
 
