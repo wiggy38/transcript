@@ -18,6 +18,7 @@ Durées par étape en secondes. Coût en dollars US (`cout_usd`, un seul poste :
 | 4 | TikTok `…/7680612500500532500` | TikTok | Terminé | — | 59 s | 8,0 | 7,5 | 2,8 | 6,0 | 0,0 | 0,2 | **24,4 s** | 0,0037 $ | 1,37 Mo (1 433 904 o) |
 | 5 | `youtube.com/watch?v=orQKfIXMiA8` (anglais) | YouTube | Terminé | — | 5 min 49 s (349 s) | 8,4 | 10,0 | 10,6 | 18,1 | 0,0 | 0,3 | **47,4 s** | 0,0213 $ | 7,99 Mo (8 382 041 o) |
 | 6 | `youtube.com/watch?v=0O5SzbiihM` | — | Refusé | « Ce lien n'est pas reconnu » | — | — | — | — | — | — | — | — | — | — |
+| 7 | `youtube.com/watch?v=Unzc731iCUY` (compte Pro) | YouTube | Terminé | — | 1 h 3 min 42 s (3 822 s) | 6,8 | 15,3 | 82,9 | 96,3 | 0,0 | 3,4 | **204,7 s** | 0,2336 $ | 87,49 Mo (91 735 556 o) |
 
 Notes :
 - Les durées sont celles des journaux (`duree_ms`). Elles ne comptent pas le délai entre l'envoi dans la file et le démarrage du worker, ni le temps de la commande qui suit l'avancement.
@@ -29,19 +30,20 @@ Notes :
 
 | Indicateur | Cible | Mesure | Verdict |
 |------------|-------|--------|---------|
-| Taux de réussite sur les liens valides | 95 % | 5 réussites sur 5 liens valides, soit 100 % | Cible atteinte, mais échantillon trop petit (voir §3) |
-| Délai médian pour 10 min de vidéo | moins de 2 min | Vidéo de 9 min 51 s : 54,2 s, soit environ 55 s pour 10 min. Médiane des 5 runs, toutes durées : 41,1 s | Cible atteinte (une seule vidéo proche de 10 min) |
-| Coût par heure de vidéo, hors proxys | (aucune cible chiffrée) | 0,0743 $ pour 1 215 s, soit 0,3375 h, soit **0,22 $ par heure** | Conforme au tarif retenu (`voxia.costs.transcription_usd_per_hour` = 0,22) |
+| Taux de réussite sur les liens valides | 95 % | 6 réussites sur 6 liens valides, soit 100 % | Cible atteinte, mais échantillon trop petit (voir §3) |
+| Délai médian pour 10 min de vidéo | moins de 2 min | Vidéo de 9 min 51 s : 54,2 s, soit environ 55 s pour 10 min. Médiane des 6 runs, toutes durées : 44,3 s | Cible atteinte (une seule vidéo proche de 10 min) |
+| Coût par heure de vidéo, hors proxys | (aucune cible chiffrée) | 0,3079 $ pour 5 037 s, soit 1,399 h, soit **0,22 $ par heure** | Conforme au tarif retenu (`voxia.costs.transcription_usd_per_hour` = 0,22) |
 
 Calculs :
-- Réussite : 5 / 5 liens valides = 100 %. Intervalle de confiance à 95 % avec 5 cas : de 48 % à 100 %.
-- Délai médian : valeurs triées 24,4 ; 28,1 ; 41,1 ; 47,4 ; 54,2 s, médiane 41,1 s.
-- Coût horaire : somme des coûts (0,0078 + 0,0361 + 0,0054 + 0,0037 + 0,0213 = 0,0743 $) divisée par la durée totale (1 215 s = 0,3375 h).
+- Réussite : 6 / 6 liens valides = 100 %. Intervalle de confiance à 95 % avec 6 cas : de 54 % à 100 %.
+- Délai médian : valeurs triées 24,4 ; 28,1 ; 41,1 ; 47,4 ; 54,2 ; 204,7 s, médiane (41,1 + 47,4) / 2 = 44,3 s.
+- Coût horaire : somme des coûts (0,0078 + 0,0361 + 0,0054 + 0,0037 + 0,0213 + 0,2336 = 0,3079 $) divisée par la durée totale (5 037 s = 1,399 h).
+- Vidéo 7 : 1 h 3 min 42 s, traitée en 3 min 25 s au total. Le téléchargement et l'extraction MP3 (82,9 s) pèsent le plus, devant la transcription (96,3 s). Compte Pro, nécessaire au-delà de 600 s.
 
 ## 3. Limites de cette mesure
 
-- **Échantillon** : 5 liens valides. Pour démontrer 95 % de réussite avec 95 % de confiance, il faut une réussite sans échec sur environ 60 liens valides (règle de trois : 3 / 0,05).
-- **Vidéo d'une heure** : aucune vidéo d'une heure dans la liste reçue. Le plan gratuit refuse plus de 600 s (`VOXIA_FREE_MAX_VIDEO_SECONDS`) après les métadonnées : aucun téléchargement, aucun coût. Il faut un lien d'une heure et le compte Pro pour mesurer le traitement.
+- **Échantillon** : 6 liens valides. Pour démontrer 95 % de réussite avec 95 % de confiance, il faut une réussite sans échec sur environ 60 liens valides (règle de trois : 3 / 0,05).
+- **Vidéo d'une heure** : une seule vidéo (lien 7, 1 h 3 min 42 s), sur le compte Pro. Le plan gratuit refuse plus de 600 s (`VOXIA_FREE_MAX_VIDEO_SECONDS`) après les métadonnées : aucun téléchargement, aucun coût.
 - **Vidéo privée** : aucune vidéo privée dans la liste reçue. Le motif est prévu par le code mais n'a jamais été vu sur une vraie sortie yt-dlp (P16, P17).
 - **Lien cassé** : le lien 6 est refusé par la reconnaissance locale, pas par YouTube. Un vrai lien cassé (identifiant de 11 caractères, vidéo supprimée) n'a pas été testé.
 - **Deux publicités TikTok** : les liens 3 et 4 sont supposés être les deux publicités. Aucune vérification n'a été faite sur le contenu.
@@ -64,5 +66,5 @@ Calculs :
 ## 6. Ce qui n'a pas été fait
 
 - Pas de correction du code (anomalies 1 à 3 seulement signalées).
-- Pas de test de la vidéo d'une heure ni d'une vidéo privée : les liens n'étaient pas dans la liste reçue. À fournir.
+- Pas de test de vidéo privée ni de vrai lien supprimé : les liens n'étaient pas dans la liste reçue. À fournir.
 - Pas de passage de la chaîne par Horizon.
