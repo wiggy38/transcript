@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voxia — maquette Signal (référence)</title>
+<!-- Maquette de référence de la page d'accueil Voxia, direction « Signal ».
+     Accent par défaut #FF6A3D (variantes testées : #C8F542, #6E8BFF).
+     Les valeurs entre crochets et les écarts listés dans docs/cahier-des-charges.md section 7 restent à corriger à l'intégration. -->
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0E0F0E}
+a{color:#EDEBE6}a:hover{color:#FF6A3D}
+input::placeholder{color:#8B8A85}
+.vx-grid{background-image:linear-gradient(to right,rgba(237,235,230,.055) 1px,transparent 1px),linear-gradient(to bottom,rgba(237,235,230,.055) 1px,transparent 1px);background-size:80px 80px}
+@keyframes vx-wave{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+@keyframes vx-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes vx-packet{0%{left:0;opacity:0}6%{opacity:1}94%{opacity:1}100%{left:calc(100% - 9px);opacity:0}}
+@keyframes vx-blink{50%{opacity:0}}
+@keyframes vx-type{0%{clip-path:inset(0 100% 0 0)}70%,100%{clip-path:inset(0 0 0 0)}}
+@keyframes vx-pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.vx-bar{animation:vx-wave 1.6s ease-in-out infinite;transform-origin:center}
+.vx-marquee{animation:vx-marquee 48s linear infinite}
+.vx-packet{animation:vx-packet 5.5s cubic-bezier(.65,0,.35,1) infinite}
+.vx-caret{animation:vx-blink 1s steps(1) infinite}
+.vx-type{animation:vx-type 5s steps(44) infinite}
+.vx-rec{animation:vx-pulse 1.6s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.vx-bar,.vx-marquee,.vx-packet,.vx-caret,.vx-type,.vx-rec{animation:none}}
+</style>
+</head>
+<body>
+<div style="background: #0E0F0E; color: #EDEBE6; font-family: 'Geist', system-ui, sans-serif; font-size: 16px; line-height: 1.6; overflow: hidden;">
+
+<div class="vx-grid" style="border-bottom: 1px solid #2A2B28;">
+<header>
+<div style="max-width: 1240px; margin: 0 auto; padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+<a href="#" style="display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; font-size: 19px; letter-spacing: -0.02em;"><svg width="22" height="18" viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="6" width="3" height="6" fill="#FF6A3D"></rect><rect x="5" y="2" width="3" height="14" fill="#EDEBE6"></rect><rect x="10" y="0" width="3" height="18" fill="#EDEBE6"></rect><rect x="15" y="4" width="3" height="10" fill="#EDEBE6"></rect><rect x="20" y="7" width="2" height="4" fill="#EDEBE6"></rect></svg>Voxia</a>
+<nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; align-items: center; gap: 28px; font-size: 14px;">
+<a href="#usages" style="text-decoration: none; color: #BDBBB5;">Usages</a>
+<a href="#process" style="text-decoration: none; color: #BDBBB5;">Fonctionnement</a>
+<a href="#tarifs" style="text-decoration: none; color: #BDBBB5;">Tarifs</a>
+<a href="#" style="text-decoration: none; color: #BDBBB5;">Se connecter</a>
+<a href="#" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 4px; background: #FF6A3D; color: #0E0F0E; text-decoration: none; font-weight: 600;">Essayer gratuitement</a>
+</nav>
+</div>
+</header>
+
+<section style="max-width: 1240px; margin: 0 auto; padding: 96px 24px 0;">
+<p style="margin: 0 0 28px; display: inline-flex; align-items: center; gap: 10px; padding: 6px 12px; border: 1px solid #2A2B28; border-radius: 999px; background: #0E0F0E; font-family: 'Geist Mono', monospace; font-size: 12px; color: #BDBBB5;"><span class="vx-rec" aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #FF6A3D;"></span>Vidéo → texte, en une ou deux minutes</p>
+<h1 style="margin: 0; max-width: 15ch; font-weight: 600; font-size: clamp(46px, 7vw, 104px); line-height: 0.96; letter-spacing: -0.045em;">Chaque vidéo contient un texte. <span style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -0.02em; color: #FF6A3D;">Voxia te l'écrit.</span></h1>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px; margin-top: 40px;">
+<p style="margin: 0; flex: 1 1 340px; max-width: 30em; font-size: 18px; color: #BDBBB5;">Colle un lien YouTube ou TikTok, ou dépose ton fichier. Tu récupères la transcription horodatée, les sous-titres et l'audio, rangés dans ta bibliothèque.</p>
+<form style="flex: 1 1 460px; max-width: 560px;">
+<label for="lien-d" style="display: block; margin: 0 0 8px; font-family: 'Geist Mono', monospace; font-size: 12px; color: #8B8A85;">LIEN DE LA VIDÉO</label>
+<div style="display: flex; flex-wrap: wrap; gap: 0; border: 1px solid #3A3B37; border-radius: 6px; background: #141513; padding: 5px;">
+<input id="lien-d" type="url" placeholder="https://youtube.com/watch?v=…" style="flex: 1 1 240px; min-width: 0; min-height: 46px; padding: 0 14px; border: 0; background: transparent; font-family: 'Geist Mono', monospace; font-size: 14px; color: #EDEBE6;">
+<button type="button" style="flex: 0 0 auto; min-height: 46px; padding: 0 22px; border: 0; border-radius: 4px; background: #EDEBE6; color: #0E0F0E; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;">Transcrire →</button>
+</div>
+<p style="margin: 10px 0 0; font-size: 13px; color: #8B8A85;">Ou <a href="#">dépose un fichier</a> MP4, MOV, MP3. Gratuit pour commencer.</p>
+</form>
+</div>
+
+<div style="position: relative; margin: 72px 0 0; border: 1px solid #2A2B28; border-bottom: 0; border-radius: 10px 10px 0 0; background: #121311;">
+<span aria-hidden="true" style="position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border-top: 2px solid #FF6A3D; border-left: 2px solid #FF6A3D; border-radius: 10px 0 0 0;"></span>
+<span aria-hidden="true" style="position: absolute; top: -1px; right: -1px; width: 14px; height: 14px; border-top: 2px solid #FF6A3D; border-right: 2px solid #FF6A3D; border-radius: 0 10px 0 0;"></span>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #2A2B28; font-family: 'Geist Mono', monospace; font-size: 12px; color: #8B8A85;">
+<span style="display: inline-flex; align-items: center; gap: 10px;"><span class="vx-rec" aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #FF6A3D;"></span><span style="color: #EDEBE6;">Vlog #34 — Mon atelier de céramique</span></span>
+<span>YOUTUBE · 12:03 · FR · 1 842 MOTS</span>
+</div>
+<div style="display: flex; flex-wrap: wrap;">
+<div style="flex: 1 1 440px; min-width: 0; padding: 32px 28px; border-right: 1px solid #2A2B28;">
+<div style="position: relative; height: 200px; display: flex; align-items: center; gap: 3px;" aria-hidden="true">
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 18%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.00s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 71%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.11s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 61%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.22s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 54%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.33s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 85%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.44s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 77%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.55s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 20%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.66s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 33%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.77s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 28%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.88s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 18%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.99s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 38%; border-radius: 2px; background: #FF6A3D; animation-delay: -1.10s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 40%; border-radius: 2px; background: #FF6A3D; animation-delay: -1.21s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 94%; border-radius: 2px; background: #FF6A3D; animation-delay: -1.32s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 86%; border-radius: 2px; background: #FF6A3D; animation-delay: -1.43s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 74%; border-radius: 2px; background: #FF6A3D; animation-delay: -1.54s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 100%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.05s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 98%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.16s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 37%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.27s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 30%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.38s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 21%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.49s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 31%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.60s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 64%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.71s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 35%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.82s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 52%; border-radius: 2px; background: #FF6A3D; animation-delay: -0.93s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 47%; border-radius: 2px; background: #FF6A3D; animation-delay: -1.04s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 31%; border-radius: 2px; background: #FF6A3D; animation-delay: -1.15s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 59%; border-radius: 2px; background: #4A4B47; animation-delay: -1.26s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 62%; border-radius: 2px; background: #4A4B47; animation-delay: -1.37s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 33%; border-radius: 2px; background: #4A4B47; animation-delay: -1.48s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 71%; border-radius: 2px; background: #4A4B47; animation-delay: -1.59s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 59%; border-radius: 2px; background: #4A4B47; animation-delay: -0.10s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 75%; border-radius: 2px; background: #4A4B47; animation-delay: -0.21s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 100%; border-radius: 2px; background: #4A4B47; animation-delay: -0.32s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 91%; border-radius: 2px; background: #4A4B47; animation-delay: -0.43s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 37%; border-radius: 2px; background: #4A4B47; animation-delay: -0.54s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 32%; border-radius: 2px; background: #4A4B47; animation-delay: -0.65s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 43%; border-radius: 2px; background: #4A4B47; animation-delay: -0.76s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 28%; border-radius: 2px; background: #4A4B47; animation-delay: -0.87s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 46%; border-radius: 2px; background: #4A4B47; animation-delay: -0.98s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 37%; border-radius: 2px; background: #4A4B47; animation-delay: -1.09s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 73%; border-radius: 2px; background: #4A4B47; animation-delay: -1.20s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 58%; border-radius: 2px; background: #4A4B47; animation-delay: -1.31s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 67%; border-radius: 2px; background: #4A4B47; animation-delay: -1.42s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 100%; border-radius: 2px; background: #4A4B47; animation-delay: -1.53s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 88%; border-radius: 2px; background: #4A4B47; animation-delay: -0.04s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 28%; border-radius: 2px; background: #4A4B47; animation-delay: -0.15s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 23%; border-radius: 2px; background: #4A4B47; animation-delay: -0.26s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 19%; border-radius: 2px; background: #4A4B47; animation-delay: -0.37s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 57%; border-radius: 2px; background: #4A4B47; animation-delay: -0.48s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 90%; border-radius: 2px; background: #4A4B47; animation-delay: -0.59s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 53%; border-radius: 2px; background: #4A4B47; animation-delay: -0.70s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 19%; border-radius: 2px; background: #4A4B47; animation-delay: -0.81s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 31%; border-radius: 2px; background: #4A4B47; animation-delay: -0.92s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 25%; border-radius: 2px; background: #4A4B47; animation-delay: -1.03s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 54%; border-radius: 2px; background: #4A4B47; animation-delay: -1.14s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 48%; border-radius: 2px; background: #4A4B47; animation-delay: -1.25s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 43%; border-radius: 2px; background: #4A4B47; animation-delay: -1.36s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 60%; border-radius: 2px; background: #4A4B47; animation-delay: -1.47s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 51%; border-radius: 2px; background: #4A4B47; animation-delay: -1.58s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 87%; border-radius: 2px; background: #4A4B47; animation-delay: -0.09s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 100%; border-radius: 2px; background: #4A4B47; animation-delay: -0.20s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 92%; border-radius: 2px; background: #4A4B47; animation-delay: -0.31s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 50%; border-radius: 2px; background: #4A4B47; animation-delay: -0.42s;"></span>
+<span class="vx-bar" style="flex: 1 1 0; min-width: 2px; height: 56%; border-radius: 2px; background: #4A4B47; animation-delay: -0.53s;"></span>
+<span style="position: absolute; top: -12px; bottom: -12px; left: 40%; width: 1px; background: #FF6A3D;"></span>
+<span style="position: absolute; top: -34px; left: 40%; transform: translateX(-50%); padding: 2px 8px; border-radius: 3px; background: #FF6A3D; color: #0E0F0E; font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 500;">00:13</span>
+</div>
+<div style="display: flex; justify-content: space-between; margin-top: 18px; font-family: 'Geist Mono', monospace; font-size: 11px; color: #6E6D68;" aria-hidden="true"><span>00:00</span><span>00:08</span><span>00:16</span><span>00:24</span><span>00:32</span></div>
+</div>
+<div style="flex: 1 1 400px; min-width: 0; padding: 24px 28px;">
+<p style="margin: 0 0 12px; font-family: 'Geist Mono', monospace; font-size: 11px; color: #8B8A85;">TRANSCRIPTION</p>
+<div style="display: flex; gap: 16px; padding: 9px 0;"><span style="flex: 0 0 44px; font-family: 'Geist Mono', monospace; font-size: 12px; color: #6E6D68; padding-top: 3px;">00:00</span><p style="margin: 0; color: #8B8A85;">Bienvenue dans l'atelier. Oui, il y a de l'argile partout.</p></div>
+<div style="display: flex; gap: 16px; padding: 9px 0;"><span style="flex: 0 0 44px; font-family: 'Geist Mono', monospace; font-size: 12px; color: #6E6D68; padding-top: 3px;">00:06</span><p style="margin: 0; color: #8B8A85;">Aujourd'hui on tourne six bols, et on en rate au moins deux.</p></div>
+<div style="display: flex; gap: 16px; padding: 9px 12px; margin: 0 -12px; border-radius: 6px; background: #1B1C1A;"><span style="flex: 0 0 44px; font-family: 'Geist Mono', monospace; font-size: 12px; color: #FF6A3D; padding-top: 3px;">00:13</span><p style="margin: 0; color: #EDEBE6; font-weight: 500;">Le secret, c'est de centrer la terre avant de vouloir aller vite.</p></div>
+<div style="display: flex; gap: 16px; padding: 9px 0;"><span style="flex: 0 0 44px; font-family: 'Geist Mono', monospace; font-size: 12px; color: #6E6D68; padding-top: 3px;">00:19</span><p style="margin: 0; color: #BDBBB5;"><span class="vx-type" style="display: inline-block;">Si elle n'est pas centrée, rien ne tiendra.</span><span class="vx-caret" aria-hidden="true" style="display: inline-block; width: 2px; height: 1.1em; margin-left: 2px; vertical-align: -3px; background: #FF6A3D;"></span></p></div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px;">
+<button type="button" style="min-height: 34px; padding: 0 12px; border: 1px solid #3A3B37; border-radius: 4px; background: transparent; color: #EDEBE6; font-family: 'Geist Mono', monospace; font-size: 12px; cursor: pointer;">Copier</button>
+<button type="button" style="min-height: 34px; padding: 0 12px; border: 1px solid #3A3B37; border-radius: 4px; background: transparent; color: #EDEBE6; font-family: 'Geist Mono', monospace; font-size: 12px; cursor: pointer;">.txt</button>
+<button type="button" style="min-height: 34px; padding: 0 12px; border: 1px solid #3A3B37; border-radius: 4px; background: transparent; color: #EDEBE6; font-family: 'Geist Mono', monospace; font-size: 12px; cursor: pointer;">.srt</button>
+<button type="button" style="min-height: 34px; padding: 0 12px; border: 1px solid #3A3B37; border-radius: 4px; background: transparent; color: #EDEBE6; font-family: 'Geist Mono', monospace; font-size: 12px; cursor: pointer;">.vtt</button>
+<button type="button" style="min-height: 34px; padding: 0 12px; border: 1px solid #3A3B37; border-radius: 4px; background: transparent; color: #EDEBE6; font-family: 'Geist Mono', monospace; font-size: 12px; cursor: pointer;">.mp3</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+
+<div style="border-bottom: 1px solid #2A2B28; padding: 18px 0; overflow: hidden; white-space: nowrap; font-family: 'Geist Mono', monospace; font-size: 14px; color: #8B8A85;" aria-hidden="true">
+<div class="vx-marquee" style="display: inline-flex; gap: 48px; padding-left: 48px;">
+<span><span style="color: #FF6A3D;">00:00</span>  Tu te réveilles avec la peau qui tire ?</span><span><span style="color: #FF6A3D;">02:14</span>  Trois outils, un seul workflow</span><span><span style="color: #FF6A3D;">00:31</span>  Le lien est juste en dessous</span><span><span style="color: #FF6A3D;">14:52</span>  Ce que j'aurais aimé savoir avant de lancer ma chaîne</span><span><span style="color: #FF6A3D;">00:06</span>  Aujourd'hui on tourne six bols</span><span><span style="color: #FF6A3D;">08:40</span>  La question qu'on me pose le plus souvent</span>
+<span><span style="color: #FF6A3D;">00:00</span>  Tu te réveilles avec la peau qui tire ?</span><span><span style="color: #FF6A3D;">02:14</span>  Trois outils, un seul workflow</span><span><span style="color: #FF6A3D;">00:31</span>  Le lien est juste en dessous</span><span><span style="color: #FF6A3D;">14:52</span>  Ce que j'aurais aimé savoir avant de lancer ma chaîne</span><span><span style="color: #FF6A3D;">00:06</span>  Aujourd'hui on tourne six bols</span><span><span style="color: #FF6A3D;">08:40</span>  La question qu'on me pose le plus souvent</span>
+</div>
+</div>
+
+<section id="usages" style="max-width: 1240px; margin: 0 auto; padding: 128px 24px 0;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 48px;">
+<h2 style="margin: 0; max-width: 14ch; font-weight: 600; font-size: clamp(36px, 4.6vw, 64px); line-height: 1; letter-spacing: -0.04em;">Deux métiers, <span style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400;">un même geste.</span></h2>
+<p style="margin: 0; max-width: 26em; color: #BDBBB5;">Tu fabriques des vidéos, ou tu étudies celles des autres. Dans les deux cas, tu as besoin du texte.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 1px; border: 1px solid #2A2B28; border-radius: 10px; background: #2A2B28; overflow: hidden;">
+
+<article style="flex: 1 1 480px; min-width: 0; padding: 40px; background: #121311;">
+<p style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; color: #FF6A3D;">01 — CRÉATEURS</p>
+<h3 style="margin: 12px 0 0; font-weight: 600; font-size: 28px; line-height: 1.15; letter-spacing: -0.025em;">Une vidéo, quatre contenus.</h3>
+<p style="margin: 12px 0 0; max-width: 30em; color: #BDBBB5;">Tu as parlé vingt minutes. Il te reste à couper, pas à tout réécrire.</p>
+<div style="display: flex; align-items: center; gap: 20px; margin-top: 36px;" aria-hidden="true">
+<div style="flex: 0 0 132px; height: 92px; display: flex; align-items: center; justify-content: center; border: 1px solid #3A3B37; border-radius: 6px; background: #0E0F0E;"><svg width="26" height="28" viewBox="0 0 26 28"><path d="M2 2 L24 14 L2 26 Z" fill="none" stroke="#EDEBE6" stroke-width="2" stroke-linejoin="round"></path></svg></div>
+<svg width="56" height="160" viewBox="0 0 56 160" style="flex: 0 0 56px;"><g fill="none" stroke="#3A3B37" stroke-width="1"><path d="M0 80 C 28 80, 28 20, 56 20"></path><path d="M0 80 C 28 80, 28 60, 56 60"></path><path d="M0 80 C 28 80, 28 100, 56 100"></path><path d="M0 80 C 28 80, 28 140, 56 140"></path></g><circle cx="0" cy="80" r="3" fill="#FF6A3D"></circle></svg>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 8px; font-family: 'Geist Mono', monospace; font-size: 13px;">
+<span style="display: flex; justify-content: space-between; gap: 8px; padding: 8px 12px; border: 1px solid #2A2B28; border-radius: 4px;"><span>Article de blog</span><span style="color: #6E6D68;">.txt</span></span>
+<span style="display: flex; justify-content: space-between; gap: 8px; padding: 8px 12px; border: 1px solid #2A2B28; border-radius: 4px;"><span>Newsletter</span><span style="color: #6E6D68;">.pdf</span></span>
+<span style="display: flex; justify-content: space-between; gap: 8px; padding: 8px 12px; border: 1px solid #FF6A3D; border-radius: 4px;"><span>Sous-titres</span><span style="color: #FF6A3D;">.srt .vtt</span></span>
+<span style="display: flex; justify-content: space-between; gap: 8px; padding: 8px 12px; border: 1px solid #2A2B28; border-radius: 4px;"><span>Podcast</span><span style="color: #6E6D68;">.mp3</span></span>
+</div>
+</div>
+</article>
+
+<article style="flex: 1 1 480px; min-width: 0; padding: 40px; background: #121311;">
+<p style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; color: #FF6A3D;">02 — MARKETEURS</p>
+<h3 style="margin: 12px 0 0; font-weight: 600; font-size: 28px; line-height: 1.15; letter-spacing: -0.025em;">Le script d'une pub, découpé.</h3>
+<p style="margin: 12px 0 0; max-width: 30em; color: #BDBBB5;">Repère l'accroche, la preuve et l'appel à l'action sans regarder la vidéo dix fois.</p>
+<div style="margin-top: 36px;">
+<div style="display: flex; justify-content: space-between; font-family: 'Geist Mono', monospace; font-size: 11px; color: #6E6D68;" aria-hidden="true"><span>Pub sérum — concurrent A</span><span>0:42</span></div>
+<div role="img" aria-label="Pub de 42 secondes découpée en cinq parties : accroche 3 s, problème 6 s, preuve 12 s, offre 13 s, appel à l'action 8 s" style="display: flex; gap: 3px; height: 44px; margin-top: 10px;">
+<span style="flex: 3 1 0; border-radius: 3px; background: #FF6A3D;"></span>
+<span style="flex: 6 1 0; border-radius: 3px; background: #5A5955;"></span>
+<span style="flex: 12 1 0; border-radius: 3px; background: #3F403C;"></span>
+<span style="flex: 13 1 0; border-radius: 3px; background: #2F302D;"></span>
+<span style="flex: 8 1 0; border-radius: 3px; background: #EDEBE6;"></span>
+</div>
+<div style="display: flex; gap: 3px; margin-top: 10px; font-family: 'Geist Mono', monospace; font-size: 11px; color: #8B8A85;" aria-hidden="true">
+<span style="flex: 3 1 0; min-width: 0; overflow: hidden; white-space: nowrap; color: #FF6A3D;">accroche</span>
+<span style="flex: 6 1 0; min-width: 0; overflow: hidden; white-space: nowrap;">problème</span>
+<span style="flex: 12 1 0; min-width: 0; overflow: hidden; white-space: nowrap;">preuve</span>
+<span style="flex: 13 1 0; min-width: 0; overflow: hidden; white-space: nowrap;">offre</span>
+<span style="flex: 8 1 0; min-width: 0; overflow: hidden; white-space: nowrap; color: #EDEBE6;">appel à l'action</span>
+</div>
+<blockquote style="margin: 28px 0 0; padding: 18px 20px; border: 1px solid #2A2B28; border-radius: 6px; background: #0E0F0E;">
+<p style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 11px; color: #FF6A3D;">ACCROCHE · 00:00 → 00:03</p>
+<p style="margin: 6px 0 0; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 26px; line-height: 1.25;">« Tu te réveilles avec la peau qui tire ? »</p>
+</blockquote>
+</div>
+</article>
+</div>
+</section>
+
+<section id="process" style="max-width: 1240px; margin: 0 auto; padding: 128px 24px 0;">
+<h2 style="margin: 0 0 56px; font-weight: 600; font-size: clamp(36px, 4.6vw, 64px); line-height: 1; letter-spacing: -0.04em;">Du lien au texte.</h2>
+<div style="position: relative;">
+<span aria-hidden="true" style="position: absolute; top: 4px; left: 0; right: 0; height: 1px; background: #2A2B28;"></span>
+<span class="vx-packet" aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 9px; height: 9px; border-radius: 2px; background: #FF6A3D;"></span>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 32px;">
+<li style="flex: 1 1 220px; min-width: 0; padding-top: 36px;"><p style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; color: #8B8A85;">01</p><h3 style="margin: 8px 0 0; font-weight: 600; font-size: 22px; letter-spacing: -0.02em;">Colle le lien</h3><p style="margin: 8px 0 0; color: #BDBBB5;">YouTube, TikTok, ou ton propre fichier.</p></li>
+<li style="flex: 1 1 220px; min-width: 0; padding-top: 36px;"><p style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; color: #8B8A85;">02</p><h3 style="margin: 8px 0 0; font-weight: 600; font-size: 22px; letter-spacing: -0.02em;">On extrait l'audio</h3><p style="margin: 8px 0 0; color: #BDBBB5;">Propre, en MP3, prêt à écouter.</p></li>
+<li style="flex: 1 1 220px; min-width: 0; padding-top: 36px;"><p style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; color: #8B8A85;">03</p><h3 style="margin: 8px 0 0; font-weight: 600; font-size: 22px; letter-spacing: -0.02em;">On transcrit</h3><p style="margin: 8px 0 0; color: #BDBBB5;">Ponctué, découpé en phrases, horodaté.</p></li>
+<li style="flex: 1 1 220px; min-width: 0; padding-top: 36px;"><p style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; color: #FF6A3D;">04</p><h3 style="margin: 8px 0 0; font-weight: 600; font-size: 22px; letter-spacing: -0.02em;">Tu exportes</h3><p style="margin: 8px 0 0; color: #BDBBB5;">TXT, PDF, SRT, VTT ou MP3, en un clic.</p></li>
+</ol>
+</div>
+</section>
+
+<section style="max-width: 1240px; margin: 0 auto; padding: 128px 24px 0;">
+<div style="display: flex; flex-wrap: wrap; border-top: 1px solid #2A2B28;">
+<div style="flex: 1 1 280px; min-width: 0; padding: 32px 32px 32px 0;">
+<h2 style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; font-weight: 500; color: #8B8A85;">FICHE TECHNIQUE</h2>
+</div>
+<dl style="flex: 3 1 640px; min-width: 0; margin: 0;">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 28px 0; border-bottom: 1px solid #2A2B28;"><dt style="flex: 0 0 160px; color: #8B8A85;">Entrées</dt><dd style="flex: 1 1 360px; margin: 0; font-family: 'Geist Mono', monospace; font-size: clamp(22px, 2.6vw, 34px); letter-spacing: -0.02em;">YouTube · TikTok · MP4 · MOV · MP3</dd></div>
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 28px 0; border-bottom: 1px solid #2A2B28;"><dt style="flex: 0 0 160px; color: #8B8A85;">Sorties</dt><dd style="flex: 1 1 360px; margin: 0; font-family: 'Geist Mono', monospace; font-size: clamp(22px, 2.6vw, 34px); letter-spacing: -0.02em;">TXT · PDF · <span style="color: #FF6A3D;">SRT · VTT</span> · MP3</dd></div>
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 28px 0; border-bottom: 1px solid #2A2B28;"><dt style="flex: 0 0 160px; color: #8B8A85;">Horodatage</dt><dd style="flex: 1 1 360px; margin: 0; font-family: 'Geist Mono', monospace; font-size: clamp(22px, 2.6vw, 34px); letter-spacing: -0.02em;">À chaque phrase</dd></div>
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 32px; padding: 28px 0; border-bottom: 1px solid #2A2B28;"><dt style="flex: 0 0 160px; color: #8B8A85;">Langues</dt><dd style="flex: 1 1 360px; margin: 0; font-family: 'Geist Mono', monospace; font-size: clamp(22px, 2.6vw, 34px); letter-spacing: -0.02em;">Détection auto · [LISTE À CONFIRMER]</dd></div>
+</dl>
+</div>
+</section>
+
+<section id="tarifs" style="max-width: 1240px; margin: 0 auto; padding: 128px 24px 0;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 48px;">
+<h2 style="margin: 0; font-weight: 600; font-size: clamp(36px, 4.6vw, 64px); line-height: 1; letter-spacing: -0.04em;">Tarifs</h2>
+<p style="margin: 0; max-width: 26em; color: #BDBBB5;">Commence sans payer. Passe à Pro quand Voxia devient un outil de travail.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 1px; border: 1px solid #2A2B28; border-radius: 10px; background: #2A2B28; overflow: hidden;">
+<div style="flex: 1 1 400px; min-width: 0; padding: 40px; background: #121311;">
+<h3 style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 13px; font-weight: 500; color: #8B8A85;">GRATUIT</h3>
+<p style="margin: 14px 0 0; font-weight: 600; font-size: 64px; line-height: 1; letter-spacing: -0.04em;">0 €</p>
+<ul style="margin: 28px 0 0; padding: 0; list-style: none; color: #BDBBB5;">
+<li style="padding: 10px 0; border-top: 1px solid #2A2B28;">[NOMBRE] vidéos par mois</li>
+<li style="padding: 10px 0; border-top: 1px solid #2A2B28;">Jusqu'à [DURÉE] minutes par vidéo</li>
+<li style="padding: 10px 0; border-top: 1px solid #2A2B28; border-bottom: 1px solid #2A2B28;">Exports TXT et SRT</li>
+</ul>
+<a href="#" style="display: inline-flex; align-items: center; margin-top: 32px; min-height: 46px; padding: 0 20px; border: 1px solid #3A3B37; border-radius: 4px; text-decoration: none; font-weight: 600;">Commencer</a>
+</div>
+<div style="position: relative; flex: 1 1 400px; min-width: 0; padding: 40px; background: #161715;">
+<span aria-hidden="true" style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #FF6A3D;"></span>
+<h3 style="margin: 0; font-family: 'Geist Mono', monospace; font-size: 13px; font-weight: 500; color: #FF6A3D;">PRO</h3>
+<p style="margin: 14px 0 0; font-weight: 600; font-size: 64px; line-height: 1; letter-spacing: -0.04em;">[PRIX]<span style="font-size: 18px; font-weight: 400; letter-spacing: 0; color: #8B8A85;"> / mois</span></p>
+<ul style="margin: 28px 0 0; padding: 0; list-style: none; color: #BDBBB5;">
+<li style="padding: 10px 0; border-top: 1px solid #2A2B28;">Vidéos longues</li>
+<li style="padding: 10px 0; border-top: 1px solid #2A2B28;">Tous les exports, dont VTT et MP3</li>
+<li style="padding: 10px 0; border-top: 1px solid #2A2B28; border-bottom: 1px solid #2A2B28;">Bibliothèque et recherche sans limite</li>
+</ul>
+<a href="#" style="display: inline-flex; align-items: center; margin-top: 32px; min-height: 46px; padding: 0 20px; border-radius: 4px; background: #FF6A3D; color: #0E0F0E; text-decoration: none; font-weight: 600;">Passer à Pro</a>
+</div>
+</div>
+</section>
+
+<section id="questions" style="max-width: 1240px; margin: 0 auto; padding: 128px 24px 0;">
+<div style="display: flex; flex-wrap: wrap; gap: 32px; border-top: 1px solid #2A2B28; padding-top: 32px;">
+<h2 style="flex: 1 1 280px; margin: 0; font-family: 'Geist Mono', monospace; font-size: 12px; font-weight: 500; color: #8B8A85;">QUESTIONS</h2>
+<dl style="flex: 3 1 640px; min-width: 0; margin: 0;">
+<dt style="font-weight: 600; font-size: 20px; letter-spacing: -0.015em;">Quelles langues sont reconnues ?</dt>
+<dd style="margin: 6px 0 0; padding-bottom: 24px; border-bottom: 1px solid #2A2B28; color: #BDBBB5;">Voxia détecte la langue parlée dans la vidéo. [LISTE DES LANGUES À CONFIRMER]</dd>
+<dt style="padding-top: 24px; font-weight: 600; font-size: 20px; letter-spacing: -0.015em;">Je peux transcrire n'importe quelle vidéo ?</dt>
+<dd style="margin: 6px 0 0; padding-bottom: 24px; border-bottom: 1px solid #2A2B28; color: #BDBBB5;">Tes vidéos, celles de tes clients, ou des vidéos publiques que tu analyses. Tu restes responsable de l'usage que tu fais du texte.</dd>
+<dt style="padding-top: 24px; font-weight: 600; font-size: 20px; letter-spacing: -0.015em;">Combien de temps mes fichiers sont-ils gardés ?</dt>
+<dd style="margin: 6px 0 0; color: #BDBBB5;">[DURÉE DE CONSERVATION À DÉFINIR]. Tu peux supprimer une transcription à tout moment.</dd>
+</dl>
+</div>
+</section>
+
+<footer style="margin-top: 128px; border-top: 1px solid #2A2B28;">
+<div style="max-width: 1240px; margin: 0 auto; padding: 28px 24px 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: #8B8A85;">
+<span>© 2026 Voxia</span>
+<span style="display: flex; flex-wrap: wrap; gap: 24px;"><a href="#" style="color: #BDBBB5;">Confidentialité</a><a href="#" style="color: #BDBBB5;">Conditions</a><a href="#" style="color: #BDBBB5;">Contact</a></span>
+</div>
+<p aria-hidden="true" style="margin: 24px 0 0; padding: 0 16px; overflow: hidden; white-space: nowrap; text-align: center; font-weight: 700; font-size: clamp(120px, 24vw, 360px); line-height: 0.78; letter-spacing: -0.06em; color: transparent; -webkit-text-stroke: 1px #3A3B37;">voxia</p>
+</footer>
+
+</div>
+</body>
+</html>
