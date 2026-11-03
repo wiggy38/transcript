@@ -35,6 +35,13 @@ return [
         ],
     ],
 
+    // Connexion Google (Socialite). Active seulement si VOXIA_GOOGLE_LOGIN=true (voxia.comptes.google_actif).
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI', '/auth/google/callback'),
+    ],
+
     // Transcription (Scribe v2), environ 0,22 $ par heure d'audio.
     'elevenlabs' => [
         'key' => env('ELEVENLABS_API_KEY'),

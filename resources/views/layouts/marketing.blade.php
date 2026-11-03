@@ -21,8 +21,8 @@
                     <li><a href="#usages" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.usages') }}</a></li>
                     <li><a href="#fonctionnement" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.fonctionnement') }}</a></li>
                     <li><a href="#tarifs" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.tarifs') }}</a></li>
-                    <li><a href="#" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.connexion') }}</a></li>
-                    <li><x-bouton href="#">{{ __('interface.navigation.essayer') }}</x-bouton></li>
+                    <li><a href="{{ route('login') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.connexion') }}</a></li>
+                    <li><x-bouton href="{{ route('accueil') }}">{{ __('interface.navigation.essayer') }}</x-bouton></li>
                 </ul>
             </nav>
         </div>

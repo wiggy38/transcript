@@ -6,7 +6,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 ## 1. Planning (cahier §9)
 
 - [ ] Étape 1 — Chaîne de traitement : lien, téléchargement, MP3, transcription, en ligne de commande (2 à 3 semaines)
-- [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines)
+- [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines) *(Comptes faits, voir §2 ; historique et affichage restent à faire.)*
 - [ ] Étape 3 — Exports (F4), lecteur synchronisé et analyse de script (F7) (2 à 3 semaines)
 - [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines)
 - [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines)
@@ -53,7 +53,36 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] L'analyse d'une pub de 60 secondes s'affiche en moins de 15 secondes.
 - [ ] Un clic sur une partie lance la lecture à son début.
 
+### Comptes (cahier §2 parcours étapes 1 et 2, §5 Comptes)
+
+*Le cahier ne numérote pas ces règles : chacune a son test dans `tests/Feature/Comptes/`. Suite complète : 228 tests passent, 4 ignorés comme avant.*
+
+- [x] Inscription par email et mot de passe, lien de vérification envoyé. *(InscriptionTest)*
+- [x] Vérification de l'email exigée avant la première transcription (route `verified`). *(VerificationEmailTest)*
+- [x] Connexion, mot de passe oublié, nouveau mot de passe par lien. *(ConnexionTest)*
+- [x] Lien collé par un visiteur conservé pendant l'inscription et la vérification, puis repris à l'arrivée dans l'application. *(LienEnAttenteTest, dont la conservation à la connexion et la non-relance)*
+- [x] Connexion Google (Socialite), désactivée par défaut par `VOXIA_GOOGLE_LOGIN`. *(ConnexionGoogleTest)* *(Partiel : Socialite simulé, aucun essai avec un vrai client Google, voir P52.)*
+- [x] Limite de comptes gratuits par IP, avec message neutre, aussi pour Google. *(InscriptionTest, ConnexionGoogleTest)* *(Partiel : mécanisme fait, valeur non fixée, donc aucune limite par défaut, voir P47.)*
+- [x] Réglages : nom, email, mot de passe, langue de l'interface. *(ReglagesTest)*
+- [x] Suppression du compte et de toutes ses données (transcriptions, MP3, fichiers) après confirmation. *(ReglagesTest : fichiers et lignes absents, voisins intacts)*
+- [x] Emails transactionnels au style Signal ; en local, journal (`MAIL_MAILER=log`). *(EmailsTransactionnelsTest)* *(Partiel : Mailpit non essayé, voir P55.)*
+- [x] Limitation des tentatives : connexion 5 par minute, inscription 10 par heure et par IP, réinitialisation 5 par heure. *(ConnexionTest, InscriptionTest)*
+- [x] Écrans au style Signal (`layouts/marketing`, `layouts/app`), accueil avec le champ de lien. *(EcransComptesTest : rendu, sans ressource externe)*
+
 ## 3. Décisions
+
+- Comptes : Fortify pour l'authentification (vues Signal dans `resources/views/auth`), sans double authentification ni passkeys (hors MVP, désactivés dans `config/fortify.php`). Socialite pour Google.
+- Lien en attente : colonne `users.lien_en_attente`. Tant que le visiteur est anonyme, le lien est gardé en session (`App\Services\Comptes\LienEnAttente`) ; il est reporté sur le compte à la connexion ou à l'inscription (événement `Login`).
+- Lancement : à l'arrivée dans l'application (`/tableau-de-bord`), une fois l'email vérifié. Le bouton « Transcrire » est déjà la demande de lancement, donc la reprise ne demande pas de second clic.
+- Lancement depuis le web (`POST /transcriptions`) : seules les adresses `http(s)` sont acceptées. `LancerTranscription` sait aussi lire un fichier local : ce chemin ne doit jamais venir d'un formulaire.
+- Limite par IP : compte les comptes au plan Gratuit créés depuis l'IP (`users.inscription_ip`). Les comptes Pro ne comptent pas. Le message est volontairement neutre.
+- Connexion Google : aucun rattachement à un compte non vérifié (sinon un tiers pourrait prendre le compte). Un compte Google n'a pas de mot de passe ; la réinitialisation en crée un.
+- Suppression : confirmation par la saisie de l'adresse email (valable aussi pour Google). Les lignes partent dans une transaction ; les fichiers MP3 par la tâche `SupprimerFichiersTranscriptions`. Déconnexion avant suppression : `Auth::logout()` enregistre le compte pour changer son jeton, ce qui réinsérait la ligne supprimée (bug trouvé par les tests).
+- Langue : middleware `DefinirLangue` (langue du compte, sinon défaut de l'application). Fichiers `lang/fr/validation.php`, `passwords.php`, `auth.php` ajoutés, car le framework ne fournit que l'anglais.
+- Emails : thème Markdown `signal` (`resources/views/vendor/mail/html/themes/signal.css`), sans police externe.
+- Environnement Windows : `composer require` échoue sans `--ignore-platform-req=ext-pcntl --ignore-platform-req=ext-posix` (Horizon, P38). Le lock n'a fait qu'ajouter des paquets, aucune version existante n'a bougé.
+
+## 4. Points ouverts
 
 - Laravel pour l'application web (validé, cahier §8).
 - Transcription : ElevenLabs Scribe v2, environ 0,22 $ par heure d'audio (validé).
@@ -174,4 +203,15 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P42 — Gris #6E6D68 de la maquette (horodatages, libellés) : 3,5 à 3,7:1, échec de 4,5:1 sur les trois fonds. Remplacement proposé : #81807A (4,5 à 4,9:1). À valider avant intégration de la maquette.
 - [ ] P43 — Bandeau défilant et frappe du texte (animations §7) : non construits, aucun composant demandé. Les animations existantes (onde, pulsation) sont coupées sous `prefers-reduced-motion`.
 - [ ] P44 — Rendu visuel non vérifié dans un navigateur : l'extension Chrome n'était pas connectée. Vérifié seulement par rendu Blade, génération Tailwind et tests. À regarder sur `/styleguide` en local.
-- [ ] P45 — Sélecteur de langue du layout `app` : emplacement seulement, pas de composant.
+- [ ] P45 — Sélecteur de langue du layout `app` : emplacement seulement, pas de composant. *(Les réglages du compte proposent la langue ; le sélecteur de l'en-tête reste à faire.)*
+- [ ] P46 — Réinitialisation : une adresse sans compte reçoit « Aucun compte ne correspond à cette adresse » (message Laravel). Cela révèle quelles adresses ont un compte. Message neutre à décider.
+- [ ] P47 — Limite de comptes gratuits par IP : valeur non fixée (`VOXIA_FREE_ACCOUNTS_PER_IP` vide = aucune limite). Le cahier ne la donne pas. Limite par appareil non traitée.
+- [ ] P48 — Adresse IP de création (`users.inscription_ip`) : donnée personnelle conservée pour la limite. Durée de conservation et mention RGPD à fixer avec P10. Derrière un proxy, l'IP lue doit être la vraie (proxys de confiance à configurer).
+- [ ] P49 — Sixième tentative de connexion : réponse 429 générique (page du framework, en anglais), sans le message « trop de tentatives » traduit.
+- [ ] P50 — Compte Google sans mot de passe : les réglages demandent le mot de passe actuel. Pour en créer un, passer par « Mot de passe oublié ». Pas de message dédié.
+- [ ] P51 — Lien en attente : retiré du compte avant le lancement. Si le lancement échoue, le visiteur voit « Ton lien n'a pas pu être lancé » sans motif et doit le coller à nouveau.
+- [ ] P52 — Connexion Google : jamais essayée avec un vrai client Google. Il faut créer les identifiants dans la console Google Cloud et déclarer l'URI de redirection `/auth/google/callback`.
+- [ ] P53 — Suppression : si la file perd la tâche `SupprimerFichiersTranscriptions`, les MP3 restent sur le disque sans ligne en base pour les retrouver. Piste : journal des dossiers à purger, ou balayage périodique.
+- [ ] P54 — Traduction française du framework partielle (`lang/fr/validation.php`) : les règles non listées restent en anglais.
+- [ ] P55 — Emails : pas encore vus dans Mailpit ni dans une boîte réelle. Pas de pied de page légal (CGU, confidentialité, voir P10).
+- [ ] P56 — Écrans de compte non vérifiés dans un navigateur : rendu seulement contrôlé par tests (même statut que P44).

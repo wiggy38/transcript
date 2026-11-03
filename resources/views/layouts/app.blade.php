@@ -20,7 +20,7 @@
             <nav aria-label="{{ __('interface.application.principale') }}">
                 <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
                     <li>
-                        <a href="#" @if (($actif ?? null) === 'nouvelle') aria-current="page" @endif
+                        <a href="{{ route('tableau-de-bord') }}" @if (($actif ?? null) === 'nouvelle') aria-current="page" @endif
                            class="{{ ($actif ?? null) === 'nouvelle' ? 'text-accent' : 'text-texte-secondaire hover:text-texte' }} no-underline">
                             {{ __('interface.application.nouvelle') }}
                         </a>
@@ -32,7 +32,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" @if (($actif ?? null) === 'compte') aria-current="page" @endif
+                        <a href="{{ route('reglages') }}" @if (($actif ?? null) === 'compte') aria-current="page" @endif
                            class="{{ ($actif ?? null) === 'compte' ? 'text-accent' : 'text-texte-secondaire hover:text-texte' }} no-underline">
                             {{ __('interface.application.compte') }}
                         </a>
@@ -51,6 +51,12 @@
                         {{ $langue }}
                     </div>
                 @endisset
+                @auth
+                    <form method="post" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="cursor-pointer text-sm text-texte-secondaire hover:text-accent">{{ __('comptes.deconnexion') }}</button>
+                    </form>
+                @endauth
             </div>
         </div>
     </header>
