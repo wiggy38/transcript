@@ -8,6 +8,7 @@ use App\Contracts\VideoFetcher;
 use App\Services\Audio\FfmpegAudioExtractor;
 use App\Services\Transcription\ElevenLabsScribeEngine;
 use App\Services\Video\YtDlpVideoFetcher;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Mises en page : <x-layouts::app> et <x-layouts::marketing> (resources/views/layouts).
+        Blade::anonymousComponentPath(resource_path('views/layouts'), 'layouts');
     }
 }

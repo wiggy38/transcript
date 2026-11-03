@@ -3,7 +3,93 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+/*
+ * Charte Signal (cahier §7). Une seule source de vérité : ces jetons.
+ * Pour tester une autre accent, changer uniquement --color-accent.
+ */
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, monospace;
+    --font-serif: 'Instrument Serif', Georgia, serif;
+
+    /* Fonds et panneaux */
+    --color-fond: #0E0F0E;
+    --color-panneau: #121311;
+    --color-panneau-eleve: #161715;
+
+    /* Filets : décoratifs (#2A2B28) et de contour de champ ou de bouton à filet (3:1 minimum) */
+    --color-filet: #2A2B28;
+    --color-filet-contour: #6A6B65;
+
+    /* Textes */
+    --color-texte: #EDEBE6;
+    --color-texte-secondaire: #BDBBB5;
+    --color-texte-discret: #8B8A85;
+
+    /* Accent : variable unique */
+    --color-accent: #FF6A3D;
+
+    /* Hors charte, à valider : couleur d'erreur (échec, message d'erreur) */
+    --color-erreur: #FF7A73;
+
+    /* Rayons */
+    --radius-bouton: 4px;
+    --radius-champ: 6px;
+    --radius-panneau: 10px;
+}
+
+@layer base {
+    html {
+        color-scheme: dark;
+    }
+
+    body {
+        background-color: var(--color-fond);
+        color: var(--color-texte);
+        font-family: var(--font-sans);
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+    }
+
+    ::placeholder {
+        color: var(--color-texte-discret);
+        opacity: 1;
+    }
+
+    dialog::backdrop {
+        background-color: rgb(14 15 14 / 0.78);
+    }
+}
+
+/* Animations : chacune est coupée quand l'utilisateur réduit les animations. */
+@keyframes vx-onde {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+}
+
+@keyframes vx-pulsation {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+}
+
+.vx-onde-barre {
+    animation: vx-onde 1.6s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.vx-pulsation {
+    animation: vx-pulsation 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vx-onde-barre,
+    .vx-pulsation {
+        animation: none;
+    }
 }

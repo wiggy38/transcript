@@ -115,6 +115,17 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - Lancement (`App\Services\Traitement\LancerTranscription`) : lien reconnu puis mis en file, ou fichier local dont l'extension est dans `voxia.uploads.extensions`. Une transcription déjà terminée est renvoyée ; une transcription en échec est relancée sur la même ligne ; une transcription en cours n'est pas relancée.
 - Commande `voxia:transcribe {source} {--user=email} {--langue=}` : lance, suit les étapes au fil de l'eau, puis affiche les 10 premiers paragraphes. `--user` est obligatoire : la commande n'a pas de compte implicite.
 - Tests : 27 nouveaux tests (`tests/Feature/Traitement`, suite passée de 131 à 158) avec `FauxVideoFetcher` (échec par étape, file de métadonnées), `FauxAudioExtractor` (nouveau, sans FFmpeg) et `FakeTranscriptionEngine`. Couverts : succès, échec à chaque étape, vidéo privée, live, durée du plan, nouvelles tentatives, fichier local, tâche abandonnée, nettoyage des fichiers temporaires, file par plan, déduplication, commande.
+- Charte Signal (cahier §7), jetons dans `resources/css/app.css` (`@theme`) :
+  - Valeurs exactes de §7. L'accent est la variable unique `--color-accent` (tester #C8F542 ou #6E8BFF en changeant cette seule ligne).
+  - Rayons 4, 6 et 10 px (`rounded-bouton`, `rounded-champ`, `rounded-panneau`).
+  - Polices auto-hébergées par `@fontsource` (npm), importées dans `resources/js/app.js`. Le chargement depuis Bunny (`laravel-vite-plugin/fonts`) est retiré de `vite.config.js` : aucun appel à un CDN de polices. Un test vérifie l'absence de `fonts.googleapis`, `fonts.bunny` et équivalents.
+  - Jetons ajoutés hors §7, à valider : `--color-filet-contour` (#6A6B65, contour de champ et de bouton à filet, 3:1 minimum) et `--color-erreur` (#FF7A73, messages d'erreur et statut Échec).
+  - Composants dans `resources/views/components` : `x-bouton` (variantes principal, clair, filet), `x-champ`, `x-panneau`, `x-badge-statut` (accepte `StatutTranscription`), `x-horodatage` (Geist Mono, formaté par `App\Support\Horodatage`), `x-message-erreur`, `x-compteur-quota` (valeurs passées par l'appelant), `x-onde-audio`, `x-fenetre-superposee` (dialog natif), `x-marque`.
+  - Mises en page dans `resources/views/layouts` (`<x-layouts::marketing>`, `<x-layouts::app>` avec emplacements `quota` et `langue`). Espace de noms enregistré dans `AppServiceProvider`.
+  - Animations (onde, pulsation des statuts) coupées sous `prefers-reduced-motion`.
+  - Page `/styleguide`, enregistrée seulement si `app()->isLocal()`.
+  - Pas de dégradé, pas d'ombre portée, pas d'emoji. La grille de fond de la maquette (dégradé de lignes) n'est pas reprise.
+  - Tests : `tests/Feature/Interface/CharteSignalTest.php` (contrastes lus dans les jetons, animations, CDN, rendu du styleguide) et `tests/Unit/Support/HorodatageTest.php`.
 
 ## 4. Points ouverts
 
@@ -158,3 +169,9 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P37 — `voxia:transcribe` plante au premier suivi : import `Illuminate\Support\Facades\Sleep` inexistant (à remplacer par `Illuminate\Support\Sleep`). Les transcriptions aboutissent quand même dans la file.
 - [ ] P38 — Horizon ne démarre pas sous Windows (`pcntl_async_signals` absente). Tests faits avec `queue:work`. Horizon à vérifier sous Linux ou WSL.
 - [ ] P39 — Une erreur « Object of class SourceTranscription could not be converted to string » est apparue une fois dans le worker, sans trace dans `laravel.log`. Non reproduite ; à surveiller.
+- [ ] P40 — Couleur d'erreur #FF7A73 : absente du cahier §7, proposée ici (7,1 à 7,6:1 sur les trois fonds). À valider.
+- [ ] P41 — Contour de champ et de bouton à filet #6A6B65 : absent du cahier §7. Le filet #2A2B28 ne fait que 1,3:1 sur le fond, sous le seuil de 3:1 pour un contour de contrôle. À valider.
+- [ ] P42 — Gris #6E6D68 de la maquette (horodatages, libellés) : 3,5 à 3,7:1, échec de 4,5:1 sur les trois fonds. Remplacement proposé : #81807A (4,5 à 4,9:1). À valider avant intégration de la maquette.
+- [ ] P43 — Bandeau défilant et frappe du texte (animations §7) : non construits, aucun composant demandé. Les animations existantes (onde, pulsation) sont coupées sous `prefers-reduced-motion`.
+- [ ] P44 — Rendu visuel non vérifié dans un navigateur : l'extension Chrome n'était pas connectée. Vérifié seulement par rendu Blade, génération Tailwind et tests. À regarder sur `/styleguide` en local.
+- [ ] P45 — Sélecteur de langue du layout `app` : emplacement seulement, pas de composant.
