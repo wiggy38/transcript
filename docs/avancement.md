@@ -61,6 +61,17 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - MP3 inclus dans tous les plans ; mention Pro reformulée « tous les exports, dont PDF et VTT » (cahier §7).
 - Base de données : PostgreSQL (demande du projet ; le cahier indique « MySQL ou PostgreSQL »).
 - File : Redis + Laravel Horizon, une tâche par vidéo (cahier §8).
+- Modèle de données posé (étape 1) : 7 migrations, 7 modèles, 7 enums PHP, factories.
+  - Enums : valeurs stockées en `varchar` avec cast Eloquent (pas de type `enum` PostgreSQL, pour ajouter une valeur sans migration lourde). Valeurs en français, comme dans le cahier.
+  - Colonnes du domaine en français (`est_apercu`, `motif_echec`…), colonnes techniques en anglais (`user_id`, `created_at`).
+  - Mots : une ligne par mot (`transcription_words`), bornes en millisecondes, écrits en lot. Paragraphes calculés (`transcription_paragraphs`), texte joint, lus en une requête pour l'affichage.
+  - Recherche plein texte : index GIN sur `to_tsvector('simple', texte)` au niveau paragraphe, sans colonne supplémentaire. Le résultat renvoie le paragraphe et son `debut_ms`, donc l'extrait et le lien vers l'horodatage. Une transcription de 3 heures compte environ 30 000 mots mais seulement quelques centaines de paragraphes : l'affichage ne charge pas les mots. Le test vérifie avec `EXPLAIN` que l'index est utilisé.
+  - Dédoublonnage F1 : contrainte unique `(user_id, source, id_video)`. Un fichier importé (`id_video` nul) n'est pas concerné.
+  - Une seule analyse de script par transcription (contrainte unique). Relancer une analyse réutilise la ligne.
+  - Journal de consommation (`usage_records`) jamais modifié. Un remboursement est une ligne en sens inverse (`annule_usage_record_id`), une seule fois par consommation ; une ligne de remboursement ne peut pas être annulée (`UsageRecord::reverse()`).
+  - Suppression d'une transcription : mots, paragraphes, analyse et journaux supprimés ; la ligne de consommation reste, avec `transcription_id` nul, pour que le quota ne se libère pas.
+  - `is_admin` n'est pas assignable en masse. Langue de l'interface par défaut : `fr` (à confirmer, voir P15).
+  - Tests : 32 tests de modèle. Sur SQLite (config par défaut), 28 passent et 4 recherche plein texte sont ignorés. Sur PostgreSQL 16 (base `voxia_test`), les 32 passent.
 
 ## 4. Points ouverts
 
@@ -75,3 +86,8 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P8 — Fournisseur du modèle de langage utilisé pour F7.
 - [ ] P9 — Durée maximale d'une vidéo analysable (proposition : 3 minutes).
 - [ ] P10 — Avis juridique sur la récupération des vidéos YouTube et TikTok, et rédaction des CGU et de la politique de confidentialité (texte définitif à demander, ne pas inventer).
+- [ ] P11 — Suppression du compte : les lignes de consommation (`usage_records`) sont supprimées avec le compte, comme le demande le cahier §5. Faut-il les conserver pour la facturation ou les obligations comptables ? Question juridique, à trancher avec l'avis du P10.
+- [ ] P12 — Règle de regroupement en paragraphes (taille cible en mots ou pause maximale). Les valeurs iront dans `config/voxia.php`. À proposer quand le service de regroupement sera écrit.
+- [ ] P13 — Recherche sans accents ni racinisation : la configuration `simple` ne reconnaît ni « école » pour « ecole », ni les formes conjuguées. Pistes : configuration `french` / `english` selon la langue détectée, ou extension `unaccent`. À trancher avec des données réelles.
+- [ ] P14 — Statuts de l'analyse de script (`en_attente`, `analyse`, `termine`, `echec`) : proposés par le modèle, absents du cahier. À valider.
+- [ ] P15 — Langue de l'interface par défaut (`fr` dans le modèle, `APP_LOCALE=en` dans `.env`). À confirmer avec P5.
