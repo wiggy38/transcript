@@ -24,6 +24,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/transcriptions/{transcription}', [TranscriptionController::class, 'show'])
         ->name('transcriptions.show');
 
+    // MP3 de la transcription, pour le lecteur audio (TikTok et fichiers). Propriétaire seulement.
+    Route::get('/transcriptions/{transcription}/audio', [TranscriptionController::class, 'audio'])
+        ->name('transcriptions.audio');
+
     // Morceaux d'un fichier importé (2 Go par défaut, envoi découpé). Email vérifié exigé.
     Route::post('/televersements/morceaux', [TeleversementController::class, 'morceau'])
         ->middleware('verified')

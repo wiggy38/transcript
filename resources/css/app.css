@@ -93,3 +93,27 @@
         animation: none;
     }
 }
+
+/*
+ * Lecture d'une transcription (F2). Un paragraphe hors écran n'est pas mis en page tant qu'il
+ * n'est pas proche de la zone visible : une transcription de 3 heures reste fluide au défilement.
+ */
+.vx-paragraphe {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 88px;
+}
+
+/* Horodatages masqués : visuellement cachés, mais toujours lisibles et actionnables par un lecteur d'écran. */
+[data-horodatages='masques'] .vx-horodatage {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* Onde figée quand la lecture est en pause. */
+[data-lecture='pause'] .vx-onde-barre {
+    animation-play-state: paused;
+}

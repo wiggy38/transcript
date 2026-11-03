@@ -22,10 +22,20 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 
 ### F2 — Transcription horodatée avec ponctuation propre
 
-*(Partiel : moteur et regroupement en paragraphes faits et testés ; affichage, lecteur, recherche et copie restent à faire.)*
+*(Partiel : moteur, regroupement en paragraphes et écran de lecture faits et testés. Exports : étape 3. Fluidité du défilement non mesurée, voir ci-dessous.)*
 
-- [ ] Le clic sur un horodatage positionne la lecture à 1 seconde près.
-- [ ] Une transcription de 3 heures s'affiche et reste fluide au défilement.
+- [ ] Le clic sur un horodatage positionne la lecture à 1 seconde près. *(Partiel : testé côté serveur (début exact en millisecondes, MP3 servi avec requêtes d'intervalle). Vérifié dans le navigateur sur le MP3 : clic sur l'horodatage 1 min 13,9 s, position lue 1,5 s plus tard : 1 min 15,4 s, lecture en cours. Le lecteur YouTube n'a pas pu être vérifié : son API renvoyait une erreur dans l'environnement de test.)*
+- [ ] Une transcription de 3 heures s'affiche et reste fluide au défilement. *(Partiel : 703 paragraphes rendus en moins de 2 s (test). Fluidité non mesurée : dans le navigateur de test, même une page au repos n'atteint que 1 à 2 images par seconde, donc la mesure n'a pas de sens ici. À mesurer sur un poste normal.)*
+
+Décisions de l'écran de lecture :
+- Paragraphes rendus d'un coup, hors écran ignorés par le navigateur (`content-visibility`), sans virtualisation en JavaScript.
+- La copie et le surlignage du texte passent par `textContent` : le texte de la transcription n'est jamais inséré comme HTML.
+- Le bandeau « Passe au Pro » s'affiche en fin de texte pour un aperçu ; son lien arrive à l'étape 4.
+- Les boutons d'export sont inactifs, avec la mention « bientôt », jusqu'à l'étape 3.
+
+Points ouverts :
+- Vérifier le lecteur YouTube sur un poste connecté avec une vraie vidéo, et la copie dans le presse-papiers (le message de confirmation n'est pas apparu dans le navigateur de test).
+- Mesurer la fluidité du défilement sur un poste normal avec une transcription de 3 heures.
 
 ### F3 — Extraction de l'audio en MP3
 

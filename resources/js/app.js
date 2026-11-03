@@ -17,7 +17,10 @@ import '@fontsource/instrument-serif/latin-ext-400-italic.css';
 
 // Envoi de fichiers en morceaux (écran Nouvelle transcription). Alpine est fourni par Livewire.
 import televersement from './televersement.js';
+// Lecteur et texte horodaté d'une transcription terminée (cahier F2).
+import lecteurTranscription from './lecteur-transcription.js';
 
 document.addEventListener('alpine:init', () => {
     window.Alpine.data('televersement', televersement);
+    window.Alpine.data('lecteurTranscription', lecteurTranscription);
 });

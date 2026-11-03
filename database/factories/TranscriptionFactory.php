@@ -6,6 +6,7 @@ use App\Enums\MotifEchec;
 use App\Enums\SourceTranscription;
 use App\Enums\StatutTranscription;
 use App\Models\Transcription;
+use App\Models\TranscriptionParagraph;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -83,6 +84,47 @@ class TranscriptionFactory extends Factory
             'motif_echec' => $motif,
             'date_echec' => now(),
         ]);
+    }
+
+    /**
+     * Transcription terminée de la durée donnée, avec ses paragraphes horodatés
+     * (3 heures par défaut). Les paragraphes se suivent sans trou, comme le regroupement réel.
+     */
+    public function longue(int $dureeSecondes = 3 * 3600): static
+    {
+        return $this->termine()
+            ->state(fn () => [
+                'duree_secondes' => $dureeSecondes,
+                'mp3_duree_secondes' => $dureeSecondes,
+            ])
+            ->afterCreating(function (Transcription $transcription) use ($dureeSecondes) {
+                $lignes = [];
+                $debut = 0;
+                $fin = $dureeSecondes * 1000;
+                $position = 1;
+                $mots = 0;
+
+                while ($debut < $fin) {
+                    $texte = fake()->sentences(fake()->numberBetween(2, 5), true);
+                    $finParagraphe = min($fin, $debut + fake()->numberBetween(8_000, 22_000));
+
+                    $lignes[] = [
+                        'transcription_id' => $transcription->getKey(),
+                        'position' => $position++,
+                        'debut_ms' => $debut,
+                        'fin_ms' => $finParagraphe,
+                        'texte' => $texte,
+                    ];
+                    $mots += str_word_count($texte);
+                    $debut = $finParagraphe;
+                }
+
+                foreach (array_chunk($lignes, 500) as $morceau) {
+                    TranscriptionParagraph::insert($morceau);
+                }
+
+                $transcription->update(['nombre_mots' => $mots]);
+            });
     }
 
     /** Aperçu gratuit : seules les 10 premières minutes sont transcrites. */
