@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Plan;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -23,6 +24,7 @@ class User extends Authenticatable
     protected $attributes = [
         'locale' => 'fr',
         'is_admin' => false,
+        'plan' => 'free',
     ];
 
     public function transcriptions(): HasMany
@@ -46,6 +48,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'plan' => Plan::class,
         ];
     }
 }

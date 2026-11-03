@@ -8,5 +8,7 @@ enum EtapeTraitement: string
     case Telechargement = 'telechargement';
     case ExtractionAudio = 'extraction_audio';
     case Transcription = 'transcription';
+    case Paragraphes = 'paragraphes';
+    case Enregistrement = 'enregistrement';
     case AnalyseScript = 'analyse_script';
 }

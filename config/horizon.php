@@ -199,8 +199,11 @@ return [
     'defaults' => [
         'supervisor-1' => [
             'connection' => 'redis',
-            'queue' => ['default'],
-            'balance' => 'auto',
+            // Ordre de priorité : « high » (Pro) avant « default » (Gratuit, Pack).
+            // Noms repris de voxia.traitement.files. Sans équilibrage, Horizon sert
+            // les files dans l'ordre listé.
+            'queue' => ['high', 'default'],
+            'balance' => false,
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,
             'maxTime' => 0,

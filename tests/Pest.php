@@ -1,8 +1,17 @@
 <?php
 
+use App\Contracts\AudioExtractor;
+use App\Contracts\TranscriptionEngine;
+use App\Contracts\VideoFetcher;
+use App\Data\MotTranscrit;
+use App\Data\TranscriptionBrute;
+use App\Services\Audio\FauxAudioExtractor;
+use App\Services\Transcription\FakeTranscriptionEngine;
+use App\Services\Video\FauxVideoFetcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 /*
@@ -121,4 +130,56 @@ function argumentApresOption(array $commande, string $option): ?string
     $position = array_search($option, $commande, true);
 
     return $position === false ? null : ($commande[$position + 1] ?? null);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Helpers de traitement (chaîne de transcription, faux services, aucun réseau)
+|--------------------------------------------------------------------------
+*/
+
+/** Ordre des étapes de la chaîne, tel qu'il doit apparaître dans processing_logs. */
+const ETAPES_TRAITEMENT = ['metadonnees', 'telechargement', 'extraction_audio', 'transcription', 'paragraphes', 'enregistrement'];
+
+/**
+ * Prépare la chaîne avec les faux services : vidéo, extracteur audio et moteur (déjà
+ * lié par Tests\TestCase). Dossier temporaire dédié, vidé à chaque appel, et disque
+ * de stockage simulé. Renvoie le faux moteur pour y mettre les réponses.
+ */
+function preparerTraitement(?FauxVideoFetcher $videos = null, ?FauxAudioExtractor $extracteur = null): FakeTranscriptionEngine
+{
+    $dossier = storage_path('framework/testing/temp-traitement');
+
+    File::deleteDirectory($dossier);
+    File::makeDirectory($dossier, 0775, true);
+
+    config([
+        'voxia.tools.download.temp_directory' => $dossier,
+        'voxia.traitement.delai_entre_tentatives_ms' => 0,
+    ]);
+
+    Storage::fake('local');
+
+    app()->instance(VideoFetcher::class, $videos ?? new FauxVideoFetcher);
+    app()->instance(AudioExtractor::class, $extracteur ?? new FauxAudioExtractor);
+
+    return app(TranscriptionEngine::class);
+}
+
+/** Vrai si le dossier temporaire des tests ne contient plus aucun fichier ni sous-dossier. */
+function dossierTemporaireVide(): bool
+{
+    $dossier = (string) config('voxia.tools.download.temp_directory');
+
+    return File::allFiles($dossier) === [] && File::directories($dossier) === [];
+}
+
+/** Réponse de moteur à trois mots, en deux paragraphes (pause entre « monde. » et « Suite »). */
+function transcriptionBruteTest(): TranscriptionBrute
+{
+    return new TranscriptionBrute('fr', [
+        new MotTranscrit('Bonjour', 0, 500),
+        new MotTranscrit('monde.', 600, 1100),
+        new MotTranscrit('Suite', 3000, 3400),
+    ], 'Bonjour monde. Suite', 0.0367);
 }

@@ -228,6 +228,52 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Traitement en file d'attente (une tâche par vidéo)
+    |--------------------------------------------------------------------------
+    |
+    | « delai_total_secondes » est le garde-fou de la tâche entière. Chaque étape
+    | a déjà son délai (outils, moteur) : ce total doit rester supérieur à leur
+    | somme pour qu'aucune tâche valide ne soit coupée. « tentatives » ne couvre
+    | que les étapes sans nouvelle tentative interne (métadonnées, stockage) ; le
+    | téléchargement et la transcription réessaient dans leur propre service.
+    |
+    */
+
+    'traitement' => [
+        'delai_total_secondes' => (int) env('VOXIA_JOB_TIMEOUT_SECONDS', 7200),
+        'tentatives' => [
+            'metadonnees' => (int) env('VOXIA_METADATA_ATTEMPTS', 2),
+            'stockage' => (int) env('VOXIA_STORAGE_ATTEMPTS', 3),
+        ],
+        'delai_entre_tentatives_ms' => (int) env('VOXIA_JOB_RETRY_DELAY_MS', 2000),
+        // Files Horizon : « prioritaire » est servie avant « standard » (voir config/horizon.php).
+        'files' => [
+            'prioritaire' => 'high',
+            'standard' => 'default',
+        ],
+        // Plans servis dans la file prioritaire.
+        'plans_prioritaires' => ['pro'],
+        // Suivi de la progression dans la commande voxia:transcribe.
+        'suivi_intervalle_secondes' => (int) env('VOXIA_CLI_POLL_SECONDS', 2),
+        'suivi_delai_secondes' => (int) env('VOXIA_CLI_TIMEOUT_SECONDS', 7200),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Stockage des MP3
+    |--------------------------------------------------------------------------
+    |
+    | Disque Laravel (config/filesystems.php) : « local » en développement,
+    | un disque compatible S3 en production.
+    |
+    */
+
+    'stockage' => [
+        'disque' => env('VOXIA_STORAGE_DISK', 'local'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Outils externes
     |--------------------------------------------------------------------------
     |

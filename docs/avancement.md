@@ -15,10 +15,10 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 
 ### F1 — Transcription depuis un lien ou un fichier
 
-- [ ] Un lien public valide de 10 minutes donne une transcription sans autre action que le lancement.
-- [ ] Une vidéo privée, supprimée, bloquée dans la région ou un live en cours affiche un message clair et ne décompte rien. *(Partiel : messages et motifs faits et testés ; le décompte de quota reste à écrire.)*
-- [ ] Un échec technique ne décompte rien du quota. *(Partiel : aucune tentative sur erreur définitive, dossier nettoyé ; le décompte reste à écrire.)*
-- [ ] Un lien déjà transcrit par le même utilisateur renvoie vers la transcription existante.
+- [ ] Un lien public valide de 10 minutes donne une transcription sans autre action que le lancement. *(Partiel : chaîne complète testée avec les faux services ; aucun lien réel essayé, yt-dlp absent, voir P16.)*
+- [ ] Une vidéo privée, supprimée, bloquée dans la région ou un live en cours affiche un message clair et ne décompte rien. *(Partiel : messages et motifs faits et testés, arrêt avant téléchargement pour le live ; le décompte de quota reste à écrire.)*
+- [ ] Un échec technique ne décompte rien du quota. *(Partiel : échec à chaque étape testé, fichiers temporaires supprimés, aucune ligne de consommation écrite ; le décompte lui-même reste à écrire, voir le point d'accroche `TranscriptionCompleted`.)*
+- [ ] Un lien déjà transcrit par le même utilisateur renvoie vers la transcription existante. *(Partiel : vérifié pour YouTube et TikTok avec identifiant connu. Un lien court `vm.tiktok.com` n'a pas d'identifiant avant résolution, donc pas de contrôle à la création, voir P32.)*
 
 ### F2 — Transcription horodatée avec ponctuation propre
 
@@ -101,6 +101,21 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
   - Nom de fichier (`NomFichierAudio`) : accents conservés en forme composée (NFC, pour macOS) ; caractères `< > : " / \ | ? *` et contrôles retirés (pas remplacés) ; espaces réduits ; points et espaces retirés en début et fin ; noms réservés Windows (CON, PRN, AUX, NUL, COM1-9, LPT1-9) préfixés par « _ » ; titre vide : `audio.mp3`. Longueur limitée à 200 octets (`voxia.audio.filename_max_bytes`), sans couper un caractère UTF-8.
   - Tests : 39 tests (23 sur le nom, dont 10 titres piégés ; 16 sur l'extraction). Réglages des délais dans `voxia.audio`.
 
+- Chaîne de traitement (`App\Services\Traitement\ChaineTranscription`, tâche `App\Jobs\ProcessTranscription`) : métadonnées → téléchargement → MP3 → transcription → paragraphes → enregistrement.
+  - Une ligne `processing_logs` par étape, réussie ou non, avec durée, message et coût (coût renseigné à la transcription uniquement).
+  - Statut par phase : Téléchargement dès le début (métadonnées incluses), Transcription avant le moteur, Terminé à l'enregistrement, Échec avec motif. Les dates suivent chaque étape.
+  - Le MP3 final est stocké à l'étape « enregistrement », sur le disque `voxia.stockage.disque` (`local` par défaut, disque S3 en production), dans `transcriptions/{id}/`. Il est retiré si l'écriture en base échoue, et jamais conservé pour une transcription en échec.
+  - Tentatives : métadonnées (`voxia.traitement.tentatives.metadonnees`, 2) et stockage (3), uniquement sur erreur technique. Téléchargement et transcription gardent leurs propres tentatives (3 chacun). Aucune nouvelle tentative au niveau de la tâche, pour ne pas retélécharger.
+  - Délais : chaque étape a le sien (outils, moteur, FFmpeg). Garde-fou : `voxia.traitement.delai_total_secondes` (7 200 s), supérieur à la somme des délais d'étapes. Une tâche interrompue passe en Échec via `failed()`.
+  - Nettoyage : dossier du téléchargement supprimé par `AudioTelecharge::supprimer()` et dossier du MP3 supprimé dans un `finally`. Le fichier source d'un fichier local n'est jamais supprimé.
+  - Événements : `TranscriptionCompleted` (point d'accroche de la consommation, à écrire avec F6) et `TranscriptionFailed(motif)` (point d'accroche des notifications). Aucune ligne `usage_records` n'est écrite par la chaîne.
+- Files : `ProcessTranscription` va sur `high` pour le plan Pro, `default` pour Gratuit et Pack (`voxia.traitement.plans_prioritaires`). Horizon sert les files dans l'ordre listé, avec `balance => false`.
+- Plan de l'utilisateur : colonne `users.plan` (défaut `free`), enum `App\Enums\Plan`. Ajoutée ici car le routage des files en dépend ; la logique de plan et de quota reste à faire (F6).
+- Durée maximale : la chaîne refuse une vidéo plus longue que `max_video_seconds` du plan (lien : après métadonnées ; fichier : après extraction).
+- Lancement (`App\Services\Traitement\LancerTranscription`) : lien reconnu puis mis en file, ou fichier local dont l'extension est dans `voxia.uploads.extensions`. Une transcription déjà terminée est renvoyée ; une transcription en échec est relancée sur la même ligne ; une transcription en cours n'est pas relancée.
+- Commande `voxia:transcribe {source} {--user=email} {--langue=}` : lance, suit les étapes au fil de l'eau, puis affiche les 10 premiers paragraphes. `--user` est obligatoire : la commande n'a pas de compte implicite.
+- Tests : 27 nouveaux tests (`tests/Feature/Traitement`, suite passée de 131 à 158) avec `FauxVideoFetcher` (échec par étape, file de métadonnées), `FauxAudioExtractor` (nouveau, sans FFmpeg) et `FakeTranscriptionEngine`. Couverts : succès, échec à chaque étape, vidéo privée, live, durée du plan, nouvelles tentatives, fichier local, tâche abandonnée, nettoyage des fichiers temporaires, file par plan, déduplication, commande.
+
 ## 4. Points ouverts
 
 - [ ] P0 — Critères d'acceptation de F6 (offre gratuite) : à rédiger, le cahier n'en fournit pas.
@@ -132,3 +147,11 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P26 — Taille maximale d'un fichier transcrit : 3 Go (FAQ officielle, retenu) contre 5 Go (page API). Durée maximale : 10 h en mode standard.
 - [ ] P27 — Espace typographique française (« Bonjour ? ») : les mots sont joints par une espace et le moteur ne renvoie pas les espaces. À vérifier sur un vrai texte français.
 - [ ] P28 — Abréviations (« M. Dupont », « etc. ») : une fin de phrase peut couper à tort. Non géré.
+- [ ] P29 — Redis et Horizon non testés en vrai : `redis-cli` absent, et `QUEUE_CONNECTION` du `.env` non vérifié (le `.env` n'a pas été lu). Les tests passent en file `sync`. Reste à vérifier : `QUEUE_CONNECTION=redis`, `php artisan horizon` qui sert `high` puis `default`.
+- [ ] P30 — Arrêt brutal du worker (délai total, kill) : `failed()` passe la transcription en Échec, mais les dossiers temporaires de téléchargement créés par `VideoFetcher` ne sont pas connus et restent. Piste : un balayage des dossiers temporaires anciens, planifié.
+- [ ] P31 — Source « fichier » : le chemin doit être lisible par le worker. Avec un worker sur une autre machine, il faudra passer par le stockage (upload) ; pas traité ici.
+- [ ] P32 — Lien court `vm.tiktok.com` : pas de déduplication à la création (identifiant inconnu avant résolution). Un doublon est possible jusqu'à l'étape métadonnées, où une collision sur `(user, source, id_video)` fera échouer la tâche en erreur technique. À traiter.
+- [ ] P33 — Étape « paragraphes » : aucun échec métier possible, donc pas de test d'échec pour elle (seulement le succès).
+- [ ] P34 — Durée maximale sur le plan gratuit : la chaîne applique `max_video_seconds` (10 min en Gratuit). Confirmer que refuser une vidéo de 15 min en Gratuit est bien le comportement voulu (cahier F1 parle d'un email au-delà de 15 min, pas d'un refus).
+- [ ] P35 — Noms de files codés en dur dans `config/horizon.php` (`high`, `default`), à garder synchronisés avec `voxia.traitement.files`.
+- [ ] P36 — Aucun essai réel : yt-dlp absent et pas de lien de test fourni (même point que P16). La chaîne réelle (yt-dlp, FFmpeg, ElevenLabs) n'a été exercée que par ses propres tests existants et les faux services.
