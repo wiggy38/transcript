@@ -169,15 +169,15 @@ return [
     |--------------------------------------------------------------------------
     |
     | « gratuits_par_ip » : nombre maximal de comptes gratuits créés depuis une
-    | même adresse IP. null = aucune limite, tant que la valeur n'est pas fixée
-    | (avancement, point P47). « google_actif » : connexion Google, désactivée par
+    | même adresse IP (2 par défaut, validé le 3 novembre 2026). null = aucune limite.
+    | « google_actif » : connexion Google, désactivée par
     | défaut. Les limites de tentatives servent à freiner les attaques, pas l'offre.
     |
     */
 
     'comptes' => [
         'google_actif' => filter_var(env('VOXIA_GOOGLE_LOGIN', false), FILTER_VALIDATE_BOOLEAN),
-        'gratuits_par_ip' => ($valeur = env('VOXIA_FREE_ACCOUNTS_PER_IP')) === null || $valeur === ''
+        'gratuits_par_ip' => ($valeur = env('VOXIA_FREE_ACCOUNTS_PER_IP', 2)) === null || $valeur === ''
             ? null
             : (int) $valeur,
         'limites' => [

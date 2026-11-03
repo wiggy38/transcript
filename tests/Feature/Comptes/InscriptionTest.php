@@ -91,3 +91,7 @@ it('limite les tentatives d\'inscription par IP', function () {
 
     $this->post('/register', ['email' => 'pas-un-email'])->assertStatus(429);
 });
+
+it('fixe la limite de comptes gratuits par IP à deux par défaut', function () {
+    expect(config('voxia.comptes.gratuits_par_ip'))->toBe(2);
+});

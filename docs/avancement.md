@@ -62,7 +62,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [x] Connexion, mot de passe oublié, nouveau mot de passe par lien. *(ConnexionTest)*
 - [x] Lien collé par un visiteur conservé pendant l'inscription et la vérification, puis repris à l'arrivée dans l'application. *(LienEnAttenteTest, dont la conservation à la connexion et la non-relance)*
 - [x] Connexion Google (Socialite), désactivée par défaut par `VOXIA_GOOGLE_LOGIN`. *(ConnexionGoogleTest)* *(Partiel : Socialite simulé, aucun essai avec un vrai client Google, voir P52.)*
-- [x] Limite de comptes gratuits par IP, avec message neutre, aussi pour Google. *(InscriptionTest, ConnexionGoogleTest)* *(Partiel : mécanisme fait, valeur non fixée, donc aucune limite par défaut, voir P47.)*
+- [x] Limite de comptes gratuits par IP, avec message neutre, aussi pour Google. *(InscriptionTest, ConnexionGoogleTest)* *(Limite fixée à 2 par IP, voir P47.)*
 - [x] Réglages : nom, email, mot de passe, langue de l'interface. *(ReglagesTest)*
 - [x] Suppression du compte et de toutes ses données (transcriptions, MP3, fichiers) après confirmation. *(ReglagesTest : fichiers et lignes absents, voisins intacts)*
 - [x] Emails transactionnels au style Signal ; en local, journal (`MAIL_MAILER=log`). *(EmailsTransactionnelsTest)* *(Partiel : Mailpit non essayé, voir P55.)*
@@ -204,8 +204,8 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] P43 — Bandeau défilant et frappe du texte (animations §7) : non construits, aucun composant demandé. Les animations existantes (onde, pulsation) sont coupées sous `prefers-reduced-motion`.
 - [ ] P44 — Rendu visuel non vérifié dans un navigateur : l'extension Chrome n'était pas connectée. Vérifié seulement par rendu Blade, génération Tailwind et tests. À regarder sur `/styleguide` en local.
 - [ ] P45 — Sélecteur de langue du layout `app` : emplacement seulement, pas de composant. *(Les réglages du compte proposent la langue ; le sélecteur de l'en-tête reste à faire.)*
-- [ ] P46 — Réinitialisation : une adresse sans compte reçoit « Aucun compte ne correspond à cette adresse » (message Laravel). Cela révèle quelles adresses ont un compte. Message neutre à décider.
-- [ ] P47 — Limite de comptes gratuits par IP : valeur non fixée (`VOXIA_FREE_ACCOUNTS_PER_IP` vide = aucune limite). Le cahier ne la donne pas. Limite par appareil non traitée.
+- [x] P46 — Réinitialisation : une adresse sans compte reçoit « Aucun compte ne correspond à cette adresse » (message Laravel). Cela révèle quelles adresses ont un compte. Accepté tel quel le 3 novembre 2026 (pas de message neutre unique).
+- [x] P47 — Limite de comptes gratuits par IP : fixée à 2 (`VOXIA_FREE_ACCOUNTS_PER_IP`, validée le 3 novembre 2026). Vide = aucune limite. Limite par appareil non traitée.
 - [ ] P48 — Adresse IP de création (`users.inscription_ip`) : donnée personnelle conservée pour la limite. Durée de conservation et mention RGPD à fixer avec P10. Derrière un proxy, l'IP lue doit être la vraie (proxys de confiance à configurer).
 - [ ] P49 — Sixième tentative de connexion : réponse 429 générique (page du framework, en anglais), sans le message « trop de tentatives » traduit.
 - [ ] P50 — Compte Google sans mot de passe : les réglages demandent le mot de passe actuel. Pour en créer un, passer par « Mot de passe oublié ». Pas de message dédié.
