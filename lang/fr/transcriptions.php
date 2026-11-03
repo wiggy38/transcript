@@ -18,6 +18,7 @@ return [
         'lancer' => 'Lancer la transcription',
         'deja' => 'Tu as déjà transcrit cette vidéo.',
         'voir' => 'Voir la transcription',
+        'limite' => 'Ta vidéo dépasse les :minutes minutes du plan Gratuit. Seules les :minutes premières minutes seront transcrites. Passe au Pro pour la transcription complète.',
     ],
 
     'langue' => [
@@ -63,6 +64,7 @@ return [
         'en_cours' => 'La transcription est en cours. Tu peux fermer cette page : elle continue, et tu la retrouveras dans ton historique.',
         'termine' => 'Transcription terminée.',
         'actualisation' => 'Le statut se met à jour tout seul.',
+        'apercu' => 'Aperçu : seules les :minutes premières minutes ont été transcrites. Passe au Pro pour la transcription complète.',
     ],
 
 ];

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\MotifEchec;
+use App\Enums\Plan;
 use App\Enums\StatutTranscription;
 use App\Models\Transcription;
 use App\Models\User;
@@ -56,4 +57,16 @@ it('affiche le motif d\'un échec', function () {
 
     $this->get(route('transcriptions.show', $transcription))
         ->assertSee(__('videos.motifs.video_privee'));
+});
+
+it('rappelle au Gratuit que seules les 10 premières minutes ont été transcrites', function () {
+    $utilisateur = User::factory()->create(['plan' => Plan::Free]);
+    $transcription = Transcription::factory()->for($utilisateur)->create([
+        'statut' => StatutTranscription::Termine,
+        'est_apercu' => true,
+    ]);
+    $this->actingAs($utilisateur);
+
+    $this->get(route('transcriptions.show', $transcription))
+        ->assertSee(__('transcriptions.page.apercu', ['minutes' => 10]));
 });

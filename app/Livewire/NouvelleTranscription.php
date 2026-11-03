@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Contracts\VideoFetcher;
 use App\Enums\MotifEchec;
+use App\Enums\Plan;
 use App\Exceptions\ErreurVideo;
 use App\Services\Televersement\Televersement;
 use App\Services\Traitement\LancerTranscription;
@@ -197,6 +198,8 @@ class NouvelleTranscription extends Component
             'apercuPret' => $etat === ApercuLien::PRET,
             'donnees' => $donnees,
             'trop_longue' => $etat === ApercuLien::PRET && $this->depasseLeDroitDuPlan(),
+            'apercu_limite' => $etat === ApercuLien::PRET && $this->limiteAuPlan(),
+            'minutes_plan' => intdiv($this->dureeMaxDuPlan(), 60),
             'tailleMaxMo' => (int) config('voxia.uploads.max_size_mb'),
             'extensions' => (array) config('voxia.uploads.extensions'),
             'morceauOctets' => (int) config('voxia.uploads.morceau_octets'),
@@ -269,13 +272,33 @@ class NouvelleTranscription extends Component
         return $apercus->lire($url) ?? ['etat' => ApercuLien::EN_COURS];
     }
 
-    /** Vrai si la vidéo aperçue dépasse la durée max du plan de l'utilisateur. */
+    /**
+     * Vrai si la vidéo aperçue dépasse la durée max d'un plan payant : refus.
+     * Le Gratuit n'est jamais refusé pour la durée : il reçoit l'aperçu (voir limiteAuPlan).
+     */
     private function depasseLeDroitDuPlan(): bool
     {
-        $duree = (int) ($this->apercu['donnees']['duree_secondes'] ?? 0);
-        $max = (int) config('voxia.plans.'.Auth::user()->plan->value.'.max_video_seconds');
+        if (Auth::user()->plan === Plan::Free) {
+            return false;
+        }
 
-        return $duree > $max;
+        return $this->dureeApercue() > $this->dureeMaxDuPlan();
+    }
+
+    /** Vrai pour le Gratuit si la vidéo dépasse 10 minutes : seules les premières seront transcrites. */
+    private function limiteAuPlan(): bool
+    {
+        return Auth::user()->plan === Plan::Free && $this->dureeApercue() > $this->dureeMaxDuPlan();
+    }
+
+    private function dureeApercue(): int
+    {
+        return (int) ($this->apercu['donnees']['duree_secondes'] ?? 0);
+    }
+
+    private function dureeMaxDuPlan(): int
+    {
+        return (int) config('voxia.plans.'.Auth::user()->plan->value.'.max_video_seconds');
     }
 
     private function messageMotif(?string $motif): string

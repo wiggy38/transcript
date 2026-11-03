@@ -18,6 +18,7 @@ return [
         'lancer' => 'Start transcription',
         'deja' => 'You have already transcribed this video.',
         'voir' => 'View the transcription',
+        'limite' => 'Your video is longer than the :minutes minutes of the Free plan. Only the first :minutes minutes will be transcribed. Upgrade to Pro for the full transcription.',
     ],
 
     'langue' => [
@@ -63,6 +64,7 @@ return [
         'en_cours' => 'The transcription is in progress. You can close this page: it keeps going, and you will find it in your history.',
         'termine' => 'Transcription complete.',
         'actualisation' => 'The status updates by itself.',
+        'apercu' => 'Preview: only the first :minutes minutes were transcribed. Upgrade to Pro for the full transcription.',
     ],
 
 ];

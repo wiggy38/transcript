@@ -17,6 +17,11 @@
         @switch ($transcription->statut->value)
             @case('termine')
                 <p class="text-texte">{{ __('transcriptions.page.termine') }}</p>
+                @if ($transcription->est_apercu)
+                    <p class="mt-3 border-l-2 border-accent py-1 pl-3 text-sm text-texte">
+                        {{ __('transcriptions.page.apercu', ['minutes' => intdiv((int) config('voxia.plans.free.max_video_seconds'), 60)]) }}
+                    </p>
+                @endif
                 @break
 
             @case('echec')

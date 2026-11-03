@@ -155,9 +155,9 @@ it('refuse le lancement tant que l\'aperçu n\'est pas prêt', function () {
     expect(Transcription::count())->toBe(0);
 });
 
-it('bloque une vidéo plus longue que la durée du plan, avant tout décompte', function () {
-    fauxVideos(metadonneesDeDuree(3 * 3600));
-    $this->actingAs(utilisateurVerifie(Plan::Free));
+it('refuse au plan payant une vidéo plus longue que son plan, avant tout décompte', function () {
+    fauxVideos(metadonneesDeDuree(3 * 3600 + 60));
+    $this->actingAs(utilisateurVerifie(Plan::Pro));
     $this->mock(QuotaService::class)->shouldNotReceive('verifier');
 
     Livewire::test(NouvelleTranscription::class)
@@ -166,6 +166,21 @@ it('bloque une vidéo plus longue que la durée du plan, avant tout décompte', 
         ->call('lancerLien');
 
     expect(Transcription::count())->toBe(0);
+});
+
+it('laisse le Gratuit lancer une vidéo plus longue, en annonçant que seules les 10 premières minutes seront transcrites', function () {
+    fauxVideos(metadonneesDeDuree(3600));
+    Queue::fake([ProcessTranscription::class]);
+    $this->actingAs(utilisateurVerifie(Plan::Free));
+
+    Livewire::test(NouvelleTranscription::class)
+        ->set('lien', LIEN_TRANSCRIPTION)
+        ->assertSee(__('transcriptions.apercu.limite', ['minutes' => 10]))
+        ->assertDontSee(__('videos.motifs.trop_longue'))
+        ->call('lancerLien');
+
+    expect(Transcription::count())->toBe(1);
+    Queue::assertPushed(ProcessTranscription::class);
 });
 
 it('envoie la langue choisie, et la détection automatique sinon', function () {

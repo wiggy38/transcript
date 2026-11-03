@@ -123,7 +123,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Liste proposée à l'utilisateur ; la détection automatique reste le défaut.
-    | Proposition, à valider avec le moteur de transcription.
+    | Validées avec ElevenLabs Scribe v2 (codes ISO 639-1 : fr, en, es, de, it, pt).
     |
     */
 

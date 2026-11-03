@@ -65,6 +65,12 @@
                             <x-message-erreur>{{ __('videos.motifs.trop_longue') }}</x-message-erreur>
                         @endif
 
+                        @if ($apercu_limite)
+                            <p class="border-l-2 border-accent py-1 pl-3 text-sm text-texte">
+                                {{ __('transcriptions.apercu.limite', ['minutes' => $minutes_plan]) }}
+                            </p>
+                        @endif
+
                         @if ($erreurLien)
                             <x-message-erreur>{{ $erreurLien }}</x-message-erreur>
                         @endif

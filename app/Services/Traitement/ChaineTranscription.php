@@ -189,10 +189,14 @@ final class ChaineTranscription
     private function etapeMp3(Transcription $transcription, string $source, string $dossierMp3, bool $estFichier): ExtraitAudio
     {
         return $this->mesurer($transcription, EtapeTraitement::ExtractionAudio, function (BilanEtape $bilan) use ($transcription, $source, $dossierMp3, $estFichier) {
-            $extrait = $this->extracteur->extraire($source, $dossierMp3, (string) $transcription->titre);
+            $extrait = $this->extracteur->extraire($source, $dossierMp3, (string) $transcription->titre, $this->decoupeDuPlan($transcription));
 
             if ($estFichier) {
-                $this->verifierDuree($transcription, $extrait->dureeSecondes);
+                // La durée source est connue seulement ici pour un fichier importé.
+                $duree = $extrait->dureeSourceSecondes > 0 ? $extrait->dureeSourceSecondes : $extrait->dureeSecondes;
+
+                $transcription->update(['duree_secondes' => $duree]);
+                $this->verifierDuree($transcription, $duree);
             }
 
             $transcription->update([
@@ -414,14 +418,37 @@ final class ChaineTranscription
         }
     }
 
+    /**
+     * Durée source au-delà du plan. Gratuit : la transcription se limite aux premières
+     * minutes du plan (voir decoupeDuPlan) et est marquée comme aperçu, avec une invitation
+     * à passer au Pro. Autres plans : refus, rien n'est transcrit.
+     */
     private function verifierDuree(Transcription $transcription, int $dureeSecondes): void
     {
         $plan = $transcription->user?->plan ?? Plan::Free;
         $maximum = config('voxia.plans.'.$plan->value.'.max_video_seconds');
 
-        if (is_numeric($maximum) && $dureeSecondes > (int) $maximum) {
+        if (! is_numeric($maximum) || $dureeSecondes <= (int) $maximum) {
+            return;
+        }
+
+        if ($plan !== Plan::Free) {
             throw new ErreurVideo(MotifEchec::TropLongue, $dureeSecondes.' s pour un maximum de '.$maximum.' s');
         }
+
+        $transcription->update(['est_apercu' => true]);
+    }
+
+    /** Gratuit : audio découpé à la durée du plan. Autres plans : pas de découpe. */
+    private function decoupeDuPlan(Transcription $transcription): ?int
+    {
+        if (($transcription->user?->plan ?? Plan::Free) !== Plan::Free) {
+            return null;
+        }
+
+        $maximum = config('voxia.plans.free.max_video_seconds');
+
+        return is_numeric($maximum) ? (int) $maximum : null;
     }
 
     private function changerStatut(Transcription $transcription, StatutTranscription $statut): void

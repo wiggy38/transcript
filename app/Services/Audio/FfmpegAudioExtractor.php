@@ -63,6 +63,7 @@ final class FfmpegAudioExtractor implements AudioExtractor
             chemin: $chemin,
             nomFichier: $nom,
             dureeSecondes: $this->dureeMesuree($chemin),
+            dureeSourceSecondes: (int) round((float) ($sonde['format']['duration'] ?? 0)),
         );
     }
 

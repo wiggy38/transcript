@@ -189,12 +189,30 @@ it('refuse un live en cours sans le télécharger', function () {
         ->and($journaux)->toHaveCount(1);
 });
 
-it('refuse une vidéo plus longue que la durée du plan', function () {
-    config(['voxia.plans.free.max_video_seconds' => 600]);
-
+it('refuse une vidéo plus longue que la durée d\'un plan payant, sans rien transcrire', function () {
     preparerTraitement(new FauxVideoFetcher(
-        metadonnees: new MetadonneesVideo('abcdefghijk', 'Longue', 601, null, null, estLive: false),
+        metadonnees: new MetadonneesVideo('abcdefghijk', 'Longue', 3 * 3600 + 1, null, null, estLive: false),
     ));
+
+    $utilisateur = User::factory()->create(['plan' => Plan::Pro]);
+    $transcription = Transcription::factory()->for($utilisateur)->create([
+        'url_origine' => LIEN_TRAITEMENT,
+        'id_video' => null,
+        'statut' => StatutTranscription::EnAttente,
+    ]);
+
+    executerChaine($transcription);
+
+    expect($transcription->refresh()->motif_echec)->toBe(MotifEchec::TropLongue)
+        ->and($transcription->statut)->toBe(StatutTranscription::Echec);
+});
+
+it('transcrit seulement les 10 premières minutes d\'un lien plus long au Gratuit, et le marque comme aperçu', function () {
+    $moteur = preparerTraitement(
+        new FauxVideoFetcher(metadonnees: new MetadonneesVideo('abcdefghijk', 'Longue', 3600, null, null, estLive: false)),
+        new FauxAudioExtractor(dureeSecondes: 3600),
+    );
+    $moteur->repondre(transcriptionBruteTest());
 
     $utilisateur = User::factory()->create(['plan' => Plan::Free]);
     $transcription = Transcription::factory()->for($utilisateur)->create([
@@ -205,7 +223,36 @@ it('refuse une vidéo plus longue que la durée du plan', function () {
 
     executerChaine($transcription);
 
-    expect($transcription->refresh()->motif_echec)->toBe(MotifEchec::TropLongue);
+    $transcription->refresh();
+
+    expect($transcription->statut)->toBe(StatutTranscription::Termine)
+        ->and($transcription->est_apercu)->toBeTrue()
+        ->and($transcription->motif_echec)->toBeNull()
+        ->and($transcription->duree_secondes)->toBe(3600)
+        ->and($transcription->mp3_duree_secondes)->toBe(600);
+});
+
+it('transcrit seulement les 10 premières minutes d\'un fichier plus long au Gratuit', function () {
+    $moteur = preparerTraitement(extracteur: new FauxAudioExtractor(dureeSecondes: 1800));
+    $moteur->repondre(transcriptionBruteTest());
+
+    $chemin = storage_path('framework/testing/traitement/entree-longue.mp3');
+    File::ensureDirectoryExists(dirname($chemin));
+    File::put($chemin, 'entree');
+
+    $utilisateur = User::factory()->create(['plan' => Plan::Free]);
+    $transcription = Transcription::factory()->fichier()->for($utilisateur)->create([
+        'statut' => StatutTranscription::EnAttente,
+    ]);
+
+    executerChaine($transcription, $chemin);
+
+    $transcription->refresh();
+
+    expect($transcription->statut)->toBe(StatutTranscription::Termine)
+        ->and($transcription->est_apercu)->toBeTrue()
+        ->and($transcription->duree_secondes)->toBe(1800)
+        ->and($transcription->mp3_duree_secondes)->toBe(600);
 });
 
 it('traite un fichier local sans le télécharger ni le supprimer', function () {

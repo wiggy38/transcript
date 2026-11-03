@@ -39,6 +39,7 @@ final class FauxAudioExtractor implements AudioExtractor
             chemin: $chemin,
             nomFichier: $nom,
             dureeSecondes: $decoupeSecondes !== null ? min($decoupeSecondes, $this->dureeSecondes) : $this->dureeSecondes,
+            dureeSourceSecondes: $this->dureeSecondes,
         );
     }
 }
