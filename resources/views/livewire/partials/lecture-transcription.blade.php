@@ -156,6 +156,8 @@
             @php
                 $compte = auth()->user();
                 $droits = app(\App\Services\Plans\PlanFeatures::class);
+                // Liens signés (cahier Sécurité) : valides le temps défini par voxia.telechargement.
+                $expirationLien = now()->addMinutes((int) config('voxia.telechargement.duree_lien_minutes'));
             @endphp
             <footer class="mt-8 border-t border-filet pt-5" x-data="{ horodatages: true }">
                 <div class="flex flex-wrap items-center gap-3">
@@ -178,8 +180,8 @@
                         <li class="flex flex-col items-start">
                             @if ($droits->peutExporter($compte, $format))
                                 @php
-                                    $urlAvec = route('transcriptions.export', [$transcription, $format, 'horodatages' => 1]);
-                                    $urlSans = route('transcriptions.export', [$transcription, $format, 'horodatages' => 0]);
+                                    $urlAvec = \Illuminate\Support\Facades\URL::temporarySignedRoute('transcriptions.export', $expirationLien, [$transcription, $format, 'horodatages' => 1]);
+                                    $urlSans = \Illuminate\Support\Facades\URL::temporarySignedRoute('transcriptions.export', $expirationLien, [$transcription, $format, 'horodatages' => 0]);
                                     $jsAvec = \Illuminate\Support\Js::from($urlAvec);
                                     $jsSans = \Illuminate\Support\Js::from($urlSans);
                                 @endphp
@@ -203,13 +205,23 @@
                     @endforeach
 
                     <li class="flex flex-col items-start">
-                        <button type="button" disabled aria-describedby="exports-bientot"
-                            class="min-h-11 cursor-not-allowed rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret">
-                            MP3 <span class="ml-1">· {{ __('transcriptions.lecture.bientot') }}</span>
-                        </button>
+                        @if ($transcription->mp3_chemin !== null)
+                            <a href="{{ \Illuminate\Support\Facades\URL::temporarySignedRoute('transcriptions.mp3', $expirationLien, [$transcription]) }}" download
+                                class="inline-flex min-h-11 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent">
+                                {{ __('transcriptions.lecture.telecharger_mp3') }}
+                            </a>
+                        @else
+                            {{-- MP3 supprimé par la règle de conservation (cahier F5) : le bouton le dit au lieu de disparaître. --}}
+                            <button type="button" disabled aria-describedby="mp3-supprime"
+                                class="min-h-11 cursor-not-allowed rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret">
+                                {{ __('transcriptions.lecture.mp3_supprime_bouton') }}
+                            </button>
+                            <p id="mp3-supprime" class="mt-1 font-mono text-[11px] text-texte-discret">
+                                {{ __('transcriptions.lecture.mp3_supprime', ['jours' => (int) config('voxia.retention.media_days')]) }}
+                            </p>
+                        @endif
                     </li>
                 </ul>
-                <p id="exports-bientot" class="mt-2 font-mono text-xs text-texte-discret">{{ __('transcriptions.lecture.exports_bientot') }}</p>
             </footer>
         </div>
     </div>

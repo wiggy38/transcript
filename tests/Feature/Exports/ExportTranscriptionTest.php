@@ -69,13 +69,13 @@ it('télécharge TXT et SRT au plan Gratuit', function () {
     $transcription = exportsTranscription($utilisateur);
 
     $this->actingAs($utilisateur)
-        ->get(route('transcriptions.export', [$transcription, 'txt']))
+        ->get(lienSigne('transcriptions.export', [$transcription, 'txt']))
         ->assertOk()
         ->assertHeader('Content-Type', 'text/plain; charset=UTF-8')
         ->assertHeader('Content-Disposition', 'attachment; filename="Atelier du jour.txt"');
 
     $this->actingAs($utilisateur)
-        ->get(route('transcriptions.export', [$transcription, 'srt']))
+        ->get(lienSigne('transcriptions.export', [$transcription, 'srt']))
         ->assertOk()
         ->assertHeader('Content-Disposition', 'attachment; filename="Atelier du jour.srt"');
 });
@@ -84,8 +84,8 @@ it('refuse PDF et VTT au plan Gratuit', function () {
     $utilisateur = User::factory()->create();
     $transcription = exportsTranscription($utilisateur);
 
-    $this->actingAs($utilisateur)->get(route('transcriptions.export', [$transcription, 'pdf']))->assertForbidden();
-    $this->actingAs($utilisateur)->get(route('transcriptions.export', [$transcription, 'vtt']))->assertForbidden();
+    $this->actingAs($utilisateur)->get(lienSigne('transcriptions.export', [$transcription, 'pdf']))->assertForbidden();
+    $this->actingAs($utilisateur)->get(lienSigne('transcriptions.export', [$transcription, 'vtt']))->assertForbidden();
 });
 
 it('donne PDF et VTT au plan Pro', function () {
@@ -93,12 +93,12 @@ it('donne PDF et VTT au plan Pro', function () {
     $transcription = exportsTranscription($utilisateur);
 
     $this->actingAs($utilisateur)
-        ->get(route('transcriptions.export', [$transcription, 'vtt']))
+        ->get(lienSigne('transcriptions.export', [$transcription, 'vtt']))
         ->assertOk()
         ->assertHeader('Content-Type', 'text/vtt; charset=UTF-8');
 
     $this->actingAs($utilisateur)
-        ->get(route('transcriptions.export', [$transcription, 'pdf']))
+        ->get(lienSigne('transcriptions.export', [$transcription, 'pdf']))
         ->assertOk()
         ->assertHeader('Content-Type', 'application/pdf');
 });
@@ -110,7 +110,7 @@ it('écrit les accents et le cyrillique en UTF-8 dans TXT, SRT et VTT', function
 
     foreach (['txt', 'srt', 'vtt'] as $format) {
         $corps = $this->actingAs($utilisateur)
-            ->get(route('transcriptions.export', [$transcription, $format]))
+            ->get(lienSigne('transcriptions.export', [$transcription, $format]))
             ->assertOk()
             ->getContent();
 
@@ -126,8 +126,8 @@ it('écrit SRT et VTT valides, au même contenu', function () {
     $transcription = exportsTranscription($utilisateur);
     $mots = $transcription->words()->get()->map(fn ($m) => new MotTranscrit($m->texte, $m->debut_ms, $m->fin_ms))->all();
 
-    $srt = $this->actingAs($utilisateur)->get(route('transcriptions.export', [$transcription, 'srt']))->getContent();
-    $vtt = $this->actingAs($utilisateur)->get(route('transcriptions.export', [$transcription, 'vtt']))->getContent();
+    $srt = $this->actingAs($utilisateur)->get(lienSigne('transcriptions.export', [$transcription, 'srt']))->getContent();
+    $vtt = $this->actingAs($utilisateur)->get(lienSigne('transcriptions.export', [$transcription, 'vtt']))->getContent();
 
     expect(ValidateurSousTitres::srt($srt, $mots))->toBe([])
         ->and(ValidateurSousTitres::vtt($vtt, $mots))->toBe([]);
@@ -137,8 +137,8 @@ it('écrit les horodatages dans le TXT, et les retire quand on le demande', func
     $utilisateur = User::factory()->create();
     $transcription = exportsTranscription($utilisateur);
 
-    $avec = $this->actingAs($utilisateur)->get(route('transcriptions.export', [$transcription, 'txt']))->getContent();
-    $sans = $this->actingAs($utilisateur)->get(route('transcriptions.export', [$transcription, 'txt']).'?horodatages=0')->getContent();
+    $avec = $this->actingAs($utilisateur)->get(lienSigne('transcriptions.export', [$transcription, 'txt']))->getContent();
+    $sans = $this->actingAs($utilisateur)->get(lienSigne('transcriptions.export', [$transcription, 'txt', 'horodatages' => 0]))->getContent();
 
     expect($avec)->toStartWith('[00:00] Bienvenue dans l’atelier')
         ->and($avec)->toContain("\n\n[00:03] Ça marche")
@@ -150,7 +150,7 @@ it('produit un PDF qui commence par son en-tête PDF', function () {
     $utilisateur = exportsComptePro();
     $transcription = exportsTranscription($utilisateur);
 
-    $pdf = $this->actingAs($utilisateur)->get(route('transcriptions.export', [$transcription, 'pdf']))->getContent();
+    $pdf = $this->actingAs($utilisateur)->get(lienSigne('transcriptions.export', [$transcription, 'pdf']))->getContent();
 
     expect(str_starts_with($pdf, '%PDF-'))->toBeTrue()
         ->and($pdf)->toContain('/BaseFont /MPDFAA+Geist-Regular');
@@ -162,7 +162,7 @@ it('ne sert pas la transcription d’un autre compte', function () {
     $transcription = exportsTranscription($proprietaire);
 
     $this->actingAs($autre)
-        ->get(route('transcriptions.export', [$transcription, 'txt']))
+        ->get(lienSigne('transcriptions.export', [$transcription, 'txt']))
         ->assertNotFound();
 });
 
@@ -171,7 +171,7 @@ it('ne sert pas une transcription qui n’est pas encore terminée', function ()
     $transcription = exportsTranscription($utilisateur, ['statut' => StatutTranscription::Transcription]);
 
     $this->actingAs($utilisateur)
-        ->get(route('transcriptions.export', [$transcription, 'txt']))
+        ->get(lienSigne('transcriptions.export', [$transcription, 'txt']))
         ->assertNotFound();
 });
 
@@ -187,7 +187,7 @@ it('refuse un format inconnu', function () {
 it('demande la connexion pour un export', function () {
     $transcription = exportsTranscription(User::factory()->create());
 
-    $this->get(route('transcriptions.export', [$transcription, 'txt']))
+    $this->get(lienSigne('transcriptions.export', [$transcription, 'txt']))
         ->assertRedirect(route('login'));
 });
 
@@ -222,4 +222,14 @@ it('échappe le titre dans le PDF', function () {
     $html = app(ExporteurPdf::class)->html(ContenuTranscription::depuis($transcription), true);
 
     expect($html)->toContain('Tom &amp; Jerry &lt;b&gt;')->not->toContain('<b>');
+});
+
+// Critère Sécurité : les exports passent par un lien signé ; une adresse nue est refusée, même au propriétaire.
+it('refuse un export sans lien signé, même au propriétaire', function () {
+    $utilisateur = User::factory()->create();
+    $transcription = exportsTranscription($utilisateur);
+
+    $this->actingAs($utilisateur)
+        ->get(route('transcriptions.export', [$transcription, 'txt']))
+        ->assertForbidden();
 });

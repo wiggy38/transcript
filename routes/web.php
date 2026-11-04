@@ -7,6 +7,7 @@ use App\Http\Controllers\Comptes\HistoriqueController;
 use App\Http\Controllers\Comptes\LienController;
 use App\Http\Controllers\Comptes\ReglagesController;
 use App\Http\Controllers\Comptes\TableauDeBordController;
+use App\Http\Controllers\Comptes\TelechargementMp3Controller;
 use App\Http\Controllers\Comptes\TeleversementController;
 use App\Http\Controllers\Comptes\TranscriptionController;
 use Illuminate\Support\Facades\Route;
@@ -39,9 +40,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/transcriptions/{transcription}/audio', [TranscriptionController::class, 'audio'])
         ->name('transcriptions.audio');
 
-    // Export d'une transcription (cahier F4) : TXT, PDF, SRT, VTT selon le plan. Propriétaire seulement.
+    // Téléchargement du MP3 (cahier F3) : lien signé et temporaire, émis par la page de transcription.
+    Route::get('/transcriptions/{transcription}/mp3', TelechargementMp3Controller::class)
+        ->middleware('signed')
+        ->name('transcriptions.mp3');
+
+    // Export d'une transcription (cahier F4) : TXT, PDF, SRT, VTT selon le plan. Lien signé et temporaire.
     Route::get('/transcriptions/{transcription}/exports/{format}', ExportController::class)
         ->whereIn('format', ['txt', 'pdf', 'srt', 'vtt'])
+        ->middleware('signed')
         ->name('transcriptions.export');
 
     // Morceaux d'un fichier importé (2 Go par défaut, envoi découpé). Email vérifié exigé.

@@ -139,17 +139,17 @@ it('affiche TXT et SRT au plan Gratuit, et PDF et VTT verrouillés avec le plan 
     $utilisateur = User::factory()->create();
     $transcription = transcriptionAvecDeuxParagraphes($utilisateur);
     $this->actingAs($utilisateur);
+    // Les liens signés contiennent leur échéance : le temps est figé pour comparer les adresses.
+    $this->travelTo(now());
 
     $this->get(route('transcriptions.show', $transcription))
         ->assertOk()
-        ->assertSee('href="'.route('transcriptions.export', [$transcription, 'txt', 'horodatages' => 1]).'"', false)
-        ->assertSee('href="'.route('transcriptions.export', [$transcription, 'srt', 'horodatages' => 1]).'"', false)
-        ->assertDontSee('href="'.route('transcriptions.export', [$transcription, 'pdf', 'horodatages' => 1]).'"', false)
+        ->assertSee('href="'.e(lienSigne('transcriptions.export', [$transcription, 'txt', 'horodatages' => 1])).'"', false)
+        ->assertSee('href="'.e(lienSigne('transcriptions.export', [$transcription, 'srt', 'horodatages' => 1])).'"', false)
+        ->assertDontSee('href="'.e(lienSigne('transcriptions.export', [$transcription, 'pdf', 'horodatages' => 1])).'"', false)
         ->assertSee('aria-describedby="verrou-pdf"', false)
         ->assertSee('aria-describedby="verrou-vtt"', false)
-        ->assertSee(__('transcriptions.lecture.exporter_verrouille', ['plan' => 'Pro']))
-        ->assertSee(__('transcriptions.lecture.exports_bientot'))
-        ->assertSee('aria-describedby="exports-bientot"', false);
+        ->assertSee(__('transcriptions.lecture.exporter_verrouille', ['plan' => 'Pro']));
 });
 
 it('active tous les formats au plan Pro', function () {
@@ -157,11 +157,13 @@ it('active tous les formats au plan Pro', function () {
     $utilisateur = User::factory()->create(['plan' => Plan::Pro]);
     $transcription = transcriptionAvecDeuxParagraphes($utilisateur);
     $this->actingAs($utilisateur);
+    // Les liens signés contiennent leur échéance : le temps est figé pour comparer les adresses.
+    $this->travelTo(now());
 
     $this->get(route('transcriptions.show', $transcription))
         ->assertOk()
-        ->assertSee('href="'.route('transcriptions.export', [$transcription, 'pdf', 'horodatages' => 1]).'"', false)
-        ->assertSee('href="'.route('transcriptions.export', [$transcription, 'vtt', 'horodatages' => 1]).'"', false)
+        ->assertSee('href="'.e(lienSigne('transcriptions.export', [$transcription, 'pdf', 'horodatages' => 1])).'"', false)
+        ->assertSee('href="'.e(lienSigne('transcriptions.export', [$transcription, 'vtt', 'horodatages' => 1])).'"', false)
         ->assertDontSee('aria-describedby="verrou-pdf"', false);
 });
 

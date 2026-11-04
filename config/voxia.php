@@ -425,6 +425,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Liens de téléchargement
+    |--------------------------------------------------------------------------
+    |
+    | Durée de validité, en minutes, des liens signés qui servent le MP3 et les exports.
+    | Un lien expiré répond 403 ; revenir sur la transcription en donne un nouveau.
+    |
+    */
+
+    'telechargement' => [
+        'duree_lien_minutes' => (int) env('VOXIA_LIEN_DUREE_MINUTES', 15),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Outils externes
     |--------------------------------------------------------------------------
     |

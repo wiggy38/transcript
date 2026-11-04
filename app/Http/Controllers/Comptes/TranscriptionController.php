@@ -75,6 +75,6 @@ class TranscriptionController extends Controller
             ]);
         }
 
-        return redirect()->away($stockage->temporaryUrl($transcription->mp3_chemin, now()->addMinutes(15)));
+        return redirect()->away($stockage->temporaryUrl($transcription->mp3_chemin, now()->addMinutes((int) config('voxia.telechargement.duree_lien_minutes'))));
     }
 }

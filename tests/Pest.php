@@ -12,6 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 /*
@@ -182,4 +183,18 @@ function transcriptionBruteTest(): TranscriptionBrute
         new MotTranscrit('monde.', 600, 1100),
         new MotTranscrit('Suite', 3000, 3400),
     ], 'Bonjour monde. Suite', 0.0367);
+}
+
+/**
+ * Lien signé et temporaire vers une route (cahier Sécurité) : valide la durée de voxia.telechargement.
+ *
+ * @param  array<int|string, mixed>  $parametres
+ */
+function lienSigne(string $nom, array $parametres): string
+{
+    return URL::temporarySignedRoute(
+        $nom,
+        now()->addMinutes((int) config('voxia.telechargement.duree_lien_minutes')),
+        $parametres,
+    );
 }
