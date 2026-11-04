@@ -24,3 +24,9 @@ Schedule::command('voxia:purger-medias')
 Schedule::command('voxia:rappeler-suppression')
     ->dailyAt(config('voxia.conservation.heure_rappel'))
     ->withoutOverlapping();
+
+// Paiement (cahier §5) : les Packs expirent et les abonnements résiliés prennent fin sans événement ;
+// ce recalcul ramène chaque compte au plan qui lui reste.
+Schedule::command('voxia:recalculer-plans')
+    ->dailyAt(config('voxia.paiement.heure_recalcul'))
+    ->withoutOverlapping();

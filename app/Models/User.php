@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Paddle\Billable;
 
 // is_admin, plan, google_id, inscription_ip et lien_en_attente ne sont pas fillable :
 // ils ne se règlent jamais depuis une requête de formulaire.
@@ -20,7 +21,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable implements MustVerifyEmailContract
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, MustVerifyEmail, Notifiable;
+    use Billable, HasFactory, MustVerifyEmail, Notifiable;
 
     /** Valeurs par défaut de la base, reprises sur les instances neuves. */
     protected $attributes = [

@@ -14,6 +14,7 @@ use App\Services\Plans\PlanFeatures;
 use App\Services\Quota\QuotaService;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
+use RuntimeException;
 
 /**
  * Crée la transcription (lien ou fichier local) et la met en file. Aucune attente
@@ -44,6 +45,45 @@ final class LancerTranscription
         }
 
         return $this->lancerFichier($utilisateur, $source, $langue);
+    }
+
+    /**
+     * Après paiement, un aperçu partiel repart en version complète, sur la même ligne (le décompte
+     * Gratuit déjà fait n'est pas refait : seul le décompte du nouveau plan s'applique à la fin).
+     *
+     * Renvoie false si la transcription n'est pas un aperçu (déjà complète, ou jamais partielle).
+     *
+     * @throws RuntimeException aperçu encore en cours : la relance doit attendre sa fin (la tâche de paiement réessaie)
+     */
+    public function relancerVersionComplete(Transcription $transcription): bool
+    {
+        $relancee = DB::transaction(function () use ($transcription) {
+            $ligne = Transcription::query()->whereKey($transcription->getKey())->lockForUpdate()->firstOrFail();
+
+            if (! $ligne->est_apercu) {
+                return false;
+            }
+
+            // Un aperçu n'est marqué qu'en cours de traitement : attendre qu'il soit terminé avant de relancer.
+            if ($ligne->statut !== StatutTranscription::Termine) {
+                throw new RuntimeException('aperçu encore en cours');
+            }
+
+            $ligne->update([
+                'est_apercu' => false,
+                'statut' => StatutTranscription::EnAttente,
+                'motif_echec' => null,
+                'date_echec' => null,
+            ]);
+
+            return true;
+        });
+
+        if ($relancee) {
+            $this->mettreEnFile($transcription->refresh(), $transcription->user, null);
+        }
+
+        return $relancee;
     }
 
     private function lancerLien(User $utilisateur, string $source, ?string $langue, ?int $dureeConnue): Transcription

@@ -63,6 +63,14 @@
             </form>
         </x-panneau>
 
+        {{-- Abonnement : formule, résiliation, factures (BillingProvider). --}}
+        <x-panneau class="p-6">
+            <h2 class="text-lg font-semibold">{{ __('abonnement.titre') }}</h2>
+            <div class="mt-6">
+                <x-bouton :href="route('abonnement')" variante="filet">{{ __('abonnement.titre') }}</x-bouton>
+            </div>
+        </x-panneau>
+
         {{-- Suppression : confirmation par la saisie de l'adresse email. --}}
         <x-panneau class="p-6">
             <h2 class="text-lg font-semibold">{{ __('comptes.suppression.titre') }}</h2>

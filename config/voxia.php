@@ -102,14 +102,40 @@ return [
     | Droits par plan (service App\Services\Plans\PlanFeatures)
     |--------------------------------------------------------------------------
     |
-    | Tant que la facturation (étape 4) n'est pas branchée, tout le monde est
-    | au plan Gratuit. « plan_reel » à true sert aux tests et à la démo : le plan
-    | enregistré sur le compte (users.plan) est alors pris en compte.
+    | « plan_reel » à true : le plan enregistré sur le compte (users.plan), mis à jour
+    | par la facturation (webhooks), fait foi. À false, tout le monde est Gratuit.
     |
     */
 
     'droits' => [
-        'plan_reel' => filter_var(env('VOXIA_PLAN_REEL', false), FILTER_VALIDATE_BOOLEAN),
+        'plan_reel' => filter_var(env('VOXIA_PLAN_REEL', true), FILTER_VALIDATE_BOOLEAN),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paiement (fournisseur derrière App\Contracts\BillingProvider)
+    |--------------------------------------------------------------------------
+    |
+    | Les montants (en dollars US) sont ceux des plans ci-dessus : ils servent à
+    | l'affichage. Le montant réellement facturé est celui du prix créé chez le
+    | prestataire, identifié par son ID ci-dessous. Clés d'API et secret des
+    | webhooks : config/cashier.php (variables PADDLE_*).
+    |
+    | « prix » : identifiants des prix Paddle (pri_…). Un identifiant vide rend
+    | la formule non vendable (la page affiche une erreur, rien n'est facturé).
+    |
+    */
+
+    'paiement' => [
+        'fournisseur' => env('VOXIA_PAIEMENT_FOURNISSEUR', 'paddle'),
+        'prix' => [
+            'pro_mensuel' => env('VOXIA_PADDLE_PRICE_PRO_MONTHLY'),
+            'pro_annuel' => env('VOXIA_PADDLE_PRICE_PRO_YEARLY'),
+            'pack' => env('VOXIA_PADDLE_PRICE_PACK'),
+        ],
+        // Type d'abonnement enregistré par Cashier (subscriptions.type) pour le plan Pro.
+        'type_abonnement_pro' => 'pro',
+        'heure_recalcul' => env('VOXIA_PLANS_RECOMPUTE_AT', '03:45'),
     ],
 
     /*

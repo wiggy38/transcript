@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->appendToGroup('web', DefinirLangue::class);
+
+        // Webhooks du prestataire : authentifiés par signature, pas par jeton CSRF.
+        $middleware->validateCsrfTokens(except: [env('CASHIER_PATH', 'paddle').'/webhook']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

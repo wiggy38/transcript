@@ -2,9 +2,11 @@
 
 namespace Tests;
 
+use App\Contracts\BillingProvider;
 use App\Contracts\ScriptAnalyzer;
 use App\Contracts\TranscriptionEngine;
 use App\Services\Analyse\FakeScriptAnalyzer;
+use App\Services\Paiement\FauxBillingProvider;
 use App\Services\Transcription\FakeTranscriptionEngine;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Http;
@@ -23,6 +25,9 @@ abstract class TestCase extends BaseTestCase
 
         // Idem pour l'analyse de script : le faux analyseur, jamais l'API Claude.
         $this->app->instance(ScriptAnalyzer::class, new FakeScriptAnalyzer);
+
+        // Le paiement : le faux fournisseur, jamais Paddle. Les webhooks restent réels (signés, en base).
+        $this->app->instance(BillingProvider::class, new FauxBillingProvider);
 
         // Les tests lisent le plan enregistré sur le compte (users.plan), comme le fera la facturation.
         // Sans cela, PlanFeatures::planDe() ramènerait tout le monde au Gratuit (voxia.droits.plan_reel).

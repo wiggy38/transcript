@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * Un achat de Pack : des secondes de transcription, valables jusqu'à expire_at. Le solde
  * restant se calcule à partir des lignes de consommation qui pointent vers l'achat.
  */
-#[Fillable(['user_id', 'secondes', 'achete_at', 'expire_at'])]
+#[Fillable(['user_id', 'secondes', 'achete_at', 'expire_at', 'paddle_transaction_id'])]
 class PackAchat extends Model
 {
     protected function casts(): array

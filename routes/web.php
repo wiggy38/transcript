@@ -11,6 +11,9 @@ use App\Http\Controllers\Comptes\TableauDeBordController;
 use App\Http\Controllers\Comptes\TelechargementMp3Controller;
 use App\Http\Controllers\Comptes\TeleversementController;
 use App\Http\Controllers\Comptes\TranscriptionController;
+use App\Http\Controllers\Paiement\AbonnementController;
+use App\Http\Controllers\Paiement\PaiementController;
+use App\Http\Controllers\Paiement\WebhookPaddleController;
 use Illuminate\Support\Facades\Route;
 
 // Parcours principal (cahier §2) : la page d'accueil reçoit le lien, les comptes le gardent.
@@ -66,7 +69,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/reglages', [ReglagesController::class, 'afficher'])->name('reglages');
     Route::put('/reglages/langue', [ReglagesController::class, 'langue'])->name('reglages.langue');
     Route::delete('/reglages/compte', [ReglagesController::class, 'supprimer'])->name('reglages.supprimer');
+
+    // Paiement (cahier §5) : ouverture d'une formule, espace Abonnement. Email vérifié exigé pour payer.
+    Route::get('/paiement/{produit}', [PaiementController::class, 'afficher'])
+        ->whereIn('produit', ['pro_mensuel', 'pro_annuel', 'pack'])
+        ->middleware('verified')
+        ->name('paiement.show');
+
+    Route::get('/abonnement', [AbonnementController::class, 'afficher'])->name('abonnement');
+    Route::put('/abonnement/formule', [AbonnementController::class, 'changerFormule'])->name('abonnement.formule');
+    Route::post('/abonnement/resiliation', [AbonnementController::class, 'resilier'])->name('abonnement.resilier');
+    Route::post('/abonnement/resiliation/annuler', [AbonnementController::class, 'annulerResiliation'])->name('abonnement.reprendre');
+    Route::get('/abonnement/factures/{facture}', [AbonnementController::class, 'facture'])->name('abonnement.facture');
 });
+
+// Webhooks du prestataire : sans session ni CSRF, signature vérifiée (voir WebhookPaddleController).
+Route::post(config('cashier.path').'/webhook', WebhookPaddleController::class)->name('paddle.webhook');
 
 // Guide de style : visible seulement en local, jamais en production.
 if (app()->isLocal()) {

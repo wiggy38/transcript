@@ -41,7 +41,8 @@ function reponseScribeTest(): array
  */
 function champsRequeteTest(Request $requete): array
 {
-    preg_match_all('/name="([^"]+)"\r\n\r\n([^\r\n]*)/', $requete->body(), $correspondances, PREG_SET_ORDER);
+    // En-têtes de partie facultatifs (Content-Length ajouté par Guzzle 7.16) avant la ligne vide.
+    preg_match_all('/name="([^"]+)"(?:\r\n[A-Za-z-]+: [^\r\n]*)*\r\n\r\n([^\r\n]*)/', $requete->body(), $correspondances, PREG_SET_ORDER);
 
     return collect($correspondances)->mapWithKeys(fn ($c) => [$c[1] => $c[2]])->all();
 }

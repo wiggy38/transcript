@@ -149,6 +149,9 @@
                 <aside class="mt-8 border-l-2 border-accent py-1 pl-4" aria-labelledby="bandeau-apercu">
                     <p id="bandeau-apercu" class="font-medium text-texte">{{ __('transcriptions.lecture.bandeau_pro') }}</p>
                     <p class="mt-1 text-sm text-texte-secondaire">{{ __('transcriptions.page.apercu', ['minutes' => $minutesApercu]) }}</p>
+                    <p class="mt-3">
+                        <a href="{{ route('paiement.show', ['produit' => 'pro_mensuel', 'transcription' => $transcription->getKey()]) }}" class="text-accent hover:underline">{{ __('transcriptions.lecture.passer_pro') }}</a>
+                    </p>
                 </aside>
             @endif
 

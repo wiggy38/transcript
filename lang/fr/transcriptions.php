@@ -92,6 +92,7 @@ return [
         'lire_a' => 'Lire à partir de :temps',
         'vide' => 'Cette transcription ne contient pas de texte.',
         'bandeau_pro' => 'Passe au Pro pour la transcription complète.',
+        'passer_pro' => 'Voir les formules Pro et transcrire la vidéo en entier',
         'copier' => 'Copier le texte',
         'copie_ok' => 'Texte copié.',
         'copie_echec' => 'Copie impossible. Sélectionne le texte et copie-le à la main.',

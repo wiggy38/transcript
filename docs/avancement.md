@@ -8,7 +8,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] Étape 1 — Chaîne de traitement : lien, téléchargement, MP3, transcription, en ligne de commande (2 à 3 semaines)
 - [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines) *(Comptes et F5 faits, voir §2 ; F2 partiel : lecture faite, exports à l'étape 3.)*
 - [ ] Étape 3 — Exports (F4), lecteur synchronisé et analyse de script (F7) (2 à 3 semaines)
-- [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines) *(Quotas, Packs et compteur faits, voir §2 F6 et §3 ; paiement et back-office restent à faire.)*
+- [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines) *(Quotas, Packs, compteur et paiement faits (Paddle, sandbox), voir §2 F6 et §3 ; le back-office reste à faire.)*
 - [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines)
 
 ## 2. Critères d'acceptation
@@ -58,7 +58,16 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
 
 ### F6 — Offre gratuite limitée
 
-- [ ] Aucun critère d'acceptation défini dans le cahier. Voir point ouvert P0. *(Règles de quota codées et testées : 20 tests dans `tests/Feature/Quotas`, dont la 6e vidéo du mois, le changement de mois, la date anniversaire, l'expiration d'un Pack et deux lancements simultanés. Paiement, gestion de l'abonnement et back-office restent à faire.)*
+- [ ] Aucun critère d'acceptation défini dans le cahier. Voir point ouvert P0. *(Règles de quota codées et testées : 20 tests dans `tests/Feature/Quotas`, dont la 6e vidéo du mois, le changement de mois, la date anniversaire, l'expiration d'un Pack et deux lancements simultanés. Paiement : 28 tests dans `tests/Feature/Paiement`, un par cas de webhook, plus le même webhook reçu deux fois. Back-office restant.)*
+- Paiement (cahier §5, « Paiement ») — critères couverts par des tests, à valider à la main dans le sandbox Paddle (P102) :
+  - [x] Prix en dollars US lus dans la config (`voxia.plans.*` pour l'affichage, `voxia.paiement.prix` pour les identifiants Paddle).
+  - [x] Webhooks vérifiés (signature) et idempotents : abonnement créé, renouvelé, modifié, résilié, paiement échoué, achat du Pack. Un même webhook reçu deux fois ne produit qu'un effet.
+  - [x] Après paiement : plan mis à jour, quotas recalculés au nouveau plan.
+  - [x] Aperçu partiel : relancé en version complète après paiement, sans recompter le Gratuit.
+  - [x] Espace Abonnement : formule, passage mensuel ↔ annuel, résiliation (accès jusqu'à la fin de la période), annulation de la résiliation, factures, Packs et leur expiration.
+  - [x] Recalcul quotidien des plans (`voxia:recalculer-plans`) : un Pack expiré ramène au plan restant.
+  - [ ] Test de bout en bout avec le sandbox Paddle réel (aucune clé ni webhook réel dans cet environnement).
+  - [ ] TVA et factures : gérées par Paddle (texte affiché), pas vérifiées sur une facture réelle.
 
 ### F7 — Analyse de la structure d'un script publicitaire
 
@@ -228,13 +237,27 @@ Décisions F7 :
   - Pas de dégradé, pas d'ombre portée, pas d'emoji. La grille de fond de la maquette (dégradé de lignes) n'est pas reprise.
   - Tests : `tests/Feature/Interface/CharteSignalTest.php` (contrastes lus dans les jetons, animations, CDN, rendu du styleguide) et `tests/Unit/Support/HorodatageTest.php`.
 
+- Paiement (étape 4) : Paddle via Laravel Cashier Paddle 2.8 (choix par défaut du prestataire, derrière `App\Contracts\BillingProvider`). Seule `App\Services\Paiement\PaddleBillingProvider` parle à Paddle ; `FauxBillingProvider` est lié dans `Tests\TestCase`. Sandbox uniquement (`PADDLE_SANDBOX=true`, valeur par défaut).
+  - Webhooks : `POST /paddle/webhook` (`App\Http\Controllers\Paiement\WebhookPaddleController`, hérite du contrôleur Cashier). Cashier vérifie la signature et met à jour ses tables `subscriptions`, `subscription_items`, `transactions`. Sans `PADDLE_WEBHOOK_SECRET`, tout webhook est refusé (403). Route exclue du CSRF (`bootstrap/app.php`).
+  - Idempotence en deux niveaux : table `evenements_paiement` (`event_id` unique), puis effets eux-mêmes idempotents (`pack_achats.paddle_transaction_id` unique ; plan et articles recalculés depuis l'état, pas ajoutés).
+  - Traitement en file (`ProcesserEvenementPaiement`, 6 tentatives), jamais dans la requête web. Le webhook est enregistré après le traitement de Cashier, pour que le plan lise l'abonnement à jour, y compris en file synchrone.
+  - Plan calculé par `App\Services\Paiement\SynchroniserPlan` : Pro si abonnement valide (actif, ou résilié dans la période payée), sinon Pack si un Pack est valable, sinon Gratuit. L'ancre du cycle (`abonnement_debut_at`) est posée au passage à Pro.
+  - Aperçu partiel : `LancerTranscription::relancerVersionComplete()` remet la même ligne en file, sans toucher au décompte Gratuit déjà fait. Refusé si l'aperçu est encore en cours : la tâche réessaie plus tard.
+  - Impayé (`past_due`) : Pro retiré tout de suite, comportement par défaut de Cashier (`Cashier::$deactivatePastDue`). Décision à confirmer (P100).
+  - `users.plan` n'est plus lu sur un drapeau : `voxia.droits.plan_reel` vaut `true` par défaut.
+  - Pages : `/paiement/{produit}` (formules `pro_mensuel`, `pro_annuel`, `pack`, email vérifié), `/abonnement`. Le bandeau d'aperçu renvoie vers `/paiement/pro_mensuel?transcription=…`.
+  - Paddle.js ouvre l'overlay côté navigateur ; aucune donnée de carte ne passe par Voxia.
+  - Dépendances : `laravel/cashier-paddle` ajouté. Il impose Guzzle 7 (la version 8.3.1 était verrouillée). Le test `ElevenLabsScribeEngineTest` a été ajusté : l'en-tête `Content-Length` de chaque partie multipart casse l'ancienne expression, pas le comportement testé.
+  - Migrations Cashier publiées dans `database/migrations` (`vendor:publish --tag=cashier-migrations`), plus `creer_evenements_paiement` et `ajouter_transaction_paddle_aux_packs`.
+  - Recalcul des plans : `voxia:recalculer-plans`, chaque jour à `VOXIA_PLANS_RECOMPUTE_AT` (03:45 par défaut).
+
 ## 4. Points ouverts
 
 - [ ] P0 — Critères d'acceptation de F6 (offre gratuite) : à rédiger, le cahier n'en fournit pas.
 - [ ] P1 — L'extraction MP3 seule, sans transcription, décompte-t-elle une vidéo en gratuit ?
 - [ ] P2 — Durée de conservation des MP3 et des fichiers importés (proposition : 30 jours). Branchée dans `voxia.retention.media_days` (30 jours par défaut) ; la valeur reste à valider.
 - [ ] P3 — Taille maximale d'un fichier importé (proposition : 2 Go).
-- [ ] P4 — Prestataire de paiement et structure juridique qui encaisse (Stripe ou Paddle ; Stripe semble fermé aux entreprises du Burkina Faso, à vérifier).
+- [ ] P4 — Structure juridique qui encaisse : Paddle retenu par défaut (voir §3, Paiement). Stripe écarté pour l’instant (accès depuis le Burkina Faso à vérifier). Compte Paddle et structure juridique à confirmer.
 - [ ] P5 — Langues de l'interface au lancement (proposition : anglais et français).
 - [ ] P6 — Autoriser un premier essai sans compte depuis la page d'accueil ?
 - [ ] P7 — Nombre de crédits IA inclus chaque mois dans le Pro ; une analyse d'essai en Gratuit pour déclencher l'upgrade ? *(Valeur provisoire : 30 par mois dans `voxia.plans.pro.ai_credits_per_month`. Une analyse d'essai en Gratuit reste à décider : aujourd'hui le Gratuit n'a pas d'analyse.)*
@@ -305,7 +328,7 @@ Décisions F7 :
 - [ ] P72 — Suppression pendant le traitement : la chaîne peut encore écrire le MP3 d'une transcription supprimée (retiré si l'écriture en base échoue). Non testé sur la file réelle (P29).
 - [ ] P73 — Rappel avant suppression : textes d'email à valider (ton, mention des 30 jours). Jamais reçu dans Mailpit ni une boîte réelle (même statut que P55 et P66).
 - [ ] P74 — Extrait de recherche : `ts_headline` écarte certaines balises HTML de la transcription, si bien que l'extrait peut différer du texte brut. Sans effet sur la sécurité (le texte est échappé) ; à valider sur de vrais textes.
-- [ ] P75 — Droits par plan : tout le monde est Gratuit tant que `VOXIA_PLAN_REEL` est faux. Le test des plans Pro et Pack se fait avec ce drapeau ; l'étape 4 le remplacera.
+- [x] P75 — Droits par plan : `VOXIA_PLAN_REEL` vaut `true` par défaut depuis la facturation (étape 4).
 - [ ] P76 — Historique : écrans non vérifiés dans un navigateur à 375 px (mêmes statuts que P44 et P58), dont le bouton de confirmation de suppression.
 - [ ] P77 — Pagination : précédente et suivante seulement (pas de numéros de page) pour rester lisible au téléphone. À confirmer avec la maquette.
 - [ ] P78 — Import réel des SRT et VTT dans YouTube Studio et CapCut : à faire à la main avec `storage/app/exports-test/exemple.srt` et `exemple.vtt`. Le validateur de règles ne remplace pas ce test.
@@ -322,9 +345,19 @@ Décisions F7 :
 - [ ] P89 — Analyse de script (F7) : la liste de l'historique charge l'analyse de chaque ligne (requête par ligne, au plus 20 lignes par page). À regrouper avec `with('scriptAnalysis')` si la liste grossit.
 - [ ] P90 — Analyse de script (F7) : la recherche plein texte ne reprend pas le découpage des parties ; elle affiche seulement la pastille « Script analysé ». Un filtre par partie reste à décider.
 - [ ] P91 — Suite de tests : `memory_limit` relevé à 512 Mo dans `phpunit.xml`. Avec 128 Mo, la suite complète échoue à `tests/Support/ValidateurSousTitres.php` (mémoire cumulée des rendus PDF et des transcriptions de test). À réduire plutôt qu'à masquer si la suite grossit encore. Un MP3 renvoyé par `Storage::temporaryUrl` (disque S3) n'a pas été essayé avec un vrai bucket.
-- [ ] P92 — Quotas (F6) : le cycle du Pro part de `users.abonnement_debut_at`. Sans cette date, la création du compte sert d'ancre. Le paiement (étape 4) doit la renseigner à la souscription. À confirmer.
+- [ ] P92 — Quotas (F6) : le cycle du Pro part de `users.abonnement_debut_at`. Sans cette date, la création du compte sert d'ancre. Le paiement (étape 4) doit la renseigner à la souscription. À confirmer. *(Ancre posée au passage à Pro : date de création de l'abonnement chez Paddle, `AppServicesPaiementSynchroniserPlan`. Reste à confirmer.)*
 - [ ] P93 — Quotas (F6) : un compte Gratuit qui achète un Pack passe au plan Pack (choix fait ici). Alternative : garder le Gratuit et lui ouvrir les Packs. À confirmer.
 - [ ] P94 — Quotas (F6) : règle demandée, à confirmer. Un abonné Pro qui achète un Pack consomme d'abord son volume Pro, puis le Pack, y compris pour une vidéo qui chevauche les deux.
-- [ ] P95 — Quotas (F6) : `voxia.droits.plan_reel` reste à false en production. Tout le monde est au plan Gratuit tant que la facturation n'est pas branchée (étape 4). Les tests le forcent à true (`Tests\TestCase`).
+- [x] P95 — Quotas (F6) : `voxia.droits.plan_reel` vaut `true` par défaut (voir P75).
 - [ ] P96 — Quotas (F6) : la concurrence réelle n'est pas testée automatiquement. Les tests tournent sur SQLite, où `lockForUpdate` n'a aucun effet. À vérifier sur PostgreSQL, avec deux lancements en parallèle.
 - [ ] P97 — Quotas (F6) : un fichier importé n'a sa durée qu'après l'extraction. Au lancement, seule une minute est réservée ; le contrôle réel a lieu au traitement, et un dépassement échoue en `quota_epuise` sans décompte.
+- [ ] P98 — Paiement : produits à créer dans le sandbox Paddle (un produit « Voxia Pro » à deux prix récurrents, USD : 12 $ mensuel et 96 $ annuel ; un produit « Voxia Pack » à un prix unique, USD : 5 $). Identifiants `pri_…` à reporter dans `VOXIA_PADDLE_PRICE_PRO_MONTHLY`, `VOXIA_PADDLE_PRICE_PRO_YEARLY` et `VOXIA_PADDLE_PRICE_PACK`.
+- [ ] P99 — Paiement : les montants affichés (`voxia.plans.*`) et les montants des prix Paddle sont deux réglages distincts. Rien ne vérifie qu'ils concordent ; à contrôler à la main avant la mise en vente.
+- [ ] P100 — Paiement : un abonnement impayé (`past_due`) perd l'accès Pro tout de suite (défaut de Cashier). Choix possible : garder l'accès pendant les relances de Paddle. À trancher avant la vente.
+- [ ] P101 — Paiement : la page d'abonnement ne reflète une formule modifiée qu'à l'arrivée du webhook (quelques secondes). Aucun rafraîchissement n'est prévu.
+- [ ] P102 — Paiement : aucun test contre le sandbox Paddle réel (pas de clé ici). Points à vérifier : signature des webhooks, format réel des données (`custom_data`), overlay Paddle.js, dans cet ordre.
+- [ ] P103 — Paiement : après relance d'un aperçu, l'ancien MP3 de l'aperçu reste sur le disque jusqu'à la purge de la transcription (`mp3_chemin` pointe vers le nouveau fichier). À nettoyer.
+- [ ] P104 — Paiement : un échec de paiement (`transaction.payment_failed`) est seulement journalisé, sans email à l'utilisateur. À décider avec les textes de courriel.
+- [ ] P105 — Paiement : changement de formule en prorata immédiat (`prorateImmediately()`, et non le défaut de Cashier qui reporte le changement à l’échéance suivante). Vérifier le montant facturé sur un changement réel avant la mise en vente.
+- [ ] P106 — Paiement : URL à déclarer dans Paddle : `https://<domaine>/paddle/webhook`, avec les événements subscription.created, subscription.updated, subscription.canceled, subscription.past_due, transaction.completed, transaction.payment_failed.
+- [ ] P107 — Paiement : migrations non lancées sur la base PostgreSQL du poste (service arrêté). Elles ont tourné sur SQLite, dans les tests. À lancer sur la recette.

@@ -92,6 +92,7 @@ return [
         'lire_a' => 'Play from :temps',
         'vide' => 'This transcription has no text.',
         'bandeau_pro' => 'Upgrade to Pro for the full transcription.',
+        'passer_pro' => 'See the Pro plans and transcribe the full video',
         'copier' => 'Copy text',
         'copie_ok' => 'Text copied.',
         'copie_echec' => 'Copy failed. Select the text and copy it by hand.',
