@@ -9,7 +9,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines) *(Comptes et F5 faits, voir §2 ; F2 partiel : lecture faite, exports à l'étape 3.)*
 - [ ] Étape 3 — Exports (F4), lecteur synchronisé et analyse de script (F7) (2 à 3 semaines)
 - [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines) *(Quotas, Packs, compteur et paiement faits (Paddle, sandbox), voir §2 F6 et §3 ; le back-office est fait, voir §2 « Back-office » ; à vérifier dans un navigateur, P113.)*
-- [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines) *(Page d'accueil et tarifs faits, voir §2 « Page d'accueil » ; CGU, textes juridiques et bêta restent ouverts, P123.)*
+- [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines) *(Page d'accueil, tarifs, questions fréquentes, brouillons des CGU et de la confidentialité, contact faits, voir §2 « Pages publiques » ; relecture juridique et bêta restent ouverts, P132.)*
 
 ## 2. Critères d'acceptation
 
@@ -146,12 +146,12 @@ Décisions du back-office :
 - [x] MP3 présenté comme inclus dans tous les plans. *(PageAccueilTest)*
 - [x] Fiche technique et texte sous le champ : MP3, M4A, WAV, MP4, MOV, WEBM (`voxia.uploads.extensions`). *(PageAccueilTest)*
 - [x] Champ du héros : visiteur envoyé à l'inscription, lien conservé ; connecté renvoyé vers le tableau de bord, lien en attente. *(PageAccueilTest pour le formulaire ; LienEnAttenteTest pour le parcours)*
-- [x] En-tête et pied branchés : Usages, Fonctionnement, Tarifs, Se connecter, Essayer gratuitement, Confidentialité, Conditions, Contact. Les trois pages du pied existent, avec un texte provisoire. *(PageAccueilTest)*
+- [x] En-tête et pied branchés : Usages, Fonctionnement, Tarifs, Se connecter, Essayer gratuitement, Confidentialité, Conditions, Contact. Les pages du pied existent (voir « Pages publiques »). *(PageAccueilTest)*
 - [x] Animations (onde, bandeau, frappe, paquet, curseur) coupées sous `prefers-reduced-motion`. *(CharteSignalTest, PageAccueilTest : contrôle du CSS ; pas d'essai avec le réglage du système activé.)*
 - [x] Aucune barre de défilement horizontale à 375, 768 et 1440 px. *(Mesure dans Chrome, sur l'accueil et une page du pied.)*
 - [x] Titre, description, balises Open Graph et Twitter, image de partage 1200 × 630 au style Signal (`public/images/partage-voxia.png`, générée avec GD). *(PageAccueilTest)*
 - [ ] Langues reconnues et durée de conservation : marquées « [À CONFIRMER] » (P121, P122).
-- [ ] Textes juridiques et contact : en attente (P123).
+- [ ] Textes juridiques et contact : brouillons et formulaire faits ; relecture juridique et adresse de contact à fournir (P132).
 
 **Décisions de la page d'accueil**
 
@@ -159,7 +159,32 @@ Décisions du back-office :
 - Polices : la maquette charge Geist, Geist Mono et Instrument Serif depuis Google Fonts. Le projet les héberge déjà par fontsource (`resources/js/app.js`) : pas d'appel à un CDN, conforme à la charte.
 - Les boutons de l'aperçu produit (Copier, .txt, .srt, .vtt, .mp3) sont décoratifs : ils sont masqués aux lecteurs d'écran et sortent du parcours clavier.
 - Les textes des sections et des tarifs sont dans `lang/fr/accueil.php` et `lang/en/accueil.php`. Les montants, quotas et formats sont passés en remplacements : rien n'est écrit en dur.
-- Le pied de page pointe vers trois pages provisoires (`/confidentialite`, `/conditions`, `/contact`) qui affichent « [À CONFIRMER] » : aucun texte juridique n'est inventé (CLAUDE.md §7).
+- Le pied de page pointe vers les pages publiques (tarifs, questions, confidentialité, conditions, contact) : voir « Pages publiques ».
+
+### Pages publiques et données du compte (cahier §5, §7, §9 étape 5)
+
+*Tests : `tests/Feature/Pages/` (`PagesPubliquesTest`, `ContactTest`, `ExportDonneesTest`), un test par critère. Textes : `lang/fr/pages.php` et `lang/en/pages.php`. Mise en page à vérifier dans un navigateur (P136).*
+
+- [x] Tarifs : comparatif détaillé (Gratuit, Pro, Pack) et FAQ tarifaire ; prix, quotas, durées et exports lus dans la config. *(PagesPubliquesTest)*
+- [x] Questions fréquentes : transcription, comptes et plans, données ; formats et langues lus dans la config. *(PagesPubliquesTest)*
+- [x] Conditions et confidentialité : brouillons en français et en anglais, bandeau « BROUILLON — à faire relire par un juriste avant lancement » en tête. *(PagesPubliquesTest)* Relecture par un juriste : P132.
+- [x] Conditions : l'utilisateur garantit avoir les droits sur les vidéos qu'il transcrit ; aucune transcription n'est publique ; durées de conservation depuis la config. *(PagesPubliquesTest)*
+- [x] Confidentialité : sous-traitants (ElevenLabs, Anthropic, prestataire de paiement, hébergeur, stockage, emails, proxys de téléchargement), transferts hors Union européenne, droits d'accès, de rectification, d'effacement, de portabilité (export ZIP) et réclamation à la CNIL. *(PagesPubliquesTest)*
+- [x] Éditeur : EVANOE, SIRET 919 260 000 00014, 13 rue de la Tuilerie, Betouille, 77950 Rubelles (`voxia.editeur`). Forme juridique et email de contact : espaces laissés à compléter. *(PagesPubliquesTest)*
+- [x] Aucun bandeau de consentement : aucun outil de mesure d'audience, aucun cookie publicitaire (voir Décisions). *(PagesPubliquesTest)*
+- [x] Formulaire de contact protégé contre le spam : champ piège, délai minimal avant envoi, limite par adresse IP (`voxia.contact`). *(ContactTest)*
+- [x] Contact : le message part en file vers `VOXIA_CONTACT_EMAIL`, avec le visiteur pour réponse ; sans adresse configurée, le formulaire n'est pas affiché. *(ContactTest)*
+- [x] Export de toutes les données en ZIP depuis les réglages (« Vos données ») : compte, transcriptions en JSON et en texte horodaté, MP3, analyses de script, consommation. Préparé par la file, lien signé reçu par email. *(ExportDonneesTest)*
+- [x] Export réservé au propriétaire (un autre compte reçoit 404, une adresse sans signature 403) ; retiré avec le compte ; purge après 24 h (`voxia:purger-exports`, planifiée). *(ExportDonneesTest)*
+- [x] Pages dans les deux langues sans clé de traduction visible. *(PagesPubliquesTest, ContactTest)*
+
+Décisions des pages publiques :
+- Consentement : aucun outil de mesure d'audience ni publicité ; seuls les cookies nécessaires (session, protection des formulaires, choix de langue) sont posés. Donc aucun bandeau. Si un outil de mesure est ajouté, la confidentialité et le bandeau sont à mettre à jour avant (une mesure exemptée de consentement par la CNIL reste à vérifier à ce moment-là).
+- Textes juridiques : tutoiement, comme le reste de l'interface (CLAUDE.md §5). Aucune valeur inventée : le plafond de responsabilité, le droit applicable, l'hébergeur, le stockage, l'envoi d'emails et les proxys restent entre crochets.
+- Prestataire de paiement nommé « Paddle », comme dans le code (`voxia.paiement.fournisseur`). Le cahier §8 le donne encore « à décider » (P132).
+- Export : préparé par la file (`ExporterDonneesCompte`), fichier `exports/{id}/voxia-donnees.zip` sur le disque de stockage, lien signé de 24 h dans l'email. Le journal technique de traitement (coûts internes) n'y figure pas : c'est une donnée d'exploitation (P134).
+- Contact : aucun CAPTCHA, car aucun service de vérification n'est dans la stack. Les messages ne sont pas enregistrés en base : ils partent seulement par email (P133).
+- Pied de page : liens Tarifs et Questions fréquentes ajoutés aux liens existants.
 
 ### Langues (CLAUDE.md §1 : français et anglais)
 
@@ -475,3 +500,9 @@ Décisions des fenêtres d'upgrade :
 - [ ] P129 — Langues : la durée (« 12 h 40 », « 40 min ») garde ses unités `h` et `min`, identiques dans les deux langues. Acceptable, ou à traduire ?
 - [ ] P130 — Langues : trois variantes anglaises du héros « Chaque vidéo contient un texte. Voxia te l'écrit. » ont été proposées (voir le compte rendu) ; la variante A est appliquée. À confirmer.
 - [ ] P131 — Langues : sélecteur, cookie et hreflang vérifiés par les tests HTTP seulement, pas dans un navigateur ni avec PostgreSQL (port 5433 : voir P107). La migration `locale` nullable n'est pas lancée sur PostgreSQL.
+- [ ] P132 — Juridique : CGU et politique de confidentialité sont des brouillons (bandeau en tête) à faire relire par un juriste avant lancement. À fournir : forme juridique d'EVANOE (non précisée), adresse email de contact (`VOXIA_CONTACT_EMAIL`, vide tant qu'elle n'est pas donnée : le formulaire et l'adresse ne s'affichent pas), hébergeur, stockage des fichiers, prestataire d'emails, proxys de téléchargement, clauses contractuelles pour les transferts vers les États-Unis, plafond de responsabilité, droit applicable. Prestataire de paiement : Paddle est celui du code, le cahier §8 le donne « à décider ». Tutoiement dans les textes juridiques : à confirmer avec le juriste.
+- [ ] P133 — Contact : protection anti-spam sans CAPTCHA (champ piège, délai, limite par IP). Si des messages de robots passent, ajouter un service de vérification : à choisir, il s'agit d'un service tiers.
+- [ ] P134 — Export : durée du lien (24 h) et conservation du ZIP (24 h) sont des valeurs proposées (`VOXIA_EXPORT_LIEN_MINUTES`, `VOXIA_EXPORT_CONSERVATION_HEURES`). Le ZIP ne contient pas les journaux techniques de traitement (coûts internes) : à confirmer comme donnée personnelle à exporter.
+- [ ] P135 — Tarifs : les crédits IA du Pro s'affichent « inclus, volume à confirmer » (lié à P110).
+- [ ] P136 — Pages publiques : mise en page non vérifiée dans un navigateur. Le tableau des tarifs défile dans son cadre sous 640 px (pas la page entière) : à vérifier à 375 px, avec la règle « aucun défilement horizontal de la page ».
+- [ ] P137 — Langues : `lang/fr/courriels.php` définit deux fois la clé `rappel_suppression` (le second bloc, avec « 3 jours » écrit en dur, remplace le premier, paramétré). À corriger en gardant la version paramétrée.

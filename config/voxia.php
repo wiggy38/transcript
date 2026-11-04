@@ -538,4 +538,52 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Contact (formulaire des pages publiques)
+    |--------------------------------------------------------------------------
+    |
+    | « email » : adresse qui reçoit les messages. Vide, le formulaire n'est pas affiché.
+    | « delai_min_secondes » : un formulaire envoyé plus vite que ce délai est traité comme automatique.
+    | « max_par_heure » : messages acceptés par adresse IP sur une heure.
+    |
+    */
+    'contact' => [
+        'email' => env('VOXIA_CONTACT_EMAIL'),
+        'delai_min_secondes' => (int) env('VOXIA_CONTACT_MIN_SECONDS', 3),
+        'max_par_heure' => (int) env('VOXIA_CONTACT_MAX_PAR_HEURE', 5),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Export des données du compte (ZIP, réglages du compte)
+    |--------------------------------------------------------------------------
+    |
+    | Le ZIP est préparé par la file, puis envoyé par email avec un lien signé valable
+    | « duree_lien_minutes ». Le fichier reste sur le disque « conservation_heures » au plus
+    | (purge quotidienne, voxia:purger-exports), ou jusqu'à la suppression du compte.
+    |
+    */
+    'donnees' => [
+        'duree_lien_minutes' => (int) env('VOXIA_EXPORT_LIEN_MINUTES', 1440),
+        'conservation_heures' => (int) env('VOXIA_EXPORT_CONSERVATION_HEURES', 24),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Éditeur (mentions légales et politique de confidentialité)
+    |--------------------------------------------------------------------------
+    |
+    | Identité reprise dans les pages juridiques. La forme juridique n'est pas encore
+    | connue : le texte affiche un espace à compléter tant qu'elle n'est pas renseignée.
+    |
+    */
+    'editeur' => [
+        'nom' => 'EVANOE',
+        'siret' => '919 260 000 00014',
+        'adresse' => '13 rue de la Tuilerie, Betouille, 77950 Rubelles',
+        // Date du brouillon affiché en tête des textes juridiques (à mettre à jour à chaque relecture).
+        'date_brouillon' => env('VOXIA_LEGAL_DRAFT_DATE', '2026-11-04'),
+    ],
+
 ];

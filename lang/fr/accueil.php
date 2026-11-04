@@ -176,19 +176,4 @@ return [
         'pt' => 'portugais',
     ],
 
-    'pages' => [
-        'confidentialite' => [
-            'titre' => 'Confidentialité',
-            'texte' => 'Texte en attente de validation juridique. [À CONFIRMER]',
-        ],
-        'conditions' => [
-            'titre' => 'Conditions',
-            'texte' => 'Conditions générales en attente de validation juridique. [À CONFIRMER]',
-        ],
-        'contact' => [
-            'titre' => 'Contact',
-            'texte' => 'Adresse de contact en attente de confirmation. [À CONFIRMER]',
-        ],
-    ],
-
 ];

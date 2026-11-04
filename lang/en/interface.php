@@ -33,6 +33,8 @@ return [
 
     'pied' => [
         'droits' => '© :annee Voxia',
+        'tarifs' => 'Pricing',
+        'questions' => 'FAQ',
         'confidentialite' => 'Privacy',
         'conditions' => 'Terms',
         'contact' => 'Contact',

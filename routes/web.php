@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\Comptes\DonneesController;
 use App\Http\Controllers\Comptes\ExportAnalyseController;
 use App\Http\Controllers\Comptes\ExportController;
 use App\Http\Controllers\Comptes\GoogleController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Comptes\TableauDeBordController;
 use App\Http\Controllers\Comptes\TelechargementMp3Controller;
 use App\Http\Controllers\Comptes\TeleversementController;
 use App\Http\Controllers\Comptes\TranscriptionController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LangueController;
 use App\Http\Controllers\Paiement\AbonnementController;
 use App\Http\Controllers\Paiement\PaiementController;
@@ -27,10 +29,15 @@ Route::post('/lien', [LienController::class, 'store'])->name('lien.store');
 Route::prefix('{locale}')->whereIn('locale', ['en', 'fr'])->group(function () {
     Route::get('/', AccueilController::class)->name('accueil');
 
-    // Liens du pied de page. Textes juridiques et contact en attente : aucun texte n'est inventé (cahier §9).
-    Route::view('/confidentialite', 'pages.provisoire', ['cle' => 'confidentialite'])->name('confidentialite');
-    Route::view('/conditions', 'pages.provisoire', ['cle' => 'conditions'])->name('conditions');
-    Route::view('/contact', 'pages.provisoire', ['cle' => 'contact'])->name('contact');
+    // Pages du pied de page et de la page d'accueil. Textes juridiques : brouillons à relire (cahier §9).
+    Route::view('/tarifs', 'pages.tarifs')->name('tarifs');
+    Route::view('/questions', 'pages.questions')->name('questions');
+    Route::view('/conditions', 'pages.juridique', ['cle' => 'conditions'])->name('conditions');
+    Route::view('/confidentialite', 'pages.juridique', ['cle' => 'confidentialite'])->name('confidentialite');
+
+    // Formulaire de contact : protégé par un champ piège, un délai minimal et une limite par IP (ContactController).
+    Route::get('/contact', [ContactController::class, 'afficher'])->name('contact');
+    Route::post('/contact', [ContactController::class, 'envoyer'])->name('contact.envoyer');
 });
 
 // Choix de langue (sélecteur) : mémorise le choix, l'enregistre sur le compte s'il y en a un,
@@ -86,6 +93,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/reglages', [ReglagesController::class, 'afficher'])->name('reglages');
     Route::put('/reglages/langue', [ReglagesController::class, 'langue'])->name('reglages.langue');
     Route::delete('/reglages/compte', [ReglagesController::class, 'supprimer'])->name('reglages.supprimer');
+
+    // Export de toutes les données (ZIP) : préparé par la file, puis livré par un lien signé reçu par email.
+    Route::post('/reglages/donnees', [DonneesController::class, 'demander'])->name('reglages.donnees.demander');
+    Route::get('/reglages/donnees/{utilisateur}/telecharger', [DonneesController::class, 'telecharger'])
+        ->middleware('signed')
+        ->name('reglages.donnees.telecharger');
 
     // Paiement (cahier §5) : ouverture d'une formule, espace Abonnement. Email vérifié exigé pour payer.
     Route::get('/paiement/{produit}', [PaiementController::class, 'afficher'])

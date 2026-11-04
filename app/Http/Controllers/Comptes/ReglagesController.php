@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Comptes;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ExporterDonneesCompte;
 use App\Jobs\SupprimerFichiersTranscriptions;
 use App\Mail\CompteSupprime;
 use App\Models\User;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -24,9 +26,13 @@ class ReglagesController extends Controller
 {
     public function afficher(Request $request): View
     {
+        $utilisateur = $request->user();
+
         return view('app.reglages', [
-            'utilisateur' => $request->user(),
+            'utilisateur' => $utilisateur,
             'langues' => Langue::disponibles(),
+            'exportDisponible' => Storage::disk((string) config('voxia.stockage.disque'))
+                ->exists(ExporterDonneesCompte::chemin($utilisateur->getKey())),
         ]);
     }
 
@@ -91,6 +97,10 @@ class ReglagesController extends Controller
         if ($identifiants !== []) {
             SupprimerFichiersTranscriptions::dispatch($identifiants);
         }
+
+        // L'export des données (ZIP) contient les mêmes informations : il part avec le compte.
+        Storage::disk((string) config('voxia.stockage.disque'))
+            ->deleteDirectory(ExporterDonneesCompte::dossier($utilisateur->getKey()));
 
         return redirect()->route('accueil')->with('statut', 'compte-supprime');
     }

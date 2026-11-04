@@ -176,19 +176,4 @@ return [
         'pt' => 'Portuguese',
     ],
 
-    'pages' => [
-        'confidentialite' => [
-            'titre' => 'Privacy',
-            'texte' => 'Text awaiting legal review. [TO CONFIRM]',
-        ],
-        'conditions' => [
-            'titre' => 'Terms',
-            'texte' => 'Terms of use awaiting legal review. [TO CONFIRM]',
-        ],
-        'contact' => [
-            'titre' => 'Contact',
-            'texte' => 'Contact address awaiting confirmation. [TO CONFIRM]',
-        ],
-    ],
-
 ];

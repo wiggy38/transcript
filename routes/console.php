@@ -21,6 +21,11 @@ Schedule::command('voxia:purger-medias')
     ->dailyAt(config('voxia.conservation.heure_purge'))
     ->withoutOverlapping();
 
+// Export des données (réglages, « Vos données ») : les ZIP sont retirés après voxia.donnees.conservation_heures.
+Schedule::command('voxia:purger-exports')
+    ->dailyAt(config('voxia.conservation.heure_purge'))
+    ->withoutOverlapping();
+
 Schedule::command('voxia:rappeler-suppression')
     ->dailyAt(config('voxia.conservation.heure_rappel'))
     ->withoutOverlapping();

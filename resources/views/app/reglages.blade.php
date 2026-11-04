@@ -72,6 +72,21 @@
             </div>
         </x-panneau>
 
+        {{-- Export de toutes les données : préparé par la file, lien reçu par email (et ici quand il est prêt). --}}
+        <x-panneau class="p-6">
+            <h2 class="text-lg font-semibold">{{ __('comptes.reglages.donnees.titre') }}</h2>
+            <p class="mt-2 text-texte-secondaire">{{ __('comptes.reglages.donnees.texte') }}</p>
+            @if ($exportDisponible)
+                <p class="mt-4 text-sm text-texte">{{ __('comptes.reglages.donnees.pret') }}
+                    <a href="{{ \Illuminate\Support\Facades\URL::temporarySignedRoute('reglages.donnees.telecharger', now()->addMinutes(config('voxia.donnees.duree_lien_minutes')), ['utilisateur' => $utilisateur->getKey()]) }}" class="text-accent underline-offset-4 hover:underline">{{ __('comptes.reglages.donnees.telecharger') }}</a>
+                </p>
+            @endif
+            <form method="post" action="{{ route('reglages.donnees.demander') }}" class="mt-6">
+                @csrf
+                <x-bouton type="submit" variante="filet">{{ __('comptes.reglages.donnees.bouton') }}</x-bouton>
+            </form>
+        </x-panneau>
+
         {{-- Suppression : confirmation par la saisie de l'adresse email. --}}
         <x-panneau class="p-6">
             <h2 class="text-lg font-semibold">{{ __('comptes.suppression.titre') }}</h2>

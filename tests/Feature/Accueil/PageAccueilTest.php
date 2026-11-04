@@ -126,15 +126,16 @@ it('branche les liens de l\'en-tête et du pied de page', function () {
         ->toContain('href="'.route('contact').'"');
 });
 
-it('répond aux pages du pied de page, sans texte juridique inventé', function (string $route, string $titre) {
+// Les textes juridiques sont des brouillons : leurs espaces à compléter restent visibles (CLAUDE.md §7).
+it('répond aux pages du pied de page, sans texte juridique inventé', function (string $route, string $titre, string $espace) {
     $this->get($route)
         ->assertOk()
         ->assertSee($titre)
-        ->assertSee('[À CONFIRMER]');
+        ->assertSee($espace);
 })->with([
-    'confidentialité' => ['/fr/confidentialite', 'Confidentialité'],
-    'conditions' => ['/fr/conditions', 'Conditions'],
-    'contact' => ['/fr/contact', 'Contact'],
+    'confidentialité' => ['/fr/confidentialite', 'Confidentialité', '[À CONFIRMER]'],
+    'conditions' => ['/fr/conditions', 'Conditions', '[À CONFIRMER]'],
+    'contact' => ['/fr/contact', 'Contact', '[EMAIL DE CONTACT À COMPLÉTER]'],
 ]);
 
 it('donne à la page un titre, une description et des balises de partage au style Signal', function () {

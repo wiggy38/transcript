@@ -82,6 +82,13 @@ return [
 
     'reglages' => [
         'titre' => 'Account settings',
+        'donnees' => [
+            'titre' => 'Your data',
+            'texte' => 'Download all your data in a ZIP file: account, transcriptions, timestamped texts, MP3 files and script analyses. The link arrives by email and is valid for a limited time.',
+            'bouton' => 'Prepare my export',
+            'pret' => 'Your latest export is ready.',
+            'telecharger' => 'Download the ZIP',
+        ],
         'profil' => 'Profile',
         'nom' => 'Name',
         'email' => 'Email address',
@@ -114,6 +121,7 @@ return [
         'profile-information-updated' => 'Profile saved.',
         'password-updated' => 'Password saved.',
         'verification-link-sent' => 'A new link has just been sent.',
+        'export-demande' => 'Your export is being prepared. The download link will arrive by email.',
     ],
 
     'deconnexion' => 'Log out',

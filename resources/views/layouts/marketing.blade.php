@@ -93,6 +93,8 @@
         <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 pt-7 text-sm text-texte-discret">
             <span>{{ __('interface.pied.droits', ['annee' => now()->year]) }}</span>
             <ul class="flex flex-wrap gap-6">
+                <li><a href="{{ route('tarifs') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.tarifs') }}</a></li>
+                <li><a href="{{ route('questions') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.questions') }}</a></li>
                 <li><a href="{{ route('confidentialite') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.confidentialite') }}</a></li>
                 <li><a href="{{ route('conditions') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.conditions') }}</a></li>
                 <li><a href="{{ route('contact') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.contact') }}</a></li>

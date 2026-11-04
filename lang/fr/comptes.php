@@ -82,6 +82,13 @@ return [
 
     'reglages' => [
         'titre' => 'Réglages du compte',
+        'donnees' => [
+            'titre' => 'Vos données',
+            'texte' => 'Télécharge toutes tes données dans un fichier ZIP : compte, transcriptions, textes horodatés, MP3 et analyses de script. Le lien arrive par email, valable un temps limité.',
+            'bouton' => 'Préparer mon export',
+            'pret' => 'Ton dernier export est prêt.',
+            'telecharger' => 'Télécharger le ZIP',
+        ],
         'profil' => 'Profil',
         'nom' => 'Nom',
         'email' => 'Adresse email',
@@ -114,6 +121,7 @@ return [
         'profile-information-updated' => 'Profil enregistré.',
         'password-updated' => 'Mot de passe enregistré.',
         'verification-link-sent' => 'Un nouveau lien vient d\'être envoyé.',
+        'export-demande' => 'Ton export est en préparation. Le lien de téléchargement arrivera par email.',
     ],
 
     'deconnexion' => 'Se déconnecter',
