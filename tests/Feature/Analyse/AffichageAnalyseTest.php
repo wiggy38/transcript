@@ -32,7 +32,7 @@ function analyseTerminee(User $utilisateur, bool $offreAbsente = false)
 // Critère F7 : un clic sur une partie lance la lecture à son début. Le bouton envoie le début exact en
 // millisecondes ; le lecteur l'écoute (événement voxia-aller).
 it('envoie le début de chaque partie au lecteur au clic', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $this->actingAs($utilisateur);
     $transcription = analyseTerminee($utilisateur);
 
@@ -44,7 +44,7 @@ it('envoie le début de chaque partie au lecteur au clic', function () {
 
 // Critère F7 : la barre reprend la maquette ; une partie absente est hachurée et porte son libellé.
 it('hachure une partie absente avec la mention « non détectée »', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $this->actingAs($utilisateur);
     $transcription = analyseTerminee($utilisateur, offreAbsente: true);
 
@@ -56,7 +56,7 @@ it('hachure une partie absente avec la mention « non détectée »', function (
 
 // Critère F7 : le texte de chaque partie est affiché avec ses horodatages.
 it('affiche le texte de chaque partie avec ses horodatages', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $this->actingAs($utilisateur);
     $transcription = analyseTerminee($utilisateur);
 
@@ -68,7 +68,7 @@ it('affiche le texte de chaque partie avec ses horodatages', function () {
 
 // Un script de plus de 3 minutes : bouton désactivé, raison affichée, et le serveur refuse aussi.
 it('désactive le bouton au-delà de 3 minutes, avec la raison', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $this->actingAs($utilisateur);
     $transcription = transcriptionAnalysable($utilisateur, ['duree_secondes' => 240]);
 
@@ -81,7 +81,7 @@ it('désactive le bouton au-delà de 3 minutes, avec la raison', function () {
 
 // Critère F7 : l'analyse est rattachée à sa transcription, visible dans l'historique.
 it('signale l’analyse dans l’historique', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $this->actingAs($utilisateur);
     analyseTerminee($utilisateur);
 
@@ -92,7 +92,7 @@ it('signale l’analyse dans l’historique', function () {
 
 // Critère F7 : suppression de la transcription, suppression de son analyse.
 it('supprime l’analyse avec sa transcription', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $this->actingAs($utilisateur);
     $transcription = analyseTerminee($utilisateur);
 
@@ -103,7 +103,7 @@ it('supprime l’analyse avec sa transcription', function () {
 
 // Critère F7 : export TXT. Une partie absente y figure comme « non détectée ».
 it('exporte l’analyse en TXT, parties absentes comprises', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $this->actingAs($utilisateur);
     $transcription = analyseTerminee($utilisateur, offreAbsente: true);
 
@@ -119,9 +119,12 @@ it('exporte l’analyse en TXT, parties absentes comprises', function () {
 
 // Critère F7 : export PDF réservé aux plans qui le incluent (cahier §5 : Gratuit = TXT et SRT seulement).
 it('refuse le PDF au plan Gratuit', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $this->actingAs($utilisateur);
     $transcription = analyseTerminee($utilisateur);
+
+    // Le compte repasse au Gratuit après l'analyse : le PDF n'est plus servi.
+    $utilisateur->forceFill(['plan' => 'free'])->save();
 
     $url = URL::temporarySignedRoute('transcriptions.analyse.export', now()->addMinutes(5), [$transcription, 'pdf']);
 
@@ -143,8 +146,8 @@ it('exporte l’analyse en PDF au plan Pro', function () {
 
 // Un export ne se donne qu'au propriétaire, et seulement pour une analyse terminée.
 it('répond 404 à un autre compte ou à une analyse non terminée', function () {
-    $proprietaire = User::factory()->create();
-    $autre = User::factory()->create();
+    $proprietaire = analyseUtilisateurPro();
+    $autre = analyseUtilisateurPro();
     $transcription = analyseTerminee($proprietaire);
 
     $this->actingAs($autre);

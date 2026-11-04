@@ -82,8 +82,8 @@ it('transcrit un lien de bout en bout : six étapes journalisées, MP3 stocké, 
     Event::assertDispatched(TranscriptionCompleted::class);
     Event::assertNotDispatched(TranscriptionFailed::class);
 
-    // Aucune consommation écrite avant l'état Terminé : c'est le point d'accroche du quota.
-    expect(DB::table('usage_records')->count())->toBe(0)
+    // Le décompte est écrit dans la transaction qui passe la transcription à Terminé : une seule ligne (Pro, en secondes).
+    expect(DB::table('usage_records')->where('transcription_id', $transcription->getKey())->count())->toBe(1)
         ->and(dossierTemporaireVide())->toBeTrue();
 });
 

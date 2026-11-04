@@ -39,6 +39,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasMany(UsageRecord::class);
     }
 
+    public function packAchats(): HasMany
+    {
+        return $this->hasMany(PackAchat::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -51,6 +56,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
             'password' => 'hashed',
             'is_admin' => 'boolean',
             'plan' => Plan::class,
+            'abonnement_debut_at' => 'datetime',
         ];
     }
 }

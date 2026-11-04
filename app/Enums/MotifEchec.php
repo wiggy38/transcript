@@ -10,6 +10,7 @@ enum MotifEchec: string
     case BloqueeRegion = 'bloquee_region';
     case LiveEnCours = 'live_en_cours';
     case TropLongue = 'trop_longue';
+    case QuotaEpuise = 'quota_epuise';
     case SansAudio = 'sans_audio';
     case FormatNonSupporte = 'format_non_supporte';
     case ErreurTechnique = 'erreur_technique';

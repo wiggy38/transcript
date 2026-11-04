@@ -10,37 +10,43 @@ use App\Exceptions\ErreurVideo;
 use App\Jobs\ProcessTranscription;
 use App\Models\Transcription;
 use App\Models\User;
+use App\Services\Plans\PlanFeatures;
 use App\Services\Quota\QuotaService;
+use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
 /**
  * Crée la transcription (lien ou fichier local) et la met en file. Aucune attente
  * ici : le traitement se fait dans la tâche ProcessTranscription. Le quota est vérifié
- * avant toute création, jamais pour une transcription déjà existante.
+ * avant toute création, dans la même transaction (verrou sur le compte), et jamais pour
+ * une transcription déjà existante.
  */
 final class LancerTranscription
 {
     public function __construct(
         private readonly VideoFetcher $videos,
         private readonly QuotaService $quotas,
+        private readonly PlanFeatures $droits,
     ) {}
 
     /**
-     * @throws ErreurVideo motif « lien_invalide » ou « format_non_supporte »
+     * @param  int|null  $dureeConnue  durée de la vidéo si elle est déjà connue (aperçu), en secondes
+     *
+     * @throws ErreurVideo motif « lien_invalide », « format_non_supporte », « trop_longue » ou « quota_epuise »
      * @throws InvalidArgumentException fichier introuvable
      */
-    public function lancer(User $utilisateur, string $source, ?string $langue = null): Transcription
+    public function lancer(User $utilisateur, string $source, ?string $langue = null, ?int $dureeConnue = null): Transcription
     {
         $langue = $langue !== null && $langue !== '' ? $langue : null;
 
         if (preg_match('#^https?://#i', $source) === 1) {
-            return $this->lancerLien($utilisateur, $source, $langue);
+            return $this->lancerLien($utilisateur, $source, $langue, $dureeConnue);
         }
 
         return $this->lancerFichier($utilisateur, $source, $langue);
     }
 
-    private function lancerLien(User $utilisateur, string $source, ?string $langue): Transcription
+    private function lancerLien(User $utilisateur, string $source, ?string $langue, ?int $dureeConnue): Transcription
     {
         $lien = $this->videos->reconnaitre($source);
 
@@ -57,15 +63,18 @@ final class LancerTranscription
             }
         }
 
-        $this->quotas->verifier($utilisateur);
+        $transcription = DB::transaction(function () use ($utilisateur, $lien, $langue, $dureeConnue) {
+            $this->quotas->verifier($utilisateur, $dureeConnue);
 
-        $transcription = $utilisateur->transcriptions()->create([
-            'source' => $lien->source,
-            'url_origine' => $lien->url,
-            'id_video' => $lien->idVideo,
-            'langue_forcee' => $langue,
-            'statut' => StatutTranscription::EnAttente,
-        ]);
+            return $utilisateur->transcriptions()->create([
+                'source' => $lien->source,
+                'url_origine' => $lien->url,
+                'id_video' => $lien->idVideo,
+                'duree_secondes' => $dureeConnue,
+                'langue_forcee' => $langue,
+                'statut' => StatutTranscription::EnAttente,
+            ]);
+        });
 
         $this->mettreEnFile($transcription, $utilisateur, null);
 
@@ -84,14 +93,17 @@ final class LancerTranscription
             throw new ErreurVideo(MotifEchec::FormatNonSupporte, '.'.$extension);
         }
 
-        $this->quotas->verifier($utilisateur);
+        $transcription = DB::transaction(function () use ($utilisateur, $source, $langue) {
+            // Durée inconnue avant l'extraction : le quota est revérifié au traitement.
+            $this->quotas->verifier($utilisateur);
 
-        $transcription = $utilisateur->transcriptions()->create([
-            'source' => SourceTranscription::Fichier,
-            'titre' => mb_substr(pathinfo($source, PATHINFO_FILENAME), 0, 500),
-            'langue_forcee' => $langue,
-            'statut' => StatutTranscription::EnAttente,
-        ]);
+            return $utilisateur->transcriptions()->create([
+                'source' => SourceTranscription::Fichier,
+                'titre' => mb_substr(pathinfo($source, PATHINFO_FILENAME), 0, 500),
+                'langue_forcee' => $langue,
+                'statut' => StatutTranscription::EnAttente,
+            ]);
+        });
 
         $this->mettreEnFile($transcription, $utilisateur, realpath($source) ?: $source);
 
@@ -122,6 +134,6 @@ final class LancerTranscription
     private function mettreEnFile(Transcription $transcription, User $utilisateur, ?string $cheminFichier): void
     {
         ProcessTranscription::dispatch($transcription->getKey(), $cheminFichier)
-            ->onQueue(FileTraitement::pour($utilisateur->plan));
+            ->onQueue($this->droits->fileDe($this->droits->planDe($utilisateur)));
     }
 }

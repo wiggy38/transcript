@@ -6,6 +6,7 @@ use App\Contracts\VideoFetcher;
 use App\Enums\MotifEchec;
 use App\Enums\Plan;
 use App\Exceptions\ErreurVideo;
+use App\Services\Plans\PlanFeatures;
 use App\Services\Televersement\Televersement;
 use App\Services\Traitement\LancerTranscription;
 use App\Services\Video\ApercuLien;
@@ -109,7 +110,7 @@ class NouvelleTranscription extends Component
         }
 
         try {
-            $transcription = $lancement->lancer(Auth::user(), $url, $this->langueChoisie());
+            $transcription = $lancement->lancer(Auth::user(), $url, $this->langueChoisie(), $this->dureeApercue() ?: null);
         } catch (ErreurVideo $erreur) {
             $this->erreurLien = $erreur->messageUtilisateur();
 
@@ -187,7 +188,7 @@ class NouvelleTranscription extends Component
 
     public function render()
     {
-        $plan = Auth::user()->plan->value;
+        $plan = $this->planDeCompte()->value;
         $etat = $this->apercu['etat'] ?? null;
         $donnees = $this->apercu['donnees'] ?? [];
 
@@ -278,7 +279,7 @@ class NouvelleTranscription extends Component
      */
     private function depasseLeDroitDuPlan(): bool
     {
-        if (Auth::user()->plan === Plan::Free) {
+        if ($this->planDeCompte() === Plan::Free) {
             return false;
         }
 
@@ -288,7 +289,7 @@ class NouvelleTranscription extends Component
     /** Vrai pour le Gratuit si la vidéo dépasse 10 minutes : seules les premières seront transcrites. */
     private function limiteAuPlan(): bool
     {
-        return Auth::user()->plan === Plan::Free && $this->dureeApercue() > $this->dureeMaxDuPlan();
+        return $this->planDeCompte() === Plan::Free && $this->dureeApercue() > $this->dureeMaxDuPlan();
     }
 
     private function dureeApercue(): int
@@ -298,7 +299,12 @@ class NouvelleTranscription extends Component
 
     private function dureeMaxDuPlan(): int
     {
-        return (int) config('voxia.plans.'.Auth::user()->plan->value.'.max_video_seconds');
+        return app(PlanFeatures::class)->dureeMaxSecondes($this->planDeCompte());
+    }
+
+    private function planDeCompte(): Plan
+    {
+        return app(PlanFeatures::class)->planDe(Auth::user());
     }
 
     private function messageMotif(?string $motif): string

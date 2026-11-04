@@ -22,6 +22,8 @@ use App\Models\ProcessingLog;
 use App\Models\Transcription;
 use App\Models\TranscriptionParagraph;
 use App\Models\TranscriptionWord;
+use App\Services\Plans\PlanFeatures;
+use App\Services\Quota\QuotaService;
 use App\Services\Transcription\ParagraphBuilder;
 use App\Support\ConfigurationRecherche;
 use Closure;
@@ -45,8 +47,9 @@ use Throwable;
  * suivent chaque étape. Tout échec passe la transcription en Échec avec son motif.
  * Les fichiers temporaires sont supprimés dans tous les cas, succès comme échec.
  *
- * Aucune consommation n'est enregistrée ici : elle sera déclenchée par
- * TranscriptionCompleted, et uniquement à l'état Terminé.
+ * Quota : vérifié dès que la durée est connue (avant le téléchargement pour un lien, après l'extraction
+ * pour un fichier). Le décompte est écrit dans la transaction qui passe la transcription à Terminé
+ * (voir etapeEnregistrement), et seulement là : un échec ne décompte rien.
  */
 final class ChaineTranscription
 {
@@ -55,6 +58,8 @@ final class ChaineTranscription
         private readonly AudioExtractor $extracteur,
         private readonly TranscriptionEngine $moteur,
         private readonly ParagraphBuilder $paragraphes,
+        private readonly QuotaService $quotas,
+        private readonly PlanFeatures $droits,
     ) {}
 
     /**
@@ -73,9 +78,19 @@ final class ChaineTranscription
 
             $lien = $this->etapeMetadonnees($transcription, $cheminFichier);
 
+            // Lien : la durée est connue avant tout téléchargement.
+            if ($cheminFichier === null) {
+                $this->quotas->verifierTraitement($transcription);
+            }
+
             $source = $this->etapeTelechargement($transcription, $cheminFichier, $lien, $audio);
 
             $extrait = $this->etapeMp3($transcription, $source, $dossierMp3, $cheminFichier !== null);
+
+            // Fichier : la durée n'est connue qu'après l'extraction.
+            if ($cheminFichier !== null) {
+                $this->quotas->verifierTraitement($transcription);
+            }
 
             $this->changerStatut($transcription, StatutTranscription::Transcription);
             $brute = $this->etapeTranscription($transcription, $extrait);
@@ -258,6 +273,9 @@ final class ChaineTranscription
 
             try {
                 DB::transaction(function () use ($transcription, $brute, $paragraphes, $chemin) {
+                    // Décompte d'abord : s'il échoue, rien n'est écrit et la transcription reste en échec.
+                    $this->quotas->consommerTranscription($transcription);
+
                     $this->enregistrerMots($transcription, $brute->mots);
                     $this->enregistrerParagraphes($transcription, $paragraphes);
 
@@ -429,10 +447,10 @@ final class ChaineTranscription
      */
     private function verifierDuree(Transcription $transcription, int $dureeSecondes): void
     {
-        $plan = $transcription->user?->plan ?? Plan::Free;
-        $maximum = config('voxia.plans.'.$plan->value.'.max_video_seconds');
+        $plan = $this->droits->planDe($transcription->user);
+        $maximum = $this->droits->dureeMaxSecondes($plan);
 
-        if (! is_numeric($maximum) || $dureeSecondes <= (int) $maximum) {
+        if ($dureeSecondes <= $maximum) {
             return;
         }
 
@@ -446,13 +464,11 @@ final class ChaineTranscription
     /** Gratuit : audio découpé à la durée du plan. Autres plans : pas de découpe. */
     private function decoupeDuPlan(Transcription $transcription): ?int
     {
-        if (($transcription->user?->plan ?? Plan::Free) !== Plan::Free) {
+        if ($this->droits->planDe($transcription->user) !== Plan::Free) {
             return null;
         }
 
-        $maximum = config('voxia.plans.free.max_video_seconds');
-
-        return is_numeric($maximum) ? (int) $maximum : null;
+        return $this->droits->dureeMaxSecondes(Plan::Free);
     }
 
     private function changerStatut(Transcription $transcription, StatutTranscription $statut): void

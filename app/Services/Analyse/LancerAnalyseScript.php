@@ -9,8 +9,8 @@ use App\Jobs\AnalyserScript;
 use App\Models\ScriptAnalysis;
 use App\Models\Transcription;
 use App\Models\User;
+use App\Services\Plans\PlanFeatures;
 use App\Services\Quota\QuotaService;
-use App\Services\Traitement\FileTraitement;
 
 /**
  * Lance l'analyse d'une transcription (F7). Les règles sont vérifiées ici, côté serveur, et non
@@ -21,7 +21,10 @@ use App\Services\Traitement\FileTraitement;
  */
 final class LancerAnalyseScript
 {
-    public function __construct(private readonly QuotaService $quotas) {}
+    public function __construct(
+        private readonly QuotaService $quotas,
+        private readonly PlanFeatures $droits,
+    ) {}
 
     /**
      * @throws AnalyseRefusee
@@ -58,7 +61,7 @@ final class LancerAnalyseScript
         );
 
         AnalyserScript::dispatch($analyse->getKey())
-            ->onQueue(FileTraitement::pour($utilisateur->plan));
+            ->onQueue($this->droits->fileDe($this->droits->planDe($utilisateur)));
 
         return $analyse;
     }

@@ -7,14 +7,21 @@ use App\Enums\Plan;
 use App\Models\User;
 
 /**
- * Droits par plan : recherche, durée de conservation de l'historique, rappel avant suppression.
+ * Droits par plan, lus dans config/voxia.php : volumes, durée max par vidéo, exports, historique,
+ * recherche, file de traitement, crédits IA. Tout écran et toute commande passent par ce service,
+ * jamais par users.plan directement.
  *
- * Tant que la facturation (étape 4) n'est pas branchée, tout le monde est au plan Gratuit.
- * Le drapeau voxia.droits.plan_reel (false par défaut) rend le plan enregistré sur le compte.
- * Tout écran et toute commande passent par ce service, jamais par users.plan directement.
+ * Le plan d'un compte est lu par planDe(). Tant que la facturation (étape 4) n'est pas branchée,
+ * voxia.droits.plan_reel reste à false et tout le monde est au plan Gratuit ; à true, c'est le plan
+ * enregistré sur le compte qui compte (tests, démo, comptes réglés à la main).
  */
 class PlanFeatures
 {
+    public const SECONDES_PAR_HEURE = 3600;
+
+    /** Arrondi de facturation : la durée est comptée à la minute supérieure (offre). */
+    public const SECONDES_PAR_MINUTE = 60;
+
     public function planDe(User $utilisateur): Plan
     {
         if (! (bool) config('voxia.droits.plan_reel')) {
@@ -24,7 +31,75 @@ class PlanFeatures
         return $utilisateur->plan instanceof Plan ? $utilisateur->plan : Plan::Free;
     }
 
-    /** La recherche plein texte dans l'historique (Pro et Pack, cahier F5). */
+    /** Vrai si le plan peut être vendu dans le MVP (Business reste défini mais non vendable). */
+    public function estVendable(Plan $plan): bool
+    {
+        return (bool) config("voxia.plans.{$plan->value}.sellable", false);
+    }
+
+    /** @return list<Plan> */
+    public function plansVendables(): array
+    {
+        return array_values(array_filter(Plan::cases(), fn (Plan $plan) => $this->estVendable($plan)));
+    }
+
+    /** Vidéos incluses par mois (Gratuit), ou null si le plan se compte en durée. */
+    public function videosMensuelles(Plan $plan): ?int
+    {
+        $volume = config("voxia.plans.{$plan->value}.videos_per_month");
+
+        return $volume === null ? null : (int) $volume;
+    }
+
+    /** Secondes de transcription incluses par mois (Pro, Business), ou null si le plan n'en a pas. */
+    public function secondesMensuelles(Plan $plan): ?int
+    {
+        $heures = config("voxia.plans.{$plan->value}.hours_per_month");
+
+        return $heures === null ? null : (int) $heures * self::SECONDES_PAR_HEURE;
+    }
+
+    /** Secondes achetées avec un Pack. */
+    public function secondesPack(): int
+    {
+        return (int) config('voxia.plans.pack.hours') * self::SECONDES_PAR_HEURE;
+    }
+
+    /** Mois de validité d'un Pack, à partir de l'achat. */
+    public function validitePackMois(): int
+    {
+        return (int) config('voxia.plans.pack.validity_months');
+    }
+
+    /** Durée max d'une vidéo, en secondes. */
+    public function dureeMaxSecondes(Plan $plan): int
+    {
+        return (int) config("voxia.plans.{$plan->value}.max_video_seconds");
+    }
+
+    /** Crédits IA inclus par mois : 0 si le plan n'y a pas accès. */
+    public function creditsIaMensuels(Plan $plan): int
+    {
+        return (int) config("voxia.plans.{$plan->value}.ai_credits_per_month", 0);
+    }
+
+    /** Coût d'une analyse de script, en crédits. */
+    public function creditsParAnalyse(): int
+    {
+        return (int) config('voxia.script_analysis.credits_per_analysis');
+    }
+
+    /** File Horizon de la tâche : « high » pour le Pro, « default » pour les autres. */
+    public function fileDe(Plan $plan): string
+    {
+        $prioritaires = (array) config('voxia.traitement.plans_prioritaires');
+
+        return in_array($plan->value, $prioritaires, true)
+            ? (string) config('voxia.traitement.files.prioritaire')
+            : (string) config('voxia.traitement.files.standard');
+    }
+
+    /** Recherche plein texte dans l'historique (Pro et Pack, cahier F5). */
     public function peutRechercher(User $utilisateur): bool
     {
         return (bool) config("voxia.plans.{$this->cle($utilisateur)}.recherche", false);
@@ -70,10 +145,9 @@ class PlanFeatures
     public function planMinimalPour(FormatExport $format): ?Plan
     {
         foreach (Plan::cases() as $plan) {
-            $vendable = (bool) config("voxia.plans.{$plan->value}.sellable", false);
             $formats = config("voxia.plans.{$plan->value}.exports", []);
 
-            if ($vendable && in_array($format->value, $formats, true)) {
+            if ($this->estVendable($plan) && in_array($format->value, $formats, true)) {
                 return $plan;
             }
         }

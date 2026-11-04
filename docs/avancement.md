@@ -8,7 +8,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] Étape 1 — Chaîne de traitement : lien, téléchargement, MP3, transcription, en ligne de commande (2 à 3 semaines)
 - [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines) *(Comptes et F5 faits, voir §2 ; F2 partiel : lecture faite, exports à l'étape 3.)*
 - [ ] Étape 3 — Exports (F4), lecteur synchronisé et analyse de script (F7) (2 à 3 semaines)
-- [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines)
+- [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines) *(Quotas, Packs et compteur faits, voir §2 F6 et §3 ; paiement et back-office restent à faire.)*
 - [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines)
 
 ## 2. Critères d'acceptation
@@ -16,8 +16,8 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 ### F1 — Transcription depuis un lien ou un fichier
 
 - [ ] Un lien public valide de 10 minutes donne une transcription sans autre action que le lancement. *(Partiel : chaîne complète et écran de lancement testés avec les faux services ; aucun lien réel essayé, yt-dlp absent, voir P16.)*
-- [ ] Une vidéo privée, supprimée, bloquée dans la région ou un live en cours affiche un message clair et ne décompte rien. *(Partiel : messages et motifs affichés sur l'écran avant tout lancement, testés ; arrêt avant téléchargement pour le live ; le décompte de quota reste à écrire.)*
-- [ ] Un échec technique ne décompte rien du quota. *(Partiel : échec à chaque étape testé, fichiers temporaires supprimés, aucune ligne de consommation écrite ; le décompte lui-même reste à écrire, voir le point d'accroche `TranscriptionCompleted`.)*
+- [ ] Une vidéo privée, supprimée, bloquée dans la région ou un live en cours affiche un message clair et ne décompte rien. *(Partiel : messages et motifs affichés sur l'écran avant tout lancement, testés ; arrêt avant téléchargement pour le live ; le décompte n'est écrit qu'à la fin réussie, et un refus pour quota ou durée n'écrit rien.)*
+- [x] Un échec technique ne décompte rien du quota. *(Testé : échec à chaque étape, fichiers temporaires supprimés, aucune ligne de consommation écrite ; `tests/Feature/Quotas/QuotasTest.php`.)*
 - [ ] Un lien déjà transcrit par le même utilisateur renvoie vers la transcription existante. *(Partiel : vérifié pour YouTube et TikTok avec identifiant connu, et l'écran affiche la transcription existante avant lancement (testé). Un lien court `vm.tiktok.com` n'a pas d'identifiant avant résolution, donc pas de contrôle à la création, voir P32.)*
 
 ### F2 — Transcription horodatée avec ponctuation propre
@@ -58,7 +58,7 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
 
 ### F6 — Offre gratuite limitée
 
-- [ ] Aucun critère d'acceptation défini dans le cahier. Voir point ouvert P0.
+- [ ] Aucun critère d'acceptation défini dans le cahier. Voir point ouvert P0. *(Règles de quota codées et testées : 20 tests dans `tests/Feature/Quotas`, dont la 6e vidéo du mois, le changement de mois, la date anniversaire, l'expiration d'un Pack et deux lancements simultanés. Paiement, gestion de l'abonnement et back-office restent à faire.)*
 
 ### F7 — Analyse de la structure d'un script publicitaire
 
@@ -120,7 +120,7 @@ Décisions F7 :
   - Morceaux de 1 Mo (`voxia.uploads.morceau_octets`), route `POST /televersements/morceaux` (email vérifié, `Televersement`). Le dernier morceau réassemble le fichier sous un nom nettoyé (`NomFichierAudio`), contrôle sa taille, puis supprime les morceaux. Le navigateur (`resources/js/televersement.js`) affiche la progression et ne transmet à Livewire que le nom final.
   - Contrôles avant écriture : extension (`voxia.uploads.extensions`), taille annoncée (`voxia.uploads.max_size_mb`, 2048), nombre de morceaux cohérent, identifiant d'envoi au format UUID (sinon un chemin pourrait sortir du dossier).
   - Un fichier reçu est relu par son nom pour le compte connecté seulement : `Televersement::cheminFichier`.
-- `QuotaService` : appelé par `LancerTranscription` avant chaque création (lien ou fichier), jamais pour une transcription déjà existante. Il autorise tout pour l'instant ; le décompte reste à écrire (F6).
+- `QuotaService` : vérifié par `LancerTranscription` avant chaque création (lien ou fichier), puis par `ChaineTranscription` au traitement, avec la durée réelle. Le décompte est écrit dans la transaction qui passe la transcription à « Terminé » (F6, voir §3).
 - E-mail « vidéo prête » (F1) : écouteur `PrevenirFinVideoLongue` sur `TranscriptionCompleted`, en file, seuil `voxia.notifications.long_video_email_after_seconds` (900 s). Mailable `TranscriptionPrete`, style Signal, textes dans `courriels.transcription_prete`.
 - Tests : 37 tests dans `tests/Feature/Transcriptions` (écran, envoi, e-mail, page de statut, lancement sans email vérifié). `VerificationEmailTest` adapté au composant : mêmes attentes, le lancement passe maintenant par Livewire. Suite complète : 262 tests passent, 4 ignorés comme avant.
 - F5 — Historique et recherche (`tests/Feature/Historique`) :
@@ -197,9 +197,21 @@ Décisions F7 :
   - Tentatives : métadonnées (`voxia.traitement.tentatives.metadonnees`, 2) et stockage (3), uniquement sur erreur technique. Téléchargement et transcription gardent leurs propres tentatives (3 chacun). Aucune nouvelle tentative au niveau de la tâche, pour ne pas retélécharger.
   - Délais : chaque étape a le sien (outils, moteur, FFmpeg). Garde-fou : `voxia.traitement.delai_total_secondes` (7 200 s), supérieur à la somme des délais d'étapes. Une tâche interrompue passe en Échec via `failed()`.
   - Nettoyage : dossier du téléchargement supprimé par `AudioTelecharge::supprimer()` et dossier du MP3 supprimé dans un `finally`. Le fichier source d'un fichier local n'est jamais supprimé.
-  - Événements : `TranscriptionCompleted` (point d'accroche de la consommation, à écrire avec F6) et `TranscriptionFailed(motif)` (point d'accroche des notifications). Aucune ligne `usage_records` n'est écrite par la chaîne.
+  - Événements : `TranscriptionCompleted` (notifications, dont l'e-mail des vidéos longues) et `TranscriptionFailed(motif)` (point d'accroche des notifications). Le décompte n'est pas fait par un écouteur : il est écrit dans la même transaction que le passage à « Terminé », pour qu'une transcription terminée soit toujours décomptée et qu'un décompte refusé la fasse échouer.
 - Files : `ProcessTranscription` va sur `high` pour le plan Pro, `default` pour Gratuit et Pack (`voxia.traitement.plans_prioritaires`). Horizon sert les files dans l'ordre listé, avec `balance => false`.
-- Plan de l'utilisateur : colonne `users.plan` (défaut `free`), enum `App\Enums\Plan`. Ajoutée ici car le routage des files en dépend ; la logique de plan et de quota reste à faire (F6).
+- Plan de l'utilisateur : colonne `users.plan` (défaut `free`), enum `App\Enums\Plan`. Ajoutée ici car le routage des files en dépend ; la logique de plan et de quota est faite (F6, voir ci-dessous).
+- Quotas (F6) : `App\Services\Quota\QuotaService` et `App\Services\Plans\PlanFeatures`. Toutes les valeurs viennent de `config/voxia.php`.
+  - Gratuit : 1 vidéo = 1 vidéo, quelle que soit sa durée ; le compteur repart le 1er du mois, en UTC.
+  - Pro : durée arrondie à la minute supérieure ; cycle à la date anniversaire de `users.abonnement_debut_at` (fin de mois ramenée au dernier jour) ; crédits IA mensuels.
+  - Pack : table `pack_achats` (secondes, `achete_at`, `expire_at` = achat + 6 mois), créée par `App\Services\Quota\AchatPack`. Un Pack non expiré compte ; le plus ancien est consommé en premier. Un compte Gratuit qui achète passe au plan Pack ; un abonné Pro garde son plan.
+  - Une vidéo consomme d'abord le volume Pro du cycle, le reste vient des Packs (lignes séparées, une par Pack). Business reste défini mais non vendable (`PlanFeatures::plansVendables()`).
+  - Journal `usage_records` : colonnes `plan`, `periode` (début du cycle) et `pack_achat_id`. Un remboursement (`reverse()`) les recopie, pour rendre les secondes à la bonne période et au bon Pack.
+  - Concurrence : lancement, vérification au traitement et décompte prennent un verrou sur la ligne du compte (`lockForUpdate`). Les transcriptions en cours comptent comme réservées (durée connue, une minute si elle ne l'est pas). Le décompte final est refait sous verrou : il ne peut pas dépasser le quota. Voir P96.
+  - Refus : durée au-delà de la limite d'un plan payant, refusée avant création (`trop_longue`) ; quota épuisé, `quota_epuise` (au lancement ou au traitement, sans décompte).
+  - Crédits IA : Pro seulement. Gratuit et Pack sont refusés avant tout appel (`credit_ia_insuffisant`). Un crédit par analyse réussie.
+  - Compteur : composant `x-compteur-plan`, dans `layouts/app` pour tout compte connecté. Textes : « 3 / 5 vidéos ce mois-ci », « 12 h 40 restantes ce mois-ci », « 10 h en Pack », « 24 crédits IA » (`interface.quota`).
+  - `FileTraitement` est remplacé par `PlanFeatures::fileDe()` (Pro en `high`, les autres en `default`).
+  - Tests : `tests/Feature/Quotas/QuotasTest.php`, une règle par test. `Tests\TestCase` active `voxia.droits.plan_reel` : les tests lisent le plan enregistré sur le compte. Les tests d'analyse de script utilisent un compte Pro.
 - Durée maximale : la chaîne refuse une vidéo plus longue que `max_video_seconds` du plan (lien : après métadonnées ; fichier : après extraction).
 - Lancement (`App\Services\Traitement\LancerTranscription`) : lien reconnu puis mis en file, ou fichier local dont l'extension est dans `voxia.uploads.extensions`. Une transcription déjà terminée est renvoyée ; une transcription en échec est relancée sur la même ligne ; une transcription en cours n'est pas relancée.
 - Commande `voxia:transcribe {source} {--user=email} {--langue=}` : lance, suit les étapes au fil de l'eau, puis affiche les 10 premiers paragraphes. `--user` est obligatoire : la commande n'a pas de compte implicite.
@@ -225,7 +237,7 @@ Décisions F7 :
 - [ ] P4 — Prestataire de paiement et structure juridique qui encaisse (Stripe ou Paddle ; Stripe semble fermé aux entreprises du Burkina Faso, à vérifier).
 - [ ] P5 — Langues de l'interface au lancement (proposition : anglais et français).
 - [ ] P6 — Autoriser un premier essai sans compte depuis la page d'accueil ?
-- [ ] P7 — Nombre de crédits IA inclus chaque mois dans le Pro ; une analyse d'essai en Gratuit pour déclencher l'upgrade ?
+- [ ] P7 — Nombre de crédits IA inclus chaque mois dans le Pro ; une analyse d'essai en Gratuit pour déclencher l'upgrade ? *(Valeur provisoire : 30 par mois dans `voxia.plans.pro.ai_credits_per_month`. Une analyse d'essai en Gratuit reste à décider : aujourd'hui le Gratuit n'a pas d'analyse.)*
 - [x] P8 — Fournisseur du modèle de langage utilisé pour F7 : API Claude (Anthropic), modèle `claude-haiku-5-5`, sorties structurées. Retenu dans la demande de F7 ; reste à vérifier avec une vraie clé (P85).
 - [ ] P9 — Durée maximale d'une vidéo analysable (proposition : 3 minutes).
 - [ ] P10 — Avis juridique sur la récupération des vidéos YouTube et TikTok, et rédaction des CGU et de la politique de confidentialité (texte définitif à demander, ne pas inventer).
@@ -306,7 +318,13 @@ Décisions F7 :
 - [ ] P85 — Analyse de script (F7) : aucun appel réel à l'API Claude (pas de clé dans l'environnement de développement). Le délai de 15 s pour une pub de 60 s et le coût réel par analyse (tarif Haiku 5.5 en `config/services.php` et `voxia.costs`, à vérifier) restent à mesurer.
 - [ ] P86 — Analyse de script (F7) : les 20 pubs de référence ne sont pas fournies. Format proposé pour `tests/fixtures/pubs-reference.json` : `{ "version": 1, "pubs": [ { "id", "titre", "langue", "duree_ms", "mots": [ { "texte", "debut_ms", "fin_ms" } ], "parties": { "accroche", "probleme", "preuve", "offre", "appel_action" } } ] }`, où chaque partie vaut `{ "debut_ms", "fin_ms" }` ou `null` si absente. Les mots viennent d'une vraie transcription. Sans ce fichier, `voxia:eval-scripts` s'arrête avec un message clair.
 - [ ] P87 — Analyse de script (F7) : la lecture au clic sur une partie n'est pas vérifiée dans un navigateur réel (le test contrôle l'événement envoyé au lecteur). À faire avec l'application lancée, sur YouTube et sur un MP3.
-- [ ] P88 — Analyse de script (F7) : le décompte de crédit IA ne bloque rien ni ne vérifie le plan (Gratuit, Pack) avant l'étape 4. Il n'a lieu qu'après une analyse réussie.
+- [x] P88 — Analyse de script (F7) : le décompte de crédit IA ne bloque rien ni ne vérifie le plan (Gratuit, Pack) avant l'étape 4. *(Fait avec F6 : `QuotaService::verifierCreditIa` refuse Gratuit et Pack, et réserve les analyses en cours.)*
 - [ ] P89 — Analyse de script (F7) : la liste de l'historique charge l'analyse de chaque ligne (requête par ligne, au plus 20 lignes par page). À regrouper avec `with('scriptAnalysis')` si la liste grossit.
 - [ ] P90 — Analyse de script (F7) : la recherche plein texte ne reprend pas le découpage des parties ; elle affiche seulement la pastille « Script analysé ». Un filtre par partie reste à décider.
 - [ ] P91 — Suite de tests : `memory_limit` relevé à 512 Mo dans `phpunit.xml`. Avec 128 Mo, la suite complète échoue à `tests/Support/ValidateurSousTitres.php` (mémoire cumulée des rendus PDF et des transcriptions de test). À réduire plutôt qu'à masquer si la suite grossit encore. Un MP3 renvoyé par `Storage::temporaryUrl` (disque S3) n'a pas été essayé avec un vrai bucket.
+- [ ] P92 — Quotas (F6) : le cycle du Pro part de `users.abonnement_debut_at`. Sans cette date, la création du compte sert d'ancre. Le paiement (étape 4) doit la renseigner à la souscription. À confirmer.
+- [ ] P93 — Quotas (F6) : un compte Gratuit qui achète un Pack passe au plan Pack (choix fait ici). Alternative : garder le Gratuit et lui ouvrir les Packs. À confirmer.
+- [ ] P94 — Quotas (F6) : règle demandée, à confirmer. Un abonné Pro qui achète un Pack consomme d'abord son volume Pro, puis le Pack, y compris pour une vidéo qui chevauche les deux.
+- [ ] P95 — Quotas (F6) : `voxia.droits.plan_reel` reste à false en production. Tout le monde est au plan Gratuit tant que la facturation n'est pas branchée (étape 4). Les tests le forcent à true (`Tests\TestCase`).
+- [ ] P96 — Quotas (F6) : la concurrence réelle n'est pas testée automatiquement. Les tests tournent sur SQLite, où `lockForUpdate` n'a aucun effet. À vérifier sur PostgreSQL, avec deux lancements en parallèle.
+- [ ] P97 — Quotas (F6) : un fichier importé n'a sa durée qu'après l'extraction. Au lancement, seule une minute est réservée ; le contrôle réel a lieu au traitement, et un dépassement échoue en `quota_epuise` sans décompte.

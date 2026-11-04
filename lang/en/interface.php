@@ -44,6 +44,10 @@ return [
         'libelle' => 'Videos used this month',
         'sur' => ':utilise of :limite videos used this month',
         'sans_limite' => ':utilise videos used this month',
+        'videos_mois' => ':utilisees / :limite videos this month',
+        'heures_mois' => ':duree left this month',
+        'packs' => ':duree in Pack',
+        'credits_ia' => ':credits AI credits',
     ],
 
     'fenetre' => [

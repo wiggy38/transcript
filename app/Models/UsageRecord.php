@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Plan;
 use App\Enums\UniteConsommation;
 use Database\Factories\UsageRecordFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -22,6 +23,9 @@ use LogicException;
     'script_analysis_id',
     'annule_usage_record_id',
     'unite',
+    'plan',
+    'periode',
+    'pack_achat_id',
     'quantite',
     'motif',
 ])]
@@ -38,9 +42,17 @@ class UsageRecord extends Model
     {
         return [
             'unite' => UniteConsommation::class,
+            'plan' => Plan::class,
+            'periode' => 'date:Y-m-d',
             'quantite' => 'integer',
             'created_at' => 'datetime',
         ];
+    }
+
+    /** Pack dont cette ligne consomme les secondes (null hors Pack). */
+    public function packAchat(): BelongsTo
+    {
+        return $this->belongsTo(PackAchat::class);
     }
 
     public function user(): BelongsTo
@@ -93,6 +105,9 @@ class UsageRecord extends Model
                 'script_analysis_id' => $original->script_analysis_id,
                 'annule_usage_record_id' => $original->getKey(),
                 'unite' => $original->unite,
+                'plan' => $original->plan,
+                'periode' => $original->periode,
+                'pack_achat_id' => $original->pack_achat_id,
                 'quantite' => -$original->quantite,
                 'motif' => $motif,
             ]);

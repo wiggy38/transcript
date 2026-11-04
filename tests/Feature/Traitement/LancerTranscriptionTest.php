@@ -6,6 +6,7 @@ use App\Exceptions\ErreurVideo;
 use App\Jobs\ProcessTranscription;
 use App\Models\Transcription;
 use App\Models\User;
+use App\Services\Quota\AchatPack;
 use App\Services\Traitement\LancerTranscription;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
@@ -18,6 +19,12 @@ it('met la tâche dans la file du plan : high pour Pro, default pour les autres'
     preparerTraitement();
 
     $utilisateur = User::factory()->create(['plan' => Plan::from($plan)]);
+
+    // Un Pack sans heures achetées ne peut rien lancer : on l'achète avant le lancement.
+    if ($plan === 'pack') {
+        app(AchatPack::class)->enregistrer($utilisateur);
+    }
+
     app(LancerTranscription::class)->lancer($utilisateur, 'https://www.youtube.com/watch?v=abcdefghijk');
 
     Queue::assertPushedOn($file, ProcessTranscription::class);

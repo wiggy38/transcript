@@ -21,6 +21,7 @@ return [
         'duree_trop_longue' => 'L’analyse est réservée aux vidéos de :minutes minutes au plus.',
         'duree_inconnue' => 'La durée de cette transcription est inconnue : l’analyse n’est pas possible.',
         'non_terminee' => 'La transcription doit être terminée pour être analysée.',
+        'credit_ia_insuffisant' => 'Tu n’as plus de crédit IA pour cette période. Ton plan Gratuit ou Pack n’inclut pas l’analyse de script.',
     ],
 
     'types' => [

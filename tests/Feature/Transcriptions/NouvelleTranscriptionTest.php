@@ -263,7 +263,7 @@ it('vérifie le quota avant de créer une nouvelle transcription', function () {
     $this->mock(QuotaService::class)
         ->shouldReceive('verifier')
         ->once()
-        ->with(Mockery::on(fn (User $u) => $u->is($utilisateur)));
+        ->with(Mockery::on(fn (User $u) => $u->is($utilisateur)), Mockery::any());
 
     Livewire::test(NouvelleTranscription::class)
         ->set('lien', LIEN_TRANSCRIPTION)

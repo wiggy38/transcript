@@ -31,7 +31,7 @@ function plagesChevauchees(): array
 
 // Critère F7 : les cinq parties, dans l'ordre de la vidéo, avec leur début, leur fin et leur texte.
 it('découpe la pub en cinq parties dans l’ordre de la vidéo', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur);
     analyseFaux()->repondre(analyseReponse());
 
@@ -50,7 +50,7 @@ it('découpe la pub en cinq parties dans l’ordre de la vidéo', function () {
 
 // Critère F7 : une partie absente de la pub est marquée « non détectée », sans bornes ni texte.
 it('marque une partie absente comme non détectée, sans bornes ni texte', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur);
     $plages = analysePlagesVraies();
     $plages['offre'] = null;
@@ -69,7 +69,7 @@ it('marque une partie absente comme non détectée, sans bornes ni texte', funct
 
 // Critère F7 : les parties ne se chevauchent pas. Deux réponses invalides : échec propre, aucun crédit.
 it('échoue proprement après une relance, sans crédit ni partie enregistrée', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur);
     analyseFaux()->repondre(analyseReponse(plagesChevauchees()))->repondre(analyseReponse(plagesChevauchees()));
 
@@ -86,7 +86,7 @@ it('échoue proprement après une relance, sans crédit ni partie enregistrée',
 
 // Critère F7 : une réponse invalide est relancée une fois ; la seconde réponse valide réussit.
 it('relance une réponse invalide une fois, puis réussit', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur);
     analyseFaux()
         ->echouer(new ErreurAnalyse('réponse illisible'))
@@ -103,7 +103,7 @@ it('relance une réponse invalide une fois, puis réussit', function () {
 
 // Critère F7 : une analyse réussie consomme 1 crédit IA, et une seule.
 it('consomme un crédit IA par analyse réussie', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur);
     analyseFaux()->repondre(analyseReponse());
 
@@ -119,7 +119,7 @@ it('consomme un crédit IA par analyse réussie', function () {
 
 // Critère F7 : le coût réel de chaque appel, y compris un appel rejeté, va dans processing_logs.
 it('journalise le coût réel, y compris celui des appels rejetés', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur);
     analyseFaux()
         ->repondre(analyseReponse(plagesChevauchees(), 0.001))
@@ -137,7 +137,7 @@ it('journalise le coût réel, y compris celui des appels rejetés', function ()
 
 // Critère F7 : une analyse réussie journalise aussi son coût.
 it('journalise le succès avec le coût de l’appel', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur);
     analyseFaux()->repondre(analyseReponse(null, 0.0123));
 
@@ -151,7 +151,7 @@ it('journalise le succès avec le coût de l’appel', function () {
 
 // Critère F7 : une vidéo de plus de 3 minutes est refusée côté serveur, sans aucun appel.
 it('refuse une vidéo plus longue que la limite, sans appel', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur, ['duree_secondes' => 181]);
 
     expect(fn () => app(LancerAnalyseScript::class)->lancer($utilisateur, $transcription))
@@ -162,7 +162,7 @@ it('refuse une vidéo plus longue que la limite, sans appel', function () {
 });
 
 it('accepte une vidéo de exactement 3 minutes', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur, ['duree_secondes' => 180]);
     analyseFaux()->repondre(analyseReponse());
 
@@ -174,7 +174,7 @@ it('accepte une vidéo de exactement 3 minutes', function () {
 
 // Une analyse terminée n'est jamais relancée : un second crédit serait décompté à tort.
 it('ne relance pas une analyse déjà terminée', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur);
     analyseFaux()->repondre(analyseReponse());
 
@@ -187,22 +187,25 @@ it('ne relance pas une analyse déjà terminée', function () {
 
 // Une transcription en cours de traitement ne peut pas être analysée.
 it('refuse une transcription qui n’est pas terminée', function () {
-    $utilisateur = User::factory()->create();
+    $utilisateur = analyseUtilisateurPro();
     $transcription = transcriptionAnalysable($utilisateur, ['statut' => StatutTranscription::Transcription]);
 
     app(LancerAnalyseScript::class)->lancer($utilisateur, $transcription);
 })->throws(AnalyseRefusee::class);
 
 // Une analyse passe par la file prioritaire pour le Pro (cahier §8), la file standard sinon.
-it('met l’analyse dans la file haute pour le Pro, standard sinon', function () {
+it('met l’analyse dans la file haute pour le Pro, et refuse le Gratuit', function () {
     Queue::fake();
 
     $pro = analyseUtilisateurPro();
     app(LancerAnalyseScript::class)->lancer($pro, transcriptionAnalysable($pro));
 
+    // Le Gratuit n'a pas de crédit IA : son lancement est refusé, rien n'est mis en file.
     $gratuit = User::factory()->create();
-    app(LancerAnalyseScript::class)->lancer($gratuit, transcriptionAnalysable($gratuit));
+
+    expect(fn () => app(LancerAnalyseScript::class)->lancer($gratuit, transcriptionAnalysable($gratuit)))
+        ->toThrow(AnalyseRefusee::class);
 
     Queue::assertPushedOn('high', AnalyserScript::class, fn ($job) => true);
-    Queue::assertPushedOn('default', AnalyserScript::class);
+    Queue::assertPushed(AnalyserScript::class, 1);
 });

@@ -9,6 +9,7 @@ return [
         'bloquee_region' => 'This video is blocked in the region Voxia fetches it from. Nothing was deducted.',
         'live_en_cours' => 'This live is in progress or has not started yet. Try again once it has ended.',
         'trop_longue' => 'This video is longer than your plan allows.',
+        'quota_epuise' => 'Your quota is used up for this period. Nothing was deducted.',
         'sans_audio' => 'No usable audio track was found in this video.',
         'format_non_supporte' => 'This file is not in a supported format: MP3, M4A, WAV, MP4, MOV or WEBM.',
         'erreur_technique' => 'A technical problem occurred. Nothing was deducted: try again in a few minutes.',

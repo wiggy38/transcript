@@ -23,5 +23,9 @@ abstract class TestCase extends BaseTestCase
 
         // Idem pour l'analyse de script : le faux analyseur, jamais l'API Claude.
         $this->app->instance(ScriptAnalyzer::class, new FakeScriptAnalyzer);
+
+        // Les tests lisent le plan enregistré sur le compte (users.plan), comme le fera la facturation.
+        // Sans cela, PlanFeatures::planDe() ramènerait tout le monde au Gratuit (voxia.droits.plan_reel).
+        config(['voxia.droits.plan_reel' => true]);
     }
 }

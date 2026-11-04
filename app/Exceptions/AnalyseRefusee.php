@@ -13,6 +13,9 @@ class AnalyseRefusee extends RuntimeException
 
     public const NON_TERMINEE = 'non_terminee';
 
+    /** Pas de crédit IA disponible : Gratuit et Pack n'y ont pas accès, le Pro en a un volume mensuel. */
+    public const CREDIT_IA_INSUFFISANT = 'credit_ia_insuffisant';
+
     public function __construct(public readonly string $motif)
     {
         parent::__construct($motif);

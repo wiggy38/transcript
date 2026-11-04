@@ -21,6 +21,7 @@ return [
         'duree_trop_longue' => 'Analysis is limited to videos of :minutes minutes or less.',
         'duree_inconnue' => 'The duration of this transcription is unknown: analysis is not possible.',
         'non_terminee' => 'The transcription must be complete before it can be analyzed.',
+        'credit_ia_insuffisant' => 'You have no AI credit left for this period. The Free and Pack plans do not include script analysis.',
     ],
 
     'types' => [

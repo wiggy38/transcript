@@ -41,11 +41,11 @@
                 </ul>
             </nav>
 
-            {{-- Emplacements : compteur de quota et sélecteur de langue, fournis par la page. --}}
+            {{-- Compteur de quota (toujours visible pour un compte connecté) et emplacement de langue fourni par la page. --}}
             <div class="ml-auto flex flex-wrap items-center gap-6">
-                @isset($quota)
-                    {{ $quota }}
-                @endisset
+                @auth
+                    <x-compteur-plan />
+                @endauth
                 @isset($langue)
                     <div class="flex items-center gap-2 text-sm text-texte-secondaire">
                         <span>{{ __('interface.application.langue') }}</span>
