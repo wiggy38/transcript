@@ -6,6 +6,7 @@ use App\Contracts\BillingProvider;
 use App\Exceptions\PaiementIndisponible;
 use App\Http\Controllers\Controller;
 use App\Models\Transcription;
+use App\Support\CheminLocal;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -37,8 +38,11 @@ class PaiementController extends Controller
 
         $apercu = $this->apercuDuCompte($request);
 
+        // Écran d'origine (fenêtre d'upgrade) : seulement une adresse de cette application.
+        $retour = CheminLocal::valider($request->query('retour'));
+
         try {
-            $ouverture = $facturation->ouvrirPaiement($utilisateur, $produit, $apercu?->getKey());
+            $ouverture = $facturation->ouvrirPaiement($utilisateur, $produit, $apercu?->getKey(), $retour);
         } catch (PaiementIndisponible $erreur) {
             Log::error('paiement: ouverture impossible', ['formule' => $produit, 'erreur' => $erreur->getMessage()]);
 

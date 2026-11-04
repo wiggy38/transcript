@@ -68,6 +68,14 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
   - [x] Recalcul quotidien des plans (`voxia:recalculer-plans`) : un Pack expiré ramène au plan restant.
   - [ ] Test de bout en bout avec le sandbox Paddle réel (aucune clé ni webhook réel dans cet environnement).
   - [ ] TVA et factures : gérées par Paddle (texte affiché), pas vérifiées sur une facture réelle.
+- Fenêtres d'upgrade (cahier §2, parcours d'upgrade) : une fenêtre superposée par déclencheur, l'écran d'origine reste en place. Tests : `tests/Feature/Upgrade/DeclencheursUpgradeTest.php`. Vérifiées par les tests, pas encore dans un navigateur (P109).
+  - [x] 6e vidéo du mois en Gratuit : compteur et plans Pro et Pack côte à côte ; le lien refusé est gardé et revient dans le champ après paiement.
+  - [x] Aperçu de 10 minutes : bandeau « Passe au Pro pour la transcription complète » avec les minutes non transcrites ; l'aperçu est relancé après paiement.
+  - [x] Export verrouillé (PDF, VTT, et PDF de l'analyse) : le format verrouillé ouvre la fenêtre.
+  - [x] Recherche dans l'historique en Gratuit : la fenêtre s'ouvre dès qu'un terme est saisi.
+  - [x] Analyse de script sans crédits IA (Gratuit, Pack) : la fenêtre s'ouvre ; un Pro à court de crédits n'y est pas renvoyé.
+  - [x] Retour après paiement : `paiement?retour=` n'accepte qu'un chemin de l'application (`App\Support\CheminLocal`).
+  - [ ] Parcours réel : payer dans le sandbox Paddle puis revenir sur l'écran d'origine (P108).
 
 ### F7 — Analyse de la structure d'un script publicitaire
 
@@ -150,6 +158,14 @@ Décisions F7 :
 - Exports produits pendant la requête web, pas par la file : contraire à la règle de CLAUDE.md §5. Choix assumé pour cette étape (TXT, SRT et VTT sont des mises en forme de texte) ; le PDF est à surveiller, voir P79.
 - Exemples à importer : `storage/app/exports-test/` (`exemple.srt`, `exemple.vtt`, `exemple.pdf`, `exemple-avec-horodatages.txt`, `exemple-sans-horodatages.txt`). Générés depuis la fixture ElevenLabs `francais_redige.json`, qui est écrite à la main et non enregistrée (P22). Le dossier `storage/app` est ignoré par git : les fichiers ne sont pas committés.
 - Nouvelles clés de config : `voxia.subtitles.coupure_ponctuation_faible_ratio`, `voxia.exports.pdf.marge_mm`.
+
+Décisions des fenêtres d'upgrade :
+- Un seul composant `x-upgrade.fenetre` (au-dessus de `x-fenetre-superposee`). Les cartes de plan viennent de `App\Services\Plans\PresentationTarifs` : prix et volumes lus dans `config/voxia.php`, phrases dans `lang/fr/upgrade.php` et `lang/en/upgrade.php`.
+- Le paiement reste sur la page `paiement` (overlay Paddle). Après paiement, Paddle renvoie à l'écran d'origine (`returnTo`) au lieu de l'espace Abonnement. Seul un chemin de l'application est accepté.
+- Reprise : seul le lien ou le fichier refusé pour la 6e vidéo est gardé en session (30 minutes) et revient dans le champ. Il n'est pas relancé tout seul : le plan peut changer quelques secondes après le paiement, et le lancement reste un geste de l'utilisateur.
+- La fenêtre de la 6e vidéo n'est ouverte qu'au plan Gratuit. Un Pro ou un Pack à court de quota reçoit seulement le message d'erreur. Même règle pour l'analyse : seuls les plans sans crédits IA reçoivent la fenêtre.
+- Un format verrouillé est un bouton actif (un bouton désactivé ne peut pas ouvrir de fenêtre). Le lien de paiement de l'aperçu garde l'identifiant de la transcription, sinon le webhook ne la relance pas.
+- Tests adaptés : le bandeau d'aperçu mène désormais à la fenêtre (`PaiementTest`), et le test de quota lit le compteur mocké (`NouvelleTranscriptionTest`, helper `mockQuotaCompteur`).
 
 ## 4. Points ouverts
 
@@ -361,3 +377,7 @@ Décisions F7 :
 - [ ] P105 — Paiement : changement de formule en prorata immédiat (`prorateImmediately()`, et non le défaut de Cashier qui reporte le changement à l’échéance suivante). Vérifier le montant facturé sur un changement réel avant la mise en vente.
 - [ ] P106 — Paiement : URL à déclarer dans Paddle : `https://<domaine>/paddle/webhook`, avec les événements subscription.created, subscription.updated, subscription.canceled, subscription.past_due, transaction.completed, transaction.payment_failed.
 - [ ] P107 — Paiement : migrations non lancées sur la base PostgreSQL du poste (service arrêté). Elles ont tourné sur SQLite, dans les tests. À lancer sur la recette.
+- [ ] P108 — Upgrade : le retour après paiement n'est vérifié qu'avec le sandbox Paddle réel (P102). À vérifier : Paddle renvoie bien à l'écran d'origine (`retour`), et le lien repris se lance au clic une fois le plan Pro reçu par webhook.
+- [ ] P109 — Upgrade : les cinq déclencheurs n'ont pas été regardés dans un navigateur. Les tests vérifient le HTML, les liens et les événements ; l'ouverture des fenêtres et le rendu Signal restent à contrôler (adresses dans le compte rendu de la session).
+- [ ] P110 — Upgrade : le Pro inclut 30 crédits IA par mois (`VOXIA_PRO_AI_CREDITS_PER_MONTH`), alors que le cahier (§5) dit « encore à fixer ». La fenêtre n'affiche pas le nombre. À confirmer avant la mise en vente.
+- [ ] P111 — Upgrade : la section Tarifs de la page d'accueil (maquette) n'est pas reprise ici (étape 5). Les fenêtres présentent les plans avec les valeurs de la config. Les libellés « Historique illimité et recherche » et « Crédits IA pour l'analyse de script » sont fixes dans `lang/*/upgrade.php`.

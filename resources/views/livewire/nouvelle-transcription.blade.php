@@ -7,6 +7,10 @@
 
 <div class="flex flex-col gap-12" @if ($apercuEnCours) wire:poll.1500ms="verifierApercu" @endif>
 
+    @if ($repriseActive)
+        <p role="status" class="border-l-2 border-accent py-1 pl-3 text-sm text-texte">{{ __('upgrade.reprise') }}</p>
+    @endif
+
     {{-- Lien --}}
     <section aria-labelledby="titre-lien" class="max-w-[720px]">
         <h2 id="titre-lien" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('transcriptions.lien.titre') }}</h2>
@@ -163,4 +167,11 @@
             </x-panneau>
         @endif
     </section>
+
+    {{-- Déclencheur principal : la 6e vidéo du mois en Gratuit. Ouverte par proposerUpgradeQuota (NouvelleTranscription). --}}
+    <x-upgrade.fenetre id="upgrade-quota" :titre="__('upgrade.quota.titre')" :retour="route('tableau-de-bord')">
+        <p class="text-texte">{{ __('upgrade.quota.texte', ['limite' => (int) config('voxia.plans.free.videos_per_month')]) }}</p>
+        <x-compteur-plan class="mt-3" />
+        <p class="mt-3 text-sm">{{ __('upgrade.quota.reprise') }}</p>
+    </x-upgrade.fenetre>
 </div>

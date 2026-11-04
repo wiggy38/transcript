@@ -42,7 +42,23 @@ class AnalyseScript extends Component
             $lancer->lancer(Auth::user(), $this->transcription());
         } catch (AnalyseRefusee $erreur) {
             $this->refus = $erreur->motif;
+
+            if ($this->proposerUpgradeAnalyse($erreur)) {
+                $this->dispatch('voxia-ouvrir', id: 'upgrade-analyse');
+            }
         }
+    }
+
+    /**
+     * Déclencheur « analyse de script » (cahier §2) : seulement pour un plan sans crédits IA (Gratuit, Pack).
+     * Un Pro à court de crédits n'est pas renvoyé vers le plan qu'il a déjà.
+     */
+    private function proposerUpgradeAnalyse(AnalyseRefusee $erreur): bool
+    {
+        $plans = app(PlanFeatures::class);
+
+        return $erreur->motif === AnalyseRefusee::CREDIT_IA_INSUFFISANT
+            && $plans->creditsIaMensuels($plans->planDe(Auth::user())) === 0;
     }
 
     public function render(PlanFeatures $plans)
@@ -82,6 +98,8 @@ class AnalyseScript extends Component
                 return $plan !== null ? $plans->libellePlan($plan) : '';
             },
             'urlExport' => fn (FormatExport $format) => URL::temporarySignedRoute('transcriptions.analyse.export', $expiration, [$transcription, $format]),
+            'plansAvec' => fn (FormatExport $format) => $plans->plansAvec($format),
+            'retour' => route('transcriptions.show', $transcription),
         ]);
     }
 

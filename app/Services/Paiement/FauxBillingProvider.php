@@ -19,9 +19,15 @@ final class FauxBillingProvider implements BillingProvider
     /** @var list<array{id: string, numero: ?string, date: CarbonInterface, montant: string, statut: string}> */
     public array $factures = [];
 
-    public function ouvrirPaiement(User $utilisateur, string $formule, ?int $transcriptionId = null): Ouverture
+    public function ouvrirPaiement(User $utilisateur, string $formule, ?int $transcriptionId = null, ?string $retour = null): Ouverture
     {
-        $this->appels[] = ['operation' => 'ouvrir', 'utilisateur' => $utilisateur->getKey(), 'valeur' => [$formule, $transcriptionId]];
+        $valeur = [$formule, $transcriptionId];
+
+        if ($retour !== null) {
+            $valeur[] = $retour;
+        }
+
+        $this->appels[] = ['operation' => 'ouvrir', 'utilisateur' => $utilisateur->getKey(), 'valeur' => $valeur];
 
         return new Ouverture('faux', 'sandbox', 'jeton-faux', [
             'items' => [['priceId' => $formule]],

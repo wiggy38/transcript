@@ -16,7 +16,7 @@ final class PaddleBillingProvider implements BillingProvider
 {
     public const FOURNISSEUR = 'paddle';
 
-    public function ouvrirPaiement(User $utilisateur, string $formule, ?int $transcriptionId = null): Ouverture
+    public function ouvrirPaiement(User $utilisateur, string $formule, ?int $transcriptionId = null, ?string $retour = null): Ouverture
     {
         $prix = self::prixDe($formule);
 
@@ -37,7 +37,8 @@ final class PaddleBillingProvider implements BillingProvider
 
         $options = $utilisateur->checkout($prix)
             ->customData($donnees)
-            ->returnTo(route('abonnement'))
+            // Après paiement : l'écran d'origine (fenêtre d'upgrade), sinon l'espace Abonnement.
+            ->returnTo($retour ?? route('abonnement'))
             ->options();
 
         return new Ouverture(

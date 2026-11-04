@@ -155,6 +155,28 @@ class PlanFeatures
         return null;
     }
 
+    /**
+     * Plans vendables qui donnent ce format : ce sont les plans à proposer quand un format est verrouillé.
+     *
+     * @return list<Plan>
+     */
+    public function plansAvec(FormatExport $format): array
+    {
+        return array_values(array_filter(
+            $this->plansVendables(),
+            fn (Plan $plan) => in_array($format->value, (array) config("voxia.plans.{$plan->value}.exports", []), true),
+        ));
+    }
+
+    /**
+     * Minutes d'une vidéo que l'aperçu gratuit ne transcrit pas (au-delà de la durée max du Gratuit),
+     * arrondies à la minute supérieure.
+     */
+    public function minutesNonTranscrites(int $dureeSecondes): int
+    {
+        return (int) ceil(max(0, $dureeSecondes - $this->dureeMaxSecondes(Plan::Free)) / self::SECONDES_PAR_MINUTE);
+    }
+
     public function libellePlan(Plan $plan): string
     {
         return (string) config("voxia.plans.{$plan->value}.label", $plan->name);

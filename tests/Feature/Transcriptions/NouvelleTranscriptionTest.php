@@ -16,6 +16,7 @@ use App\Services\Video\FauxVideoFetcher;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 use Livewire\Livewire;
+use Mockery\MockInterface;
 
 uses(RefreshDatabase::class);
 
@@ -47,6 +48,15 @@ function metadonneesDeDuree(int $secondes): MetadonneesVideo
         chaine: null,
         estLive: false,
     );
+}
+
+/** Mock du quota : la fenêtre d'upgrade lit le compteur du mois (resume) à chaque affichage de l'écran. */
+function mockQuotaCompteur(): MockInterface
+{
+    $quota = test()->mock(QuotaService::class);
+    $quota->shouldReceive('resume')->andReturn(['plan' => Plan::Free, 'videos_utilisees' => 0, 'videos_limite' => 5]);
+
+    return $quota;
 }
 
 function utilisateurVerifie(Plan $plan = Plan::Free): User
@@ -112,7 +122,7 @@ it('affiche le motif d\'un lien refusé avant lancement, sans rien créer ni dé
     }
 
     $this->actingAs(utilisateurVerifie());
-    $this->mock(QuotaService::class)->shouldNotReceive('verifier');
+    mockQuotaCompteur()->shouldNotReceive('verifier');
 
     Livewire::test(NouvelleTranscription::class)
         ->set('lien', LIEN_TRANSCRIPTION)
@@ -158,7 +168,7 @@ it('refuse le lancement tant que l\'aperçu n\'est pas prêt', function () {
 it('refuse au plan payant une vidéo plus longue que son plan, avant tout décompte', function () {
     fauxVideos(metadonneesDeDuree(3 * 3600 + 60));
     $this->actingAs(utilisateurVerifie(Plan::Pro));
-    $this->mock(QuotaService::class)->shouldNotReceive('verifier');
+    mockQuotaCompteur()->shouldNotReceive('verifier');
 
     Livewire::test(NouvelleTranscription::class)
         ->set('lien', LIEN_TRANSCRIPTION)
@@ -229,7 +239,7 @@ it('renvoie vers la transcription existante du même utilisateur, sans nouveau d
     $utilisateur = utilisateurVerifie();
     $existante = Transcription::factory()->for($utilisateur)->create(['id_video' => 'dQw4w9WgXcQ']);
     $this->actingAs($utilisateur);
-    $this->mock(QuotaService::class)->shouldNotReceive('verifier');
+    mockQuotaCompteur()->shouldNotReceive('verifier');
 
     Livewire::test(NouvelleTranscription::class)
         ->set('lien', LIEN_TRANSCRIPTION)
@@ -260,8 +270,8 @@ it('vérifie le quota avant de créer une nouvelle transcription', function () {
     Queue::fake([ProcessTranscription::class]);
     $utilisateur = utilisateurVerifie();
     $this->actingAs($utilisateur);
-    $this->mock(QuotaService::class)
-        ->shouldReceive('verifier')
+    $quota = mockQuotaCompteur();
+    $quota->shouldReceive('verifier')
         ->once()
         ->with(Mockery::on(fn (User $u) => $u->is($utilisateur)), Mockery::any());
 

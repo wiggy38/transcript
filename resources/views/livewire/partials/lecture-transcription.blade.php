@@ -8,6 +8,8 @@
     $langue = strtoupper((string) ($transcription->langue_detectee ?? $transcription->langue_forcee ?? '')) ?: '—';
     $mots = \Illuminate\Support\Number::format((int) $transcription->nombre_mots);
     $minutesApercu = intdiv((int) config('voxia.plans.free.max_video_seconds'), 60);
+    // Déclencheur « aperçu » (cahier §2) : minutes que l'aperçu gratuit n'a pas transcrites.
+    $minutesNonTranscrites = app(\App\Services\Plans\PlanFeatures::class)->minutesNonTranscrites((int) $transcription->duree_secondes);
 @endphp
 
 <section aria-labelledby="titre-transcription" wire:ignore
@@ -150,9 +152,17 @@
                     <p id="bandeau-apercu" class="font-medium text-texte">{{ __('transcriptions.lecture.bandeau_pro') }}</p>
                     <p class="mt-1 text-sm text-texte-secondaire">{{ __('transcriptions.page.apercu', ['minutes' => $minutesApercu]) }}</p>
                     <p class="mt-3">
-                        <a href="{{ route('paiement.show', ['produit' => 'pro_mensuel', 'transcription' => $transcription->getKey()]) }}" class="text-accent hover:underline">{{ __('transcriptions.lecture.passer_pro') }}</a>
+                        <button type="button" aria-haspopup="dialog" x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-apercu' })"
+                            class="cursor-pointer text-left text-accent hover:underline">{{ __('transcriptions.lecture.passer_pro') }}</button>
                     </p>
                 </aside>
+
+                {{-- Déclencheur « aperçu » : le bandeau ouvre cette fenêtre, la transcription reste à l'écran.
+                     Le paiement garde l'identifiant : l'aperçu est relancé en version complète après paiement. --}}
+                <x-upgrade.fenetre id="upgrade-apercu" :titre="__('upgrade.apercu.titre')" :retour="route('transcriptions.show', $transcription)"
+                    :transcription-id="$transcription->getKey()">
+                    <p class="text-texte">{{ __('upgrade.apercu.texte', ['minutes' => $minutesNonTranscrites, 'duree' => \App\Support\Duree::formater((int) $transcription->duree_secondes)]) }}</p>
+                </x-upgrade.fenetre>
             @endif
 
             {{-- Barre d'export (cahier F4) : les formats du plan sont des liens, les autres sont verrouillés
@@ -197,13 +207,20 @@
                                 @php
                                     $planDebloquant = $droits->planMinimalPour($format);
                                 @endphp
-                                <button type="button" disabled aria-describedby="verrou-{{ $format->value }}"
-                                    class="min-h-11 cursor-not-allowed rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret">
+                                {{-- Format verrouillé : le bouton ouvre la fenêtre d'upgrade (cahier §2, déclencheur annexe « export »). --}}
+                                <button type="button" aria-haspopup="dialog" aria-describedby="verrou-{{ $format->value }}"
+                                    x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-export-{{ $format->value }}' })"
+                                    class="min-h-11 cursor-pointer rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret hover:border-accent hover:text-accent">
                                     {{ $format->libelle() }}
                                 </button>
                                 <p id="verrou-{{ $format->value }}" class="mt-1 font-mono text-[11px] text-texte-discret">
                                     {{ __('transcriptions.lecture.exporter_verrouille', ['plan' => $planDebloquant ? $droits->libellePlan($planDebloquant) : '']) }}
                                 </p>
+
+                                <x-upgrade.fenetre id="upgrade-export-{{ $format->value }}" :titre="__('upgrade.export.titre', ['format' => $format->libelle()])"
+                                    :retour="route('transcriptions.show', $transcription)" :plans="$droits->plansAvec($format)" :transcription-id="$transcription->getKey()">
+                                    <p class="text-texte">{{ __('upgrade.export.texte', ['format' => $format->libelle(), 'plan' => $planDebloquant ? $droits->libellePlan($planDebloquant) : '']) }}</p>
+                                </x-upgrade.fenetre>
                             @endif
                         </li>
                     @endforeach

@@ -19,11 +19,12 @@ interface BillingProvider
 {
     /**
      * Ouvre le paiement d'une formule. « transcriptionId » : aperçu partiel à relancer en version
-     * complète après paiement (rappelé dans les données personnalisées du paiement).
+     * complète après paiement (rappelé dans les données personnalisées du paiement). « retour » :
+     * adresse de l'écran d'origine, rejointe après le paiement (chemin local, voir CheminLocal).
      *
      * @throws PaiementIndisponible formule sans identifiant de prix configuré
      */
-    public function ouvrirPaiement(User $utilisateur, string $formule, ?int $transcriptionId = null): Ouverture;
+    public function ouvrirPaiement(User $utilisateur, string $formule, ?int $transcriptionId = null, ?string $retour = null): Ouverture;
 
     /** Passe l'abonnement Pro en cours à une autre formule (mensuel ↔ annuel), au prorata. */
     public function changerFormule(User $utilisateur, string $formule): void;

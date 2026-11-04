@@ -100,17 +100,28 @@
                                 {{ $format->libelle() }}
                             </a>
                         @else
-                            <button type="button" disabled aria-describedby="verrou-analyse-{{ $format->value }}"
-                                class="min-h-11 cursor-not-allowed rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret">
+                            <button type="button" aria-haspopup="dialog" aria-describedby="verrou-analyse-{{ $format->value }}"
+                                x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-analyse-export-{{ $format->value }}' })"
+                                class="min-h-11 cursor-pointer rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret hover:border-accent hover:text-accent">
                                 {{ $format->libelle() }}
                             </button>
                             <p id="verrou-analyse-{{ $format->value }}" class="mt-1 font-mono text-[11px] text-texte-discret">
                                 {{ __('transcriptions.lecture.exporter_verrouille', ['plan' => $libellePlanDebloquant($format)]) }}
                             </p>
+
+                            <x-upgrade.fenetre id="upgrade-analyse-export-{{ $format->value }}" :titre="__('upgrade.export.titre', ['format' => $format->libelle()])"
+                                :retour="$retour" :plans="$plansAvec($format)">
+                                <p class="text-texte">{{ __('upgrade.export.texte', ['format' => $format->libelle(), 'plan' => $libellePlanDebloquant($format)]) }}</p>
+                            </x-upgrade.fenetre>
                         @endif
                     </li>
                 @endforeach
             </ul>
         </footer>
     @endif
+
+    {{-- Déclencheur « analyse de script » (cahier §2) : ouvert par proposerUpgradeAnalyse, seulement sans crédits IA. --}}
+    <x-upgrade.fenetre id="upgrade-analyse" :titre="__('upgrade.analyse.titre')" :retour="$retour" :plans="['pro']">
+        <p class="text-texte">{{ __('upgrade.analyse.texte') }}</p>
+    </x-upgrade.fenetre>
 </section>

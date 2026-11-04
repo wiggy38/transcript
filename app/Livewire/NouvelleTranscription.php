@@ -25,7 +25,16 @@ use Livewire\Component;
  */
 class NouvelleTranscription extends Component
 {
+    /** Clé de session : lien ou fichier en attente, rendu à l'écran après un passage au Pro (upgrade). */
+    public const CLE_REPRISE = 'upgrade.reprise';
+
+    /** Une reprise n'est rendue que dans ce délai après la sortie vers le paiement. */
+    private const DUREE_REPRISE_SECONDES = 1800;
+
     public string $lien = '';
+
+    /** Vrai quand le lien ou le fichier a été repris après un paiement. */
+    public bool $repriseActive = false;
 
     public string $langue = '';
 
@@ -45,6 +54,39 @@ class NouvelleTranscription extends Component
     public ?string $erreurLien = null;
 
     public ?string $erreurFichier = null;
+
+    /**
+     * Retour du paiement : le lien (ou le fichier) qui a déclenché la fenêtre d'upgrade revient dans le
+     * champ. Il n'est pas relancé tout seul : le plan peut changer quelques secondes après le paiement,
+     * et le lancement reste un geste de l'utilisateur, décompté au quota à ce moment-là.
+     */
+    public function mount(): void
+    {
+        $reprise = session()->pull(self::CLE_REPRISE);
+
+        if (! is_array($reprise) || now()->timestamp - (int) ($reprise['enregistre'] ?? 0) > self::DUREE_REPRISE_SECONDES) {
+            return;
+        }
+
+        $langue = (string) ($reprise['langue'] ?? '');
+        $this->langue = in_array($langue, (array) config('voxia.langues_forcables'), true) ? $langue : '';
+
+        if (isset($reprise['envoi'], $reprise['nomFichier'])
+            && app(Televersement::class)->cheminFichier(Auth::user(), (string) $reprise['envoi'], (string) $reprise['nomFichier']) !== null) {
+            $this->envoi = (string) $reprise['envoi'];
+            $this->nomFichier = (string) $reprise['nomFichier'];
+            $this->nomAffiche = (string) ($reprise['nomAffiche'] ?? $this->nomFichier);
+            $this->repriseActive = true;
+
+            return;
+        }
+
+        if (isset($reprise['lien']) && is_string($reprise['lien']) && $reprise['lien'] !== '') {
+            $this->lien = $reprise['lien'];
+            $this->chargerApercu();
+            $this->repriseActive = true;
+        }
+    }
 
     /** Affiche l'aperçu du lien collé (bouton « Transcrire → »). */
     public function soumettreLien(): void
@@ -114,6 +156,10 @@ class NouvelleTranscription extends Component
         } catch (ErreurVideo $erreur) {
             $this->erreurLien = $erreur->messageUtilisateur();
 
+            if ($this->proposerUpgradeQuota($erreur)) {
+                $this->ouvrirUpgradeQuota(['lien' => $url, 'langue' => $this->langue]);
+            }
+
             return;
         } catch (InvalidArgumentException) {
             $this->erreurLien = $this->messageMotif(MotifEchec::LienInvalide->value);
@@ -175,6 +221,15 @@ class NouvelleTranscription extends Component
             $transcription = $lancement->lancer(Auth::user(), $chemin, $this->langueChoisie());
         } catch (ErreurVideo $erreur) {
             $this->erreurFichier = $erreur->messageUtilisateur();
+
+            if ($this->proposerUpgradeQuota($erreur)) {
+                $this->ouvrirUpgradeQuota([
+                    'envoi' => $this->envoi,
+                    'nomFichier' => $this->nomFichier,
+                    'nomAffiche' => $this->nomAffiche,
+                    'langue' => $this->langue,
+                ]);
+            }
 
             return;
         } catch (InvalidArgumentException) {
@@ -243,6 +298,23 @@ class NouvelleTranscription extends Component
                 ->where('id_video', $lien->idVideo)
                 ->value('id');
         }
+    }
+
+    /**
+     * 6e vidéo du mois en Gratuit (cahier §2, déclencheur principal) : seul ce refus ouvre la fenêtre
+     * d'upgrade. Un Pro ou un Pack à court de quota n'est pas renvoyé vers un plan qu'il a déjà.
+     */
+    private function proposerUpgradeQuota(ErreurVideo $erreur): bool
+    {
+        return $erreur->motif === MotifEchec::QuotaEpuise && $this->planDeCompte() === Plan::Free;
+    }
+
+    /** Garde le lien ou le fichier pour le retour du paiement, puis ouvre la fenêtre d'upgrade. */
+    private function ouvrirUpgradeQuota(array $reprise): void
+    {
+        session()->put(self::CLE_REPRISE, $reprise + ['enregistre' => now()->timestamp]);
+
+        $this->dispatch('voxia-ouvrir', id: 'upgrade-quota');
     }
 
     /**

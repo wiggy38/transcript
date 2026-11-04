@@ -30,7 +30,17 @@
     </form>
 
     @unless ($peutRechercher)
-        <p class="mt-3 border-l-2 border-accent py-1 pl-3 text-sm text-texte">{{ __('historique.recherche.gratuit') }}</p>
+        <p class="mt-3 border-l-2 border-accent py-1 pl-3 text-sm text-texte">
+            {{ __('historique.recherche.gratuit') }}
+            <button type="button" aria-haspopup="dialog" x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-recherche' })"
+                class="ml-1 cursor-pointer text-accent hover:underline">{{ __('upgrade.recherche.titre') }}</button>
+        </p>
+
+        {{-- Déclencheur « recherche » (cahier §2) : s'ouvre dès qu'un terme est saisi en Gratuit. --}}
+        <x-upgrade.fenetre id="upgrade-recherche" :titre="__('upgrade.recherche.titre')" :retour="route('historique', $terme !== '' ? ['q' => $terme] : [])"
+            :ouvrir-au-chargement="$terme !== ''">
+            <p class="text-texte">{{ __('upgrade.recherche.texte') }}</p>
+        </x-upgrade.fenetre>
     @endunless
 
     @if ($resultats !== null)

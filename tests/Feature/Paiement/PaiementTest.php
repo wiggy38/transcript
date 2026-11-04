@@ -539,12 +539,13 @@ test('recalcul des plans : un abonnement résilié garde le Pack encore valable'
     expect($utilisateur->refresh()->plan)->toBe(Plan::Pack);
 });
 
-test('bandeau d\'aperçu : le lien mène aux formules avec cet aperçu', function () {
+test('bandeau d\'aperçu : la fenêtre mène aux formules avec cet aperçu et l\'écran d\'origine', function () {
     $utilisateur = paiementCompte();
     $apercu = paiementApercu($utilisateur);
 
+    // Le bandeau ouvre la fenêtre d'upgrade ; son lien garde l'aperçu (relance après paiement) et le retour.
     $this->actingAs($utilisateur)
         ->get(route('transcriptions.show', $apercu))
         ->assertOk()
-        ->assertSee(route('paiement.show', ['produit' => 'pro_mensuel', 'transcription' => $apercu->getKey()]), false);
+        ->assertSee(e(route('paiement.show', ['produit' => 'pro_mensuel', 'retour' => '/transcriptions/'.$apercu->getKey(), 'transcription' => $apercu->getKey()])), false);
 });
