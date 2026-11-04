@@ -512,4 +512,27 @@ return [
         'ytdlp_update_timeout_seconds' => (int) env('VOXIA_YTDLP_UPDATE_TIMEOUT_SECONDS', 300),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Back-office (/admin, cahier §5)
+    |--------------------------------------------------------------------------
+    |
+    | « alerte_echecs » : email aux administrateurs quand le taux d'échec du téléchargement
+    | dépasse « seuil » sur la dernière « fenetre_minutes ». « delai_minutes » évite de renvoyer
+    | la même alerte à chaque passage de la commande (valeur choisie, non fixée par le cahier).
+    | « indicateurs » : fenêtres du tableau de bord.
+    |
+    */
+    'administration' => [
+        'alerte_echecs' => [
+            'seuil' => (float) env('VOXIA_ALERTE_ECHECS_SEUIL', 0.05),
+            'fenetre_minutes' => (int) env('VOXIA_ALERTE_ECHECS_FENETRE_MINUTES', 60),
+            'delai_minutes' => (int) env('VOXIA_ALERTE_ECHECS_DELAI_MINUTES', 60),
+        ],
+        'indicateurs' => [
+            'fenetre_echecs_heures' => (int) env('VOXIA_INDICATEURS_FENETRE_ECHECS_HEURES', 24),
+            'fenetre_jours' => (int) env('VOXIA_INDICATEURS_FENETRE_JOURS', 30),
+        ],
+    ],
+
 ];

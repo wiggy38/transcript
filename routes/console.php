@@ -30,3 +30,8 @@ Schedule::command('voxia:rappeler-suppression')
 Schedule::command('voxia:recalculer-plans')
     ->dailyAt(config('voxia.paiement.heure_recalcul'))
     ->withoutOverlapping();
+
+// Back-office (cahier §5) : alerte email quand les téléchargements échouent trop souvent.
+Schedule::command('voxia:alerter-echecs')
+    ->everyFiveMinutes()
+    ->withoutOverlapping();

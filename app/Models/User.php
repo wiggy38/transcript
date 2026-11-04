@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\Plan;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -18,10 +20,16 @@ use Laravel\Paddle\Billable;
 // ils ne se règlent jamais depuis une requête de formulaire.
 #[Fillable(['name', 'email', 'password', 'locale'])]
 #[Hidden(['password', 'remember_token', 'google_id', 'inscription_ip'])]
-class User extends Authenticatable implements MustVerifyEmailContract
+class User extends Authenticatable implements FilamentUser, MustVerifyEmailContract
 {
     /** @use HasFactory<UserFactory> */
     use Billable, HasFactory, MustVerifyEmail, Notifiable;
+
+    /** Back-office (/admin) : réservé aux comptes is_admin, posé par la commande voxia:make-admin. */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->is_admin === true;
+    }
 
     /** Valeurs par défaut de la base, reprises sur les instances neuves. */
     protected $attributes = [

@@ -8,7 +8,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] Étape 1 — Chaîne de traitement : lien, téléchargement, MP3, transcription, en ligne de commande (2 à 3 semaines)
 - [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines) *(Comptes et F5 faits, voir §2 ; F2 partiel : lecture faite, exports à l'étape 3.)*
 - [ ] Étape 3 — Exports (F4), lecteur synchronisé et analyse de script (F7) (2 à 3 semaines)
-- [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines) *(Quotas, Packs, compteur et paiement faits (Paddle, sandbox), voir §2 F6 et §3 ; le back-office reste à faire.)*
+- [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines) *(Quotas, Packs, compteur et paiement faits (Paddle, sandbox), voir §2 F6 et §3 ; le back-office est fait, voir §2 « Back-office » ; à vérifier dans un navigateur, P113.)*
 - [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines)
 
 ## 2. Critères d'acceptation
@@ -58,7 +58,7 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
 
 ### F6 — Offre gratuite limitée
 
-- [ ] Aucun critère d'acceptation défini dans le cahier. Voir point ouvert P0. *(Règles de quota codées et testées : 20 tests dans `tests/Feature/Quotas`, dont la 6e vidéo du mois, le changement de mois, la date anniversaire, l'expiration d'un Pack et deux lancements simultanés. Paiement : 28 tests dans `tests/Feature/Paiement`, un par cas de webhook, plus le même webhook reçu deux fois. Back-office restant.)*
+- [ ] Aucun critère d'acceptation défini dans le cahier. Voir point ouvert P0. *(Règles de quota codées et testées : 20 tests dans `tests/Feature/Quotas`, dont la 6e vidéo du mois, le changement de mois, la date anniversaire, l'expiration d'un Pack et deux lancements simultanés. Paiement : 28 tests dans `tests/Feature/Paiement`, un par cas de webhook, plus le même webhook reçu deux fois. Back-office : voir §2 « Back-office ».)*
 - Paiement (cahier §5, « Paiement ») — critères couverts par des tests, à valider à la main dans le sandbox Paddle (P102) :
   - [x] Prix en dollars US lus dans la config (`voxia.plans.*` pour l'affichage, `voxia.paiement.prix` pour les identifiants Paddle).
   - [x] Webhooks vérifiés (signature) et idempotents : abonnement créé, renouvelé, modifié, résilié, paiement échoué, achat du Pack. Un même webhook reçu deux fois ne produit qu'un effet.
@@ -93,6 +93,30 @@ Décisions F7 :
 - Le crédit IA n'est pas bloquant tant que l'étape 4 n'est pas branchée (`QuotaService::verifierCreditIa`).
 - Limite de durée : 180 s, vérifiée côté serveur. Une limite de recalage de 2 s entre une borne renvoyée et le mot le plus proche rend la réponse invalide.
 - `phpunit.xml` passe `memory_limit` à 512 Mo : la suite complète dépasse 128 Mo avec les rendus PDF (P91).
+
+### Back-office (cahier §5, « Back-office d'administration »)
+
+*Filament 4.16.1 sur `/admin`, réservé aux comptes `is_admin` (commande `voxia:make-admin {email}`). Tests : `tests/Feature/Administration` (35 tests). Vérifié par les tests, pas encore dans un navigateur (P113).*
+
+- [x] Liste des utilisateurs : plan, date d'inscription, consommation du mois (vidéos, heures, crédits), Packs actifs, filtre par plan. *(ListesBackOfficeTest, AjustementQuotaTest)*
+- [x] Liste des traitements : statut, plateforme, motif d'échec, durée de chaque étape (onglet « Étapes »), coût estimé ; filtres par statut et par période. *(ListesBackOfficeTest)*
+- [x] Ajustement d'un quota avec motif obligatoire, journalisé. *(AjustementQuotaTest)*
+- [x] Remboursement d'un traitement raté par une ligne de consommation inverse, journalisé, jamais deux fois. *(RemboursementTest)*
+- [x] Tableau de bord : traitements du jour, taux d'échec du téléchargement sur 24 h, coût moyen par heure de vidéo (30 jours), inscriptions, conversions Gratuit vers payant. *(IndicateursTest)*
+- [x] Alerte email aux administrateurs quand le taux d'échec du téléchargement dépasse 5 % sur la dernière heure (seuil dans la config). Commande `voxia:alerter-echecs`, planifiée toutes les cinq minutes. *(AlerteEchecsTest)*
+- [x] Un non-administrateur reçoit une erreur 403. *(AccesBackOfficeTest)*
+- [x] Les deux actions (ajustement, remboursement) sont inscrites au journal `journal_administration`, consultable dans `/admin`. *(AjustementQuotaTest, RemboursementTest)*
+
+Décisions du back-office :
+- Filament 5 (dernière version, 5.11.1) exige Livewire 4, alors que le projet reste sur Livewire 3 (CLAUDE.md §3). Installé : Filament 4.16.1, dernière version 4.x compatible avec Livewire 3 (P112).
+- Accès : `User::canAccessPanel()` renvoie `is_admin`. Un visiteur est renvoyé vers `/admin/login` ; un compte connecté sans droit reçoit un 403 (middleware de Filament).
+- Journal : une ligne par action, motif, administrateur, cible et détails. Les lignes ne se modifient jamais et l'écran est en lecture seule.
+- Ajustement : une ligne de consommation négative (motif `ajustement_admin`), donc comptée comme une vraie consommation. Compteurs : vidéos (Gratuit), heures du mois (Pro), heures du plus ancien Pack, crédits IA du mois. Les heures se saisissent en heures. La limite affichée inclut l'ajout accordé.
+- Remboursement : seulement sur un traitement en échec ; une ligne inverse par ligne de consommation active (`UsageRecord::reverse`), dans une seule transaction. Motif obligatoire, en plus du journal (choix, non demandé par le cahier).
+- Alerte : pas de renvoi avant le délai de 60 minutes (`voxia.administration.alerte_echecs.delai_minutes`, choix non fixé par le cahier). Pas d'alerte sans tentative sur la fenêtre.
+- Conversions : comptes dont le premier achat (abonnement Paddle ou Pack) tombe dans les 30 derniers jours.
+- Tableau de bord : widgets non différés, pour que les chiffres sortent avec la page.
+- Langue : celle du compte administrateur (`DefinirLangue`), français par défaut.
 
 ### Comptes (cahier §2 parcours étapes 1 et 2, §5 Comptes)
 
@@ -381,3 +405,12 @@ Décisions des fenêtres d'upgrade :
 - [ ] P109 — Upgrade : les cinq déclencheurs n'ont pas été regardés dans un navigateur. Les tests vérifient le HTML, les liens et les événements ; l'ouverture des fenêtres et le rendu Signal restent à contrôler (adresses dans le compte rendu de la session).
 - [ ] P110 — Upgrade : le Pro inclut 30 crédits IA par mois (`VOXIA_PRO_AI_CREDITS_PER_MONTH`), alors que le cahier (§5) dit « encore à fixer ». La fenêtre n'affiche pas le nombre. À confirmer avant la mise en vente.
 - [ ] P111 — Upgrade : la section Tarifs de la page d'accueil (maquette) n'est pas reprise ici (étape 5). Les fenêtres présentent les plans avec les valeurs de la config. Les libellés « Historique illimité et recherche » et « Crédits IA pour l'analyse de script » sont fixes dans `lang/*/upgrade.php`.
+- [ ] P112 — Back-office : Filament 4.16.1 installé, pas 5.11.1. Filament 5 exige Livewire 4 et le projet est sur Livewire 3 (CLAUDE.md §3). À trancher : rester sur Filament 4, ou monter Livewire 4 (touche les trois composants Livewire existants) puis passer à Filament 5.
+- [ ] P113 — Back-office : aucune vérification dans un navigateur (mise en page sombre, accent, modales d'action, filtres). Les tests vérifient le contenu HTML et les actions, pas le rendu. À faire sur le poste de développement avec la base lancée.
+- [ ] P114 — Back-office : le pipeline ne débite jamais un traitement en échec. Le bouton « Rembourser » n'apparaît donc que s'il existe une consommation active pour ce traitement (cas rare ou correction manuelle). À confirmer que c'est bien le besoin visé.
+- [ ] P115 — Back-office : migration `journal_administration` non lancée sur PostgreSQL (port 5433 refusé pendant cette session). Elle tourne sur SQLite dans les tests. À lancer avec P107 sur la recette.
+- [ ] P116 — Back-office : l'alerte suppose le planificateur (cron ou `php artisan schedule:work`) et une file en marche (Horizon) pour l'envoi de l'email. Rien ne le vérifie en production.
+- [ ] P117 — Back-office : deux valeurs fixées ici, non prévues par le cahier : délai de 60 minutes entre deux alertes (`voxia.administration.alerte_echecs.delai_minutes`) et motif obligatoire pour un remboursement. À valider.
+- [ ] P118 — Back-office : conversions Gratuit vers payant = comptes dont le premier achat (abonnement ou Pack) tombe dans les 30 derniers jours. Pas de taux de conversion (pas de dénominateur défini par le cahier). À confirmer.
+- [ ] P119 — Back-office : la consommation affichée tient compte des ajustements (la limite inclut l'ajout accordé). À valider avec le support, car le compteur du client ne change pas de sens entre l'application et le back-office.
+- [ ] P120 — Back-office : le coût moyen par heure de vidéo est calculé sur `transcriptions.cout_estime_usd` des transcriptions terminées des 30 derniers jours. Fenêtre et périmètre (coût de l'analyse de script exclu) à confirmer.
