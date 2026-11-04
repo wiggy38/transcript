@@ -24,6 +24,7 @@
             'sur' => __('transcriptions.lecture.resultat_sur'),
         ],
     ]))"
+    x-on:voxia-aller.window="aller($event.detail.ms)"
     :data-horodatages="horodatagesVisibles ? 'affiches' : 'masques'"
     :data-lecture="lecture ? 'lecture' : 'pause'"
     x-on:wheel.window.passive="surInteraction($event)"

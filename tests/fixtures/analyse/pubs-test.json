@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "exemple_de_test": true,
+  "pubs": [
+    {
+      "id": "pub-test-1",
+      "titre": "Pub de test 1 (fixture, pas une pub de référence)",
+      "langue": "fr",
+      "duree_ms": 9900,
+      "mots": [
+        { "texte": "Tu", "debut_ms": 0, "fin_ms": 900 },
+        { "texte": "te", "debut_ms": 1000, "fin_ms": 1900 },
+        { "texte": "réveilles", "debut_ms": 2000, "fin_ms": 2900 },
+        { "texte": "?", "debut_ms": 3000, "fin_ms": 3900 },
+        { "texte": "Ta", "debut_ms": 4000, "fin_ms": 4900 },
+        { "texte": "peau", "debut_ms": 5000, "fin_ms": 5900 },
+        { "texte": "tire", "debut_ms": 6000, "fin_ms": 6900 },
+        { "texte": "Essaie", "debut_ms": 7000, "fin_ms": 7900 },
+        { "texte": "ça", "debut_ms": 8000, "fin_ms": 8900 },
+        { "texte": "vite.", "debut_ms": 9000, "fin_ms": 9900 }
+      ],
+      "parties": {
+        "accroche": { "debut_ms": 0, "fin_ms": 3900 },
+        "probleme": { "debut_ms": 4000, "fin_ms": 5900 },
+        "preuve": { "debut_ms": 6000, "fin_ms": 7900 },
+        "offre": { "debut_ms": 8000, "fin_ms": 8900 },
+        "appel_action": { "debut_ms": 9000, "fin_ms": 9900 }
+      }
+    },
+    {
+      "id": "pub-test-2",
+      "titre": "Pub de test 2 (fixture, pas une pub de référence)",
+      "langue": "fr",
+      "duree_ms": 9900,
+      "mots": [
+        { "texte": "Tu", "debut_ms": 0, "fin_ms": 900 },
+        { "texte": "te", "debut_ms": 1000, "fin_ms": 1900 },
+        { "texte": "réveilles", "debut_ms": 2000, "fin_ms": 2900 },
+        { "texte": "?", "debut_ms": 3000, "fin_ms": 3900 },
+        { "texte": "Ta", "debut_ms": 4000, "fin_ms": 4900 },
+        { "texte": "peau", "debut_ms": 5000, "fin_ms": 5900 },
+        { "texte": "tire", "debut_ms": 6000, "fin_ms": 6900 },
+        { "texte": "Essaie", "debut_ms": 7000, "fin_ms": 7900 },
+        { "texte": "ça", "debut_ms": 8000, "fin_ms": 8900 },
+        { "texte": "vite.", "debut_ms": 9000, "fin_ms": 9900 }
+      ],
+      "parties": {
+        "accroche": { "debut_ms": 0, "fin_ms": 3900 },
+        "probleme": { "debut_ms": 4000, "fin_ms": 5900 },
+        "preuve": { "debut_ms": 6000, "fin_ms": 7900 },
+        "offre": { "debut_ms": 8000, "fin_ms": 8900 },
+        "appel_action": { "debut_ms": 9000, "fin_ms": 9900 }
+      }
+    }
+  ]
+}

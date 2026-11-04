@@ -51,6 +51,9 @@
                                    aria-label="{{ __('historique.recherche.aller') }} : {{ $resultat->transcription->titre ?? __('historique.sans_titre') }}"
                                    class="font-mono text-sm tabular-nums text-accent no-underline hover:underline">{{ Horodatage::format($resultat->debutMs) }}</a>
                                 <span class="min-w-0 font-medium [overflow-wrap:anywhere]">{{ $resultat->transcription->titre ?? __('historique.sans_titre') }}</span>
+                                @if ($resultat->transcription->scriptAnalysis?->statut === \App\Enums\StatutAnalyseScript::Termine)
+                                    <span class="font-mono text-xs text-accent">{{ __('analyse.pastille') }}</span>
+                                @endif
                             </p>
                             {{-- Extrait échappé côté serveur ; seules les balises <mark> du surlignage sont ajoutées. --}}
                             <p class="mt-2 text-texte-secondaire [overflow-wrap:anywhere]">{!! $resultat->extraitHtml !!}</p>
@@ -105,6 +108,9 @@
 
                             <div class="flex flex-wrap items-center gap-4 sm:justify-end">
                                 <x-badge-statut :statut="$transcription->statut" />
+                                @if ($transcription->scriptAnalysis?->statut === \App\Enums\StatutAnalyseScript::Termine)
+                                    <span class="font-mono text-xs text-accent">{{ __('analyse.pastille') }}</span>
+                                @endif
                                 <a href="{{ route('transcriptions.supprimer', $transcription) }}"
                                    class="text-sm text-texte-secondaire no-underline hover:text-erreur">
                                     {{ __('historique.supprimer') }}<span class="sr-only"> : {{ __('historique.supprimer_aria', ['titre' => $titre]) }}</span>

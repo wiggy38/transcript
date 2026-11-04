@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Contracts\AudioExtractor;
+use App\Contracts\ScriptAnalyzer;
 use App\Contracts\TranscriptionEngine;
 use App\Contracts\VideoFetcher;
 use App\Models\User;
+use App\Services\Analyse\ClaudeScriptAnalyzer;
 use App\Services\Audio\FfmpegAudioExtractor;
 use App\Services\Comptes\LienEnAttente;
 use App\Services\Transcription\ElevenLabsScribeEngine;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(VideoFetcher::class, YtDlpVideoFetcher::class);
         $this->app->bind(AudioExtractor::class, FfmpegAudioExtractor::class);
         $this->app->bind(TranscriptionEngine::class, ElevenLabsScribeEngine::class);
+        $this->app->bind(ScriptAnalyzer::class, ClaudeScriptAnalyzer::class);
     }
 
     /**

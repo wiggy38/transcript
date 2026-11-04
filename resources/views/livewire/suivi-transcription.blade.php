@@ -3,6 +3,8 @@
 <div @if ($enCours) wire:poll.3s @endif>
     @if ($termine)
         @include('livewire.partials.lecture-transcription')
+        {{-- Hors de la zone wire:ignore du lecteur : le composant doit pouvoir se rafraîchir seul. --}}
+        <livewire:analyse-script :transcription="$transcription" />
     @else
         <section aria-labelledby="titre-transcription" class="max-w-[720px]">
             <div class="flex flex-wrap items-center gap-4">

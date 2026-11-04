@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\Comptes\ExportAnalyseController;
 use App\Http\Controllers\Comptes\ExportController;
 use App\Http\Controllers\Comptes\GoogleController;
 use App\Http\Controllers\Comptes\HistoriqueController;
@@ -50,6 +51,12 @@ Route::middleware('auth')->group(function () {
         ->whereIn('format', ['txt', 'pdf', 'srt', 'vtt'])
         ->middleware('signed')
         ->name('transcriptions.export');
+
+    // Export de l'analyse de script (cahier F7) : TXT et PDF selon le plan. Lien signé et temporaire.
+    Route::get('/transcriptions/{transcription}/analyse/{format}', ExportAnalyseController::class)
+        ->whereIn('format', ['txt', 'pdf'])
+        ->middleware('signed')
+        ->name('transcriptions.analyse.export');
 
     // Morceaux d'un fichier importé (2 Go par défaut, envoi découpé). Email vérifié exigé.
     Route::post('/televersements/morceaux', [TeleversementController::class, 'morceau'])

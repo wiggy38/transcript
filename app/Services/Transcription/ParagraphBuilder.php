@@ -4,6 +4,7 @@ namespace App\Services\Transcription;
 
 use App\Data\MotTranscrit;
 use App\Data\Paragraphe;
+use App\Support\TexteMots;
 
 /**
  * Regroupe les mots transcrits en paragraphes lisibles. Séparé du moteur.
@@ -17,9 +18,6 @@ final class ParagraphBuilder
 {
     /** Ponctuation de fin de phrase, suivie éventuellement de guillemets ou de parenthèses. */
     private const FIN_DE_PHRASE = '/[.!?…]["\'»”’)\]]*$/u';
-
-    /** Ponctuation seule, rattachée au mot précédent. */
-    private const PONCTUATION_SEULE = '/^[.,;:!?…)»”"\]]+$/u';
 
     /**
      * @param  list<MotTranscrit>  $mots
@@ -64,20 +62,10 @@ final class ParagraphBuilder
     /** @param  non-empty-list<MotTranscrit>  $mots */
     private function fermer(array $mots): Paragraphe
     {
-        $texte = '';
-
-        foreach ($mots as $mot) {
-            $texte = $texte === ''
-                ? $mot->texte
-                : (preg_match(self::PONCTUATION_SEULE, $mot->texte) === 1
-                    ? $texte.$mot->texte
-                    : $texte.' '.$mot->texte);
-        }
-
         return new Paragraphe(
             debutMs: $mots[0]->debutMs,
             finMs: $mots[array_key_last($mots)]->finMs,
-            texte: $texte,
+            texte: TexteMots::joindre($mots),
         );
     }
 }

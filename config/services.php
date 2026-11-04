@@ -42,6 +42,12 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI', '/auth/google/callback'),
     ],
 
+    // Analyse de script (F7) : API Messages. Version figée pour les sorties structurées.
+    'anthropic_messages' => [
+        'base_url' => env('ANTHROPIC_BASE_URL', 'https://api.anthropic.com'),
+        'version' => env('ANTHROPIC_VERSION', '2026-10-21'),
+    ],
+
     // Transcription (Scribe v2), environ 0,22 $ par heure d'audio.
     'elevenlabs' => [
         'key' => env('ELEVENLABS_API_KEY'),

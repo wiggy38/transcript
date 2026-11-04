@@ -62,10 +62,20 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
 
 ### F7 — Analyse de la structure d'un script publicitaire
 
-- [ ] Sur 20 pubs découpées à la main, les limites des parties tombent à 2 secondes près dans 80 % des cas (cible à valider).
-- [ ] Les parties ne se chevauchent pas et suivent l'ordre de la vidéo.
-- [ ] L'analyse d'une pub de 60 secondes s'affiche en moins de 15 secondes.
-- [ ] Un clic sur une partie lance la lecture à son début.
+- [ ] Sur 20 pubs découpées à la main, les limites des parties tombent à 2 secondes près dans 80 % des cas (cible à valider). *(Non mesuré : la commande `voxia:eval-scripts` est prête, mais les 20 pubs de référence ne sont pas encore fournies, P86.)*
+- [x] Les parties ne se chevauchent pas et suivent l'ordre de la vidéo. *(ValidateurAnalyseTest, AnalyseScriptTest.)*
+- [ ] L'analyse d'une pub de 60 secondes s'affiche en moins de 15 secondes. *(Non mesuré avec l'API réelle, P85.)*
+- [ ] Un clic sur une partie lance la lecture à son début. *(Partiel : le test vérifie que le début exact en millisecondes part vers le lecteur (AffichageAnalyseTest) ; la lecture réelle dans un navigateur n'est pas vérifiée, P87.)*
+
+Livré avec F7 (tests dans `tests/Feature/Analyse`, faux analyseur `FakeScriptAnalyzer`, aucun appel réel) : contrat `App\Contracts\ScriptAnalyzer` et adaptateur `ClaudeScriptAnalyzer` (API Messages, modèle `claude-haiku-5-5`, sorties structurées par `output_config.format`), validation serveur `ValidateurAnalyse`, relance unique dans `ServiceAnalyseScript`, tâche `AnalyserScript` (file `high` pour le Pro), bouton et statut dans `AnalyseScript` (Livewire), barre et parties reprises de la maquette, exports TXT et PDF (`ExporteurAnalyse`, route signée), pastille dans l'historique et la recherche, décompte d'un crédit IA dans `QuotaService`, coût dans `processing_logs`, commande `voxia:eval-scripts`.
+
+Décisions F7 :
+- Le modèle ne renvoie ni texte ni horodatage : il donne les numéros du premier et du dernier mot de chaque partie. Les bornes et le texte viennent des mots transcrits.
+- Une réponse invalide (refus, troncature, indices hors du texte, chevauchement) et un échec d'appel sont relancés une fois. Un échec final ne décompte rien, mais son coût est journalisé.
+- Une analyse terminée n'est jamais relancée (un second crédit serait décompté).
+- Le crédit IA n'est pas bloquant tant que l'étape 4 n'est pas branchée (`QuotaService::verifierCreditIa`).
+- Limite de durée : 180 s, vérifiée côté serveur. Une limite de recalage de 2 s entre une borne renvoyée et le mot le plus proche rend la réponse invalide.
+- `phpunit.xml` passe `memory_limit` à 512 Mo : la suite complète dépasse 128 Mo avec les rendus PDF (P91).
 
 ### Comptes (cahier §2 parcours étapes 1 et 2, §5 Comptes)
 
@@ -216,7 +226,7 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
 - [ ] P5 — Langues de l'interface au lancement (proposition : anglais et français).
 - [ ] P6 — Autoriser un premier essai sans compte depuis la page d'accueil ?
 - [ ] P7 — Nombre de crédits IA inclus chaque mois dans le Pro ; une analyse d'essai en Gratuit pour déclencher l'upgrade ?
-- [ ] P8 — Fournisseur du modèle de langage utilisé pour F7.
+- [x] P8 — Fournisseur du modèle de langage utilisé pour F7 : API Claude (Anthropic), modèle `claude-haiku-5-5`, sorties structurées. Retenu dans la demande de F7 ; reste à vérifier avec une vraie clé (P85).
 - [ ] P9 — Durée maximale d'une vidéo analysable (proposition : 3 minutes).
 - [ ] P10 — Avis juridique sur la récupération des vidéos YouTube et TikTok, et rédaction des CGU et de la politique de confidentialité (texte définitif à demander, ne pas inventer).
 - [ ] P11 — Suppression du compte : les lignes de consommation (`usage_records`) sont supprimées avec le compte, comme le demande le cahier §5. Faut-il les conserver pour la facturation ou les obligations comptables ? Question juridique, à trancher avec l'avis du P10.
@@ -292,4 +302,11 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
 - [x] P81 — Bouton MP3 de la barre d'export : branché sur un lien signé (voir §3, « Téléchargements »), testé.
 - [ ] P82 — Durée des liens signés (MP3 et exports) : 15 minutes, valeur reprise de l'ancien code (`voxia.telechargement.duree_lien_minutes`, variable `VOXIA_LIEN_DUREE_MINUTES`). Pas dans le cahier : à valider.
 - [ ] P83 — Lien expiré : une page ouverte depuis plus de 15 minutes donne un 403 au clic sur MP3 ou sur un export. Piste : régénérer les liens au clic (route ou Livewire) au lieu de les figer au rendu.
-- [ ] P84 — Lecteur audio : son adresse reste la route authentifiée (`transcriptions.audio`), pas un lien signé, pour qu'un seek ne tombe pas sur un lien expiré en pleine lecture. Un MP3 renvoyé par `Storage::temporaryUrl` (disque S3) n'a pas été essayé avec un vrai bucket.
+- [ ] P84 — Lecteur audio : son adresse reste la route authentifiée (`transcriptions.audio`), pas un lien signé, pour qu'un seek ne tombe pas sur un lien expiré en pleine lecture.
+- [ ] P85 — Analyse de script (F7) : aucun appel réel à l'API Claude (pas de clé dans l'environnement de développement). Le délai de 15 s pour une pub de 60 s et le coût réel par analyse (tarif Haiku 5.5 en `config/services.php` et `voxia.costs`, à vérifier) restent à mesurer.
+- [ ] P86 — Analyse de script (F7) : les 20 pubs de référence ne sont pas fournies. Format proposé pour `tests/fixtures/pubs-reference.json` : `{ "version": 1, "pubs": [ { "id", "titre", "langue", "duree_ms", "mots": [ { "texte", "debut_ms", "fin_ms" } ], "parties": { "accroche", "probleme", "preuve", "offre", "appel_action" } } ] }`, où chaque partie vaut `{ "debut_ms", "fin_ms" }` ou `null` si absente. Les mots viennent d'une vraie transcription. Sans ce fichier, `voxia:eval-scripts` s'arrête avec un message clair.
+- [ ] P87 — Analyse de script (F7) : la lecture au clic sur une partie n'est pas vérifiée dans un navigateur réel (le test contrôle l'événement envoyé au lecteur). À faire avec l'application lancée, sur YouTube et sur un MP3.
+- [ ] P88 — Analyse de script (F7) : le décompte de crédit IA ne bloque rien ni ne vérifie le plan (Gratuit, Pack) avant l'étape 4. Il n'a lieu qu'après une analyse réussie.
+- [ ] P89 — Analyse de script (F7) : la liste de l'historique charge l'analyse de chaque ligne (requête par ligne, au plus 20 lignes par page). À regrouper avec `with('scriptAnalysis')` si la liste grossit.
+- [ ] P90 — Analyse de script (F7) : la recherche plein texte ne reprend pas le découpage des parties ; elle affiche seulement la pastille « Script analysé ». Un filtre par partie reste à décider.
+- [ ] P91 — Suite de tests : `memory_limit` relevé à 512 Mo dans `phpunit.xml`. Avec 128 Mo, la suite complète échoue à `tests/Support/ValidateurSousTitres.php` (mémoire cumulée des rendus PDF et des transcriptions de test). À réduire plutôt qu'à masquer si la suite grossit encore. Un MP3 renvoyé par `Storage::temporaryUrl` (disque S3) n'a pas été essayé avec un vrai bucket.

@@ -276,6 +276,23 @@ return [
     'script_analysis' => [
         'max_video_seconds' => (int) env('VOXIA_SCRIPT_ANALYSIS_MAX_SECONDS', 180),
         'credits_per_analysis' => (int) env('VOXIA_SCRIPT_ANALYSIS_CREDITS', 1),
+        // Relances après une réponse invalide ou un échec d'appel (le total doit rester sous 15 s).
+        'relances' => (int) env('VOXIA_SCRIPT_ANALYSIS_RETRIES', 1),
+        // Délai d'un appel au fournisseur, et de la tâche entière.
+        'timeout_seconds' => (int) env('VOXIA_SCRIPT_ANALYSIS_TIMEOUT_SECONDS', 30),
+        'connect_timeout_seconds' => (int) env('VOXIA_SCRIPT_ANALYSIS_CONNECT_TIMEOUT_SECONDS', 10),
+        'job_timeout_seconds' => (int) env('VOXIA_SCRIPT_ANALYSIS_JOB_TIMEOUT_SECONDS', 90),
+        'max_output_tokens' => (int) env('VOXIA_SCRIPT_ANALYSIS_MAX_OUTPUT_TOKENS', 1024),
+        // Écart maximal, en millisecondes, entre une borne renvoyée et le mot le plus proche.
+        'recalage_max_ms' => (int) env('VOXIA_SCRIPT_ANALYSIS_SNAP_MAX_MS', 2000),
+        // Largeur affichée d'une partie non détectée dans la barre (échelle relative, sans durée réelle).
+        'poids_partie_absente_ms' => (int) env('VOXIA_SCRIPT_ANALYSIS_ABSENT_WEIGHT_MS', 1500),
+        // Évaluation (commande voxia:eval-scripts) : part de limites justes visée, tolérance, délai max.
+        'eval' => [
+            'cible' => (float) env('VOXIA_SCRIPT_EVAL_TARGET', 0.8),
+            'tolerance_ms' => (int) env('VOXIA_SCRIPT_EVAL_TOLERANCE_MS', 2000),
+            'delai_max_secondes' => (int) env('VOXIA_SCRIPT_EVAL_MAX_SECONDS', 15),
+        ],
     ],
 
     /*
@@ -322,6 +339,9 @@ return [
 
     'costs' => [
         'transcription_usd_per_hour' => (float) env('VOXIA_TRANSCRIPTION_COST_USD_PER_HOUR', 0.22),
+        // Analyse de script (Claude Haiku 5.5, par million de jetons, tarif officiel).
+        'script_analysis_input_usd_per_mtok' => (float) env('VOXIA_SCRIPT_ANALYSIS_INPUT_USD_PER_MTOK', 0.10),
+        'script_analysis_output_usd_per_mtok' => (float) env('VOXIA_SCRIPT_ANALYSIS_OUTPUT_USD_PER_MTOK', 0.50),
     ],
 
     /*

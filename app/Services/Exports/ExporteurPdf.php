@@ -5,8 +5,6 @@ namespace App\Services\Exports;
 use App\Data\ContenuTranscription;
 use App\Enums\FormatExport;
 use App\Support\Horodatage;
-use Illuminate\Support\Facades\File;
-use Mpdf\Mpdf;
 
 /**
  * PDF sobre : titre, lien source, date de transcription, puis le texte avec ou sans horodatages.
@@ -18,13 +16,6 @@ use Mpdf\Mpdf;
  */
 final class ExporteurPdf implements Exporteur
 {
-    /** Polices déclarées auprès de mPDF : nom CSS => fichiers par variante (resources/fonts). */
-    private const POLICES = [
-        'geist' => ['R' => 'Geist-Regular.ttf', 'B' => 'Geist-SemiBold.ttf'],
-        'geistmono' => ['R' => 'GeistMono-Regular.ttf'],
-        'notosans' => ['R' => 'NotoSans-Regular.ttf'],
-    ];
-
     public function format(): FormatExport
     {
         return FormatExport::Pdf;
@@ -35,35 +26,7 @@ final class ExporteurPdf implements Exporteur
         $titre = $contenu->titre !== '' ? $contenu->titre : __('exports.pdf.titre_defaut');
         $html = $this->html($contenu, $avecHorodatages);
 
-        $dossierTemporaire = storage_path('app/mpdf');
-        File::ensureDirectoryExists($dossierTemporaire);
-
-        $mpdf = new Mpdf([
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_left' => (int) config('voxia.exports.pdf.marge_mm'),
-            'margin_right' => (int) config('voxia.exports.pdf.marge_mm'),
-            'margin_top' => (int) config('voxia.exports.pdf.marge_mm'),
-            'margin_bottom' => (int) config('voxia.exports.pdf.marge_mm'),
-            'tempDir' => $dossierTemporaire,
-            'fontDir' => [resource_path('fonts')],
-            'fontdata' => self::POLICES,
-            'default_font' => 'geist',
-            'useSubstitutions' => true,
-            'backupSubsFont' => ['notosans'],
-            'autoScriptToLang' => false,
-            'autoLangToFont' => false,
-        ]);
-
-        $mpdf->SetTitle($titre);
-        $mpdf->SetAuthor('Voxia');
-        $mpdf->SetCreator('Voxia');
-        $mpdf->SetFooter('<div style="font-family: geistmono; font-size: 8pt; text-align: right; color: #6B6A65;">'
-            .__('exports.pdf.page', ['page' => '{PAGENO}']).'</div>');
-
-        $mpdf->WriteHTML($html);
-
-        return $mpdf->OutputBinaryData();
+        return app(RendeurPdf::class)->rendre($titre, $html);
     }
 
     /**
