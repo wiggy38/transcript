@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\User;
+use App\Support\Langue;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -23,12 +24,12 @@ class AlerteEchecsTelechargement extends Mailable implements ShouldQueue
         public float $seuil,
         public int $fenetreMinutes,
     ) {
-        $this->locale('fr');
+        $this->locale(Langue::pour($administrateur));
     }
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: __('administration.courriel.alerte_echecs.objet', [], 'fr'));
+        return new Envelope(subject: __('administration.courriel.alerte_echecs.objet'));
     }
 
     public function content(): Content

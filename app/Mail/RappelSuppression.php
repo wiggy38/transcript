@@ -4,6 +4,8 @@ namespace App\Mail;
 
 use App\Models\Transcription;
 use App\Models\User;
+use App\Support\Formats;
+use App\Support\Langue;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -27,7 +29,7 @@ class RappelSuppression extends Mailable implements ShouldQueue
         public int $joursConservation,
         public int $joursAvantRappel,
     ) {
-        $this->locale($utilisateur->locale ?? config('app.locale'));
+        $this->locale(Langue::pour($utilisateur));
     }
 
     public function envelope(): Envelope
@@ -41,7 +43,7 @@ class RappelSuppression extends Mailable implements ShouldQueue
             'nom' => $this->utilisateur->name,
             'lignes' => $this->transcriptions->map(fn ($transcription) => [
                 'titre' => $transcription->titre ?? $transcription->url_origine ?? '—',
-                'date' => $transcription->created_at->copy()->addDays($this->joursConservation)->format(__('historique.format_date')),
+                'date' => Formats::date($transcription->created_at->copy()->addDays($this->joursConservation)),
             ])->all(),
             'nombre' => $this->transcriptions->count(),
             'jours' => $this->joursConservation,

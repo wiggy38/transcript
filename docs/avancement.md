@@ -161,6 +161,28 @@ Décisions du back-office :
 - Les textes des sections et des tarifs sont dans `lang/fr/accueil.php` et `lang/en/accueil.php`. Les montants, quotas et formats sont passés en remplacements : rien n'est écrit en dur.
 - Le pied de page pointe vers trois pages provisoires (`/confidentialite`, `/conditions`, `/contact`) qui affichent « [À CONFIRMER] » : aucun texte juridique n'est inventé (CLAUDE.md §7).
 
+### Langues (CLAUDE.md §1 : français et anglais)
+
+*Tests : `tests/Feature/Langue/LangueTest.php` (un test par critère), plus les tests de pages existants, qui rendent les écrans en français.*
+
+- [x] Tous les textes visibles des pages publiques, de l'application, des courriels, des PDF et des écrans d'upgrade passent par `lang/fr` et `lang/en`. Les clés sont les mêmes dans les deux langues, sans valeur vide. *(LangueTest : parité et valeurs vides)*
+- [x] Chaque page principale s'affiche dans les deux langues sans clé de traduction visible : accueil, confidentialité, conditions, contact, connexion, inscription, tableau de bord, historique, réglages, abonnement. *(LangueTest ; le détecteur est lui-même testé)*
+- [x] Ordre de choix : adresse `/fr` ou `/en`, puis préférence du compte, puis choix mémorisé (cookie `voxia_langue`), puis langue du navigateur (`Accept-Language`), puis anglais. *(LangueTest)*
+- [x] Pages publiques sous `/fr` et `/en` ; `/` redirige vers la langue du visiteur ; balises `hreflang` (fr, en, x-default). *(LangueTest)*
+- [x] Sélecteur dans l'en-tête (pages publiques et application) et dans les réglages (« Suivre le navigateur », Français, English). Le choix est enregistré sur le compte s'il y en a un. *(LangueTest)*
+- [x] Dates, nombres et devises selon la langue (`App\Support\Formats`, `App\Support\Montant`). *(LangueTest)*
+- [x] Courriels envoyés dans la langue du destinataire (suppression, rappel, transcription prête, alerte administrateur). *(LangueTest, EmailsTransactionnelsTest)*
+- [ ] Back-office Filament : libellés encore en français (P126).
+
+Décisions de la langue :
+- Adresses `/fr` et `/en` seulement pour les pages publiques (accueil, confidentialité, conditions, contact). Les écrans de l'application gardent leurs adresses ; leur langue vient du compte ou du navigateur.
+- Le cookie `voxia_langue` (un an) est posé par une adresse `/fr` ou `/en` et par le sélecteur. Il sert aux visiteurs sans compte, et aux requêtes Livewire qui n'ont pas l'adresse de la page.
+- `App\Support\Langue::resoudre` : les comptes ont une préférence à partir de l'inscription, car la langue courante y est enregistrée (`CreateNewUser`, connexion Google). « Suivre le navigateur » efface la préférence pour un compte existant.
+- `users.locale` devient facultatif (migration `2026_11_04_300000`). Les comptes existants gardent leur valeur : celle posée par défaut à la création de la colonne (`fr`), qui n'était pas un choix de l'utilisateur.
+- Le sélecteur envoie son choix à `POST /langue`, qui renvoie sur la même page dans l'autre langue (`/fr/contact` vers `/en/contact`). Un retour externe n'est jamais suivi (`CheminLocal`).
+- Les comptes de test sont créés en français (fabrique), comme avant ; les tests de langue fixent leur langue.
+- Héros en anglais : « Every video has words in it. » / « Voxia writes them down. » (variante A, choix à confirmer, P130).
+
 ## 3. Décisions
 
 - Comptes : Fortify pour l'authentification (vues Signal dans `resources/views/auth`), sans double authentification ni passkeys (hors MVP, désactivés dans `config/fortify.php`). Socialite pour Google.
@@ -217,6 +239,7 @@ Décisions des fenêtres d'upgrade :
 - La fenêtre de la 6e vidéo n'est ouverte qu'au plan Gratuit. Un Pro ou un Pack à court de quota reçoit seulement le message d'erreur. Même règle pour l'analyse : seuls les plans sans crédits IA reçoivent la fenêtre.
 - Un format verrouillé est un bouton actif (un bouton désactivé ne peut pas ouvrir de fenêtre). Le lien de paiement de l'aperçu garde l'identifiant de la transcription, sinon le webhook ne la relance pas.
 - Tests adaptés : le bandeau d'aperçu mène désormais à la fenêtre (`PaiementTest`), et le test de quota lit le compteur mocké (`NouvelleTranscriptionTest`, helper `mockQuotaCompteur`).
+- Langues : les textes de l'interface et des courriels sont bilingues (voir « Langues » en §2). Tests existants adaptés à la nouvelle adresse de l'accueil (`/fr`) et à la langue explicite des courriels : `ExampleTest`, `PageAccueilTest`, `EcransComptesTest`, `CharteSignalTest`, `EmailsTransactionnelsTest`, `HistoriqueListeTest`, `ConservationTest`.
 
 ## 4. Points ouverts
 
@@ -444,5 +467,11 @@ Décisions des fenêtres d'upgrade :
 - [ ] P121 — Page d'accueil : « Quelles langues sont reconnues ? » et la fiche technique reprennent les six langues de `voxia.langues_forcables` (fr, en, es, de, it, pt, validées en P61). À confirmer que c'est bien la liste à annoncer comme reconnue.
 - [ ] P122 — Page d'accueil : durée de conservation affichée « 30 jours [À CONFIRMER] » pour les transcriptions du Gratuit et pour les MP3 (lié à P2). Marqueur à retirer une fois tranchée.
 - [ ] P123 — Pages Confidentialité, Conditions et Contact : texte juridique et adresse de contact à fournir. En attendant, les pages affichent « [À CONFIRMER] ».
-- [ ] P124 — Page d'accueil : `APP_LOCALE=en` dans `.env` fait voir l'anglais aux visiteurs (les comptes gardent leur langue). Lié à P15 ; à trancher avant la comparaison avec la maquette française.
+- [x] P124 — Page d'accueil : `APP_LOCALE=en` ne décide plus de la langue des visiteurs. La langue vient de l'adresse, du compte, du cookie ou du navigateur ; `APP_LOCALE` ne sert plus que de repli technique. *(Résolu avec la bilinguisme, voir « Langues ».)*
 - [ ] P125 — Page d'accueil : les boutons de l'aperçu produit (Copier, .txt, .srt, .vtt, .mp3) sont décoratifs. Les garder ainsi, ou les rendre fonctionnels sur une transcription d'exemple ?
+- [ ] P126 — Langues : le back-office Filament reste en français (une vingtaine de libellés déclarés dans `app/Filament`, plus les notifications, widgets, colonnes, filtres et actions). Non traduit dans ce lot : à faire avec `lang/fr` et `lang/en` (`administration.*`). Interface interne, mais CLAUDE.md §1 la place dans l'obligation bilingue.
+- [ ] P127 — Langues : hors périmètre, en français et non visibles par les visiteurs : descriptions et messages des commandes Artisan (`app/Console`), journaux (`Log::`), messages d'exception internes, prompt d'analyse de script, page `/styleguide` (locale seulement), message du webhook (403). À garder ainsi, ou à traduire ?
+- [ ] P128 — Langues : `processing_logs.message` (« piste audio téléchargée », etc.) est en français et s'affiche dans le back-office. Lié à P126.
+- [ ] P129 — Langues : la durée (« 12 h 40 », « 40 min ») garde ses unités `h` et `min`, identiques dans les deux langues. Acceptable, ou à traduire ?
+- [ ] P130 — Langues : trois variantes anglaises du héros « Chaque vidéo contient un texte. Voxia te l'écrit. » ont été proposées (voir le compte rendu) ; la variante A est appliquée. À confirmer.
+- [ ] P131 — Langues : sélecteur, cookie et hreflang vérifiés par les tests HTTP seulement, pas dans un navigateur ni avec PostgreSQL (port 5433 : voir P107). La migration `locale` nullable n'est pas lancée sur PostgreSQL.

@@ -92,6 +92,7 @@ return [
         'confirmation' => 'Confirme le nouveau mot de passe',
         'langue' => 'Langue de l\'interface',
         'langues' => [
+            'auto' => 'Suivre le navigateur',
             'fr' => 'Français',
             'en' => 'English',
         ],

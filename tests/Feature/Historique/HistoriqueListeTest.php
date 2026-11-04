@@ -54,8 +54,8 @@ it('affiche la miniature, le titre, la plateforme, la durée, la date et le stat
         ->assertSee(__('historique.plateformes.tiktok'))
         ->assertSee('12:34')
         ->assertSee('00:42')
-        ->assertSee('14/10/2026 09:30')
-        ->assertSee('15/10/2026 18:05')
+        ->assertSee('14 octobre 2026 à 09:30')
+        ->assertSee('15 octobre 2026 à 18:05')
         ->assertSee(__('interface.statuts.termine'));
 });
 
@@ -120,7 +120,7 @@ it('affiche la date de suppression prévue au plan Gratuit', function () {
     $this->actingAs($utilisateur)
         ->get(route('historique'))
         ->assertSee(__('historique.suppression_prevue', [
-            'date' => $creation->copy()->addDays(30)->format(__('historique.format_date')),
+            'date' => $creation->copy()->addDays(30)->locale('fr')->isoFormat('LL'),
         ]));
 });
 

@@ -54,6 +54,7 @@
                 <div class="flex flex-col gap-2">
                     <label for="langue-interface" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('comptes.reglages.langue') }}</label>
                     <select id="langue-interface" name="locale" class="min-h-11 rounded-champ border border-filet-contour bg-panneau px-3.5 text-texte">
+                        <option value="auto" @selected($utilisateur->locale === null)>{{ __('comptes.reglages.langues.auto') }}</option>
                         @foreach ($langues as $langue)
                             <option value="{{ $langue }}" @selected($utilisateur->locale === $langue)>{{ __('comptes.reglages.langues.'.$langue) }}</option>
                         @endforeach

@@ -5,6 +5,8 @@
     $image ??= asset('images/partage-voxia.png');
     $adresse = url()->current();
     $localeOg = app()->getLocale() === 'fr' ? 'fr_FR' : 'en_US';
+    // Une adresse par langue sur les pages publiques (hreflang) ; vide ailleurs.
+    $alternatives = \App\Support\Langue::alternatives(request());
 @endphp
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -15,11 +17,22 @@
     <title>{{ $titre }}</title>
     <meta name="description" content="{{ $description }}">
     <link rel="canonical" href="{{ $adresse }}">
+    @foreach ($alternatives as $langue => $alternative)
+        <link rel="alternate" hreflang="{{ $langue }}" href="{{ $alternative }}">
+    @endforeach
+    @if ($alternatives !== [])
+        <link rel="alternate" hreflang="x-default" href="{{ url('/') }}">
+    @endif
 
     {{-- Partage (Open Graph et Twitter) : carte au style Signal, 1200 × 630. --}}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ __('interface.marque') }}">
     <meta property="og:locale" content="{{ $localeOg }}">
+    @foreach (array_keys($alternatives) as $langue)
+        @if ($langue !== app()->getLocale())
+            <meta property="og:locale:alternate" content="{{ $langue === 'fr' ? 'fr_FR' : 'en_US' }}">
+        @endif
+    @endforeach
     <meta property="og:title" content="{{ $titre }}">
     <meta property="og:description" content="{{ $description }}">
     <meta property="og:url" content="{{ $adresse }}">
@@ -58,6 +71,7 @@
                         @endauth
                     </ul>
                 </nav>
+                <x-selecteur-langue />
             </div>
         </header>
 

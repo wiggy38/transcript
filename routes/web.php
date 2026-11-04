@@ -11,19 +11,31 @@ use App\Http\Controllers\Comptes\TableauDeBordController;
 use App\Http\Controllers\Comptes\TelechargementMp3Controller;
 use App\Http\Controllers\Comptes\TeleversementController;
 use App\Http\Controllers\Comptes\TranscriptionController;
+use App\Http\Controllers\LangueController;
 use App\Http\Controllers\Paiement\AbonnementController;
 use App\Http\Controllers\Paiement\PaiementController;
 use App\Http\Controllers\Paiement\WebhookPaddleController;
 use Illuminate\Support\Facades\Route;
 
+// Pages publiques : une adresse par langue (/fr, /en), avec balises hreflang. La racine redirige
+// vers la langue du visiteur (App\Support\Langue::resoudre).
+Route::get('/', fn () => redirect()->route('accueil'))->name('racine');
+
 // Parcours principal (cahier §2) : la page d'accueil reçoit le lien, les comptes le gardent.
-Route::get('/', AccueilController::class)->name('accueil');
 Route::post('/lien', [LienController::class, 'store'])->name('lien.store');
 
-// Liens du pied de page. Textes juridiques et contact en attente : aucun texte n'est inventé (cahier §9).
-Route::view('/confidentialite', 'pages.provisoire', ['cle' => 'confidentialite'])->name('confidentialite');
-Route::view('/conditions', 'pages.provisoire', ['cle' => 'conditions'])->name('conditions');
-Route::view('/contact', 'pages.provisoire', ['cle' => 'contact'])->name('contact');
+Route::prefix('{locale}')->whereIn('locale', ['en', 'fr'])->group(function () {
+    Route::get('/', AccueilController::class)->name('accueil');
+
+    // Liens du pied de page. Textes juridiques et contact en attente : aucun texte n'est inventé (cahier §9).
+    Route::view('/confidentialite', 'pages.provisoire', ['cle' => 'confidentialite'])->name('confidentialite');
+    Route::view('/conditions', 'pages.provisoire', ['cle' => 'conditions'])->name('conditions');
+    Route::view('/contact', 'pages.provisoire', ['cle' => 'contact'])->name('contact');
+});
+
+// Choix de langue (sélecteur) : mémorise le choix, l'enregistre sur le compte s'il y en a un,
+// et renvoie sur la même page dans la nouvelle langue.
+Route::post('/langue', [LangueController::class, 'changer'])->name('langue.changer');
 
 // Connexion Google : répond 404 tant que VOXIA_GOOGLE_LOGIN n'est pas à true.
 Route::get('/auth/google', [GoogleController::class, 'rediriger'])->name('google.redirect');

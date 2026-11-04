@@ -108,10 +108,10 @@
                                         {{ $transcription->duree_secondes !== null ? Horodatage::format($transcription->duree_secondes * 1000) : '—' }}
                                     </span>
                                     <time datetime="{{ $transcription->created_at->toIso8601String() }}">
-                                        <span class="sr-only">{{ __('historique.colonnes.date') }} : </span>{{ $transcription->created_at->format(__('historique.format_date_heure')) }}
+                                        <span class="sr-only">{{ __('historique.colonnes.date') }} : </span>{{ \App\Support\Formats::dateHeure($transcription->created_at) }}
                                     </time>
                                     @if ($joursConservation !== null)
-                                        <span>{{ __('historique.suppression_prevue', ['date' => $transcription->created_at->copy()->addDays($joursConservation)->format(__('historique.format_date'))]) }}</span>
+                                        <span>{{ __('historique.suppression_prevue', ['date' => \App\Support\Formats::date($transcription->created_at->copy()->addDays($joursConservation))]) }}</span>
                                     @endif
                                 </p>
                             </div>

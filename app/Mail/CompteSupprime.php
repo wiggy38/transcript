@@ -14,9 +14,9 @@ class CompteSupprime extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public string $nom)
+    public function __construct(public string $nom, string $langue)
     {
-        $this->locale(app()->getLocale());
+        $this->locale($langue);
     }
 
     public function envelope(): Envelope

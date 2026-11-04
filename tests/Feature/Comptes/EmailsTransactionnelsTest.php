@@ -41,7 +41,7 @@ it('rédige l\'email de réinitialisation avec le lien de choix du mot de passe'
 it('rédige la confirmation de suppression en anglais quand l\'interface est en anglais', function () {
     app()->setLocale('en');
 
-    $html = (string) (new CompteSupprime('Ada'))->render();
+    $html = (string) (new CompteSupprime('Ada', 'en'))->render();
 
     expect($html)
         ->toContain('Account deleted')

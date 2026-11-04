@@ -9,7 +9,7 @@
         <section aria-labelledby="titre-transcription" class="max-w-[720px]">
             <div class="flex flex-wrap items-center gap-4">
                 <x-badge-statut :statut="$transcription->statut" />
-                <span class="font-mono text-xs text-texte-discret">{{ __('transcriptions.page.lancee_le', ['date' => $transcription->created_at->translatedFormat('d/m/Y H:i')]) }}</span>
+                <span class="font-mono text-xs text-texte-discret">{{ __('transcriptions.page.lancee_le', ['date' => \App\Support\Formats::dateHeure($transcription->created_at)]) }}</span>
             </div>
 
             <h1 id="titre-transcription" class="mt-4 text-3xl font-semibold leading-tight tracking-tight [overflow-wrap:anywhere]">

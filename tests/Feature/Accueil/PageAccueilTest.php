@@ -16,7 +16,7 @@ function pageAccueilDecodee(string $adresse): string
 }
 
 it('affiche la carte Créateurs « Une transcription, quatre formats. » avec les formats réels', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('Une transcription, quatre formats.')
@@ -28,7 +28,7 @@ it('affiche la carte Créateurs « Une transcription, quatre formats. » avec le
 });
 
 it('garde la carte Marketeurs telle quelle, avec l\'analyse de script', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('Le script d\'une pub, découpé.')
@@ -36,7 +36,7 @@ it('garde la carte Marketeurs telle quelle, avec l\'analyse de script', function
 });
 
 it('affiche les prix en dollars US lus dans config/voxia.php', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     // Gratuit 0 $, Pro 12 $ par mois ou 96 $ par an, Pack 5 $.
     expect($html)
@@ -56,7 +56,7 @@ it('reprend les quotas du plan Gratuit et du Pro depuis la configuration', funct
         'voxia.plans.pack.hours' => 15,
     ]);
 
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('7 vidéos par mois')
@@ -66,7 +66,7 @@ it('reprend les quotas du plan Gratuit et du Pro depuis la configuration', funct
 });
 
 it('bascule le Pro entre mensuel et annuel sans rechargement', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('x-data="{ periode: \'mois\' }"')
@@ -76,13 +76,13 @@ it('bascule le Pro entre mensuel et annuel sans rechargement', function () {
 });
 
 it('présente le MP3 comme inclus dans tous les plans', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect(substr_count($html, 'MP3 inclus'))->toBe(3);
 });
 
 it('liste les formats acceptés et les langues depuis la configuration', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('MP3, M4A, WAV, MP4, MOV, WEBM')
@@ -90,7 +90,7 @@ it('liste les formats acceptés et les langues depuis la configuration', functio
 });
 
 it('marque à confirmer la durée de conservation tant qu\'elle n\'est pas tranchée', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('[À CONFIRMER]')
@@ -98,7 +98,7 @@ it('marque à confirmer la durée de conservation tant qu\'elle n\'est pas tranc
 });
 
 it('envoie le lien du héros à la route qui démarre le parcours', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('action="'.route('lien.store').'"')
@@ -107,13 +107,13 @@ it('envoie le lien du héros à la route qui démarre le parcours', function () 
 });
 
 it('pointe le lien de dépôt de fichier vers l\'inscription pour un visiteur', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)->toContain('href="'.route('register').'"');
 });
 
 it('branche les liens de l\'en-tête et du pied de page', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('href="'.route('accueil').'#usages"')
@@ -132,13 +132,13 @@ it('répond aux pages du pied de page, sans texte juridique inventé', function 
         ->assertSee($titre)
         ->assertSee('[À CONFIRMER]');
 })->with([
-    'confidentialité' => ['/confidentialite', 'Confidentialité'],
-    'conditions' => ['/conditions', 'Conditions'],
-    'contact' => ['/contact', 'Contact'],
+    'confidentialité' => ['/fr/confidentialite', 'Confidentialité'],
+    'conditions' => ['/fr/conditions', 'Conditions'],
+    'contact' => ['/fr/contact', 'Contact'],
 ]);
 
 it('donne à la page un titre, une description et des balises de partage au style Signal', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     expect($html)
         ->toContain('<title>Voxia — Chaque vidéo contient un texte</title>')
@@ -168,7 +168,7 @@ it('coupe toutes les animations de la page sous prefers-reduced-motion', functio
 });
 
 it('affiche la page d\'accueil sans barre de défilement horizontale par construction', function () {
-    $html = pageAccueilDecodee('/');
+    $html = pageAccueilDecodee('/fr');
 
     // Le bandeau et la ligne de process sont dans un conteneur qui coupe le débordement.
     expect($html)

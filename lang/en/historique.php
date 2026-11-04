@@ -5,9 +5,6 @@ return [
     'titre' => 'History',
     'sous_titre' => 'All your transcriptions, from newest to oldest.',
 
-    'format_date' => 'M j, Y',
-    'format_date_heure' => 'M j, Y H:i',
-
     'recherche' => [
         'libelle' => 'Search my transcriptions',
         'aide' => 'A word or a phrase, across all your text.',

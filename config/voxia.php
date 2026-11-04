@@ -26,6 +26,9 @@ return [
 
     'locales' => ['en', 'fr'],
 
+    // Langue utilisée quand ni l'adresse, ni le compte, ni le navigateur n'en donnent une.
+    'locale_defaut' => 'en',
+
     /*
     |--------------------------------------------------------------------------
     | Plans

@@ -92,6 +92,7 @@ return [
         'confirmation' => 'Confirm the new password',
         'langue' => 'Interface language',
         'langues' => [
+            'auto' => 'Browser language',
             'fr' => 'Français',
             'en' => 'English',
         ],

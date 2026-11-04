@@ -18,8 +18,8 @@ return [
 
     'hero' => [
         'pastille' => 'Video → text, in a minute or two',
-        'titre' => 'Every video contains a text.',
-        'titre_accent' => 'Voxia writes it down.',
+        'titre' => 'Every video has words in it.',
+        'titre_accent' => 'Voxia writes them down.',
         'sous_titre' => 'Paste a YouTube or TikTok link, or drop your file. You get the timestamped transcript, the subtitles and the audio, filed in your library.',
         'champ' => 'Video link',
         'placeholder' => 'https://youtube.com/watch?v=…',

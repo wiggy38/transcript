@@ -4,6 +4,15 @@ return [
 
     'marque' => 'Voxia',
 
+    'langues' => [
+        'fr' => 'Français',
+        'en' => 'English',
+    ],
+
+    'langue' => [
+        'selecteur' => 'Language',
+    ],
+
     'navigation' => [
         'principale' => 'Main navigation',
         'usages' => 'Uses',

@@ -41,17 +41,12 @@
                 </ul>
             </nav>
 
-            {{-- Compteur de quota (toujours visible pour un compte connecté) et emplacement de langue fourni par la page. --}}
+            {{-- Compteur de quota (toujours visible pour un compte connecté), sélecteur de langue. --}}
             <div class="ml-auto flex flex-wrap items-center gap-6">
                 @auth
                     <x-compteur-plan />
                 @endauth
-                @isset($langue)
-                    <div class="flex items-center gap-2 text-sm text-texte-secondaire">
-                        <span>{{ __('interface.application.langue') }}</span>
-                        {{ $langue }}
-                    </div>
-                @endisset
+                <x-selecteur-langue />
                 @auth
                     <form method="post" action="{{ route('logout') }}">
                         @csrf

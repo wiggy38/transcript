@@ -13,7 +13,7 @@ it('affiche chaque écran de compte sans erreur, sans police ni script externe',
         ->not->toContain('fonts.bunny')
         ->not->toContain('cdn.jsdelivr');
 })->with([
-    'accueil' => ['/'],
+    'accueil' => ['/fr'],
     'connexion' => ['/login'],
     'inscription' => ['/register'],
     'mot de passe oublié' => ['/forgot-password'],

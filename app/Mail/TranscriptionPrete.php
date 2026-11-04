@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\Transcription;
 use App\Support\Horodatage;
+use App\Support\Langue;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -18,7 +19,7 @@ class TranscriptionPrete extends Mailable implements ShouldQueue
 
     public function __construct(public Transcription $transcription)
     {
-        $this->locale($transcription->user->locale ?? config('app.locale'));
+        $this->locale(Langue::pour($transcription->user));
     }
 
     public function envelope(): Envelope

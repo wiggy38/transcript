@@ -2,6 +2,7 @@
 
 use App\Enums\StatutTranscription;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\URL;
 
 /*
  * Charte Signal (cahier §7) : jetons, contrastes, animations, polices auto-hébergées, composants.
@@ -138,6 +139,7 @@ test('le compteur de quota n\'écrit aucune valeur de plan en dur', function () 
 });
 
 test('les mises en page s\'affichent avec leur en-tête et leur pied', function () {
+    URL::defaults(['locale' => 'fr']);
     $marketing = Blade::render('<x-layouts::marketing>contenu</x-layouts::marketing>');
     $application = Blade::render('<x-layouts::app actif="historique"><x-slot:quota>Q</x-slot:quota>contenu</x-layouts::app>');
 

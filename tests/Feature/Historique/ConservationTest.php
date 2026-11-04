@@ -102,7 +102,7 @@ it('le rappel indique le nombre de transcriptions, leurs titres et leurs dates d
     $mail = new RappelSuppression($gratuit, collect([$transcription]), 30, 3);
 
     $mail->assertSeeInHtml('Vidéo du rappel');
-    $mail->assertSeeInHtml($transcription->created_at->copy()->addDays(30)->format(__('historique.format_date')));
+    $mail->assertSeeInHtml($transcription->created_at->copy()->addDays(30)->locale('fr')->isoFormat('LL'));
 });
 
 // Critère F5 (conservation) : MP3 et fichiers importés supprimés après la durée de config, pour tous.

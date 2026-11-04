@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SupprimerFichiersTranscriptions;
 use App\Mail\CompteSupprime;
 use App\Models\User;
+use App\Support\Langue;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,20 +26,23 @@ class ReglagesController extends Controller
     {
         return view('app.reglages', [
             'utilisateur' => $request->user(),
-            'langues' => (array) config('voxia.locales'),
+            'langues' => Langue::disponibles(),
         ]);
     }
 
+    /** « auto » efface la préférence : l'interface suit alors le navigateur (App\Support\Langue). */
     public function langue(Request $request): RedirectResponse
     {
         $donnees = $request->validate([
-            'locale' => ['required', 'string', 'in:'.implode(',', (array) config('voxia.locales'))],
+            'locale' => ['required', 'string', 'in:auto,'.implode(',', Langue::disponibles())],
         ]);
 
-        $request->user()->forceFill(['locale' => $donnees['locale']])->save();
+        $langue = $donnees['locale'] === 'auto' ? null : $donnees['locale'];
 
-        // La page suivante s'affiche déjà dans la nouvelle langue.
-        app()->setLocale($donnees['locale']);
+        $request->user()->forceFill(['locale' => $langue])->save();
+
+        // La page suivante s'affiche déjà dans la nouvelle langue (sinon celle du navigateur).
+        app()->setLocale($langue ?? Langue::resoudre($request));
 
         return redirect()->route('reglages')->with('statut', 'langue-enregistree');
     }
@@ -68,7 +72,7 @@ class ReglagesController extends Controller
         $nom = $utilisateur->name;
         $identifiants = $utilisateur->transcriptions()->pluck('id')->all();
 
-        Mail::to($email)->queue(new CompteSupprime($nom));
+        Mail::to($email)->queue(new CompteSupprime($nom, Langue::pour($utilisateur)));
 
         // Déconnexion avant la suppression : Auth::logout() enregistre le compte pour changer
         // son jeton de session, ce qui réinsérerait une ligne supprimée.

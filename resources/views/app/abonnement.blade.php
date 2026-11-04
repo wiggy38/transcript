@@ -2,8 +2,7 @@
     @php
         $cleStatut = session('statut');
         $messageStatut = $cleStatut ? __('abonnement.statut.'.$cleStatut) : null;
-        $locale = app()->getLocale();
-        $dateCourte = fn ($date) => $date ? $date->locale($locale)->isoFormat('LL') : '';
+        $dateCourte = fn ($date) => $date ? \App\Support\Formats::date($date) : '';
     @endphp
 
     @if ($messageStatut && $messageStatut !== 'abonnement.statut.'.$cleStatut)
@@ -84,7 +83,7 @@
                 <ul class="mt-4 grid gap-3">
                     @foreach ($packs as $pack)
                         <li class="flex flex-wrap justify-between gap-2 border-t border-filet pt-3 text-sm">
-                            <span>{{ __('abonnement.packs.ligne', ['heures' => number_format($pack->secondes / 3600, 0, '.', ' ')]) }}</span>
+                            <span>{{ __('abonnement.packs.ligne', ['heures' => \App\Support\Formats::nombre($pack->secondes / 3600)]) }}</span>
                             <span class="text-texte-secondaire">{{ __('abonnement.packs.expire', ['date' => $dateCourte($pack->expire_at)]) }}</span>
                         </li>
                     @endforeach

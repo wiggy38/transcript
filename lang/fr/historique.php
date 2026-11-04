@@ -5,10 +5,6 @@ return [
     'titre' => 'Historique',
     'sous_titre' => 'Toutes tes transcriptions, de la plus récente à la plus ancienne.',
 
-    // Dates affichées : d/m/Y (fr), voir Carbon::format.
-    'format_date' => 'd/m/Y',
-    'format_date_heure' => 'd/m/Y H:i',
-
     'recherche' => [
         'libelle' => 'Chercher dans mes transcriptions',
         'aide' => 'Un mot ou une expression, dans tout ton texte.',
