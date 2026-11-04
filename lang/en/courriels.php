@@ -42,6 +42,15 @@ return [
         'ignorer' => 'You receive this message once per transcription, :avant days before it is deleted.',
     ],
 
+    'rappel_suppression' => [
+        'objet' => 'Some transcriptions will be deleted soon',
+        'titre' => 'Deletion coming up',
+        'texte' => 'Hello :nom, :nombre transcription(s) on your Free plan will be deleted in 3 days. The Free plan keeps transcriptions for :jours days. Here are the dates:',
+        'le' => 'deleted on',
+        'bouton' => 'View my history',
+        'ignorer' => 'You receive this message once per transcription, 3 days before it is deleted.',
+    ],
+
     'signature' => 'The Voxia team',
 
 ];

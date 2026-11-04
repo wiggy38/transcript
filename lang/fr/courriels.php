@@ -42,6 +42,15 @@ return [
         'ignorer' => 'Tu reçois ce message une seule fois par transcription, :avant jours avant sa suppression.',
     ],
 
+    'rappel_suppression' => [
+        'objet' => 'Des transcriptions seront bientôt supprimées',
+        'titre' => 'Suppression prochaine',
+        'texte' => 'Bonjour :nom, :nombre transcription(s) de ton plan Gratuit seront supprimées dans 3 jours. Le plan Gratuit conserve les transcriptions :jours jours. Voici les dates :',
+        'le' => 'supprimée le',
+        'bouton' => 'Voir mon historique',
+        'ignorer' => 'Tu reçois ce message une seule fois par transcription, 3 jours avant sa suppression.',
+    ],
+
     'signature' => 'L\'équipe Voxia',
 
 ];
