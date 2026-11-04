@@ -33,7 +33,7 @@
         <p class="mt-3 border-l-2 border-accent py-1 pl-3 text-sm text-texte">
             {{ __('historique.recherche.gratuit') }}
             <button type="button" aria-haspopup="dialog" x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-recherche' })"
-                class="ml-1 cursor-pointer text-accent hover:underline">{{ __('upgrade.recherche.titre') }}</button>
+                class="ml-1 cursor-pointer text-accent-texte hover:underline">{{ __('upgrade.recherche.titre') }}</button>
         </p>
 
         {{-- Déclencheur « recherche » (cahier §2) : s'ouvre dès qu'un terme est saisi en Gratuit. --}}
@@ -49,7 +49,7 @@
                 <h2 id="titre-resultats" class="text-lg font-semibold">
                     {{ trans_choice('historique.recherche.resultats', $resultats->total(), ['terme' => $terme, 'nombre' => $resultats->total()]) }}
                 </h2>
-                <a href="{{ route('historique') }}" class="text-sm text-texte-secondaire hover:text-accent">{{ __('historique.recherche.effacer') }}</a>
+                <a href="{{ route('historique') }}" class="text-sm text-texte-secondaire hover:text-accent-texte">{{ __('historique.recherche.effacer') }}</a>
             </div>
 
             @if ($resultats->isNotEmpty())
@@ -59,10 +59,10 @@
                             <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                                 <a href="{{ route('transcriptions.show', ['transcription' => $resultat->transcription, 't' => $resultat->debutMs]) }}"
                                    aria-label="{{ __('historique.recherche.aller') }} : {{ $resultat->transcription->titre ?? __('historique.sans_titre') }}"
-                                   class="font-mono text-sm tabular-nums text-accent no-underline hover:underline">{{ Horodatage::format($resultat->debutMs) }}</a>
+                                   class="font-mono text-sm tabular-nums text-accent-texte no-underline hover:underline">{{ Horodatage::format($resultat->debutMs) }}</a>
                                 <span class="min-w-0 font-medium [overflow-wrap:anywhere]">{{ $resultat->transcription->titre ?? __('historique.sans_titre') }}</span>
                                 @if ($resultat->transcription->scriptAnalysis?->statut === \App\Enums\StatutAnalyseScript::Termine)
-                                    <span class="font-mono text-xs text-accent">{{ __('analyse.pastille') }}</span>
+                                    <span class="font-mono text-xs text-accent-texte">{{ __('analyse.pastille') }}</span>
                                 @endif
                             </p>
                             {{-- Extrait échappé côté serveur ; seules les balises <mark> du surlignage sont ajoutées. --}}
@@ -99,7 +99,7 @@
 
                             <div class="min-w-0">
                                 <a href="{{ route('transcriptions.show', $transcription) }}"
-                                   class="block truncate font-medium text-texte no-underline hover:text-accent">{{ $titre }}</a>
+                                   class="block truncate font-medium text-texte no-underline hover:text-accent-texte">{{ $titre }}</a>
 
                                 <p class="mt-1 flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-texte-discret">
                                     <span>{{ __('historique.plateformes.'.$plateforme) }}</span>
@@ -119,7 +119,7 @@
                             <div class="flex flex-wrap items-center gap-4 sm:justify-end">
                                 <x-badge-statut :statut="$transcription->statut" />
                                 @if ($transcription->scriptAnalysis?->statut === \App\Enums\StatutAnalyseScript::Termine)
-                                    <span class="font-mono text-xs text-accent">{{ __('analyse.pastille') }}</span>
+                                    <span class="font-mono text-xs text-accent-texte">{{ __('analyse.pastille') }}</span>
                                 @endif
                                 <a href="{{ route('transcriptions.supprimer', $transcription) }}"
                                    class="text-sm text-texte-secondaire no-underline hover:text-erreur">

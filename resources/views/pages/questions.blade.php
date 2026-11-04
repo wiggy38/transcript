@@ -6,7 +6,7 @@
 
 <x-layouts::marketing :titre="__('pages.questions.titre').' — '.__('interface.marque')" :description="__('pages.questions.intro')">
     <section class="pt-20 pb-10">
-        <p class="font-mono text-xs font-medium text-accent uppercase">{{ __('interface.pied.questions') }}</p>
+        <p class="font-mono text-xs font-medium text-accent-texte uppercase">{{ __('interface.pied.questions') }}</p>
         <h1 class="mt-4 text-[clamp(40px,5vw,64px)] leading-none font-semibold tracking-[-0.04em]">{{ __('pages.questions.titre') }}</h1>
         <p class="mt-6 max-w-[40em] text-lg text-texte-secondaire">{{ __('pages.questions.intro') }}</p>
     </section>
@@ -29,7 +29,7 @@
     <section class="pt-16 pb-10">
         <p class="text-texte-secondaire">
             {{ __('pages.contact.intro') }}
-            <a href="{{ route('contact') }}" class="text-accent underline-offset-4 hover:underline">{{ __('interface.pied.contact') }}</a>
+            <a href="{{ route('contact') }}" class="text-accent-texte underline-offset-4 hover:underline">{{ __('interface.pied.contact') }}</a>
         </p>
     </section>
 </x-layouts::marketing>

@@ -9,7 +9,7 @@
     @foreach (\App\Support\Langue::disponibles() as $langue)
         <button type="submit" name="locale" value="{{ $langue }}" lang="{{ $langue }}"
             @if ($langue === $courante) aria-current="true" class="cursor-default font-medium text-texte"
-            @else class="cursor-pointer text-texte-secondaire hover:text-accent" @endif>
+            @else class="cursor-pointer text-texte-secondaire hover:text-accent-texte" @endif>
             {{ __('interface.langues.'.$langue) }}
         </button>
     @endforeach

@@ -86,13 +86,13 @@
             <div class="relative flex h-[200px] items-center gap-px md:gap-[3px]" aria-hidden="true">
                 @foreach ($barres as [$hauteur, $delai, $accent])
                     <span
-                        class="vx-onde-barre min-w-0 flex-[1_1_0] rounded-sm {{ $accent ? 'bg-accent' : 'bg-[#4A4B47]' }}"
+                        class="vx-onde-barre min-w-0 flex-[1_1_0] rounded-sm {{ $accent ? 'bg-accent' : 'bg-[var(--vx-wave-idle)]' }}"
                         style="height: {{ $hauteur }}%; animation-delay: -{{ number_format($delai, 2, '.', '') }}s"
                     ></span>
                 @endforeach
 
                 <span class="absolute -top-3 -bottom-3 left-[40%] w-px bg-accent"></span>
-                <span class="absolute -top-[34px] left-[40%] -translate-x-1/2 rounded-[3px] bg-accent px-2 py-0.5 font-mono text-[11px] font-medium text-fond">00:13</span>
+                <span class="absolute -top-[34px] left-[40%] -translate-x-1/2 rounded-[3px] bg-accent px-2 py-0.5 font-mono text-[11px] font-medium text-sur-accent">00:13</span>
             </div>
 
             <div class="mt-[18px] flex justify-between font-mono text-[11px] text-texte-discret" aria-hidden="true">
@@ -106,8 +106,8 @@
             @foreach (trans('accueil.apercu.lignes') as $indice => $ligne)
                 @if ($indice === 2)
                     {{-- Phrase en cours : surlignée. --}}
-                    <div class="-mx-3 flex gap-4 rounded-champ bg-[#1B1C1A] px-3 py-2.5">
-                        <span class="w-11 shrink-0 pt-[3px] font-mono text-xs text-accent">{{ $ligne['temps'] }}</span>
+                    <div class="-mx-3 flex gap-4 rounded-champ bg-panneau-eleve px-3 py-2.5">
+                        <span class="w-11 shrink-0 pt-[3px] font-mono text-xs text-accent-texte">{{ $ligne['temps'] }}</span>
                         <p class="font-medium text-texte">{{ $ligne['texte'] }}</p>
                     </div>
                 @elseif ($indice === 3)

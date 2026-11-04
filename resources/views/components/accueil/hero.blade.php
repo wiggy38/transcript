@@ -21,7 +21,7 @@
 
     <h1 id="titre-accueil" class="max-w-[15ch] text-[clamp(46px,7vw,104px)] leading-[0.96] font-semibold tracking-[-0.045em]">
         {{ __('accueil.hero.titre') }}
-        <span class="font-serif font-normal italic tracking-[-0.02em] text-accent">{{ __('accueil.hero.titre_accent') }}</span>
+        <span class="vx-surlignage">{{ __('accueil.hero.titre_accent') }}</span>
     </h1>
 
     <div class="mt-10 flex flex-wrap items-end justify-between gap-10">
@@ -54,7 +54,7 @@
 
             <p id="lien-depot" class="mt-2.5 text-[13px] text-texte-discret">
                 {!! __('accueil.hero.depot', [
-                    'lien' => '<a href="'.e($destination).'" class="text-texte-secondaire hover:text-accent">'.e(__('accueil.hero.depot_lien')).'</a>',
+                    'lien' => '<a href="'.e($destination).'" class="text-texte-secondaire hover:text-accent-texte">'.e(__('accueil.hero.depot_lien')).'</a>',
                     'formats' => $formats,
                 ]) !!}
             </p>

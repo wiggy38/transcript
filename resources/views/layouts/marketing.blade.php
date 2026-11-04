@@ -9,11 +9,11 @@
     $alternatives = \App\Support\Langue::alternatives(request());
 @endphp
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#0E0F0E">
+    <meta name="theme-color" content="#F4F1EA">
     <title>{{ $titre }}</title>
     <meta name="description" content="{{ $description }}">
     <link rel="canonical" href="{{ $adresse }}">
@@ -48,7 +48,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen antialiased">
-    <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-bouton focus:bg-accent focus:px-4 focus:py-2 focus:text-fond">
+    <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-bouton focus:bg-accent focus:px-4 focus:py-2 focus:text-sur-accent">
         {{ __('interface.acces.aller_contenu') }}
     </a>
 
@@ -60,13 +60,13 @@
 
                 <nav aria-label="{{ __('interface.navigation.principale') }}">
                     <ul class="flex flex-wrap items-center gap-x-7 gap-y-3 text-sm">
-                        <li><a href="{{ route('accueil') }}#usages" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.usages') }}</a></li>
-                        <li><a href="{{ route('accueil') }}#fonctionnement" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.fonctionnement') }}</a></li>
-                        <li><a href="{{ route('accueil') }}#tarifs" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.tarifs') }}</a></li>
+                        <li><a href="{{ route('accueil') }}#usages" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.navigation.usages') }}</a></li>
+                        <li><a href="{{ route('accueil') }}#fonctionnement" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.navigation.fonctionnement') }}</a></li>
+                        <li><a href="{{ route('accueil') }}#tarifs" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.navigation.tarifs') }}</a></li>
                         @auth
                             <li><x-bouton href="{{ route('tableau-de-bord') }}">{{ __('interface.navigation.espace') }}</x-bouton></li>
                         @else
-                            <li><a href="{{ route('login') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.navigation.connexion') }}</a></li>
+                            <li><a href="{{ route('login') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.navigation.connexion') }}</a></li>
                             <li><x-bouton href="{{ route('register') }}">{{ __('interface.navigation.essayer') }}</x-bouton></li>
                         @endauth
                     </ul>
@@ -93,11 +93,11 @@
         <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 pt-7 text-sm text-texte-discret">
             <span>{{ __('interface.pied.droits', ['annee' => now()->year]) }}</span>
             <ul class="flex flex-wrap gap-6">
-                <li><a href="{{ route('tarifs') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.tarifs') }}</a></li>
-                <li><a href="{{ route('questions') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.questions') }}</a></li>
-                <li><a href="{{ route('confidentialite') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.confidentialite') }}</a></li>
-                <li><a href="{{ route('conditions') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.conditions') }}</a></li>
-                <li><a href="{{ route('contact') }}" class="text-texte-secondaire no-underline hover:text-accent">{{ __('interface.pied.contact') }}</a></li>
+                <li><a href="{{ route('tarifs') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.tarifs') }}</a></li>
+                <li><a href="{{ route('questions') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.questions') }}</a></li>
+                <li><a href="{{ route('confidentialite') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.confidentialite') }}</a></li>
+                <li><a href="{{ route('conditions') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.conditions') }}</a></li>
+                <li><a href="{{ route('contact') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.contact') }}</a></li>
             </ul>
         </div>
         <p aria-hidden="true" class="mt-6 overflow-hidden px-4 text-center text-[clamp(120px,24vw,360px)] leading-[0.78] font-bold tracking-[-0.06em] whitespace-nowrap text-transparent [-webkit-text-stroke:1px_var(--color-filet-contour)]">voxia</p>

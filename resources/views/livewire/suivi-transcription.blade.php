@@ -43,6 +43,6 @@
     @endif
 
     <p class="mt-6 text-sm">
-        <a href="{{ route('tableau-de-bord') }}" class="text-accent hover:underline">{{ __('transcriptions.page.nouvelle') }}</a>
+        <a href="{{ route('tableau-de-bord') }}" class="text-accent-texte hover:underline">{{ __('transcriptions.page.nouvelle') }}</a>
     </p>
 </div>

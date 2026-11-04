@@ -32,7 +32,7 @@
 
             <p class="mt-8 text-sm text-texte-discret">
                 {{ __('comptes.inscription.deja') }}
-                <a href="{{ route('login') }}" class="text-texte-secondaire hover:text-accent">{{ __('comptes.connexion.bouton') }}</a>
+                <a href="{{ route('login') }}" class="text-texte-secondaire hover:text-accent-texte">{{ __('comptes.connexion.bouton') }}</a>
             </p>
         </x-panneau>
     </section>

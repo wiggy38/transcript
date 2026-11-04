@@ -8,9 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('utilise le thème Signal pour tous les emails transactionnels', function () {
-    expect(config('mail.markdown.theme'))->toBe('signal')
-        ->and(file_exists(resource_path('views/vendor/mail/html/themes/signal.css')))->toBeTrue();
+it('utilise le thème Surligneur pour tous les emails transactionnels', function () {
+    expect(config('mail.markdown.theme'))->toBe('surligneur')
+        ->and(file_exists(resource_path('views/vendor/mail/html/themes/surligneur.css')))->toBeTrue();
 });
 
 it('rédige l\'email de vérification en français avec le bouton d\'accent', function () {
@@ -22,7 +22,7 @@ it('rédige l\'email de vérification en français avec le bouton d\'accent', fu
     expect($html)
         ->toContain('Vérifie ton adresse')
         ->toContain('Bonjour Ada')
-        ->toContain('#FF6A3D')
+        ->toContain('#E4521F')
         ->toContain('/email/verify/');
 });
 

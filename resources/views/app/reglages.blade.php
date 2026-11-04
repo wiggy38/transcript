@@ -78,7 +78,7 @@
             <p class="mt-2 text-texte-secondaire">{{ __('comptes.reglages.donnees.texte') }}</p>
             @if ($exportDisponible)
                 <p class="mt-4 text-sm text-texte">{{ __('comptes.reglages.donnees.pret') }}
-                    <a href="{{ \Illuminate\Support\Facades\URL::temporarySignedRoute('reglages.donnees.telecharger', now()->addMinutes(config('voxia.donnees.duree_lien_minutes')), ['utilisateur' => $utilisateur->getKey()]) }}" class="text-accent underline-offset-4 hover:underline">{{ __('comptes.reglages.donnees.telecharger') }}</a>
+                    <a href="{{ \Illuminate\Support\Facades\URL::temporarySignedRoute('reglages.donnees.telecharger', now()->addMinutes(config('voxia.donnees.duree_lien_minutes')), ['utilisateur' => $utilisateur->getKey()]) }}" class="text-accent-texte underline-offset-4 hover:underline">{{ __('comptes.reglages.donnees.telecharger') }}</a>
                 </p>
             @endif
             <form method="post" action="{{ route('reglages.donnees.demander') }}" class="mt-6">

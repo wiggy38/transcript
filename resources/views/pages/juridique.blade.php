@@ -7,7 +7,7 @@
 
 <x-layouts::marketing :titre="$titre.' — '.__('interface.marque')">
     <article class="max-w-[760px] pt-20 pb-10">
-        <p role="note" class="rounded-panneau border border-accent bg-panneau px-5 py-4 font-mono text-sm font-medium text-accent">{{ __('pages.brouillon') }}</p>
+        <p role="note" class="rounded-panneau border border-accent bg-panneau px-5 py-4 font-mono text-sm font-medium text-accent-texte">{{ __('pages.brouillon') }}</p>
 
         <h1 class="mt-10 text-4xl font-semibold tracking-[-0.03em]">{{ $titre }}</h1>
         <p class="mt-3 text-sm text-texte-discret">{{ __('pages.maj', ['date' => $remplacements['date']]) }}</p>

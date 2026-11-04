@@ -3,7 +3,7 @@
     <div class="vx-defilement inline-flex gap-12 pl-12">
         @foreach ([1, 2] as $copie)
             @foreach (trans('accueil.bandeau.extraits') as $extrait)
-                <span><span class="text-accent">{{ $extrait['temps'] }}</span>&nbsp;&nbsp;{{ $extrait['texte'] }}</span>
+                <span><span class="text-accent-texte">{{ $extrait['temps'] }}</span>&nbsp;&nbsp;{{ $extrait['texte'] }}</span>
             @endforeach
         @endforeach
     </div>

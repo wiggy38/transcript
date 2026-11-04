@@ -1,4 +1,4 @@
-{{-- Panneau de la charte : fond #121311, filet fin, rayon 10 px. eleve : fond #161715. --}}
+{{-- Panneau de la charte « Surligneur » : fond surface, filet fin, rayon 20 px. eleve : surface élevée. --}}
 @props(['eleve' => false])
 
 <div {{ $attributes->class(['rounded-panneau border border-filet', $eleve ? 'bg-panneau-eleve' : 'bg-panneau']) }}>

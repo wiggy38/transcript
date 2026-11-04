@@ -61,7 +61,7 @@
                         @if ($transcriptionExistante)
                             <p class="text-sm text-texte-secondaire">
                                 {{ __('transcriptions.apercu.deja') }}
-                                <a href="{{ route('transcriptions.show', $transcriptionExistante) }}" class="text-accent hover:underline">{{ __('transcriptions.apercu.voir') }}</a>
+                                <a href="{{ route('transcriptions.show', $transcriptionExistante) }}" class="text-accent-texte hover:underline">{{ __('transcriptions.apercu.voir') }}</a>
                             </p>
                         @endif
 

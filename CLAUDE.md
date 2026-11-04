@@ -29,14 +29,15 @@ En cas de conflit entre documents, le cahier prime. Pour une valeur absente des 
 - Filament pour `/admin`.
 - Paiement : Stripe ou Paddle, à décider (cahier §8).
 
-## 4. Charte Signal (cahier §7)
+## 4. Charte « Surligneur » (cahier §7, remplace Signal)
 
-- Fond `#0E0F0E` ; panneaux `#121311` à `#161715` ; filets `#2A2B28`.
-- Texte `#EDEBE6` ; secondaire `#BDBBB5` ; discret `#8B8A85`.
-- Accent `#FF6A3D` (variantes testées : `#C8F542`, `#6E8BFF`).
-- Typographies : Geist (texte, titres) ; Geist Mono (horodatages, libellés, données) ; Instrument Serif italique (mots d'accent des titres).
-- Rayons : 4 px boutons, 6 px champs, 10 px panneaux.
-- Animations : onde audio, bandeau défilant, frappe du texte ; toutes coupées sous `prefers-reduced-motion`.
+- Clair par défaut : fond `#F4F1EA`, surfaces `#FFFDF8`, surface élevée `#EAE6DB`, filets `#DDD7CA`, contour `#817A6B`. Sombre : fond `#13120F`, surfaces `#1B1A16`.
+- Texte `#1A1814` ; secondaire `#4B463D` ; discret `#655F53` (sombre : `#F2EEE4`, `#C4BEB0`, `#9C9686`).
+- Accent d'action `#E4521F` (sombre `#FF7A4D`), texte encre sur bouton. Surligneur `#DDF37A` (sombre `#3A4419`), mot d'accent `#D7F46A`.
+- Tokens dans `resources/css/voxia-tokens.css`, mappés dans `app.css` (`@theme inline`) ; les classes `bg-fond`, `text-texte`, `border-filet`, `rounded-bouton` restent valides.
+- Typographies : Bricolage Grotesque 700 (titres, mots d'accent surlignés) ; Geist (texte) ; Geist Mono (horodatages, données, casse normale).
+- Rayons : pilule boutons et badges, 12 px champs, 20 px panneaux.
+- Animations : onde audio, progression, apparition mot à mot ; toutes coupées sous `prefers-reduced-motion`.
 
 ## 5. Règles de code
 

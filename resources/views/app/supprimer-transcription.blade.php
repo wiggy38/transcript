@@ -2,7 +2,7 @@
 <x-layouts::app :titre="__('historique.confirmation.titre')" actif="historique">
     <section class="max-w-[640px]">
         <p class="mb-6 text-sm">
-            <a href="{{ route('historique') }}" class="text-texte-secondaire no-underline hover:text-accent">← {{ __('historique.confirmation.retour') }}</a>
+            <a href="{{ route('historique') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">← {{ __('historique.confirmation.retour') }}</a>
         </p>
 
         <x-panneau class="p-6">
@@ -16,7 +16,7 @@
                 @method('DELETE')
 
                 <button type="submit"
-                        class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-bouton border border-erreur px-5 text-[15px] font-semibold text-erreur transition-colors duration-150 hover:bg-erreur hover:text-fond">
+                        class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-bouton border border-erreur px-5 text-[15px] font-semibold text-erreur transition-colors duration-150 hover:bg-erreur hover:text-sur-accent">
                     {{ __('historique.confirmation.bouton') }}
                 </button>
 

@@ -3,7 +3,7 @@
 @props(['statut'])
 @php
     $valeur = $statut instanceof \BackedEnum ? $statut->value : (string) $statut;
-    $encours = ['classe' => 'border-accent text-accent', 'point' => 'bg-accent', 'pulse' => true];
+    $encours = ['classe' => 'border-accent text-accent-texte', 'point' => 'bg-accent', 'pulse' => true];
     $styles = [
         'en_attente' => ['classe' => 'border-filet-contour text-texte-secondaire', 'point' => 'bg-texte-discret', 'pulse' => false],
         'telechargement' => $encours,

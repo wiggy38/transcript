@@ -19,7 +19,7 @@
         </x-panneau>
 
         <p class="text-sm text-texte-secondaire">
-            <a href="{{ route('abonnement') }}" class="text-accent">{{ __('abonnement.paiement.retour') }}</a>
+            <a href="{{ route('abonnement') }}" class="text-accent-texte">{{ __('abonnement.paiement.retour') }}</a>
         </p>
     </div>
 

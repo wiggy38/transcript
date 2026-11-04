@@ -37,7 +37,7 @@
                 <li class="border-y border-filet py-2.5">{{ __('accueil.tarifs.gratuit.lignes.3') }}</li>
             </ul>
 
-            <a href="{{ $connecte ? route('tableau-de-bord') : route('register') }}" class="mt-8 inline-flex min-h-[46px] items-center self-start rounded-bouton border border-filet-contour px-5 font-semibold text-texte no-underline hover:border-accent hover:text-accent">{{ __('accueil.tarifs.gratuit.cta') }}</a>
+            <a href="{{ $connecte ? route('tableau-de-bord') : route('register') }}" class="mt-8 inline-flex min-h-[46px] items-center self-start rounded-bouton border border-filet-contour px-5 font-semibold text-texte no-underline hover:border-accent hover:text-accent-texte">{{ __('accueil.tarifs.gratuit.cta') }}</a>
         </article>
 
         {{-- Pro : bascule mensuel / annuel --}}
@@ -45,7 +45,7 @@
             <span aria-hidden="true" class="absolute inset-x-0 top-0 h-[3px] bg-accent"></span>
 
             <div class="flex flex-wrap items-center justify-between gap-4">
-                <h3 id="plan-pro" class="font-mono text-[13px] font-medium text-accent uppercase">{{ $plans['pro']['label'] }}</h3>
+                <h3 id="plan-pro" class="font-mono text-[13px] font-medium text-accent-texte uppercase">{{ $plans['pro']['label'] }}</h3>
 
                 <div role="group" aria-label="{{ __('accueil.tarifs.pro.periode') }}" class="inline-flex rounded-bouton border border-filet-contour p-0.5 font-mono text-xs">
                     <button type="button" class="min-h-9 cursor-pointer rounded-[3px] px-3 transition-colors"
@@ -79,7 +79,7 @@
 
             <a href="{{ $urlMois }}"
                x-bind:href="periode === 'an' ? '{{ $urlAn }}' : '{{ $urlMois }}'"
-               class="mt-8 inline-flex min-h-[46px] items-center self-start rounded-bouton bg-accent px-5 font-semibold text-fond no-underline hover:opacity-90">{{ __('accueil.tarifs.pro.cta') }}</a>
+               class="mt-8 inline-flex min-h-[46px] items-center self-start rounded-bouton bg-accent px-5 font-semibold text-sur-accent no-underline hover:opacity-90">{{ __('accueil.tarifs.pro.cta') }}</a>
         </article>
 
         {{-- Pack : achat unique --}}
@@ -96,7 +96,7 @@
                 <li class="border-y border-filet py-2.5">{{ __('accueil.tarifs.pack.lignes.3') }}</li>
             </ul>
 
-            <a href="{{ $urlPack }}" class="mt-8 inline-flex min-h-[46px] items-center self-start rounded-bouton border border-filet-contour px-5 font-semibold text-texte no-underline hover:border-accent hover:text-accent">{{ __('accueil.tarifs.pack.cta') }}</a>
+            <a href="{{ $urlPack }}" class="mt-8 inline-flex min-h-[46px] items-center self-start rounded-bouton border border-filet-contour px-5 font-semibold text-texte no-underline hover:border-accent hover:text-accent-texte">{{ __('accueil.tarifs.pack.cta') }}</a>
         </article>
     </div>
 </section>

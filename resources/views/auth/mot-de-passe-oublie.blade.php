@@ -18,7 +18,7 @@
             </form>
 
             <p class="mt-8 text-sm">
-                <a href="{{ route('login') }}" class="text-texte-secondaire hover:text-accent">{{ __('comptes.mot_de_passe.retour') }}</a>
+                <a href="{{ route('login') }}" class="text-texte-secondaire hover:text-accent-texte">{{ __('comptes.mot_de_passe.retour') }}</a>
             </p>
         </x-panneau>
     </section>

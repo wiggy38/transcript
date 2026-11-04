@@ -1,7 +1,7 @@
 {{-- Fiche technique (maquette Signal) : entrées, sorties, horodatage, langues. Valeurs lues dans config/voxia.php. --}}
 @php
     $fichiers = collect(config('voxia.uploads.extensions'))->map(fn ($extension) => strtoupper($extension))->implode(' · ');
-    $sousTitres = '<span class="text-accent">SRT · VTT</span>';
+    $sousTitres = '<span class="text-accent-texte">SRT · VTT</span>';
     $codesLangues = collect(config('voxia.langues_forcables'))->map(fn ($code) => strtoupper($code))->implode(' · ');
 @endphp
 

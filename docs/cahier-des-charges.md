@@ -200,24 +200,33 @@ Les cibles ci-dessous sont des propositions à confirmer après les premiers tes
 | Sécurité | HTTPS partout, mots de passe hachés, limitation du nombre de requêtes, fichiers accessibles par liens signés et temporaires |
 | Données personnelles | Conformité RGPD (cible incluant l'UE) : consentement, export et suppression des données, liste des sous-traitants dont ElevenLabs |
 | Interface | Responsive, utilisable sur mobile ; interface en anglais et en français au lancement (proposition) |
-| Direction visuelle | Maquette « Signal » retenue ; charte et structure en section 7 |
+| Direction visuelle | Direction « Surligneur » retenue (remplace Signal) ; charte et structure en section 7 |
 | Observabilité | Journal de chaque traitement : durée de chaque étape, motif d'échec, plateforme, coût estimé |
 | Accessibilité | Contrastes suffisants, navigation au clavier, lecteur et transcription utilisables au lecteur d'écran |
 
-## 7. Maquette retenue : direction Signal
+## 7. Direction retenue : « Surligneur »
 
-La page d'accueil du MVP suit la maquette « Signal » (https://claude.ai/artifact/5VGaCUHRuvJDRZj7CJpgwv). Les écrans de l'application (inscription, tableau de bord, transcription, historique, paiement) reprennent sa charte et ses composants, mais restent à maquetter.
+La direction « Surligneur » (Claude Design, proposition 3) remplace la maquette « Signal », dont la charte n'est plus appliquée. Elle est épurée, vivante et professionnelle : papier clair par défaut, encre presque noire, un surligneur jaune-vert qui marque la phrase lue, les mots d'accent et le focus, et un orange plus profond pour les actions. Source : `docs/Voxia Direction 3 - Surligneur.dc.html` (tokens, composants et animations). Les écrans de l'application reprennent cette charte et ses composants.
 
 **Charte**
 
-| Élément | Valeur |
+| Élément | Valeur (clair · sombre) |
 | --- | --- |
-| Fond | #0E0F0E ; panneaux #121311 à #161715 ; filets #2A2B28 |
-| Texte | principal #EDEBE6 ; secondaire #BDBBB5 ; discret #8B8A85 |
-| Accent | #FF6A3D (variantes testées : #C8F542, #6E8BFF) |
-| Typographies | Geist pour le texte et les titres ; Geist Mono pour horodatages, libellés et données ; Instrument Serif italique pour les mots d'accent des titres |
-| Rayons | 4 px boutons, 6 px champs, 10 px panneaux |
-| Animations | onde audio, bandeau défilant, frappe du texte ; toutes coupées quand l'utilisateur réduit les animations |
+| Fond | #F4F1EA · #13120F |
+| Surfaces | #FFFDF8 · #1B1A16 ; surface élevée #EAE6DB · #24231E |
+| Filets | décoratif #DDD7CA · #34322B ; contour de champ ou de bouton #817A6B · #77725F (3:1 minimum) |
+| Texte | principal #1A1814 · #F2EEE4 ; secondaire #4B463D · #C4BEB0 ; discret #655F53 · #9C9686 (4,5:1 minimum) |
+| Accent d'action | #E4521F · #FF7A4D, avec texte encre #1A1814 · #13120F sur bouton ; texte d'accent #B23A0E · #FF8A5C |
+| Surligneur | #DDF37A (surlignage de lecture) · #3A4419 ; mot d'accent #D7F46A sur encre #1A1814 (14,4:1) |
+| États | succès #1D7444 · #5DD394 ; avertissement #875700 · #F0B64A ; erreur #BA2530 · #FF8077 |
+| Focus | #1A1814 · #D7F46A |
+| Typographies | Bricolage Grotesque 700 pour les titres et les mots d'accent (surlignés, sans changement de police) ; Geist 400 et 500 pour le texte ; Geist Mono pour horodatages, durées et données, en casse normale |
+| Rayons | pilule (999 px) boutons et badges ; 12 px champs ; 20 px panneaux |
+| Icônes | Phosphor (MIT), graisse Regular, 22 px ; Duotone pour les états vides |
+| Thème | clair par défaut ; sombre en option ; suit `prefers-color-scheme` en repli |
+| Animations | onde audio (1,6 s), progression (déterminée pour l'envoi, indéterminée pour les étapes), apparition mot à mot sur l'accueil ; toutes coupées quand l'utilisateur réduit les animations |
+
+Anciennes valeurs (Signal, §7 de la version précédente) : fond #0E0F0E, accent #FF6A3D, Instrument Serif, rayons 4-6-10 px. Elles ne sont plus utilisées.
 
 **Structure de la page d'accueil**
 

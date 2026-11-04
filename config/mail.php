@@ -120,12 +120,12 @@ return [
     | Markdown Mail Settings
     |--------------------------------------------------------------------------
     |
-    | Emails transactionnels sobres, au style Signal (resources/views/vendor/mail/html/themes/signal.css).
+    | Emails transactionnels sobres, au style Surligneur (resources/views/vendor/mail/html/themes/surligneur.css).
     |
     */
 
     'markdown' => [
-        'theme' => 'signal',
+        'theme' => 'surligneur',
         'paths' => [
             resource_path('views/vendor/mail'),
         ],

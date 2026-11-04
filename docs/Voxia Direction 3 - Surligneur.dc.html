@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap">
+<style>
+/* TOKENS */
+:root, [data-theme="light"] {
+  --vx-bg: #F4F1EA;
+  --vx-surface: #FFFDF8;
+  --vx-surface-2: #EAE6DB;
+  --vx-line: #DDD7CA;
+  --vx-line-strong: #817A6B;
+  --vx-text: #1A1814;
+  --vx-text-2: #4B463D;
+  --vx-text-3: #655F53;
+  --vx-accent: #E4521F;
+  --vx-on-accent: #1A1814;
+  --vx-accent-text: #B23A0E;
+  --vx-mark: #DDF37A;
+  --vx-mark-text: #1A1814;
+  --vx-success: #1D7444;
+  --vx-warning: #875700;
+  --vx-error: #BA2530;
+  --vx-focus: #1A1814;
+  --vx-live: #E4521F;
+  --vx-wave-idle: #CFC8B8;
+  --vx-accent-word: #1A1814;
+  --vx-mark-time: #1A1814;
+  --vx-accent-word-bg: #D7F46A;
+  --vx-shadow: 0 1px 0 rgb(26 24 20 / 0.04), 0 12px 32px -16px rgb(26 24 20 / 0.22);
+}
+[data-theme="dark"] {
+  --vx-bg: #13120F;
+  --vx-surface: #1B1A16;
+  --vx-surface-2: #24231E;
+  --vx-line: #34322B;
+  --vx-line-strong: #77725F;
+  --vx-text: #F2EEE4;
+  --vx-text-2: #C4BEB0;
+  --vx-text-3: #9C9686;
+  --vx-accent: #FF7A4D;
+  --vx-on-accent: #13120F;
+  --vx-accent-text: #FF8A5C;
+  --vx-mark: #3A4419;
+  --vx-mark-text: #F2EEE4;
+  --vx-success: #5DD394;
+  --vx-warning: #F0B64A;
+  --vx-error: #FF8077;
+  --vx-focus: #D7F46A;
+  --vx-live: #FF7A4D;
+  --vx-wave-idle: #45423A;
+  --vx-accent-word: #1A1814;
+  --vx-accent-word-bg: #D7F46A;
+  --vx-mark-time: #D7F46A;
+  --vx-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.7);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) { color-scheme: dark; }
+}
+:root {
+  --vx-font-text: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --vx-font-title: "Bricolage Grotesque", "Geist", ui-sans-serif, sans-serif;
+  --vx-font-data: "Geist Mono", ui-monospace, monospace;
+  --vx-font-accent: "Bricolage Grotesque", "Geist", sans-serif;
+  --vx-title-weight: 700;
+  --vx-title-track: -0.035em;
+  --vx-accent-style: normal;
+  --vx-accent-weight: 700;
+  --vx-accent-word-pad: 0 0.12em;
+  --vx-label-transform: none;
+  --vx-label-track: 0;
+  --vx-r-btn: 999px;
+  --vx-r-field: 12px;
+  --vx-r-panel: 20px;
+  --vx-r-badge: 999px;
+  --vx-badge-tint: 16%;
+  --vx-badge-border: 0%;
+  --vx-corner: none;
+  --vx-icon-stroke: 1.5;
+  --vx-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --vx-pattern: none;
+  --vx-pattern-size: auto;
+}
+/* FIN TOKENS */
+html, body { margin: 0; }
+body { -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+a { color: var(--vx-accent-text); text-underline-offset: 3px; }
+a:hover { color: var(--vx-text); }
+:focus-visible { outline: 2px solid var(--vx-focus); outline-offset: 2px; }
+@keyframes vx-onde { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+@keyframes vx-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes vx-indet { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+@keyframes vx-fill { 0% { width: 6%; } 80%, 100% { width: 72%; } }
+@keyframes vx-word { 0% { opacity: 0; transform: translateY(5px); } 8%, 90% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes vx-caret { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+[data-motion="off"] *, [data-motion="off"] *::before, [data-motion="off"] *::after { animation: none !important; transition: none !important; }
+</style>
+</helmet>
+
+<div data-theme="{{ theme }}" data-motion="{{ motion }}" style="min-height: 100vh; background: var(--vx-bg); color: var(--vx-text); font-family: var(--vx-font-text); font-size: 16px; line-height: 1.6;">
+
+  <nav aria-label="Livrables de la refonte" style="border-bottom: 1px solid var(--vx-line); background: var(--vx-surface);">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; font-family: var(--vx-font-data); font-size: 13px;">
+      <span style="font-weight: 500; color: var(--vx-text);">Voxia · Refonte</span>
+      <a href="Voxia Audit.dc.html" style="color: var(--vx-text-2);">Audit</a>
+      <a href="Voxia Direction 1 - Signal.dc.html" style="color: var(--vx-text-2);">1 · Signal affiné</a>
+      <a href="Voxia Direction 2 - Studio.dc.html" style="color: var(--vx-text-2);">2 · Studio</a>
+      <a href="Voxia Direction 3 - Surligneur.dc.html" style="color: var(--vx-text-2);">3 · Surligneur</a>
+      <a href="Voxia Recommandation.dc.html" style="color: var(--vx-text-2);">Recommandation</a>
+    </div>
+  </nav>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 0 16px 120px;">
+
+    <header style="padding: 72px 0 48px; display: grid; gap: 28px;">
+      <p style="margin: 0; font-family: var(--vx-font-data); font-size: 13px; color: var(--vx-accent-text); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">{{ d.kicker }}</p>
+      <h1 style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: clamp(44px, 7vw, 96px); line-height: 0.98; letter-spacing: var(--vx-title-track); max-width: 14ch; text-wrap: balance;">{{ d.titre }} <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{ d.titreAccent }}</span></h1>
+      <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; justify-content: space-between;">
+        <p style="margin: 0; max-width: 38em; font-size: 19px; color: var(--vx-text-2); text-wrap: pretty;">{{ d.these }}</p>
+        <div style="display: grid; gap: 8px; min-width: 220px;">
+          <span style="font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Écart avec Signal</span>
+          <div role="img" aria-label="{{ d.ecartLabel }}" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
+            <sc-for list="{{ ecart }}" as="e" hint-placeholder-count="3">
+              <span style="height: 8px; border-radius: 2px; background: {{ e.c }};"></span>
+            </sc-for>
+          </div>
+          <span style="font-family: var(--vx-font-data); font-size: 13px; color: var(--vx-text-2);">{{ d.ecartLabel }}</span>
+        </div>
+      </div>
+    </header>
+
+    <section aria-labelledby="t-change" style="border-top: 1px solid var(--vx-line); padding-top: 32px;">
+      <h2 id="t-change" style="margin: 0 0 24px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Ce qui change par rapport à Signal</h2>
+      <div style="display: grid; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); overflow: hidden; background: var(--vx-surface);">
+        <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 1.3fr) minmax(0, 2fr); gap: 16px; padding: 12px 20px; background: var(--vx-surface-2); font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">
+          <span>Élément</span><span>Signal</span><span>Proposé</span><span>Pourquoi</span>
+        </div>
+        <sc-for list="{{ d.changes }}" as="c" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 1.3fr) minmax(0, 2fr); gap: 16px; padding: 14px 20px; border-top: 1px solid var(--vx-line); font-size: 14px; line-height: 1.5;">
+            <span style="font-weight: 600;">{{ c.quoi }}</span>
+            <span style="color: var(--vx-text-3); font-family: var(--vx-font-data); font-size: 13px; overflow-wrap: anywhere;">{{ c.avant }}</span>
+            <span style="font-family: var(--vx-font-data); font-size: 13px; overflow-wrap: anywhere;">{{ c.apres }}</span>
+            <span style="color: var(--vx-text-2);">{{ c.pourquoi }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-palette" style="margin-top: 96px;">
+      <h2 id="t-palette" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Palette</h2>
+      <p style="margin: 0 0 28px; color: var(--vx-text-2); max-width: 44em;">Ratios calculés en direct depuis les variables CSS, contre le fond et contre la surface 2 (le cas le plus défavorable). Texte : 4,5:1 minimum. Filet de contour : 3:1 minimum (élément d'interface).</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 24px;">
+        <sc-for list="{{ themes }}" as="th" hint-placeholder-count="2">
+          <div data-theme="{{ th.t }}" data-pal="{{ th.t }}" style="background: var(--vx-bg); color: var(--vx-text); border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); padding: 20px;">
+            <p style="margin: 0 0 16px; font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">{{ th.label }}</p>
+            <div style="display: grid; gap: 2px;">
+              <sc-for list="{{ th.swatches }}" as="s" hint-placeholder-count="15">
+                <div style="display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--vx-line);">
+                  <span style="width: 40px; height: 28px; border-radius: 4px; background: var({{ s.v }}); border: 1px solid var(--vx-line);"></span>
+                  <span style="min-width: 0; display: grid; line-height: 1.3;">
+                    <span style="font-size: 14px;">{{ s.nom }}</span>
+                    <span style="font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); overflow-wrap: anywhere;">{{ s.v }} · {{ s.hex }}</span>
+                  </span>
+                  <span style="font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-2); text-align: right;">{{ s.ratio }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-type" style="margin-top: 96px;">
+      <h2 id="t-type" style="margin: 0 0 28px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Typographie</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: start;">
+        <div style="display: grid; gap: 20px; padding: 28px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); box-shadow: var(--vx-shadow);">
+          <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 56px; line-height: 1; letter-spacing: var(--vx-title-track);">Du lien <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em;">au texte.</span></p>
+          <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 28px; line-height: 1.15; letter-spacing: -0.02em;">Vlog #34 — Mon atelier de céramique</p>
+          <p style="margin: 0; font-size: 16px; color: var(--vx-text-2); max-width: 34em;">Colle un lien YouTube ou TikTok, ou dépose ton fichier. Tu récupères la transcription horodatée, les sous-titres et l'audio.</p>
+          <p style="margin: 0; font-size: 14px; color: var(--vx-text-3);">Le statut se met à jour tout seul.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 16px; font-family: var(--vx-font-data); font-size: 13px; font-variant-numeric: tabular-nums;">
+            <span style="color: var(--vx-accent-text);">00:13</span><span style="color: var(--vx-text-3);">01:02:47</span><span style="color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">YouTube · 12:03 · FR</span>
+          </div>
+        </div>
+        <div style="display: grid; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); overflow: hidden; background: var(--vx-surface);">
+          <sc-for list="{{ d.type }}" as="r" hint-placeholder-count="4">
+            <div style="display: grid; gap: 2px; padding: 14px 20px; border-bottom: 1px solid var(--vx-line);">
+              <span style="font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">{{ r.role }}</span>
+              <span style="font-weight: 600;">{{ r.police }}</span>
+              <span style="font-size: 14px; color: var(--vx-text-2);">{{ r.usage }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-icones" style="margin-top: 96px;">
+      <h2 id="t-icones" style="margin: 0 0 28px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Icônes et illustrations</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px;">
+        <div style="padding: 24px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; color: var(--vx-text);">
+            <span title="Lien" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"></path><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"></path></svg></span>
+            <span title="Fichier" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg></span>
+            <span title="Lecture" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"></path></svg></span>
+            <span title="Recherche" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+            <span title="Copier" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg></span>
+            <span title="Télécharger" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg></span>
+            <span title="Terminé" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field); color: var(--vx-success);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8 12.5 2.5 2.5L16 9.5"></path></svg></span>
+            <span title="Erreur" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field); color: var(--vx-error);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5h.01"></path></svg></span>
+            <span title="Verrouillé" style="display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-field); color: var(--vx-text-3);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"></path></svg></span>
+          </div>
+          <p style="margin: 16px 0 0; font-size: 14px; color: var(--vx-text-2);">{{ d.icones }}</p>
+        </div>
+        <div style="padding: 24px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); display: grid; gap: 12px; align-content: start;">
+          <p style="margin: 0; font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Illustration</p>
+          <sc-for list="{{ d.illus }}" as="il" hint-placeholder-count="3">
+            <p style="margin: 0; font-size: 15px; color: var(--vx-text-2); padding-left: 14px; border-left: 2px solid var(--vx-line);">{{ il }}</p>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-compo" style="margin-top: 96px;">
+      <h2 id="t-compo" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Composants clés</h2>
+      <p style="margin: 0 0 28px; color: var(--vx-text-2); max-width: 44em;">Mêmes composants, mêmes jetons, dans les deux thèmes. Les libellés anglais sont affichés à côté des libellés français pour vérifier la tenue des textes longs.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr)); gap: 24px;">
+        <sc-for list="{{ themes }}" as="th" hint-placeholder-count="2">
+          <div data-theme="{{ th.t }}" style="background: var(--vx-bg); color: var(--vx-text); border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); padding: 24px; display: grid; gap: 32px; min-width: 0;">
+            <p style="margin: 0; font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">{{ th.label }}</p>
+
+            <div style="display: grid; gap: 12px;">
+              <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Boutons</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                <button type="button" style="min-height: 44px; padding: 0 20px; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-accent); color: var(--vx-on-accent); font: 600 15px var(--vx-font-text); cursor: pointer;" style-hover="filter: brightness(1.08);">Transcrire →</button>
+                <button type="button" style="min-height: 44px; padding: 0 20px; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-text); color: var(--vx-bg); font: 600 15px var(--vx-font-text); cursor: pointer;">Lancer la transcription</button>
+                <button type="button" style="min-height: 44px; padding: 0 20px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 600 15px var(--vx-font-text); cursor: pointer;" style-hover="border-color: var(--vx-accent-text); color: var(--vx-accent-text);">Parcourir</button>
+                <button type="button" disabled style="min-height: 44px; padding: 0 20px; border: 1px dashed var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text-3); font: 600 15px var(--vx-font-text); cursor: not-allowed;">Désactivé</button>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+                <button type="button" style="min-height: 44px; padding: 0 20px; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-accent); color: var(--vx-on-accent); font: 600 15px var(--vx-font-text); outline: 2px solid var(--vx-focus); outline-offset: 3px;">Focus visible</button>
+                <button type="button" style="min-height: 44px; padding: 0 20px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 600 15px var(--vx-font-text); white-space: nowrap;">Start transcribing the file</button>
+              </div>
+            </div>
+
+            <div style="display: grid; gap: 16px;">
+              <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Champs</p>
+              <div style="display: grid; gap: 8px;">
+                <label for="lien-{{ th.t }}" style="font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-2); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Lien YouTube ou TikTok</label>
+                <input id="lien-{{ th.t }}" type="url" placeholder="https://" value="https://youtube.com/watch?v=…" aria-describedby="aide-{{ th.t }}" style="min-height: 44px; width: 100%; min-width: 0; padding: 0 14px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-field); background: var(--vx-surface); color: var(--vx-text); font: 14px var(--vx-font-data);">
+                <p id="aide-{{ th.t }}" style="margin: 0; font-size: 14px; color: var(--vx-text-3);">Une vidéo publique suffit.</p>
+              </div>
+              <div style="display: grid; gap: 8px;">
+                <label for="err-{{ th.t }}" style="font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-2); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Video link</label>
+                <input id="err-{{ th.t }}" type="url" value="https://youtube.com/watch?v=prive" aria-invalid="true" aria-describedby="errm-{{ th.t }}" style="min-height: 44px; width: 100%; min-width: 0; padding: 0 14px; border: 1.5px solid var(--vx-error); border-radius: var(--vx-r-field); background: var(--vx-surface); color: var(--vx-text); font: 14px var(--vx-font-data);">
+                <p id="errm-{{ th.t }}" style="margin: 0; display: flex; gap: 8px; align-items: flex-start; font-size: 14px; color: var(--vx-error);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5h.01"></path></svg>Cette vidéo est privée. Aucun décompte n'a été fait.</p>
+              </div>
+            </div>
+
+            <div style="display: grid; gap: 12px;">
+              <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Badges de statut (libellé toujours affiché)</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                <sc-for list="{{ statuts }}" as="b" hint-placeholder-count="5">
+                  <span style="display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: var(--vx-r-badge); white-space: nowrap; color: {{ b.c }}; background: color-mix(in oklab, currentColor var(--vx-badge-tint), transparent); border: 1px solid color-mix(in oklab, currentColor var(--vx-badge-border), transparent); font: 500 12px var(--vx-font-data);">
+                    <span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: {{ b.anim }};"></span>{{ b.label }}
+                  </span>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display: grid; gap: 12px;">
+              <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Carte (historique)</p>
+              <div style="position: relative; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 14px; align-items: center; padding: 14px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); box-shadow: var(--vx-shadow);">
+                <span aria-hidden="true" style="display: grid; place-items: center; height: 50px; border-radius: var(--vx-r-field); background: var(--vx-surface-2); border: 1px solid var(--vx-line); font: 12px var(--vx-font-data); color: var(--vx-text-3);">YT</span>
+                <div style="min-width: 0; display: grid; gap: 6px;">
+                  <a href="#" style="color: var(--vx-text); font-weight: 600; text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Vlog #34 — Mon atelier de céramique</a>
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font: 12px var(--vx-font-data); color: var(--vx-text-3);">
+                    <span>YouTube</span><span>12:03</span><span>04/11/2026 14:12</span>
+                    <span style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: var(--vx-r-badge); white-space: nowrap; color: var(--vx-success); background: color-mix(in oklab, currentColor var(--vx-badge-tint), transparent); border: 1px solid color-mix(in oklab, currentColor var(--vx-badge-border), transparent);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>Terminé</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; gap: 12px;">
+              <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Lecteur audio (fichier importé)</p>
+              <div style="display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: center; padding: 14px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+                <button type="button" aria-label="Lecture" style="width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-accent); color: var(--vx-on-accent); cursor: pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"></path></svg></button>
+                <div style="min-width: 0; display: grid; gap: 6px;">
+                  <div aria-hidden="true" style="height: 32px; display: flex; align-items: center; gap: 2px;">
+                    <sc-for list="{{ barsSmall }}" as="b" hint-placeholder-count="40">
+                      <span style="flex: 1 1 0; min-width: 1px; height: {{ b.h }}; border-radius: 1px; background: {{ b.c }};"></span>
+                    </sc-for>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font: 12px var(--vx-font-data); font-variant-numeric: tabular-nums; color: var(--vx-text-2);"><span>04:12</span><span style="color: var(--vx-text-3);">12:03</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: grid; gap: 12px;">
+              <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Horodatages (boutons « Lire à partir de… »)</p>
+              <ol style="margin: 0; padding: 0; list-style: none; display: grid; gap: 2px;">
+                <sc-for list="{{ lignes3 }}" as="l" hint-placeholder-count="3">
+                  <li style="display: flex; gap: 14px; padding: 10px 12px; border-radius: var(--vx-r-field); background: {{ l.bg }};">
+                    <button type="button" aria-label="Lire à partir de {{ l.t }}" style="flex-shrink: 0; min-height: 28px; padding: 0 6px; border: 0; border-radius: 3px; background: transparent; color: {{ l.tc }}; font: 500 13px var(--vx-font-data); font-variant-numeric: tabular-nums; cursor: pointer;">{{ l.t }}</button>
+                    <p style="margin: 0; color: {{ l.c }}; font-weight: {{ l.w }}; font-size: 15px;">{{ l.texte }}</p>
+                  </li>
+                </sc-for>
+              </ol>
+            </div>
+
+            <div style="display: grid; gap: 14px;">
+              <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Bandeau de progression</p>
+              <div style="display: grid; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; font: 12px var(--vx-font-data); color: var(--vx-text-2);"><span>Envoi : 64 %</span><span style="color: var(--vx-text-3);">atelier-ceramique.mp4</span></div>
+                <div role="progressbar" aria-label="Envoi du fichier" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64" style="height: 6px; border-radius: 999px; background: var(--vx-surface-2); overflow: hidden; border: 1px solid var(--vx-line);"><div style="width: 64%; height: 100%; background: var(--vx-accent); border-radius: 999px;"></div></div>
+              </div>
+              <ol aria-label="Étapes du traitement" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+                <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-success);"></span><span style="font: 12px var(--vx-font-data); color: var(--vx-text-2);">Téléchargement</span></li>
+                <li aria-current="step" style="display: grid; gap: 6px;"><span style="position: relative; height: 4px; border-radius: 2px; background: var(--vx-surface-2); overflow: hidden;"><span style="position: absolute; inset: 0; width: 40%; background: var(--vx-accent); border-radius: 2px; animation: vx-indet 1.6s var(--vx-ease) infinite;"></span></span><span style="font: 500 12px var(--vx-font-data); color: var(--vx-accent-text);">Transcription</span></li>
+                <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-surface-2); border: 1px solid var(--vx-line);"></span><span style="font: 12px var(--vx-font-data); color: var(--vx-text-3);">Terminé</span></li>
+              </ol>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-anim" style="margin-top: 96px;">
+      <div style="display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: baseline; justify-content: space-between; margin-bottom: 28px;">
+        <h2 id="t-anim" style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Micro-animations</h2>
+        <button type="button" onClick="{{ toggleMotion }}" aria-pressed="{{ motionOff }}" style="min-height: 44px; padding: 0 16px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 13px var(--vx-font-data); cursor: pointer; white-space: nowrap;">{{ motionLabel }}</button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px;">
+        <div style="display: grid; gap: 16px; align-content: start; padding: 24px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <p style="margin: 0; font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Onde audio</p>
+          <div aria-hidden="true" style="height: 96px; display: flex; align-items: center; gap: 3px;">
+            <sc-for list="{{ bars }}" as="b" hint-placeholder-count="48">
+              <span style="flex: 1 1 0; min-width: 1px; height: {{ b.h }}; border-radius: 2px; background: {{ b.c }}; transform-origin: center; animation: vx-onde 1.6s ease-in-out infinite; animation-delay: {{ b.d }};"></span>
+            </sc-for>
+          </div>
+          <p style="margin: 0; font-size: 14px; color: var(--vx-text-2);">{{ d.animOnde }}</p>
+        </div>
+        <div style="display: grid; gap: 16px; align-content: start; padding: 24px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <p style="margin: 0; font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Progression</p>
+          <div style="display: grid; gap: 18px; padding: 12px 0;">
+            <div style="height: 6px; border-radius: 999px; background: var(--vx-surface-2); overflow: hidden;"><div style="height: 100%; width: 72%; background: var(--vx-accent); border-radius: 999px; animation: vx-fill 3.2s var(--vx-ease) infinite;"></div></div>
+            <div style="position: relative; height: 6px; border-radius: 999px; background: var(--vx-surface-2); overflow: hidden;"><div style="position: absolute; inset: 0; width: 40%; background: var(--vx-accent); border-radius: 999px; animation: vx-indet 1.6s var(--vx-ease) infinite;"></div></div>
+            <div style="display: flex; align-items: center; gap: 10px; font: 13px var(--vx-font-data); color: var(--vx-text-2);"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: var(--vx-live); animation: vx-pulse 1.6s ease-in-out infinite;"></span>Transcription</div>
+          </div>
+          <p style="margin: 0; font-size: 14px; color: var(--vx-text-2);">{{ d.animProg }}</p>
+        </div>
+        <div style="display: grid; gap: 16px; align-content: start; padding: 24px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <p style="margin: 0; font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Apparition du texte</p>
+          <div style="display: flex; gap: 14px; padding: 12px; border-radius: var(--vx-r-field); background: var(--vx-mark); min-height: 96px;">
+            <span style="flex-shrink: 0; font: 500 13px var(--vx-font-data); color: var(--vx-mark-time, var(--vx-accent-text)); padding-top: 2px;">00:13</span>
+            <p style="margin: 0; color: var(--vx-mark-text); font-weight: 500;">
+              <sc-for list="{{ mots }}" as="m" hint-placeholder-count="12"><span style="display: inline-block; margin-right: 0.28em; animation: vx-word 6s var(--vx-ease) infinite; animation-delay: {{ m.d }};">{{ m.w }}</span></sc-for><span aria-hidden="true" style="display: inline-block; width: 2px; height: 1.05em; vertical-align: -3px; background: var(--vx-accent); animation: vx-caret 1s steps(1) infinite;"></span>
+            </p>
+          </div>
+          <p style="margin: 0; font-size: 14px; color: var(--vx-text-2);">{{ d.animTexte }}</p>
+        </div>
+      </div>
+      <p style="margin: 20px 0 0; font-size: 14px; color: var(--vx-text-3); max-width: 52em;">Sous <span style="font-family: var(--vx-font-data);">prefers-reduced-motion: reduce</span>, une règle globale coupe animations et transitions : l'onde reste figée à sa forme, la barre indéterminée devient un segment fixe, le texte s'affiche en entier et le curseur ne clignote plus. Le bouton ci-dessus simule ce réglage.</p>
+    </section>
+
+    <section aria-labelledby="t-ecrans" style="margin-top: 96px;">
+      <h2 id="t-ecrans" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Accueil</h2>
+      <p style="margin: 0 0 28px; color: var(--vx-text-2);">Desktop en {{ themeMain }}, mobile (375 px, marges de 16 px) en {{ themeAlt }}. Prix et quotas en valeurs provisoires.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start;">
+
+        <div data-theme="{{ theme }}" style="flex: 1 1 640px; min-width: 0; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); overflow: hidden; background: var(--vx-bg); color: var(--vx-text); box-shadow: var(--vx-shadow);">
+          <div style="background-image: var(--vx-pattern); background-size: var(--vx-pattern-size); border-bottom: 1px solid var(--vx-line);">
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; padding: 18px 28px;">
+              <a href="#" style="display: inline-flex; align-items: center; gap: 10px; color: var(--vx-text); text-decoration: none; font-weight: 600; font-size: 19px; letter-spacing: -0.02em;"><svg width="22" height="18" viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="6" width="3" height="6" fill="var(--vx-accent)"></rect><rect x="5" y="2" width="3" height="14" fill="currentColor"></rect><rect x="10" y="0" width="3" height="18" fill="currentColor"></rect><rect x="15" y="4" width="3" height="10" fill="currentColor"></rect><rect x="20" y="7" width="2" height="4" fill="currentColor"></rect></svg>Voxia</a>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; font-size: 14px;">
+                <a href="#" style="color: var(--vx-text-2); text-decoration: none;">Usages</a>
+                <a href="#" style="color: var(--vx-text-2); text-decoration: none;">Fonctionnement</a>
+                <a href="#" style="color: var(--vx-text-2); text-decoration: none;">Tarifs</a>
+                <a href="#" style="color: var(--vx-text-2); text-decoration: none;">Se connecter</a>
+                <a href="#" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--vx-r-btn); background: var(--vx-accent); color: var(--vx-on-accent); font-weight: 600; text-decoration: none;">Essayer gratuitement</a>
+                <span style="font: 12px var(--vx-font-data); color: var(--vx-text-2); border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-field); padding: 6px 10px; white-space: nowrap;">FR ▾</span>
+              </div>
+            </div>
+            <div style="padding: 56px 28px 0;">
+              <p style="margin: 0 0 24px; display: inline-flex; align-items: center; gap: 10px; padding: 6px 12px; border: 1px solid var(--vx-line); border-radius: 999px; background: var(--vx-bg); white-space: nowrap; font: 12px var(--vx-font-data); color: var(--vx-text-2);"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: var(--vx-live); animation: vx-pulse 1.6s ease-in-out infinite;"></span>Vidéo → texte, en une ou deux minutes</p>
+              <h3 style="margin: 0; max-width: 15ch; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: clamp(40px, 5.4vw, 72px); line-height: 0.98; letter-spacing: var(--vx-title-track); text-wrap: balance;">Chaque vidéo contient un texte. <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em; -webkit-box-decoration-break: clone; box-decoration-break: clone;">Voxia te l'écrit.</span></h3>
+              <div style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-end; justify-content: space-between;">
+                <p style="margin: 0; flex: 1 1 280px; max-width: 30em; font-size: 17px; color: var(--vx-text-2);">Colle un lien YouTube ou TikTok, ou dépose ton fichier. Tu récupères la transcription horodatée, les sous-titres et l'audio, rangés dans ta bibliothèque.</p>
+                <form onSubmit="{{ noop }}" style="flex: 1 1 380px; max-width: 520px; display: grid; gap: 8px;">
+                  <label for="hero-lien" style="font: 12px var(--vx-font-data); color: var(--vx-text-2); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Lien de la vidéo</label>
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px; padding: 5px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-field); background: var(--vx-surface);">
+                    <input id="hero-lien" type="url" placeholder="https://youtube.com/watch?v=…" style="flex: 1 1 200px; min-width: 0; min-height: 44px; padding: 0 12px; border: 0; background: transparent; color: var(--vx-text); font: 14px var(--vx-font-data);">
+                    <button type="submit" style="min-height: 44px; padding: 0 18px; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-text); color: var(--vx-bg); font: 600 15px var(--vx-font-text); cursor: pointer;">Transcrire →</button>
+                  </div>
+                  <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Ou <a href="#">dépose un fichier</a>. Formats acceptés : MP3, M4A, WAV, MP4, MOV, WEBM. Gratuit pour commencer.</p>
+                </form>
+              </div>
+              <div style="position: relative; margin-top: 48px; border: 1px solid var(--vx-line); border-bottom: 0; border-radius: var(--vx-r-panel) var(--vx-r-panel) 0 0; background: var(--vx-surface);">
+                <span aria-hidden="true" style="display: var(--vx-corner); position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border-top: 2px solid var(--vx-accent); border-left: 2px solid var(--vx-accent); border-top-left-radius: var(--vx-r-panel);"></span>
+                <span aria-hidden="true" style="display: var(--vx-corner); position: absolute; top: -1px; right: -1px; width: 14px; height: 14px; border-top: 2px solid var(--vx-accent); border-right: 2px solid var(--vx-accent); border-top-right-radius: var(--vx-r-panel);"></span>
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 12px 20px; border-bottom: 1px solid var(--vx-line); font: 12px var(--vx-font-data); color: var(--vx-text-3);"><span style="color: var(--vx-text);">Vlog #34 — Mon atelier de céramique</span><span style="text-transform: var(--vx-label-transform);">YouTube · 12:03 · FR · 1 842 mots</span></div>
+                <div style="display: flex; flex-wrap: wrap;">
+                  <div style="flex: 1 1 300px; min-width: 0; padding: 28px 24px;">
+                    <div aria-hidden="true" style="position: relative; height: 140px; display: flex; align-items: center; gap: 2px;">
+                      <sc-for list="{{ bars }}" as="b" hint-placeholder-count="48">
+                        <span style="flex: 1 1 0; min-width: 1px; height: {{ b.h }}; border-radius: 2px; background: {{ b.c }}; transform-origin: center; animation: vx-onde 1.6s ease-in-out infinite; animation-delay: {{ b.d }};"></span>
+                      </sc-for>
+                      <span style="position: absolute; top: -10px; bottom: -10px; left: 40%; width: 1px; background: var(--vx-accent);"></span>
+                      <span style="position: absolute; top: -32px; left: 40%; transform: translateX(-50%); padding: 1px 8px; border-radius: 3px; background: var(--vx-accent); color: var(--vx-on-accent); font: 500 11px var(--vx-font-data);">00:13</span>
+                    </div>
+                  </div>
+                  <div style="flex: 1 1 300px; min-width: 0; padding: 20px 24px; border-left: 1px solid var(--vx-line);">
+                    <sc-for list="{{ lignes }}" as="l" hint-placeholder-count="4">
+                      <div style="display: flex; gap: 14px; padding: 8px 10px; border-radius: var(--vx-r-field); background: {{ l.bg }};">
+                        <span style="flex-shrink: 0; width: 42px; padding-top: 2px; font: 12px var(--vx-font-data); color: {{ l.tc }};">{{ l.t }}</span>
+                        <p style="margin: 0; font-size: 15px; color: {{ l.c }}; font-weight: {{ l.w }};">{{ l.texte }}</p>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 48px 28px;">
+            <p style="margin: 0 0 20px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 36px; letter-spacing: -0.03em;">Tarifs</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+              <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+                <div style="position: relative; display: grid; gap: 12px; align-content: start; padding: 20px; border: 1px solid {{ p.bord }}; border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+                  <span style="font: 500 12px var(--vx-font-data); color: {{ p.tc }}; text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">{{ p.nom }}</span>
+                  <span style="font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 36px; line-height: 1; letter-spacing: -0.03em;">[prix]<span style="font: 400 13px var(--vx-font-text); color: var(--vx-text-3); letter-spacing: 0;"> {{ p.suffixe }}</span></span>
+                  <span style="font-size: 14px; color: var(--vx-text-2);">{{ p.ligne }}</span>
+                  <span style="display: inline-flex; justify-self: start; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--vx-r-btn); background: {{ p.bbg }}; color: {{ p.bfg }}; border: 1px solid {{ p.bb }}; font-weight: 600; font-size: 14px; white-space: nowrap;">{{ p.cta }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div data-theme="{{ themeAltKey }}" style="flex: 0 0 375px; max-width: 100%; border: 1px solid var(--vx-line); border-radius: 28px; overflow: hidden; background: var(--vx-bg); color: var(--vx-text);">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--vx-line);">
+            <a href="#" style="display: inline-flex; align-items: center; gap: 8px; color: var(--vx-text); text-decoration: none; font-weight: 600; font-size: 17px;"><svg width="20" height="16" viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="6" width="3" height="6" fill="var(--vx-accent)"></rect><rect x="5" y="2" width="3" height="14" fill="currentColor"></rect><rect x="10" y="0" width="3" height="18" fill="currentColor"></rect><rect x="15" y="4" width="3" height="10" fill="currentColor"></rect><rect x="20" y="7" width="2" height="4" fill="currentColor"></rect></svg>Voxia</a>
+            <button type="button" aria-expanded="false" style="min-height: 44px; padding: 0 14px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 13px var(--vx-font-data);">Menu</button>
+          </div>
+          <div style="padding: 32px 16px 24px; background-image: var(--vx-pattern); background-size: var(--vx-pattern-size);">
+            <p style="margin: 0 0 18px; display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border: 1px solid var(--vx-line); border-radius: 999px; background: var(--vx-bg); white-space: nowrap; font: 11px var(--vx-font-data); color: var(--vx-text-2);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: var(--vx-live);"></span>Vidéo → texte, en une ou deux minutes</p>
+            <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 42px; line-height: 1; letter-spacing: var(--vx-title-track);">Chaque vidéo contient un texte. <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); -webkit-box-decoration-break: clone; box-decoration-break: clone;">Voxia te l'écrit.</span></p>
+            <p style="margin: 18px 0 0; font-size: 16px; color: var(--vx-text-2);">Colle un lien YouTube ou TikTok, ou dépose ton fichier.</p>
+            <div style="margin-top: 22px; display: grid; gap: 8px;">
+              <label for="m-lien" style="font: 12px var(--vx-font-data); color: var(--vx-text-2); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Lien de la vidéo</label>
+              <input id="m-lien" type="url" placeholder="https://youtube.com/watch?v=…" style="min-height: 48px; width: 100%; padding: 0 14px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-field); background: var(--vx-surface); color: var(--vx-text); font: 14px var(--vx-font-data);">
+              <button type="button" style="min-height: 48px; width: 100%; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-accent); color: var(--vx-on-accent); font: 600 16px var(--vx-font-text);">Transcrire →</button>
+              <p style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Ou <a href="#">dépose un fichier</a>. Gratuit pour commencer.</p>
+            </div>
+          </div>
+          <div style="margin: 0 16px 24px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); overflow: hidden;">
+            <div style="padding: 10px 14px; border-bottom: 1px solid var(--vx-line); font: 11px var(--vx-font-data); color: var(--vx-text-3); text-transform: var(--vx-label-transform);">YouTube · 12:03 · FR</div>
+            <div aria-hidden="true" style="height: 56px; display: flex; align-items: center; gap: 2px; padding: 0 14px;">
+              <sc-for list="{{ barsSmall }}" as="b" hint-placeholder-count="40">
+                <span style="flex: 1 1 0; min-width: 1px; height: {{ b.h }}; border-radius: 1px; background: {{ b.c }}; animation: vx-onde 1.6s ease-in-out infinite; animation-delay: {{ b.d }};"></span>
+              </sc-for>
+            </div>
+            <div style="padding: 4px 6px 10px;">
+              <sc-for list="{{ lignes3 }}" as="l" hint-placeholder-count="3">
+                <div style="display: flex; gap: 12px; padding: 8px; border-radius: var(--vx-r-field); background: {{ l.bg }};">
+                  <span style="flex-shrink: 0; font: 12px var(--vx-font-data); color: {{ l.tc }}; padding-top: 2px;">{{ l.t }}</span>
+                  <p style="margin: 0; font-size: 14px; color: {{ l.c }}; font-weight: {{ l.w }};">{{ l.texte }}</p>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding: 0 16px 28px; display: grid; gap: 10px;">
+            <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px; border: 1px solid {{ p.bord }}; border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+                <span style="display: grid;"><span style="font: 500 12px var(--vx-font-data); color: {{ p.tc }}; text-transform: var(--vx-label-transform);">{{ p.nom }}</span><span style="font-size: 13px; color: var(--vx-text-2);">{{ p.ligne }}</span></span>
+                <span style="font-weight: 600; font-size: 20px;">[prix]</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-resultat" style="margin-top: 96px;">
+      <h2 id="t-resultat" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Résultat et export</h2>
+      <p style="margin: 0 0 28px; color: var(--vx-text-2);">Plan Gratuit : PDF et VTT verrouillés, avec le plan qui les débloque. Le lecteur reste visible pendant le défilement du texte.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start;">
+
+        <div data-theme="{{ theme }}" style="flex: 1 1 640px; min-width: 0; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); overflow: hidden; background: var(--vx-bg); color: var(--vx-text); box-shadow: var(--vx-shadow);">
+          <div style="display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; padding: 14px 24px; border-bottom: 1px solid var(--vx-line);">
+            <a href="#" style="display: inline-flex; align-items: center; gap: 10px; color: var(--vx-text); text-decoration: none; font-weight: 600; font-size: 18px;"><svg width="22" height="18" viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="6" width="3" height="6" fill="var(--vx-accent)"></rect><rect x="5" y="2" width="3" height="14" fill="currentColor"></rect><rect x="10" y="0" width="3" height="18" fill="currentColor"></rect><rect x="15" y="4" width="3" height="10" fill="currentColor"></rect><rect x="20" y="7" width="2" height="4" fill="currentColor"></rect></svg>Voxia</a>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 14px;">
+              <a href="#" aria-current="page" style="color: var(--vx-accent-text); text-decoration: none; font-weight: 500;">Nouvelle transcription</a>
+              <a href="#" style="color: var(--vx-text-2); text-decoration: none;">Historique</a>
+              <a href="#" style="color: var(--vx-text-2); text-decoration: none;">Compte</a>
+            </div>
+            <div style="margin-left: auto; display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+              <div style="display: grid; gap: 4px; min-width: 150px; font: 11px var(--vx-font-data); color: var(--vx-text-2);"><span>[n] sur [limite] vidéos ce mois-ci</span><span style="height: 4px; border-radius: 999px; background: var(--vx-surface-2); overflow: hidden;"><span style="display: block; height: 100%; width: 40%; background: var(--vx-accent);"></span></span></div>
+              <span style="font: 12px var(--vx-font-data); color: var(--vx-text-2);">FR ▾</span>
+            </div>
+          </div>
+          <div style="padding: 28px 24px;">
+            <div style="position: relative; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+              <span aria-hidden="true" style="display: var(--vx-corner); position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border-top: 2px solid var(--vx-accent); border-left: 2px solid var(--vx-accent); border-top-left-radius: var(--vx-r-panel);"></span>
+              <span aria-hidden="true" style="display: var(--vx-corner); position: absolute; top: -1px; right: -1px; width: 14px; height: 14px; border-top: 2px solid var(--vx-accent); border-right: 2px solid var(--vx-accent); border-top-right-radius: var(--vx-r-panel);"></span>
+              <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding: 16px 20px; border-bottom: 1px solid var(--vx-line);">
+                <div style="display: flex; gap: 12px; align-items: center; min-width: 0;">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: var(--vx-r-badge); white-space: nowrap; color: var(--vx-success); background: color-mix(in oklab, currentColor var(--vx-badge-tint), transparent); border: 1px solid color-mix(in oklab, currentColor var(--vx-badge-border), transparent); font: 500 12px var(--vx-font-data);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>Terminé</span>
+                  <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.02em; overflow-wrap: anywhere;">Vlog #34 — Mon atelier de céramique</h3>
+                </div>
+                <p style="margin: 0; font: 12px var(--vx-font-data); color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">YouTube · 12:03 · FR · 1 842 mots</p>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 28px; padding: 20px;">
+                <div style="flex: 1 1 240px; max-width: 360px; display: grid; gap: 16px; align-content: start;">
+                  <div style="aspect-ratio: 16 / 9; border-radius: var(--vx-r-field); border: 1px solid var(--vx-line); background: var(--vx-surface-2); display: grid; place-items: center; font: 12px var(--vx-font-data); color: var(--vx-text-3);">Lecteur YouTube (iframe officielle)</div>
+                  <div aria-hidden="true" style="height: 72px; display: flex; align-items: center; gap: 2px;">
+                    <sc-for list="{{ bars }}" as="b" hint-placeholder-count="48">
+                      <span style="flex: 1 1 0; min-width: 1px; height: {{ b.h }}; border-radius: 1px; background: {{ b.c }}; animation: vx-onde 1.6s ease-in-out infinite; animation-delay: {{ b.d }};"></span>
+                    </sc-for>
+                  </div>
+                  <p style="margin: 0; font: 14px var(--vx-font-data); font-variant-numeric: tabular-nums; color: var(--vx-text-2);">04:12 <span style="color: var(--vx-text-3);">/ 12:03</span></p>
+                </div>
+                <div style="flex: 3 1 380px; min-width: 0; display: grid; gap: 14px; align-content: start;">
+                  <div role="search" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <label for="r-search" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Rechercher dans la transcription</label>
+                    <input id="r-search" type="search" placeholder="Rechercher dans la transcription" value="centrer" style="flex: 1 1 200px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-field); background: var(--vx-bg); color: var(--vx-text); font: 15px var(--vx-font-text);">
+                    <button type="button" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 14px var(--vx-font-text);">Précédent</button>
+                    <button type="button" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 14px var(--vx-font-text);">Suivant</button>
+                    <span style="width: 100%; font: 12px var(--vx-font-data); color: var(--vx-text-3);">1 sur 1</span>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button type="button" aria-pressed="true" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-accent-text); border-radius: var(--vx-r-btn); background: color-mix(in oklab, var(--vx-accent) 10%, transparent); color: var(--vx-accent-text); font: 12px var(--vx-font-data); white-space: nowrap;">✓ Horodatages</button>
+                    <button type="button" aria-pressed="false" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 12px var(--vx-font-data); white-space: nowrap;">Suivre la lecture</button>
+                  </div>
+                  <ol style="margin: 0; padding: 0; list-style: none; display: grid; gap: 2px;">
+                    <sc-for list="{{ lignesLongues }}" as="l" hint-placeholder-count="6">
+                      <li style="display: flex; gap: 14px; padding: 10px 12px; border-radius: var(--vx-r-field); background: {{ l.bg }};">
+                        <button type="button" aria-label="Lire à partir de {{ l.t }}" style="flex-shrink: 0; min-height: 28px; padding: 0 4px; border: 0; background: transparent; color: {{ l.tc }}; font: 500 12px var(--vx-font-data); font-variant-numeric: tabular-nums; cursor: pointer;">{{ l.t }}</button>
+                        <p style="margin: 0; color: {{ l.c }}; font-weight: {{ l.w }}; font-size: 15px;">{{ l.texte }}</p>
+                      </li>
+                    </sc-for>
+                  </ol>
+                  <div style="border-top: 1px solid var(--vx-line); padding-top: 18px; display: grid; gap: 14px;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center;">
+                      <button type="button" style="min-height: 44px; padding: 0 16px; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-text); color: var(--vx-bg); font: 600 14px var(--vx-font-text);">Copier le texte</button>
+                      <label style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font: 13px var(--vx-font-data); color: var(--vx-text-2);"><input type="checkbox" defaultChecked="{{ true }}" style="width: 16px; height: 16px; accent-color: var(--vx-accent);">Avec horodatages</label>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start;">
+                      <sc-for list="{{ exports }}" as="x" hint-placeholder-count="5">
+                        <span style="display: grid; gap: 4px; max-width: 150px;">
+                          <button type="button" style="min-height: 44px; padding: 0 16px; display: inline-flex; gap: 8px; align-items: center; border: 1px solid {{ x.b }}; border-radius: var(--vx-r-btn); background: transparent; color: {{ x.c }}; font: 13px var(--vx-font-data);">{{ x.label }}</button>
+                          <span style="font: 11px var(--vx-font-data); color: var(--vx-text-3);">{{ x.note }}</span>
+                        </span>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div data-theme="{{ themeAltKey }}" style="flex: 0 0 375px; max-width: 100%; border: 1px solid var(--vx-line); border-radius: 28px; overflow: hidden; background: var(--vx-bg); color: var(--vx-text);">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--vx-line);">
+            <a href="#" style="color: var(--vx-text-2); font-size: 14px; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center;">← Historique</a>
+            <span style="font: 11px var(--vx-font-data); color: var(--vx-text-2);">[n] / [limite]</span>
+          </div>
+          <div style="padding: 20px 16px 0; display: grid; gap: 10px;">
+            <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: var(--vx-r-badge); white-space: nowrap; color: var(--vx-success); background: color-mix(in oklab, currentColor var(--vx-badge-tint), transparent); border: 1px solid color-mix(in oklab, currentColor var(--vx-badge-border), transparent); font: 500 12px var(--vx-font-data);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>Terminé</span>
+            <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 24px; line-height: 1.15; letter-spacing: -0.02em;">Vlog #34 — Mon atelier de céramique</p>
+            <p style="margin: 0; font: 11px var(--vx-font-data); color: var(--vx-text-3); text-transform: var(--vx-label-transform);">YouTube · 12:03 · FR · 1 842 mots</p>
+          </div>
+          <div style="position: sticky; top: 0; margin: 16px 16px 0; padding: 12px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center;">
+            <button type="button" aria-label="Pause" style="width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-accent); color: var(--vx-on-accent);"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg></button>
+            <div style="min-width: 0; display: grid; gap: 4px;">
+              <div aria-hidden="true" style="height: 26px; display: flex; align-items: center; gap: 2px;">
+                <sc-for list="{{ barsSmall }}" as="b" hint-placeholder-count="40">
+                  <span style="flex: 1 1 0; min-width: 1px; height: {{ b.h }}; border-radius: 1px; background: {{ b.c }};"></span>
+                </sc-for>
+              </div>
+              <span style="font: 11px var(--vx-font-data); color: var(--vx-text-2);">04:12 / 12:03</span>
+            </div>
+          </div>
+          <div style="padding: 14px 16px 0; display: grid; gap: 8px;">
+            <label for="m-search" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Rechercher dans la transcription</label>
+            <input id="m-search" type="search" placeholder="Rechercher dans la transcription" style="min-height: 44px; width: 100%; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-field); background: var(--vx-surface); color: var(--vx-text); font: 15px var(--vx-font-text);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <button type="button" aria-pressed="true" style="min-height: 44px; border: 1px solid var(--vx-accent-text); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-accent-text); font: 12px var(--vx-font-data); white-space: nowrap;">✓ Horodatages</button>
+              <button type="button" aria-pressed="false" style="min-height: 44px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 12px var(--vx-font-data); white-space: nowrap;">Suivre la lecture</button>
+            </div>
+          </div>
+          <ol style="margin: 10px 0 0; padding: 0 8px; list-style: none; display: grid; gap: 2px;">
+            <sc-for list="{{ lignes }}" as="l" hint-placeholder-count="4">
+              <li style="display: flex; gap: 10px; padding: 10px 8px; border-radius: var(--vx-r-field); background: {{ l.bg }};">
+                <span style="flex-shrink: 0; font: 500 12px var(--vx-font-data); color: {{ l.tc }}; padding-top: 2px;">{{ l.t }}</span>
+                <p style="margin: 0; color: {{ l.c }}; font-weight: {{ l.w }}; font-size: 15px;">{{ l.texte }}</p>
+              </li>
+            </sc-for>
+          </ol>
+          <div style="margin-top: 12px; padding: 16px; border-top: 1px solid var(--vx-line); background: var(--vx-surface); display: grid; gap: 10px;">
+            <button type="button" style="min-height: 48px; width: 100%; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-text); color: var(--vx-bg); font: 600 15px var(--vx-font-text);">Copier le texte</button>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+              <sc-for list="{{ exports }}" as="x" hint-placeholder-count="5">
+                <button type="button" aria-describedby="{{ x.id }}" style="min-height: 44px; border: 1px solid {{ x.b }}; border-radius: var(--vx-r-btn); background: transparent; color: {{ x.c }}; font: 13px var(--vx-font-data);">{{ x.label }}</button>
+              </sc-for>
+            </div>
+            <p style="margin: 0; font: 11px var(--vx-font-data); color: var(--vx-text-3);">PDF et VTT : disponibles à partir du plan Pro.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-etats" style="margin-top: 96px;">
+      <h2 id="t-etats" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Création et suivi : les cinq états</h2>
+      <p style="margin: 0 0 28px; color: var(--vx-text-2); max-width: 50em;">Chaque carte a la largeur d'un écran mobile. Les étapes reprennent les statuts existants (En attente, Téléchargement, Transcription, Terminé, Échec) : aucune donnée nouvelle n'est demandée au serveur, seul l'envoi de fichier a un pourcentage réel.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 16px;">
+
+        <div style="display: grid; gap: 14px; align-content: start; padding: 20px 16px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <p style="margin: 0; font: 12px var(--vx-font-data); color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">1 · Vide</p>
+          <div style="display: grid; gap: 8px;">
+            <label for="e-lien" style="font: 12px var(--vx-font-data); color: var(--vx-text-2); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Lien YouTube ou TikTok</label>
+            <input id="e-lien" type="url" placeholder="https://" style="min-height: 44px; width: 100%; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-field); background: var(--vx-bg); color: var(--vx-text); font: 14px var(--vx-font-data);">
+            <button type="button" style="min-height: 44px; border: 0; border-radius: var(--vx-r-btn); background: var(--vx-accent); color: var(--vx-on-accent); font: 600 15px var(--vx-font-text);">Transcrire →</button>
+          </div>
+          <div style="display: grid; gap: 10px; justify-items: start; padding: 18px; border: 1.5px dashed var(--vx-line-strong); border-radius: var(--vx-r-panel);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>
+            <p style="margin: 0; font-size: 14px; color: var(--vx-text-2);"><strong style="color: var(--vx-text); font-weight: 600;">Glisse ton fichier ici</strong><br>Formats : MP3, M4A, WAV, MP4, MOV, WEBM. Taille maximale : [max] Go.</p>
+            <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 600 14px var(--vx-font-text);">Parcourir</button>
+          </div>
+        </div>
+
+        <div style="display: grid; gap: 14px; align-content: start; padding: 20px 16px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <p style="margin: 0; font: 12px var(--vx-font-data); color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">2 · En file d'attente</p>
+          <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: var(--vx-r-badge); white-space: nowrap; color: var(--vx-text-2); background: color-mix(in oklab, currentColor var(--vx-badge-tint), transparent); border: 1px solid color-mix(in oklab, currentColor var(--vx-badge-border), transparent); font: 500 12px var(--vx-font-data);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>En attente</span>
+          <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 20px; line-height: 1.2; letter-spacing: -0.015em;">Vlog #34 — Mon atelier de céramique</p>
+          <p style="margin: 0; font: 12px var(--vx-font-data); color: var(--vx-text-3); overflow-wrap: anywhere;">https://youtube.com/watch?v=…</p>
+          <ol aria-label="Étapes du traitement" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-surface-2); border: 1px solid var(--vx-line);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-3);">Téléchargement</span></li>
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-surface-2); border: 1px solid var(--vx-line);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-3);">Transcription</span></li>
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-surface-2); border: 1px solid var(--vx-line);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-3);">Terminé</span></li>
+          </ol>
+          <p role="status" style="margin: 0; font-size: 14px; color: var(--vx-text-2);">La transcription est en cours. Tu peux fermer cette page : elle continue, et tu la retrouveras dans ton historique.</p>
+        </div>
+
+        <div style="display: grid; gap: 14px; align-content: start; padding: 20px 16px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <p style="margin: 0; font: 12px var(--vx-font-data); color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">3 · En cours</p>
+          <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: var(--vx-r-badge); white-space: nowrap; color: var(--vx-accent-text); background: color-mix(in oklab, currentColor var(--vx-badge-tint), transparent); border: 1px solid color-mix(in oklab, currentColor var(--vx-badge-border), transparent); font: 500 12px var(--vx-font-data);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: var(--vx-live); animation: vx-pulse 1.6s ease-in-out infinite;"></span>Transcription</span>
+          <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 20px; line-height: 1.2; letter-spacing: -0.015em;">atelier-ceramique-final.mp4</p>
+          <div style="display: grid; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; font: 12px var(--vx-font-data); color: var(--vx-text-2);"><span>Envoi : 100 %</span><span style="color: var(--vx-success);">✓</span></div>
+            <div style="height: 6px; border-radius: 999px; background: var(--vx-success);"></div>
+          </div>
+          <ol aria-label="Étapes du traitement" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-success);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-2);">Téléchargement</span></li>
+            <li aria-current="step" style="display: grid; gap: 6px;"><span style="position: relative; height: 4px; border-radius: 2px; background: var(--vx-surface-2); overflow: hidden;"><span style="position: absolute; inset: 0; width: 40%; background: var(--vx-accent); animation: vx-indet 1.6s var(--vx-ease) infinite;"></span></span><span style="font: 500 11px var(--vx-font-data); color: var(--vx-accent-text);">Transcription</span></li>
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-surface-2); border: 1px solid var(--vx-line);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-3);">Terminé</span></li>
+          </ol>
+          <p style="margin: 0; display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--vx-text-3);">Le statut se met à jour tout seul.</p>
+        </div>
+
+        <div style="display: grid; gap: 14px; align-content: start; padding: 20px 16px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <p style="margin: 0; font: 12px var(--vx-font-data); color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">4 · En erreur</p>
+          <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: var(--vx-r-badge); white-space: nowrap; color: var(--vx-error); background: color-mix(in oklab, currentColor var(--vx-badge-tint), transparent); border: 1px solid color-mix(in oklab, currentColor var(--vx-badge-border), transparent); font: 500 12px var(--vx-font-data);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>Échec</span>
+          <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 20px; line-height: 1.2; letter-spacing: -0.015em;">Transcription</p>
+          <ol aria-label="Étapes du traitement" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-error);"></span><span style="font: 500 11px var(--vx-font-data); color: var(--vx-error);">Téléchargement</span></li>
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-surface-2); border: 1px solid var(--vx-line);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-3);">Transcription</span></li>
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-surface-2); border: 1px solid var(--vx-line);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-3);">Terminé</span></li>
+          </ol>
+          <p role="alert" style="margin: 0; display: flex; gap: 10px; padding: 12px; border-radius: var(--vx-r-field); background: color-mix(in oklab, var(--vx-error) 9%, transparent); color: var(--vx-text); font-size: 14px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vx-error)" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5h.01"></path></svg>Cette vidéo est privée. Aucun décompte n'a été fait.</p>
+          <a href="#" style="justify-self: start; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); color: var(--vx-text); text-decoration: none; font-weight: 600; font-size: 14px;">Nouvelle transcription</a>
+        </div>
+
+        <div style="display: grid; gap: 14px; align-content: start; padding: 20px 16px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
+          <p style="margin: 0; font: 12px var(--vx-font-data); color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">5 · Terminé</p>
+          <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: var(--vx-r-badge); white-space: nowrap; color: var(--vx-success); background: color-mix(in oklab, currentColor var(--vx-badge-tint), transparent); border: 1px solid color-mix(in oklab, currentColor var(--vx-badge-border), transparent); font: 500 12px var(--vx-font-data);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>Terminé</span>
+          <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 20px; line-height: 1.2; letter-spacing: -0.015em;">Vlog #34 — Mon atelier de céramique</p>
+          <ol aria-label="Étapes du traitement" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;">
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-success);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-2);">Téléchargement</span></li>
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-success);"></span><span style="font: 11px var(--vx-font-data); color: var(--vx-text-2);">Transcription</span></li>
+            <li style="display: grid; gap: 6px;"><span style="height: 4px; border-radius: 2px; background: var(--vx-success);"></span><span style="font: 500 11px var(--vx-font-data); color: var(--vx-success);">Terminé</span></li>
+          </ol>
+          <p role="status" style="margin: 0; font-size: 14px; color: var(--vx-text-2);">Transcription terminée. Le texte remplace ce panneau sans rechargement.</p>
+          <div style="padding: 10px; border-radius: var(--vx-r-field); background: var(--vx-mark); display: flex; gap: 10px;">
+            <span style="font: 500 12px var(--vx-font-data); color: var(--vx-mark-time, var(--vx-accent-text)); padding-top: 2px;">00:00</span>
+            <p style="margin: 0; font-size: 14px; color: var(--vx-mark-text);">Bienvenue dans l'atelier. Oui, il y a de l'argile partout.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-css" style="margin-top: 96px;">
+      <h2 id="t-css" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Variables CSS</h2>
+      <p style="margin: 0 0 20px; color: var(--vx-text-2); max-width: 50em;">Bloc lu directement dans la feuille de cette page : c'est celui qui colore tout ce qui précède. Le thème suit l'attribut <span style="font-family: var(--vx-font-data);">data-theme</span> posé sur <span style="font-family: var(--vx-font-data);">&lt;html&gt;</span> (piloté par Alpine et le réglage du compte), avec <span style="font-family: var(--vx-font-data);">prefers-color-scheme</span> en repli.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap: 16px; align-items: start;">
+        <pre style="margin: 0; padding: 20px; max-height: 640px; overflow: auto; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); color: var(--vx-text); font: 12.5px/1.6 var(--vx-font-data); white-space: pre;">{{ css }}</pre>
+        <pre style="margin: 0; padding: 20px; overflow: auto; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); color: var(--vx-text); font: 12.5px/1.6 var(--vx-font-data); white-space: pre;">/* resources/css/app.css — Tailwind v4 */
+@import 'tailwindcss';
+@import './voxia-tokens.css'; /* le bloc ci-contre */
+
+@custom-variant dark (&amp;:where([data-theme=dark], [data-theme=dark] *));
+
+@theme inline {
+  --color-fond: var(--vx-bg);
+  --color-panneau: var(--vx-surface);
+  --color-panneau-eleve: var(--vx-surface-2);
+  --color-filet: var(--vx-line);
+  --color-filet-contour: var(--vx-line-strong);
+  --color-texte: var(--vx-text);
+  --color-texte-secondaire: var(--vx-text-2);
+  --color-texte-discret: var(--vx-text-3);
+  --color-accent: var(--vx-accent);
+  --color-sur-accent: var(--vx-on-accent);
+  --color-accent-texte: var(--vx-accent-text);
+  --color-surlignage: var(--vx-mark);
+  --color-succes: var(--vx-success);
+  --color-avertissement: var(--vx-warning);
+  --color-erreur: var(--vx-error);
+  --font-sans: var(--vx-font-text);
+  --font-titre: var(--vx-font-title);
+  --font-mono: var(--vx-font-data);
+  --font-accent: var(--vx-font-accent);
+  --radius-bouton: var(--vx-r-btn);
+  --radius-champ: var(--vx-r-field);
+  --radius-panneau: var(--vx-r-panel);
+}
+
+/* Les noms de classes existants (bg-fond, text-texte,
+   border-filet, rounded-bouton…) restent valides :
+   la migration se fait sans toucher aux vues Blade. */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}</pre>
+      </div>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pageTheme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;light&quot;, &quot;dark&quot;], &quot;default&quot;: &quot;light&quot;, &quot;tsType&quot;: &quot;'dark' | 'light'&quot;, &quot;section&quot;: &quot;Affichage&quot;}, &quot;animations&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Affichage&quot;}}">
+class Component extends DCLogic {
+  state = { css: '', pal: {}, motionOff: false };
+
+  D = {
+    kicker: 'Direction 3 sur 3 · Rupture',
+    titre: 'Le',
+    titreAccent: 'surligneur.',
+    these: "Le geste du produit, c'est trouver la bonne phrase. Cette direction en fait l'identité : papier clair par défaut, encre presque noire, et un surligneur jaune-vert qui marque la phrase lue, les mots d'accent et le focus. L'orange reste, plus profond, pour les actions et la progression. Titres en Bricolage Grotesque, boutons en pilule, plus de capitales mono.",
+    ecart: 3,
+    ecartLabel: '3 sur 3 · nouvelle identité, même ADN',
+    defaultTheme: 'light',
+    changes: [
+      { quoi: 'Thème par défaut', avant: 'Sombre uniquement', apres: 'Clair (papier #F4F1EA), sombre en option', pourquoi: "Marketeurs et e-commerçants lisent de longs textes en journée : le clair est plus confortable pour la lecture continue." },
+      { quoi: 'Signature', avant: 'Orange + repères d\'angle', apres: 'Surligneur #D7F46A', pourquoi: "Relie directement l'image de marque à la fonction : la phrase lue est surlignée, comme sur une feuille." },
+      { quoi: 'Accent d\'action', avant: '#FF6A3D, texte foncé', apres: '#E4521F clair · #FF7A4D sombre, texte encre', pourquoi: "Garde la filiation Signal ; l'orange plus profond tient 3,4:1 comme forme sur papier et 4,7:1 avec texte encre." },
+      { quoi: 'Titres', avant: 'Geist 600', apres: 'Bricolage Grotesque 700', pourquoi: 'Plus de caractère pour l’accueil et les tarifs ; Geist reste le texte courant.' },
+      { quoi: 'Mots d\'accent', avant: 'Instrument Serif italique', apres: 'Même police, surlignés', pourquoi: "Supprime une troisième famille ; l'accent devient un geste (surligner) plutôt qu'un changement de police." },
+      { quoi: 'Rayons', avant: '4 · 6 · 10 px', apres: 'Pilule · 12 · 20 px', pourquoi: 'Plus accueillant pour un public peu technique ; les boutons se distinguent nettement des champs.' },
+      { quoi: 'Libellés', avant: 'Mono en capitales', apres: 'Mono en casse normale', pourquoi: 'Les capitales allongent les libellés anglais et ralentissent la lecture des libellés français longs.' },
+      { quoi: 'Icônes', avant: 'Aucune bibliothèque définie', apres: 'Phosphor (MIT), Regular + Duotone pour les états vides', pourquoi: "Formes plus rondes, cohérentes avec la pilule ; le duotone accueille le surligneur." }
+    ],
+    type: [
+      { role: 'Texte', police: 'Geist 400 / 500 · 16–17 px', usage: 'Corps et transcription, un point plus grand qu’aujourd’hui pour la lecture longue.' },
+      { role: 'Titres', police: 'Bricolage Grotesque 700 · −0,035 em', usage: 'Police variable libre (OFL), axe de taille optique : serrée en héros, plus ouverte à 20 px.' },
+      { role: 'Données', police: 'Geist Mono 400 / 500 · 12–14 px', usage: 'Horodatages tabulaires, durées, formats. Casse normale.' },
+      { role: 'Mots d\'accent', police: 'Bricolage Grotesque 700, surligné', usage: 'Fond #D7F46A, texte encre (14,4:1) dans les deux thèmes.' }
+    ],
+    icones: "Phosphor (licence MIT), graisse Regular, 22 px. Les états vides utilisent la variante Duotone, la couche claire prenant le surligneur.",
+    illus: [
+      "Pas d'illustration figurative. Le surligneur sert de motif : bandes posées sous un mot, une ligne, un horodatage.",
+      "Aucun quadrillage ni trame : le papier suffit, les panneaux se détachent par l'ombre.",
+      "Les extraits de transcription mis en avant sur l'accueil sont des citations surlignées, en grand."
+    ],
+    animOnde: "Barres en scaleY 0,4 → 1, 1,6 s, ease-in-out, décalage de −0,1 s par barre. Barres lues en orange, à venir en gris chaud. Figée en pause.",
+    animProg: "Barre orange déterminée pour l'envoi (pourcentage réel) ; segment indéterminé de 1,6 s pour l'étape en cours ; point orange pulsé.",
+    animTexte: "Apparition mot à mot (400 ms, décalage 60 ms) sur la ligne surlignée, à l'accueil uniquement ; jamais dans une vraie transcription."
+  };
+
+  componentDidMount() {
+    setTimeout(() => this.lire(), 60);
+    setTimeout(() => this.lire(), 900);
+  }
+
+  lire() {
+    const tok = ['--vx-bg','--vx-surface','--vx-surface-2','--vx-line','--vx-line-strong','--vx-text','--vx-text-2','--vx-text-3','--vx-accent','--vx-on-accent','--vx-accent-text','--vx-mark','--vx-success','--vx-warning','--vx-error'];
+    const pal = {};
+    ['light','dark'].forEach(t => {
+      const el = document.querySelector('[data-pal="' + t + '"]');
+      if (!el) return;
+      const cs = getComputedStyle(el);
+      pal[t] = {};
+      tok.forEach(k => pal[t][k] = cs.getPropertyValue(k).trim().toUpperCase());
+    });
+    let css = '';
+    const st = [...document.querySelectorAll('style')].find(s => s.textContent.includes('/* TOKENS */'));
+    if (st) {
+      const t = st.textContent;
+      css = t.slice(t.indexOf('/* TOKENS */') + 13, t.indexOf('/* FIN TOKENS */')).trim();
+    }
+    this.setState({ pal, css });
+  }
+
+  ratio(a, b) {
+    const L = h => {
+      if (!h || h[0] !== '#') return 0;
+      const c = [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16) / 255).map(v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    };
+    const x = L(a), y = L(b);
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  }
+
+  swatches(t) {
+    const p = this.state.pal[t] || {};
+    const f = r => r.toFixed(1).replace('.', ',') + ':1';
+    const txt = k => { const r = Math.min(this.ratio(p[k], p['--vx-bg']), this.ratio(p[k], p['--vx-surface-2'])); return f(r) + (r >= 4.5 ? ' AA' : ' ✕'); };
+    const names = [
+      ['--vx-bg', 'Fond', null], ['--vx-surface', 'Surface (panneaux)', null], ['--vx-surface-2', 'Surface 2 (élevée)', null],
+      ['--vx-line', 'Filet décoratif', null], ['--vx-line-strong', 'Filet de contour', 'ui'],
+      ['--vx-text', 'Texte principal', 'txt'], ['--vx-text-2', 'Texte secondaire', 'txt'], ['--vx-text-3', 'Texte discret', 'txt'],
+      ['--vx-accent', 'Accent (fond de bouton)', 'on'], ['--vx-on-accent', 'Texte sur accent', null], ['--vx-accent-text', 'Accent (texte, liens)', 'txt'],
+      ['--vx-mark', 'Surlignage de lecture', 'mark'], ['--vx-success', 'Succès', 'txt'], ['--vx-warning', 'Avertissement', 'txt'], ['--vx-error', 'Erreur', 'txt']
+    ];
+    return names.map(([v, nom, kind]) => {
+      let ratio = '';
+      if (kind === 'txt') ratio = txt(v);
+      if (kind === 'ui') { const r = Math.min(this.ratio(p[v], p['--vx-bg']), this.ratio(p[v], p['--vx-surface'])); ratio = f(r) + (r >= 3 ? ' UI' : ' ✕'); }
+      if (kind === 'on') { const r = this.ratio(p[v], p['--vx-on-accent']); ratio = f(r) + ' avec texte'; }
+      if (kind === 'mark') { const r = this.ratio(p[v], p['--vx-text']); ratio = f(r) + ' avec texte'; }
+      return { v, nom, hex: p[v] || '…', ratio };
+    });
+  }
+
+  renderVals() {
+    const D = this.D;
+    const theme = this.props.pageTheme ?? D.defaultTheme;
+    const alt = theme === 'dark' ? 'light' : 'dark';
+    const motionOff = this.state.motionOff || this.props.animations === false;
+    const bars = Array.from({ length: 56 }, (_, i) => {
+      const h = Math.round(22 + 78 * Math.abs(Math.sin(i * 1.7 + 0.6) * Math.cos(i * 0.45)));
+      return { h: h + '%', d: '-' + ((i % 16) / 10) + 's', c: i < 22 ? 'var(--vx-accent)' : 'var(--vx-wave-idle)' };
+    });
+    const src = [
+      ['00:00', "Bienvenue dans l'atelier. Oui, il y a de l'argile partout."],
+      ['00:06', "Aujourd'hui on tourne six bols, et on en rate au moins deux."],
+      ['00:13', "Le secret, c'est de centrer la terre avant de vouloir aller vite."],
+      ['00:19', "Si elle n'est pas centrée, rien ne tiendra."],
+      ['00:24', "Je mouille les mains, je pose les coudes sur les genoux."],
+      ['00:31', "Et on laisse le tour faire une bonne partie du travail."]
+    ];
+    const ligne = ([t, texte], i, actif) => i === actif
+      ? { t, texte, bg: 'var(--vx-mark)', c: 'var(--vx-mark-text)', tc: 'var(--vx-mark-time, var(--vx-accent-text))', w: 500 }
+      : { t, texte, bg: 'transparent', c: i < actif ? 'var(--vx-text-3)' : 'var(--vx-text-2)', tc: 'var(--vx-text-3)', w: 400 };
+    const mots = "Le secret, c'est de centrer la terre avant de vouloir aller vite.".split(' ').map((w, i) => ({ w, d: (i * 0.06).toFixed(2) + 's' }));
+    const lab = { light: 'Thème clair', dark: 'Thème sombre' };
+    return {
+      d: D,
+      theme,
+      themeAltKey: alt,
+      themeMain: theme === 'dark' ? 'thème sombre' : 'thème clair',
+      themeAlt: alt === 'dark' ? 'thème sombre' : 'thème clair',
+      motion: motionOff ? 'off' : 'on',
+      motionOff: motionOff ? 'true' : 'false',
+      motionLabel: motionOff ? 'Réactiver les animations' : 'Simuler « réduire les animations »',
+      toggleMotion: () => this.setState(s => ({ motionOff: !s.motionOff })),
+      noop: e => e.preventDefault(),
+      ecart: [0, 1, 2].map(i => ({ c: i < D.ecart ? 'var(--vx-accent)' : 'var(--vx-surface-2)' })),
+      themes: ['light', 'dark'].map(t => ({ t, label: lab[t], swatches: this.swatches(t) })),
+      css: this.state.css || 'Lecture des variables…',
+      bars,
+      barsSmall: bars.slice(0, 40),
+      lignes: src.slice(0, 4).map((l, i) => ligne(l, i, 2)),
+      lignes3: src.slice(1, 4).map((l, i) => ligne(l, i, 1)),
+      lignesLongues: src.map((l, i) => ligne(l, i, 2)),
+      mots,
+      statuts: [
+        { label: 'En attente', c: 'var(--vx-text-2)', anim: 'none' },
+        { label: 'Téléchargement', c: 'var(--vx-accent-text)', anim: 'vx-pulse 1.6s ease-in-out infinite' },
+        { label: 'Transcription', c: 'var(--vx-accent-text)', anim: 'vx-pulse 1.6s ease-in-out infinite' },
+        { label: 'Terminé', c: 'var(--vx-success)', anim: 'none' },
+        { label: 'Échec', c: 'var(--vx-error)', anim: 'none' }
+      ],
+      plans: [
+        { nom: 'Gratuit', suffixe: '', ligne: '[n] vidéos par mois · TXT et SRT', cta: 'Commencer', bord: 'var(--vx-line)', tc: 'var(--vx-text-3)', bbg: 'transparent', bfg: 'var(--vx-text)', bb: 'var(--vx-line-strong)' },
+        { nom: 'Pro', suffixe: '/ mois', ligne: '[n] h par mois · tous les exports', cta: 'Passer à Pro', bord: 'var(--vx-accent)', tc: 'var(--vx-accent-text)', bbg: 'var(--vx-accent)', bfg: 'var(--vx-on-accent)', bb: 'var(--vx-accent)' },
+        { nom: 'Pack', suffixe: 'paiement unique', ligne: '[n] h valables [n] mois', cta: 'Acheter un Pack', bord: 'var(--vx-line)', tc: 'var(--vx-text-3)', bbg: 'transparent', bfg: 'var(--vx-text)', bb: 'var(--vx-line-strong)' }
+      ],
+      exports: [
+        { id: 'x-txt', label: 'TXT', note: '', b: 'var(--vx-line-strong)', c: 'var(--vx-text)' },
+        { id: 'x-pdf', label: 'PDF · Pro', note: 'À partir du plan Pro', b: 'var(--vx-line)', c: 'var(--vx-text-3)' },
+        { id: 'x-srt', label: 'SRT', note: '', b: 'var(--vx-line-strong)', c: 'var(--vx-text)' },
+        { id: 'x-vtt', label: 'VTT · Pro', note: 'À partir du plan Pro', b: 'var(--vx-line)', c: 'var(--vx-text-3)' },
+        { id: 'x-mp3', label: 'MP3', note: '', b: 'var(--vx-line-strong)', c: 'var(--vx-text)' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

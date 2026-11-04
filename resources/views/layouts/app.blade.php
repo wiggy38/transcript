@@ -1,6 +1,6 @@
 @props(["titre" => null, "actif" => null])
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen antialiased">
-    <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-bouton focus:bg-accent focus:px-4 focus:py-2 focus:text-fond">
+    <a href="#contenu" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-bouton focus:bg-accent focus:px-4 focus:py-2 focus:text-sur-accent">
         {{ __('interface.acces.aller_contenu') }}
     </a>
 
@@ -22,19 +22,19 @@
                 <ul class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
                     <li>
                         <a href="{{ route('tableau-de-bord') }}" @if (($actif ?? null) === 'nouvelle') aria-current="page" @endif
-                           class="{{ ($actif ?? null) === 'nouvelle' ? 'text-accent' : 'text-texte-secondaire hover:text-texte' }} no-underline">
+                           class="{{ ($actif ?? null) === 'nouvelle' ? 'text-accent-texte' : 'text-texte-secondaire hover:text-texte' }} no-underline">
                             {{ __('interface.application.nouvelle') }}
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('historique') }}" @if (($actif ?? null) === 'historique') aria-current="page" @endif
-                           class="{{ ($actif ?? null) === 'historique' ? 'text-accent' : 'text-texte-secondaire hover:text-texte' }} no-underline">
+                           class="{{ ($actif ?? null) === 'historique' ? 'text-accent-texte' : 'text-texte-secondaire hover:text-texte' }} no-underline">
                             {{ __('interface.application.historique') }}
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('reglages') }}" @if (($actif ?? null) === 'compte') aria-current="page" @endif
-                           class="{{ ($actif ?? null) === 'compte' ? 'text-accent' : 'text-texte-secondaire hover:text-texte' }} no-underline">
+                           class="{{ ($actif ?? null) === 'compte' ? 'text-accent-texte' : 'text-texte-secondaire hover:text-texte' }} no-underline">
                             {{ __('interface.application.compte') }}
                         </a>
                     </li>
@@ -50,7 +50,7 @@
                 @auth
                     <form method="post" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="cursor-pointer text-sm text-texte-secondaire hover:text-accent">{{ __('comptes.deconnexion') }}</button>
+                        <button type="submit" class="cursor-pointer text-sm text-texte-secondaire hover:text-accent-texte">{{ __('comptes.deconnexion') }}</button>
                     </form>
                 @endauth
             </div>

@@ -106,7 +106,7 @@
                             <span class="font-mono">{{ $facture['montant'] }}</span>
                             <span class="text-texte-discret">{{ __('abonnement.factures.statuts.'.$facture['statut']) }}</span>
                             @if ($facture['numero'])
-                                <a href="{{ route('abonnement.facture', ['facture' => $facture['id']]) }}" class="text-accent">{{ __('abonnement.factures.telecharger') }}</a>
+                                <a href="{{ route('abonnement.facture', ['facture' => $facture['id']]) }}" class="text-accent-texte">{{ __('abonnement.factures.telecharger') }}</a>
                             @endif
                         </li>
                     @endforeach

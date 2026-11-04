@@ -266,6 +266,18 @@ Décisions des fenêtres d'upgrade :
 - Tests adaptés : le bandeau d'aperçu mène désormais à la fenêtre (`PaiementTest`), et le test de quota lit le compteur mocké (`NouvelleTranscriptionTest`, helper `mockQuotaCompteur`).
 - Langues : les textes de l'interface et des courriels sont bilingues (voir « Langues » en §2). Tests existants adaptés à la nouvelle adresse de l'accueil (`/fr`) et à la langue explicite des courriels : `ExampleTest`, `PageAccueilTest`, `EcransComptesTest`, `CharteSignalTest`, `EmailsTransactionnelsTest`, `HistoriqueListeTest`, `ConservationTest`.
 
+### Refonte visuelle « Surligneur » (cahier §7, CLAUDE.md §4)
+
+- [x] Direction 3 « Surligneur » retenue parmi les trois propositions de Claude Design (`docs/Voxia Direction 3 - Surligneur.dc.html`). Elle remplace la charte Signal, dans le cahier (§6, §7) et dans `CLAUDE.md` (§4).
+- [x] Tokens dans `resources/css/voxia-tokens.css` : clair par défaut, sombre sous `data-theme="dark"` et en repli `prefers-color-scheme`. `app.css` les branche en `@theme inline` ; les classes existantes (`bg-fond`, `text-texte`, `border-filet`, `rounded-bouton`…) restent valides.
+- [x] Polices : Bricolage Grotesque Variable ajoutée (fontsource, auto-hébergée), Instrument Serif retirée. Mots d'accent des titres : classe `.vx-surlignage` (même police, fond surligné).
+- [x] Animations existantes conservées, plus `vx-indeterminee` ; toutes coupées sous `prefers-reduced-motion`.
+- [x] Accessibilité : texte d'accent sur `text-accent-texte` (#B23A0E clair, #FF8A5C sombre) ; texte sur fond d'accent sur `text-sur-accent` (encre).
+- [x] Hexadécimaux en dur retirés des vues (aperçu, accueil, analyse de script, lecture, guide de style).
+- [x] Emails : thème `surligneur.css` en clair, remplace `signal.css`.
+- [x] Tests : `CharteSignalTest` remplacé par `CharteSurligneurTest`. Il lit `voxia-tokens.css` dans les deux thèmes et garde les mêmes critères (4,5:1 texte et bouton, 3:1 contour, animations coupées, pas de CDN de police). Les tests de la page d'accueil et des emails suivent la nouvelle charte. Aucun test n'a été désactivé.
+- Non fait dans ce lot : icônes Phosphor, bascule de thème dans les réglages, vérification visuelle dans un navigateur, couleurs des PDF d'export. Voir P138 à P142.
+
 ## 4. Points ouverts
 
 - Laravel pour l'application web (validé, cahier §8).
@@ -506,3 +518,8 @@ Décisions des fenêtres d'upgrade :
 - [ ] P135 — Tarifs : les crédits IA du Pro s'affichent « inclus, volume à confirmer » (lié à P110).
 - [ ] P136 — Pages publiques : mise en page non vérifiée dans un navigateur. Le tableau des tarifs défile dans son cadre sous 640 px (pas la page entière) : à vérifier à 375 px, avec la règle « aucun défilement horizontal de la page ».
 - [ ] P137 — Langues : `lang/fr/courriels.php` définit deux fois la clé `rappel_suppression` (le second bloc, avec « 3 jours » écrit en dur, remplace le premier, paramétré). À corriger en gardant la version paramétrée.
+- [ ] P138 — Refonte « Surligneur » : icônes Phosphor (MIT, Regular et Duotone) à intégrer en SVG. Non fait : aucune bibliothèque d'icônes n'est installée pour l'instant.
+- [ ] P139 — Refonte « Surligneur » : bascule clair et sombre dans les réglages du compte (Alpine et préférence enregistrée). Aujourd'hui `data-theme="light"` est posé en dur sur `<html>`.
+- [ ] P140 — Refonte « Surligneur » : aucune vérification visuelle dans un navigateur (desktop, mobile à 375 px, animations coupées, thème sombre). À faire avant de fusionner.
+- [ ] P141 — Refonte « Surligneur » : les PDF d'export (`resources/views/exports/*.blade.php`) gardent leurs couleurs d'origine. À aligner sur la charte si le document doit suivre la marque.
+- [ ] P142 — Refonte « Surligneur » : les formes décoratives de la page d'accueil (usages, aperçu) utilisent maintenant les tokens ; à revoir visuellement.

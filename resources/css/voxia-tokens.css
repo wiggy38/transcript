@@ -1,0 +1,103 @@
+/*
+ * Voxia — jetons de la direction « Surligneur » (cahier §7).
+ * Source : docs/Voxia Direction 3 - Surligneur.dc.html. Clair par défaut ;
+ * sombre sous data-theme="dark", et en repli quand le système le demande.
+ */
+
+:root,
+:root[data-theme="light"] {
+    --vx-bg: #F4F1EA;
+    --vx-surface: #FFFDF8;
+    --vx-surface-2: #EAE6DB;
+    --vx-line: #DDD7CA;
+    --vx-line-strong: #817A6B;
+    --vx-text: #1A1814;
+    --vx-text-2: #4B463D;
+    --vx-text-3: #655F53;
+    --vx-accent: #E4521F;
+    --vx-on-accent: #1A1814;
+    --vx-accent-text: #B23A0E;
+    --vx-mark: #DDF37A;
+    --vx-mark-text: #1A1814;
+    --vx-success: #1D7444;
+    --vx-warning: #875700;
+    --vx-error: #BA2530;
+    --vx-focus: #1A1814;
+    --vx-live: #E4521F;
+    --vx-wave-idle: #CFC8B8;
+    --vx-accent-word: #1A1814;
+    --vx-mark-time: #1A1814;
+    --vx-accent-word-bg: #D7F46A;
+    --vx-shadow: 0 1px 0 rgb(26 24 20 / 0.04), 0 12px 32px -16px rgb(26 24 20 / 0.22);
+    color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --vx-bg: #13120F;
+        --vx-surface: #1B1A16;
+        --vx-surface-2: #24231E;
+        --vx-line: #34322B;
+        --vx-line-strong: #77725F;
+        --vx-text: #F2EEE4;
+        --vx-text-2: #C4BEB0;
+        --vx-text-3: #9C9686;
+        --vx-accent: #FF7A4D;
+        --vx-on-accent: #13120F;
+        --vx-accent-text: #FF8A5C;
+        --vx-mark: #3A4419;
+        --vx-mark-text: #F2EEE4;
+        --vx-success: #5DD394;
+        --vx-warning: #F0B64A;
+        --vx-error: #FF8077;
+        --vx-focus: #D7F46A;
+        --vx-live: #FF7A4D;
+        --vx-wave-idle: #45423A;
+        --vx-accent-word: #1A1814;
+        --vx-mark-time: #D7F46A;
+        --vx-accent-word-bg: #D7F46A;
+        --vx-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.7);
+        color-scheme: dark;
+    }
+}
+
+:root[data-theme="dark"] {
+    --vx-bg: #13120F;
+    --vx-surface: #1B1A16;
+    --vx-surface-2: #24231E;
+    --vx-line: #34322B;
+    --vx-line-strong: #77725F;
+    --vx-text: #F2EEE4;
+    --vx-text-2: #C4BEB0;
+    --vx-text-3: #9C9686;
+    --vx-accent: #FF7A4D;
+    --vx-on-accent: #13120F;
+    --vx-accent-text: #FF8A5C;
+    --vx-mark: #3A4419;
+    --vx-mark-text: #F2EEE4;
+    --vx-success: #5DD394;
+    --vx-warning: #F0B64A;
+    --vx-error: #FF8077;
+    --vx-focus: #D7F46A;
+    --vx-live: #FF7A4D;
+    --vx-wave-idle: #45423A;
+    --vx-accent-word: #1A1814;
+    --vx-mark-time: #D7F46A;
+    --vx-accent-word-bg: #D7F46A;
+    --vx-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.7);
+    color-scheme: dark;
+}
+
+:root {
+    --vx-font-text: "Geist", ui-sans-serif, system-ui, sans-serif;
+    --vx-font-title: "Bricolage Grotesque Variable", "Geist", ui-sans-serif, sans-serif;
+    --vx-font-data: "Geist Mono", ui-monospace, monospace;
+    --vx-title-weight: 700;
+    --vx-title-track: -0.035em;
+    --vx-r-btn: 999px;
+    --vx-r-field: 12px;
+    --vx-r-panel: 20px;
+    --vx-r-badge: 999px;
+    --vx-icon-stroke: 1.5;
+    --vx-ease: cubic-bezier(0.65, 0, 0.35, 1);
+}

@@ -10,7 +10,7 @@
         @unless ($verifie)
             <p class="mt-6 border-l-2 border-accent py-1 pl-3 text-sm text-texte">
                 {{ __('comptes.tableau.non_verifie') }}
-                <a href="{{ route('verification.notice') }}" class="text-accent hover:underline">{{ __('comptes.verification.renvoyer') }}</a>
+                <a href="{{ route('verification.notice') }}" class="text-accent-texte hover:underline">{{ __('comptes.verification.renvoyer') }}</a>
             </p>
         @endunless
     </section>
@@ -28,7 +28,7 @@
             <ul class="mt-4 flex flex-col divide-y divide-filet rounded-panneau border border-filet bg-panneau">
                 @foreach ($transcriptions as $transcription)
                     <li class="flex flex-wrap items-center justify-between gap-4 px-5 py-4">
-                        <a href="{{ route('transcriptions.show', $transcription) }}" class="min-w-0 truncate text-texte no-underline hover:text-accent">{{ $transcription->titre ?? $transcription->url_origine ?? '—' }}</a>
+                        <a href="{{ route('transcriptions.show', $transcription) }}" class="min-w-0 truncate text-texte no-underline hover:text-accent-texte">{{ $transcription->titre ?? $transcription->url_origine ?? '—' }}</a>
                         <x-badge-statut :statut="$transcription->statut" />
                     </li>
                 @endforeach

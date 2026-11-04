@@ -1,0 +1,92 @@
+/* Thème « surligneur » : emails transactionnels aux couleurs de la direction « Surligneur » (cahier §7), clair.
+   Aucune police externe : repli système, les clients mail ne chargent pas les polices de toute façon. */
+
+body,
+.wrapper {
+    background-color: #F4F1EA !important;
+}
+
+.wrapper {
+    color: #1A1814;
+}
+
+.content {
+    background-color: #F4F1EA !important;
+}
+
+.inner-body {
+    background-color: #FFFDF8 !important;
+    border: 1px solid #DDD7CA;
+    border-radius: 20px;
+    color: #1A1814;
+}
+
+.body-action {
+    color: #1A1814;
+}
+
+.content-cell {
+    padding: 32px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #1A1814;
+}
+
+h1 {
+    color: #1A1814;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 16px;
+}
+
+p,
+ul,
+ol,
+blockquote {
+    color: #4B463D;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+a {
+    color: #B23A0E;
+}
+
+.header a {
+    color: #1A1814 !important;
+    font-size: 19px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.footer {
+    color: #655F53;
+}
+
+.footer p {
+    color: #655F53;
+    font-size: 12px;
+}
+
+.signature-discrete {
+    display: block;
+    margin-top: 24px;
+    color: #655F53;
+    font-size: 13px;
+}
+
+/* Boutons : pilule, accent #E4521F, texte encre. */
+.button {
+    border-radius: 999px;
+    text-decoration: none;
+}
+
+.button-primary,
+.button-primary:visited {
+    background-color: #E4521F;
+    border-bottom: 8px solid #E4521F;
+    border-left: 18px solid #E4521F;
+    border-right: 18px solid #E4521F;
+    border-top: 8px solid #E4521F;
+    color: #1A1814 !important;
+    font-weight: 600;
+}

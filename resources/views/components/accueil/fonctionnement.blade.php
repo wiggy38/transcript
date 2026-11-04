@@ -11,7 +11,7 @@
         <ol class="m-0 flex list-none flex-wrap gap-8 p-0">
             @foreach (trans('accueil.fonctionnement.etapes') as $indice => $etape)
                 <li class="min-w-0 flex-[1_1_220px] pt-9">
-                    <p class="font-mono text-xs {{ $indice === 3 ? 'text-accent' : 'text-texte-discret' }}">0{{ $indice + 1 }}</p>
+                    <p class="font-mono text-xs {{ $indice === 3 ? 'text-accent-texte' : 'text-texte-discret' }}">0{{ $indice + 1 }}</p>
                     <h3 class="mt-2 text-[22px] font-semibold tracking-[-0.02em]">{{ $etape['titre'] }}</h3>
                     <p class="mt-2 text-texte-secondaire">{{ $etape['texte'] }}</p>
                 </li>

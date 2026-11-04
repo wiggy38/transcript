@@ -30,10 +30,10 @@
             </form>
 
             <ul class="mt-8 flex flex-col gap-2 text-sm">
-                <li><a href="{{ route('password.request') }}" class="text-texte-secondaire hover:text-accent">{{ __('comptes.connexion.oubli') }}</a></li>
+                <li><a href="{{ route('password.request') }}" class="text-texte-secondaire hover:text-accent-texte">{{ __('comptes.connexion.oubli') }}</a></li>
                 <li class="text-texte-discret">
                     {{ __('comptes.connexion.pas_de_compte') }}
-                    <a href="{{ route('register') }}" class="text-texte-secondaire hover:text-accent">{{ __('comptes.connexion.creer') }}</a>
+                    <a href="{{ route('register') }}" class="text-texte-secondaire hover:text-accent-texte">{{ __('comptes.connexion.creer') }}</a>
                 </li>
             </ul>
         </x-panneau>

@@ -1,48 +1,52 @@
 @import 'tailwindcss';
+@import './voxia-tokens.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
 /*
- * Charte Signal (cahier §7). Une seule source de vérité : ces jetons.
- * Pour tester une autre accent, changer uniquement --color-accent.
+ * Direction « Surligneur » (cahier §7). Les valeurs sont dans voxia-tokens.css : ici, seulement
+ * le branchement sur Tailwind. Les noms de classes existants (bg-fond, text-texte, border-filet,
+ * rounded-bouton…) restent valides ; le thème sombre passe par data-theme="dark".
  */
-@theme {
-    --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
-    --font-mono: 'Geist Mono', ui-monospace, monospace;
-    --font-serif: 'Instrument Serif', Georgia, serif;
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-    /* Fonds et panneaux */
-    --color-fond: #0E0F0E;
-    --color-panneau: #121311;
-    --color-panneau-eleve: #161715;
+@theme inline {
+    --font-sans: var(--vx-font-text);
+    --font-titre: var(--vx-font-title);
+    --font-mono: var(--vx-font-data);
 
-    /* Filets : décoratifs (#2A2B28) et de contour de champ ou de bouton à filet (3:1 minimum) */
-    --color-filet: #2A2B28;
-    --color-filet-contour: #6A6B65;
+    --color-fond: var(--vx-bg);
+    --color-panneau: var(--vx-surface);
+    --color-panneau-eleve: var(--vx-surface-2);
 
-    /* Textes */
-    --color-texte: #EDEBE6;
-    --color-texte-secondaire: #BDBBB5;
-    --color-texte-discret: #8B8A85;
+    /* Filets : décoratifs, et de contour de champ ou de bouton (3:1 minimum) */
+    --color-filet: var(--vx-line);
+    --color-filet-contour: var(--vx-line-strong);
 
-    /* Accent : variable unique */
-    --color-accent: #FF6A3D;
+    --color-texte: var(--vx-text);
+    --color-texte-secondaire: var(--vx-text-2);
+    --color-texte-discret: var(--vx-text-3);
 
-    /* Hors charte, à valider : couleur d'erreur (échec, message d'erreur) */
-    --color-erreur: #FF7A73;
+    /* Accent d'action : fond de bouton (texte encre dessus) et texte d'accent (liens, états) */
+    --color-accent: var(--vx-accent);
+    --color-sur-accent: var(--vx-on-accent);
+    --color-accent-texte: var(--vx-accent-text);
 
-    /* Rayons */
-    --radius-bouton: 4px;
-    --radius-champ: 6px;
-    --radius-panneau: 10px;
+    /* Surligneur : phrase lue, mots d'accent, focus */
+    --color-surlignage: var(--vx-mark);
+    --color-sur-surlignage: var(--vx-mark-text);
+
+    --color-succes: var(--vx-success);
+    --color-avertissement: var(--vx-warning);
+    --color-erreur: var(--vx-error);
+
+    --radius-bouton: var(--vx-r-btn);
+    --radius-champ: var(--vx-r-field);
+    --radius-panneau: var(--vx-r-panel);
 }
 
 @layer base {
-    html {
-        color-scheme: dark;
-    }
-
     body {
         background-color: var(--color-fond);
         color: var(--color-texte);
@@ -53,7 +57,7 @@
     }
 
     :focus-visible {
-        outline: 2px solid var(--color-accent);
+        outline: 2px solid var(--vx-focus);
         outline-offset: 2px;
     }
 
@@ -63,8 +67,23 @@
     }
 
     dialog::backdrop {
-        background-color: rgb(14 15 14 / 0.78);
+        background-color: color-mix(in oklab, var(--vx-bg) 78%, transparent);
     }
+}
+
+/*
+ * Mot d'accent des titres : même police que le titre, surligné comme sur une feuille.
+ * Remplace l'ancienne police italique : une seule famille de titres.
+ */
+.vx-surlignage {
+    font-family: var(--font-titre);
+    font-weight: 700;
+    color: var(--vx-accent-word);
+    background-color: var(--vx-accent-word-bg);
+    padding: 0 0.12em;
+    letter-spacing: -0.01em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
 }
 
 /* Animations : chacune est coupée quand l'utilisateur réduit les animations. */
@@ -78,6 +97,12 @@
     50% { opacity: 0.25; }
 }
 
+/* Barre indéterminée (étape en cours) et remplissage de démonstration. */
+@keyframes vx-indet {
+    0% { transform: translateX(-110%); }
+    100% { transform: translateX(260%); }
+}
+
 .vx-onde-barre {
     animation: vx-onde 1.6s ease-in-out infinite;
     transform-origin: center;
@@ -87,7 +112,11 @@
     animation: vx-pulsation 1.6s ease-in-out infinite;
 }
 
-/* Page d'accueil (maquette Signal) : bandeau défilant, paquet sur la ligne, frappe du texte, curseur. */
+.vx-indeterminee {
+    animation: vx-indet 1.6s var(--vx-ease) infinite;
+}
+
+/* Page d'accueil : bandeau défilant, paquet sur la ligne, frappe du texte, curseur. */
 @keyframes vx-defilement {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
@@ -127,20 +156,19 @@
 /* Fond quadrillé de l'en-tête et du héros. */
 .vx-grille {
     background-image:
-        linear-gradient(to right, rgb(237 235 230 / 0.055) 1px, transparent 1px),
-        linear-gradient(to bottom, rgb(237 235 230 / 0.055) 1px, transparent 1px);
+        linear-gradient(to right, color-mix(in oklab, var(--vx-text) 5.5%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in oklab, var(--vx-text) 5.5%, transparent) 1px, transparent 1px);
     background-size: 80px 80px;
 }
 
 @media (prefers-reduced-motion: reduce) {
     .vx-onde-barre,
-    .vx-pulsation {
+    .vx-pulsation,
+    .vx-indeterminee {
         animation: none;
     }
-}
 
-/* Page d'accueil : mêmes coupures, pour le bandeau, le paquet, le curseur et la frappe. */
-@media (prefers-reduced-motion: reduce) {
+    /* Page d'accueil : mêmes coupures, pour le bandeau, le paquet, le curseur et la frappe. */
     .vx-defilement,
     .vx-paquet,
     .vx-curseur {

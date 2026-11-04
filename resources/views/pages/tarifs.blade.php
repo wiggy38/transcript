@@ -22,7 +22,7 @@
 
 <x-layouts::marketing :titre="__('pages.tarifs.titre').' — '.__('interface.marque')" :description="__('pages.tarifs.intro')">
     <section class="pt-20" aria-labelledby="titre-page-tarifs">
-        <p class="font-mono text-xs font-medium text-accent uppercase">{{ __('interface.pied.tarifs') }}</p>
+        <p class="font-mono text-xs font-medium text-accent-texte uppercase">{{ __('interface.pied.tarifs') }}</p>
         <h1 id="titre-page-tarifs" class="mt-4 text-[clamp(40px,5vw,64px)] leading-none font-semibold tracking-[-0.04em]">{{ __('pages.tarifs.titre') }}</h1>
         <p class="mt-6 max-w-[40em] text-lg text-texte-secondaire">{{ __('pages.tarifs.intro') }}</p>
 
@@ -33,7 +33,7 @@
                     <tr class="border-b border-filet bg-panneau">
                         <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret uppercase">{{ __('pages.tarifs.colonnes.fonctionnalite') }}</th>
                         <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret uppercase">{{ $plans['free']['label'] }}</th>
-                        <th scope="col" class="p-5 font-mono text-xs font-medium text-accent uppercase">{{ $plans['pro']['label'] }}</th>
+                        <th scope="col" class="p-5 font-mono text-xs font-medium text-accent-texte uppercase">{{ $plans['pro']['label'] }}</th>
                         <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret uppercase">{{ $plans['pack']['label'] }}</th>
                     </tr>
                 </thead>

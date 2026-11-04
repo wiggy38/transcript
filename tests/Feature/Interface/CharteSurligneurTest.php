@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\URL;
 
 /*
- * Charte Signal (cahier §7) : jetons, contrastes, animations, polices auto-hébergées, composants.
+ * Charte « Surligneur » (cahier §7) : jetons des deux thèmes, contrastes, animations, polices
+ * auto-hébergées, composants.
  */
 
 function luminanceCharte(string $hex): float
@@ -32,56 +33,84 @@ function contrasteCharte(string $premier, string $second): float
     return ($clair + 0.05) / ($sombre + 0.05);
 }
 
-/** @return array<string, string> jetons --color-* déclarés dans app.css */
-function jetonsCharte(): array
+/**
+ * @return array<string, string> jetons --vx-* de voxia-tokens.css pour le thème demandé ('clair' ou 'sombre')
+ */
+function jetonsCharte(string $theme): array
 {
-    $css = file_get_contents(resource_path('css/app.css'));
-    preg_match_all('/--color-([a-z-]+):\s*(#[0-9A-Fa-f]{6});/', $css, $correspondances, PREG_SET_ORDER);
+    $css = file_get_contents(resource_path('css/voxia-tokens.css'));
+    $motif = $theme === 'sombre'
+        ? '/:root\[data-theme="dark"\]\s*\{(.*?)\}/s'
+        : '/:root,\s*:root\[data-theme="light"\]\s*\{(.*?)\}/s';
+    preg_match($motif, $css, $bloc);
+
+    preg_match_all('/--vx-([a-z0-9-]+):\s*(#[0-9A-Fa-f]{6});/', $bloc[1] ?? '', $correspondances, PREG_SET_ORDER);
 
     return collect($correspondances)->mapWithKeys(fn (array $m) => [$m[1] => strtoupper($m[2])])->all();
 }
 
-test('les textes de la charte atteignent 4,5:1 sur chaque fond', function () {
-    $jetons = jetonsCharte();
-    $textes = ['texte', 'texte-secondaire', 'texte-discret', 'accent', 'erreur'];
-    $fonds = ['fond', 'panneau', 'panneau-eleve'];
+test('les textes de la charte atteignent 4,5:1 sur chaque fond, dans les deux thèmes', function () {
+    foreach (['clair', 'sombre'] as $theme) {
+        $jetons = jetonsCharte($theme);
 
-    foreach ($textes as $texte) {
-        foreach ($fonds as $fond) {
-            expect(contrasteCharte($jetons[$texte], $jetons[$fond]))
-                ->toBeGreaterThanOrEqual(4.5, "$texte sur $fond");
+        foreach (['text', 'text-2', 'text-3', 'accent-text', 'error', 'success', 'warning'] as $texte) {
+            foreach (['bg', 'surface', 'surface-2'] as $fond) {
+                expect(contrasteCharte($jetons[$texte], $jetons[$fond]))
+                    ->toBeGreaterThanOrEqual(4.5, "$theme : $texte sur $fond");
+            }
         }
     }
 });
 
-test('le texte des boutons atteint 4,5:1 sur l\'accent et sur le fond clair', function () {
-    $jetons = jetonsCharte();
+test('le texte des boutons atteint 4,5:1 sur l\'accent, dans les deux thèmes', function () {
+    foreach (['clair', 'sombre'] as $theme) {
+        $jetons = jetonsCharte($theme);
 
-    expect(contrasteCharte($jetons['fond'], $jetons['accent']))->toBeGreaterThanOrEqual(4.5)
-        ->and(contrasteCharte($jetons['fond'], $jetons['texte']))->toBeGreaterThanOrEqual(4.5);
-});
-
-test('les contours de champ et de bouton à filet atteignent 3:1 sur chaque fond', function () {
-    $jetons = jetonsCharte();
-
-    foreach (['fond', 'panneau', 'panneau-eleve'] as $fond) {
-        expect(contrasteCharte($jetons['filet-contour'], $jetons[$fond]))
-            ->toBeGreaterThanOrEqual(3.0, "filet-contour sur $fond");
+        expect(contrasteCharte($jetons['on-accent'], $jetons['accent']))
+            ->toBeGreaterThanOrEqual(4.5, "$theme : texte de bouton sur accent");
     }
 });
 
-test('l\'accent est une variable unique, réutilisée partout', function () {
+test('le mot surligné des titres atteint 4,5:1 sur son surlignage', function () {
+    foreach (['clair', 'sombre'] as $theme) {
+        $jetons = jetonsCharte($theme);
+
+        expect(contrasteCharte($jetons['accent-word'], $jetons['accent-word-bg']))
+            ->toBeGreaterThanOrEqual(4.5, "$theme : mot d'accent sur surlignage");
+    }
+});
+
+test('les contours de champ et de bouton à filet atteignent 3:1 sur chaque fond', function () {
+    foreach (['clair', 'sombre'] as $theme) {
+        $jetons = jetonsCharte($theme);
+
+        foreach (['bg', 'surface', 'surface-2'] as $fond) {
+            expect(contrasteCharte($jetons['line-strong'], $jetons[$fond]))
+                ->toBeGreaterThanOrEqual(3.0, "$theme : contour sur $fond");
+        }
+    }
+});
+
+test('l\'accent d\'action atteint 3:1 sur le fond, comme forme', function () {
+    foreach (['clair', 'sombre'] as $theme) {
+        $jetons = jetonsCharte($theme);
+
+        expect(contrasteCharte($jetons['accent'], $jetons['bg']))
+            ->toBeGreaterThanOrEqual(3.0, "$theme : accent sur fond");
+    }
+});
+
+test('les couleurs viennent des jetons, jamais écrites en dur dans app.css', function () {
     $css = file_get_contents(resource_path('css/app.css'));
 
-    expect(substr_count($css, '#FF6A3D'))->toBe(1)
-        ->and(substr_count($css, '#ff6a3d'))->toBe(0);
+    expect(preg_match('/#[0-9A-Fa-f]{3,6}\b/', $css))->toBe(0);
 });
 
 test('chaque animation est coupée sous prefers-reduced-motion', function () {
     $css = file_get_contents(resource_path('css/app.css'));
 
     expect($css)->toMatch(
-        '/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.vx-onde-barre,\s*\.vx-pulsation\s*\{\s*animation:\s*none;\s*\}\s*\}/',
+        '/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.vx-onde-barre,\s*\.vx-pulsation,\s*\.vx-indeterminee\s*\{\s*animation:\s*none;\s*\}/',
     );
 });
 

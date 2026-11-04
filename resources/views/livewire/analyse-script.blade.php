@@ -3,8 +3,8 @@
      Un clic sur une partie envoie « voxia-aller » ; le lecteur (lecture-transcription) lance la lecture à son début.
      La barre est décorative (aria-hidden) : la liste en dessous porte l'information pour les lecteurs d'écran. --}}
 @php
-    $couleurs = ['#FF6A3D', '#5A5955', '#3F403C', '#2F302D', '#EDEBE6'];
-    $hachures = 'repeating-linear-gradient(135deg, #3F403C 0 6px, #121311 6px 12px)';
+    $couleurs = ['var(--vx-accent)', 'var(--vx-line-strong)', 'var(--vx-wave-idle)', 'var(--vx-line)', 'var(--vx-text)'];
+    $hachures = 'repeating-linear-gradient(135deg, var(--vx-line) 0 6px, var(--vx-surface) 6px 12px)';
     $detectees = collect($parties)->where('detectee', true)->count();
 @endphp
 
@@ -20,7 +20,7 @@
         @unless ($termine)
             <div class="flex flex-col items-start gap-2 sm:items-end">
                 <button type="button" wire:click="analyser" @disabled($bloque || $enCours) aria-describedby="aide-analyse"
-                    class="min-h-11 cursor-pointer rounded-bouton bg-accent px-5 text-[15px] font-semibold text-fond hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
+                    class="min-h-11 cursor-pointer rounded-bouton bg-accent px-5 text-[15px] font-semibold text-sur-accent hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
                     {{ __('analyse.bouton') }}
                 </button>
                 <p id="aide-analyse" class="max-w-xs font-mono text-[11px] text-texte-discret sm:text-right">
@@ -69,10 +69,10 @@
                     @if ($partie['detectee'])
                         <button type="button" x-on:click="$dispatch('voxia-aller', { ms: {{ $partie['debut'] }} })"
                             class="block w-full cursor-pointer rounded-champ border border-filet bg-fond px-4 py-3 text-left hover:border-accent">
-                            <span class="block font-mono text-[11px] uppercase tracking-wide text-accent">
+                            <span class="block font-mono text-[11px] uppercase tracking-wide text-accent-texte">
                                 {{ __('analyse.types.'.$partie['type']->value) }} · {{ \App\Support\Horodatage::format($partie['debut']) }} → {{ \App\Support\Horodatage::format($partie['fin']) }}
                             </span>
-                            <span class="mt-1.5 block font-serif text-[22px] italic leading-snug text-texte [overflow-wrap:anywhere]">« {{ $partie['texte'] }} »</span>
+                            <span class="mt-1.5 block font-titre text-[22px] font-medium leading-snug text-texte [overflow-wrap:anywhere]">« {{ $partie['texte'] }} »</span>
                         </button>
                     @else
                         <div class="rounded-champ border border-dashed border-filet-contour px-4 py-3" style="background-image: {{ $hachures }};">
@@ -96,13 +96,13 @@
                     <li class="flex flex-col items-start">
                         @if ($peutExporter($format))
                             <a href="{{ $urlExport($format) }}" download
-                                class="inline-flex min-h-11 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent">
+                                class="inline-flex min-h-11 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
                                 {{ $format->libelle() }}
                             </a>
                         @else
                             <button type="button" aria-haspopup="dialog" aria-describedby="verrou-analyse-{{ $format->value }}"
                                 x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-analyse-export-{{ $format->value }}' })"
-                                class="min-h-11 cursor-pointer rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret hover:border-accent hover:text-accent">
+                                class="min-h-11 cursor-pointer rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret hover:border-accent hover:text-accent-texte">
                                 {{ $format->libelle() }}
                             </button>
                             <p id="verrou-analyse-{{ $format->value }}" class="mt-1 font-mono text-[11px] text-texte-discret">
