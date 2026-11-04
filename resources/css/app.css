@@ -87,10 +87,70 @@
     animation: vx-pulsation 1.6s ease-in-out infinite;
 }
 
+/* Page d'accueil (maquette Signal) : bandeau défilant, paquet sur la ligne, frappe du texte, curseur. */
+@keyframes vx-defilement {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@keyframes vx-paquet {
+    0% { left: 0; opacity: 0; }
+    6%, 94% { opacity: 1; }
+    100% { left: calc(100% - 9px); opacity: 0; }
+}
+
+@keyframes vx-frappe {
+    0% { clip-path: inset(0 100% 0 0); }
+    70%, 100% { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes vx-curseur {
+    50% { opacity: 0; }
+}
+
+.vx-defilement {
+    animation: vx-defilement 48s linear infinite;
+}
+
+.vx-paquet {
+    animation: vx-paquet 5.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.vx-frappe {
+    animation: vx-frappe 5s steps(44) infinite;
+}
+
+.vx-curseur {
+    animation: vx-curseur 1s steps(1) infinite;
+}
+
+/* Fond quadrillé de l'en-tête et du héros. */
+.vx-grille {
+    background-image:
+        linear-gradient(to right, rgb(237 235 230 / 0.055) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(237 235 230 / 0.055) 1px, transparent 1px);
+    background-size: 80px 80px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .vx-onde-barre,
     .vx-pulsation {
         animation: none;
+    }
+}
+
+/* Page d'accueil : mêmes coupures, pour le bandeau, le paquet, le curseur et la frappe. */
+@media (prefers-reduced-motion: reduce) {
+    .vx-defilement,
+    .vx-paquet,
+    .vx-curseur {
+        animation: none;
+    }
+
+    /* Texte affiché en entier : la frappe n'est pas jouée. */
+    .vx-frappe {
+        animation: none;
+        clip-path: none;
     }
 }
 

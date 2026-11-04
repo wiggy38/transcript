@@ -11,6 +11,7 @@ return [
         'tarifs' => 'Pricing',
         'connexion' => 'Log in',
         'essayer' => 'Try for free',
+        'espace' => 'My space',
     ],
 
     'application' => [

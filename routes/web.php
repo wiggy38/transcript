@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', AccueilController::class)->name('accueil');
 Route::post('/lien', [LienController::class, 'store'])->name('lien.store');
 
+// Liens du pied de page. Textes juridiques et contact en attente : aucun texte n'est inventé (cahier §9).
+Route::view('/confidentialite', 'pages.provisoire', ['cle' => 'confidentialite'])->name('confidentialite');
+Route::view('/conditions', 'pages.provisoire', ['cle' => 'conditions'])->name('conditions');
+Route::view('/contact', 'pages.provisoire', ['cle' => 'contact'])->name('contact');
+
 // Connexion Google : répond 404 tant que VOXIA_GOOGLE_LOGIN n'est pas à true.
 Route::get('/auth/google', [GoogleController::class, 'rediriger'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'retour'])->name('google.callback');

@@ -9,7 +9,7 @@ Mise à jour à la fin de chaque tâche (voir `CLAUDE.md` §6).
 - [ ] Étape 2 — Comptes, historique et affichage de la transcription (F2, F5) (2 semaines) *(Comptes et F5 faits, voir §2 ; F2 partiel : lecture faite, exports à l'étape 3.)*
 - [ ] Étape 3 — Exports (F4), lecteur synchronisé et analyse de script (F7) (2 à 3 semaines)
 - [ ] Étape 4 — Plans, quotas, paiement et back-office (F6) (2 semaines) *(Quotas, Packs, compteur et paiement faits (Paddle, sandbox), voir §2 F6 et §3 ; le back-office est fait, voir §2 « Back-office » ; à vérifier dans un navigateur, P113.)*
-- [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines)
+- [ ] Étape 5 — Page d'accueil, page des tarifs, CGU, puis bêta privée avec 20 à 50 créateurs et marketeurs (2 semaines) *(Page d'accueil et tarifs faits, voir §2 « Page d'accueil » ; CGU, textes juridiques et bêta restent ouverts, P123.)*
 
 ## 2. Critères d'acceptation
 
@@ -133,6 +133,33 @@ Décisions du back-office :
 - [x] Emails transactionnels au style Signal ; en local, journal (`MAIL_MAILER=log`). *(EmailsTransactionnelsTest)* *(Partiel : Mailpit non essayé, voir P55.)*
 - [x] Limitation des tentatives : connexion 5 par minute, inscription 10 par heure et par IP, réinitialisation 5 par heure. *(ConnexionTest, InscriptionTest)*
 - [x] Écrans au style Signal (`layouts/marketing`, `layouts/app`), accueil avec le champ de lien. *(EcransComptesTest : rendu, sans ressource externe)*
+
+### Page d'accueil (cahier §7, maquette Signal)
+
+*Tests : `tests/Feature/Accueil/PageAccueilTest.php` (un test par critère de la liste de corrections), plus `CharteSignalTest` pour les animations. Mise en page vérifiée dans Chrome : aucun débordement horizontal à 375, 768 et 1440 px, sur l'accueil et sur une page du pied.*
+
+- [x] Structure et animations de la maquette reprises en composants Blade (`components/accueil/`) sur `layouts/marketing` : en-tête, héros, aperçu, bandeau, usages, fonctionnement, fiche technique, tarifs, questions, pied. *(PageAccueilTest)* *(Comparaison visuelle au trait près : à faire par le client.)*
+- [x] Carte Créateurs : « Une transcription, quatre formats. », formats réels (.txt, .pdf, .srt et .vtt, .mp3). *(PageAccueilTest)*
+- [x] Carte Marketeurs gardée telle quelle (F7 dans le MVP). *(PageAccueilTest)*
+- [x] Prix en dollars US lus dans `config/voxia.php` : Gratuit 0 $, Pro 12 $ par mois ou 96 $ par an, Pack 5 $. Bascule mensuel / annuel sur le Pro. *(PageAccueilTest)*
+- [x] Quotas et contenus du Gratuit, du Pro et du Pack lus dans la config (vidéos par mois, durée maximale, heures, validité). *(PageAccueilTest)*
+- [x] MP3 présenté comme inclus dans tous les plans. *(PageAccueilTest)*
+- [x] Fiche technique et texte sous le champ : MP3, M4A, WAV, MP4, MOV, WEBM (`voxia.uploads.extensions`). *(PageAccueilTest)*
+- [x] Champ du héros : visiteur envoyé à l'inscription, lien conservé ; connecté renvoyé vers le tableau de bord, lien en attente. *(PageAccueilTest pour le formulaire ; LienEnAttenteTest pour le parcours)*
+- [x] En-tête et pied branchés : Usages, Fonctionnement, Tarifs, Se connecter, Essayer gratuitement, Confidentialité, Conditions, Contact. Les trois pages du pied existent, avec un texte provisoire. *(PageAccueilTest)*
+- [x] Animations (onde, bandeau, frappe, paquet, curseur) coupées sous `prefers-reduced-motion`. *(CharteSignalTest, PageAccueilTest : contrôle du CSS ; pas d'essai avec le réglage du système activé.)*
+- [x] Aucune barre de défilement horizontale à 375, 768 et 1440 px. *(Mesure dans Chrome, sur l'accueil et une page du pied.)*
+- [x] Titre, description, balises Open Graph et Twitter, image de partage 1200 × 630 au style Signal (`public/images/partage-voxia.png`, générée avec GD). *(PageAccueilTest)*
+- [ ] Langues reconnues et durée de conservation : marquées « [À CONFIRMER] » (P121, P122).
+- [ ] Textes juridiques et contact : en attente (P123).
+
+**Décisions de la page d'accueil**
+
+- Les écarts de la section 7 du cahier sont tranchés comme dans la liste de corrections : carte Créateurs reformulée, devise en dollars, Pack ajouté, MP3 inclus partout, formats d'upload alignés sur la configuration.
+- Polices : la maquette charge Geist, Geist Mono et Instrument Serif depuis Google Fonts. Le projet les héberge déjà par fontsource (`resources/js/app.js`) : pas d'appel à un CDN, conforme à la charte.
+- Les boutons de l'aperçu produit (Copier, .txt, .srt, .vtt, .mp3) sont décoratifs : ils sont masqués aux lecteurs d'écran et sortent du parcours clavier.
+- Les textes des sections et des tarifs sont dans `lang/fr/accueil.php` et `lang/en/accueil.php`. Les montants, quotas et formats sont passés en remplacements : rien n'est écrit en dur.
+- Le pied de page pointe vers trois pages provisoires (`/confidentialite`, `/conditions`, `/contact`) qui affichent « [À CONFIRMER] » : aucun texte juridique n'est inventé (CLAUDE.md §7).
 
 ## 3. Décisions
 
@@ -414,3 +441,8 @@ Décisions des fenêtres d'upgrade :
 - [ ] P118 — Back-office : conversions Gratuit vers payant = comptes dont le premier achat (abonnement ou Pack) tombe dans les 30 derniers jours. Pas de taux de conversion (pas de dénominateur défini par le cahier). À confirmer.
 - [ ] P119 — Back-office : la consommation affichée tient compte des ajustements (la limite inclut l'ajout accordé). À valider avec le support, car le compteur du client ne change pas de sens entre l'application et le back-office.
 - [ ] P120 — Back-office : le coût moyen par heure de vidéo est calculé sur `transcriptions.cout_estime_usd` des transcriptions terminées des 30 derniers jours. Fenêtre et périmètre (coût de l'analyse de script exclu) à confirmer.
+- [ ] P121 — Page d'accueil : « Quelles langues sont reconnues ? » et la fiche technique reprennent les six langues de `voxia.langues_forcables` (fr, en, es, de, it, pt, validées en P61). À confirmer que c'est bien la liste à annoncer comme reconnue.
+- [ ] P122 — Page d'accueil : durée de conservation affichée « 30 jours [À CONFIRMER] » pour les transcriptions du Gratuit et pour les MP3 (lié à P2). Marqueur à retirer une fois tranchée.
+- [ ] P123 — Pages Confidentialité, Conditions et Contact : texte juridique et adresse de contact à fournir. En attendant, les pages affichent « [À CONFIRMER] ».
+- [ ] P124 — Page d'accueil : `APP_LOCALE=en` dans `.env` fait voir l'anglais aux visiteurs (les comptes gardent leur langue). Lié à P15 ; à trancher avant la comparaison avec la maquette française.
+- [ ] P125 — Page d'accueil : les boutons de l'aperçu produit (Copier, .txt, .srt, .vtt, .mp3) sont décoratifs. Les garder ainsi, ou les rendre fonctionnels sur une transcription d'exemple ?
