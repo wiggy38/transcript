@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\Comptes\ExportController;
 use App\Http\Controllers\Comptes\GoogleController;
 use App\Http\Controllers\Comptes\HistoriqueController;
 use App\Http\Controllers\Comptes\LienController;
@@ -37,6 +38,11 @@ Route::middleware('auth')->group(function () {
     // MP3 de la transcription, pour le lecteur audio (TikTok et fichiers). Propriétaire seulement.
     Route::get('/transcriptions/{transcription}/audio', [TranscriptionController::class, 'audio'])
         ->name('transcriptions.audio');
+
+    // Export d'une transcription (cahier F4) : TXT, PDF, SRT, VTT selon le plan. Propriétaire seulement.
+    Route::get('/transcriptions/{transcription}/exports/{format}', ExportController::class)
+        ->whereIn('format', ['txt', 'pdf', 'srt', 'vtt'])
+        ->name('transcriptions.export');
 
     // Morceaux d'un fichier importé (2 Go par défaut, envoi découpé). Email vérifié exigé.
     Route::post('/televersements/morceaux', [TeleversementController::class, 'morceau'])

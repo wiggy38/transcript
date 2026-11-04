@@ -96,7 +96,9 @@ return [
         'copie_ok' => 'Texte copié.',
         'copie_echec' => 'Copie impossible. Sélectionne le texte et copie-le à la main.',
         'bientot' => 'bientôt',
-        'exports_bientot' => 'Les exports (TXT, SRT, VTT, MP3) arrivent bientôt.',
+        'exports_bientot' => 'L’export MP3 arrive bientôt.',
+        'avec_horodatages' => 'Avec horodatages',
+        'exporter_verrouille' => 'Disponible à partir du plan :plan.',
     ],
 
 ];

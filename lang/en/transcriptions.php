@@ -96,7 +96,9 @@ return [
         'copie_ok' => 'Text copied.',
         'copie_echec' => 'Copy failed. Select the text and copy it by hand.',
         'bientot' => 'coming soon',
-        'exports_bientot' => 'Exports (TXT, SRT, VTT, MP3) are coming soon.',
+        'exports_bientot' => 'MP3 export is coming soon.',
+        'avec_horodatages' => 'With timestamps',
+        'exporter_verrouille' => 'Available from the :plan plan.',
     ],
 
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Services\Plans;
 
+use App\Enums\FormatExport;
 use App\Enums\Plan;
 use App\Models\User;
 
@@ -41,6 +42,48 @@ class PlanFeatures
     public function joursAvantRappel(User $utilisateur): int
     {
         return (int) config("voxia.plans.{$this->cle($utilisateur)}.history_reminder_days_before", 0);
+    }
+
+    /**
+     * Formats d'export du plan (voxia.plans.*.exports), dans l'ordre de FormatExport.
+     *
+     * @return list<FormatExport>
+     */
+    public function formatsExport(User $utilisateur): array
+    {
+        $autorises = config("voxia.plans.{$this->cle($utilisateur)}.exports", []);
+
+        return array_values(array_filter(
+            FormatExport::cases(),
+            fn (FormatExport $format) => in_array($format->value, $autorises, true),
+        ));
+    }
+
+    public function peutExporter(User $utilisateur, FormatExport $format): bool
+    {
+        return in_array($format, $this->formatsExport($utilisateur), true);
+    }
+
+    /**
+     * Plan vendable le moins cher qui donne ce format : c'est le plan à nommer quand un format est verrouillé.
+     */
+    public function planMinimalPour(FormatExport $format): ?Plan
+    {
+        foreach (Plan::cases() as $plan) {
+            $vendable = (bool) config("voxia.plans.{$plan->value}.sellable", false);
+            $formats = config("voxia.plans.{$plan->value}.exports", []);
+
+            if ($vendable && in_array($format->value, $formats, true)) {
+                return $plan;
+            }
+        }
+
+        return null;
+    }
+
+    public function libellePlan(Plan $plan): string
+    {
+        return (string) config("voxia.plans.{$plan->value}.label", $plan->name);
     }
 
     private function cle(User $utilisateur): string

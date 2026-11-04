@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Plan;
 use App\Enums\StatutTranscription;
 use App\Models\Transcription;
 use App\Models\TranscriptionParagraph;
@@ -133,15 +134,35 @@ it('affiche le bandeau Passe au Pro sur un aperçu, en fin de texte', function (
         ->assertSee(__('transcriptions.lecture.bandeau_pro'));
 });
 
-it('laisse les boutons d’export inactifs, avec leur explication', function () {
+// Critère F4 : la barre d'export branche les formats du plan ; un format verrouillé dit quel plan le débloque.
+it('affiche TXT et SRT au plan Gratuit, et PDF et VTT verrouillés avec le plan qui les débloque', function () {
     $utilisateur = User::factory()->create();
     $transcription = transcriptionAvecDeuxParagraphes($utilisateur);
     $this->actingAs($utilisateur);
 
     $this->get(route('transcriptions.show', $transcription))
         ->assertOk()
+        ->assertSee('href="'.route('transcriptions.export', [$transcription, 'txt', 'horodatages' => 1]).'"', false)
+        ->assertSee('href="'.route('transcriptions.export', [$transcription, 'srt', 'horodatages' => 1]).'"', false)
+        ->assertDontSee('href="'.route('transcriptions.export', [$transcription, 'pdf', 'horodatages' => 1]).'"', false)
+        ->assertSee('aria-describedby="verrou-pdf"', false)
+        ->assertSee('aria-describedby="verrou-vtt"', false)
+        ->assertSee(__('transcriptions.lecture.exporter_verrouille', ['plan' => 'Pro']))
         ->assertSee(__('transcriptions.lecture.exports_bientot'))
         ->assertSee('aria-describedby="exports-bientot"', false);
+});
+
+it('active tous les formats au plan Pro', function () {
+    config(['voxia.droits.plan_reel' => true]);
+    $utilisateur = User::factory()->create(['plan' => Plan::Pro]);
+    $transcription = transcriptionAvecDeuxParagraphes($utilisateur);
+    $this->actingAs($utilisateur);
+
+    $this->get(route('transcriptions.show', $transcription))
+        ->assertOk()
+        ->assertSee('href="'.route('transcriptions.export', [$transcription, 'pdf', 'horodatages' => 1]).'"', false)
+        ->assertSee('href="'.route('transcriptions.export', [$transcription, 'vtt', 'horodatages' => 1]).'"', false)
+        ->assertDontSee('aria-describedby="verrou-pdf"', false);
 });
 
 it('n’affiche pas la lecture tant que la transcription n’est pas terminée', function () {

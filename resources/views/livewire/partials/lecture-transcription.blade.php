@@ -151,8 +151,13 @@
                 </aside>
             @endif
 
-            {{-- Barre d'export : la copie fonctionne ; les exports arrivent à l'étape 3 --}}
-            <footer class="mt-8 border-t border-filet pt-5">
+            {{-- Barre d'export (cahier F4) : les formats du plan sont des liens, les autres sont verrouillés
+                 avec le plan qui les débloque. Les SRT et VTT gardent toujours leurs horodatages. --}}
+            @php
+                $compte = auth()->user();
+                $droits = app(\App\Services\Plans\PlanFeatures::class);
+            @endphp
+            <footer class="mt-8 border-t border-filet pt-5" x-data="{ horodatages: true }">
                 <div class="flex flex-wrap items-center gap-3">
                     <button type="button" @click="copier()"
                         class="min-h-11 cursor-pointer rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent">
@@ -161,14 +166,49 @@
                     <span role="status" class="font-mono text-xs text-texte-discret" x-text="messageCopie"></span>
                 </div>
 
-                <div class="mt-3 flex flex-wrap items-center gap-2">
-                    @foreach (['.txt', '.srt', '.vtt', '.mp3'] as $format)
+                <div class="mt-4">
+                    <label class="inline-flex min-h-11 cursor-pointer items-center gap-2 font-mono text-xs text-texte-secondaire">
+                        <input type="checkbox" x-model="horodatages" class="size-4 accent-accent">
+                        {{ __('transcriptions.lecture.avec_horodatages') }}
+                    </label>
+                </div>
+
+                <ul class="mt-2 flex flex-wrap items-start gap-3">
+                    @foreach (\App\Enums\FormatExport::cases() as $format)
+                        <li class="flex flex-col items-start">
+                            @if ($droits->peutExporter($compte, $format))
+                                @php
+                                    $urlAvec = route('transcriptions.export', [$transcription, $format, 'horodatages' => 1]);
+                                    $urlSans = route('transcriptions.export', [$transcription, $format, 'horodatages' => 0]);
+                                    $jsAvec = \Illuminate\Support\Js::from($urlAvec);
+                                    $jsSans = \Illuminate\Support\Js::from($urlSans);
+                                @endphp
+                                <a href="{{ $urlAvec }}" x-bind:href="horodatages ? {{ $jsAvec }} : {{ $jsSans }}" download
+                                    class="inline-flex min-h-11 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent">
+                                    {{ $format->libelle() }}
+                                </a>
+                            @else
+                                @php
+                                    $planDebloquant = $droits->planMinimalPour($format);
+                                @endphp
+                                <button type="button" disabled aria-describedby="verrou-{{ $format->value }}"
+                                    class="min-h-11 cursor-not-allowed rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret">
+                                    {{ $format->libelle() }}
+                                </button>
+                                <p id="verrou-{{ $format->value }}" class="mt-1 font-mono text-[11px] text-texte-discret">
+                                    {{ __('transcriptions.lecture.exporter_verrouille', ['plan' => $planDebloquant ? $droits->libellePlan($planDebloquant) : '']) }}
+                                </p>
+                            @endif
+                        </li>
+                    @endforeach
+
+                    <li class="flex flex-col items-start">
                         <button type="button" disabled aria-describedby="exports-bientot"
                             class="min-h-11 cursor-not-allowed rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret">
-                            {{ $format }} <span class="ml-1">· {{ __('transcriptions.lecture.bientot') }}</span>
+                            MP3 <span class="ml-1">· {{ __('transcriptions.lecture.bientot') }}</span>
                         </button>
-                    @endforeach
-                </div>
+                    </li>
+                </ul>
                 <p id="exports-bientot" class="mt-2 font-mono text-xs text-texte-discret">{{ __('transcriptions.lecture.exports_bientot') }}</p>
             </footer>
         </div>

@@ -44,8 +44,10 @@ Points ouverts :
 
 ### F4 — Export TXT, PDF, SRT, VTT
 
-- [ ] Les fichiers SRT et VTT s'importent sans erreur dans YouTube Studio et CapCut.
-- [ ] Les accents et caractères non latins s'affichent correctement dans chaque format.
+- [ ] Les fichiers SRT et VTT s'importent sans erreur dans YouTube Studio et CapCut. *(Partiel : un validateur contrôle chaque règle sur les cinq cas (`tests/Feature/Exports/SousTitresTest.php`), et des exemples sont prêts dans `storage/app/exports-test/`. L'import réel reste à faire à la main, P78.)*
+- [ ] Les accents et caractères non latins s'affichent correctement dans chaque format. *(Partiel : TXT, SRT et VTT sont testés en UTF-8 avec accents et cyrillique ; le texte du PDF a été relu par pdf.js, français, cyrillique et grec. L'arabe et les écritures CJK ne sont pas couverts dans le PDF, P80.)*
+
+Livré avec F4 : TXT et PDF avec ou sans horodatages ; SRT et VTT (42 caractères, 2 lignes, 1 à 7 secondes, sans chevauchement, coupure à la ponctuation puis entre deux mots). Barre d'export de la lecture branchée : les formats du plan sont des liens, les autres sont verrouillés avec le plan qui les débloque. Route `transcriptions.export`, 403 côté serveur pour un format hors plan. Tests : `tests/Feature/Exports`, `LectureTranscriptionTest`.
 
 ### F5 — Historique et recherche
 
@@ -118,6 +120,14 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
   - Lien depuis la recherche : `?t=` en millisecondes, borné à la durée. Le lecteur se place sur ce moment sans lancer la lecture (MP3 après `loadedmetadata`, YouTube à `onReady`).
   - Nouvelles clés de config : `voxia.recherche`, `voxia.conservation`, `voxia.droits`, `voxia.historique.par_page` (20).
 - Bug trouvé par l'essai réel sur serveur, et corrigé : les champs de formulaire arrivent en chaînes, la comparaison stricte du nombre de morceaux refusait donc tout envoi réel. Les tests envoient désormais des champs en chaînes, comme le navigateur.
+- Exports (F4) : une interface `App\Services\Exports\Exporteur`, une classe par format (`ExporteurTxt`, `ExporteurPdf`, `ExporteurSrt`, `ExporteurVtt`), choisies par `Exporteurs::pour()`. Les exporteurs reçoivent un `App\Data\ContenuTranscription`, sans Eloquent.
+- Sous-titres (`GenerateurSousTitres`) : les mots se fusionnent à leur ponctuation pour former des unités qui ne se coupent jamais. Une coupure se fait à la fin de phrase si le sous-titre dure au moins 1 s ; à une virgule seulement si le sous-titre occupe au moins 75 % de la place (`voxia.subtitles.coupure_ponctuation_faible_ratio`) ; sinon à la limite de place. Un sous-titre de moins d'une seconde est fusionné avec le suivant si la durée et les lignes le permettent, sinon il s'étire vers l'avant sans toucher au suivant. Un étirement impossible laisse un sous-titre de moins d'une seconde : le validateur le signalerait.
+- PDF : mPDF (`mpdf/mpdf`). Installé avec `--ignore-platform-req=ext-pcntl --ignore-platform-req=ext-posix`, car ces extensions Linux manquent sous Windows ; à rejouer tel quel sur un poste sans elles. Polices dans `resources/fonts` (voir son README).
+- Téléchargement : `GET /transcriptions/{id}/exports/{format}?horodatages=0|1`, propriétaire seulement. Les SRT et VTT ignorent le paramètre et gardent leurs horodatages.
+- Droits : `PlanFeatures::formatsExport()`, `peutExporter()`, `planMinimalPour()`. Le plan débloquant est le moins cher et vendable (Pro pour PDF et VTT).
+- Exports produits pendant la requête web, pas par la file : contraire à la règle de CLAUDE.md §5. Choix assumé pour cette étape (TXT, SRT et VTT sont des mises en forme de texte) ; le PDF est à surveiller, voir P79.
+- Exemples à importer : `storage/app/exports-test/` (`exemple.srt`, `exemple.vtt`, `exemple.pdf`, `exemple-avec-horodatages.txt`, `exemple-sans-horodatages.txt`). Générés depuis la fixture ElevenLabs `francais_redige.json`, qui est écrite à la main et non enregistrée (P22). Le dossier `storage/app` est ignoré par git : les fichiers ne sont pas committés.
+- Nouvelles clés de config : `voxia.subtitles.coupure_ponctuation_faible_ratio`, `voxia.exports.pdf.marge_mm`.
 
 ## 4. Points ouverts
 
@@ -273,3 +283,7 @@ Livré avec F5 : liste (miniature, titre, plateforme, durée, date, statut), tri
 - [ ] P75 — Droits par plan : tout le monde est Gratuit tant que `VOXIA_PLAN_REEL` est faux. Le test des plans Pro et Pack se fait avec ce drapeau ; l'étape 4 le remplacera.
 - [ ] P76 — Historique : écrans non vérifiés dans un navigateur à 375 px (mêmes statuts que P44 et P58), dont le bouton de confirmation de suppression.
 - [ ] P77 — Pagination : précédente et suivante seulement (pas de numéros de page) pour rester lisible au téléphone. À confirmer avec la maquette.
+- [ ] P78 — Import réel des SRT et VTT dans YouTube Studio et CapCut : à faire à la main avec `storage/app/exports-test/exemple.srt` et `exemple.vtt`. Le validateur de règles ne remplace pas ce test.
+- [ ] P79 — Export PDF pendant la requête web : contraire à la règle « tout passe par la file » (CLAUDE.md §5). Mesuré sur le poste de développement, pour 28 848 mots (3 heures) : PDF 14,5 s, SRT 0,45 s, TXT moins de 0,02 s. Décision à prendre : passer le PDF par la file avec téléchargement différé, ou garder la requête si la mesure le permet.
+- [ ] P80 — Écritures sans couverture dans le PDF : arabe et CJK. La mise en forme de Noto Sans Arabic échoue dans mPDF (table GPOS de type 5 non prise en charge). TXT, SRT et VTT les gèrent. Choix à faire : police CJK plus lourde, ou moteur PDF différent.
+- [ ] P81 — Bouton MP3 de la barre d'export : toujours inactif. Le téléchargement du MP3 relève de F3 et n'est pas branché ici.

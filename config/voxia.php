@@ -247,6 +247,24 @@ return [
         'max_lines' => (int) env('VOXIA_SUBTITLE_MAX_LINES', 2),
         'min_duration_seconds' => (int) env('VOXIA_SUBTITLE_MIN_DURATION_SECONDS', 1),
         'max_duration_seconds' => (int) env('VOXIA_SUBTITLE_MAX_DURATION_SECONDS', 7),
+        // Coupure à une virgule ou un point-virgule seulement si le sous-titre occupe au moins cette part de la place.
+        'coupure_ponctuation_faible_ratio' => (float) env('VOXIA_SUBTITLE_WEAK_BREAK_RATIO', 0.75),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exports (F4)
+    |--------------------------------------------------------------------------
+    |
+    | Polices dans resources/fonts : Geist pour le texte, Noto Sans en secours pour les
+    | caractères non latins. Marge en millimètres.
+    |
+    */
+
+    'exports' => [
+        'pdf' => [
+            'marge_mm' => (int) env('VOXIA_PDF_MARGIN_MM', 22),
+        ],
     ],
 
     /*
