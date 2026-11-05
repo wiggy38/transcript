@@ -1,4 +1,4 @@
-@props(["titre" => null])
+@props(["titre" => null, "entete" => "border-b border-filet bg-panneau", "principal" => "mx-auto grid w-full max-w-[1120px] items-start gap-12 px-4 py-10 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:items-center lg:gap-20 lg:py-16"])
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="dark">
 <head>
@@ -15,16 +15,18 @@
     </a>
 
     {{-- Connexion et inscription (maquettes « Connexion » et « Inscription ») : en-tête minimal, sans navigation d'application. --}}
-    <header class="border-b border-filet bg-panneau">
+    <header class="{{ $entete }}">
         <div class="mx-auto flex max-w-[1120px] items-center justify-between gap-4 px-4 py-3">
             <x-marque />
             <x-selecteur-langue />
         </div>
     </header>
 
-    <main id="contenu" class="mx-auto grid w-full max-w-[1120px] items-start gap-12 px-4 py-10 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:items-center lg:gap-20 lg:py-16">
+    <main id="contenu" class="{{ $principal }}">
         {{ $slot }}
     </main>
+
+    <x-pied-page />
 
     @livewireScripts
 </body>

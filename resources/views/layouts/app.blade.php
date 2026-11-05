@@ -55,6 +55,8 @@
         {{ $slot }}
     </main>
 
+    <x-pied-page />
+
     @livewireScripts
 </body>
 </html>

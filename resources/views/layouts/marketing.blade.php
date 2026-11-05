@@ -92,18 +92,7 @@
         {{ $slot }}
     </main>
 
-    <footer class="mt-24 border-t border-filet bg-panneau">
-        <div class="mx-auto flex w-full max-w-[1120px] flex-wrap items-center justify-between gap-4 px-4 py-7 text-aide text-texte-discret">
-            <span>{{ __('interface.pied.droits', ['annee' => now()->year]) }}</span>
-            <ul class="m-0 flex list-none flex-wrap gap-x-6 gap-y-2 p-0">
-                <li><a href="{{ route('tarifs') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.tarifs') }}</a></li>
-                <li><a href="{{ route('questions') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.questions') }}</a></li>
-                <li><a href="{{ route('conditions') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.conditions') }}</a></li>
-                <li><a href="{{ route('confidentialite') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.confidentialite') }}</a></li>
-                <li><a href="{{ route('contact') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.contact') }}</a></li>
-            </ul>
-        </div>
-    </footer>
+    <x-pied-page classe="mt-24" />
 
     @livewireScripts
 </body>
