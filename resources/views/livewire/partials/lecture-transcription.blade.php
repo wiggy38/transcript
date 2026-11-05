@@ -48,7 +48,7 @@
             </h1>
         </div>
 
-        <ul class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-wide text-texte-discret">
+        <ul class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-texte-discret">
             <li><span class="sr-only">{{ __('transcriptions.lecture.plateforme') }} : </span>{{ __('transcriptions.lecture.plateformes.'.$transcription->source->value) }}</li>
             <li aria-hidden="true">·</li>
             <li><span class="sr-only">{{ __('transcriptions.lecture.duree') }} : </span>{{ \App\Support\Horodatage::format($dureeMs) }}</li>

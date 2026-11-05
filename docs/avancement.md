@@ -276,6 +276,8 @@ Décisions des fenêtres d'upgrade :
 - [x] Étape 2 : composants alignés sur le handoff (`<x-icone>`, héros, aperçu, fonctionnement en trois étapes, « Ce que tu récupères », « Pour qui ? » avec scènes animées, tarifs, questions en `<details>`, appel final). Bandeau défilant et fiche technique retirés. En-tête collant avec menu mobile. Textes FR et EN mis à jour.
 - [x] Thème : sombre par défaut, sans repli sur le thème du système (demande de l'utilisateur ; le handoff prévoyait un repli clair).
 - [x] Tests : `PageAccueilTest` adapté au handoff (cartes, lien « Se connecter » dans l'en-tête, animations du bandeau retirées). Tarifs et FAQ liés à la configuration conservés. Liens Tarifs et Questions gardés au pied de page.
+- [x] Étape 3 : écrans de l'app alignés sur le handoff. Titres de page en Unbounded (utilitaire `titre-h2`), libellés mono sans majuscules ni espacement. Les cinq états (vide, file, cours, erreur, terminé) reposent sur les statuts existants (`<x-badge-statut>`, `progression-etapes`) : non revus un à un dans un navigateur.
+- [x] Étape 5 : thème Filament `resources/css/filament/admin/theme.css` (Onest, rayons 12 px, gris indigo, accent Nocturne) branché par `viteTheme` dans `AdminPanelProvider`. Non vérifié dans un navigateur (exige un compte administrateur).
 - [ ] Vérification visuelle : bureau faite en clair ; mobile 375 px non vérifiée (le redimensionnement de Chrome n'a pas pris effet).
 - [ ] Reste à faire (étape 2 et suivantes) : composants Blade selon `blade-reference/`, landing, tarifs, écrans de l'application, thème Filament. Voir P138 à P142.
 

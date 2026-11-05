@@ -1,7 +1,7 @@
 <x-layouts::marketing :titre="__('comptes.connexion.titre')">
     <section class="mx-auto max-w-md py-16" aria-labelledby="titre-connexion">
         <x-panneau class="p-8">
-            <h1 id="titre-connexion" class="text-2xl font-semibold tracking-tight">{{ __('comptes.connexion.titre') }}</h1>
+            <h1 id="titre-connexion" class="titre-h2">{{ __('comptes.connexion.titre') }}</h1>
             <p class="mt-2 text-texte-secondaire">{{ __('comptes.connexion.sous_titre') }}</p>
 
             @if (request()->session()->has('lien_en_attente'))

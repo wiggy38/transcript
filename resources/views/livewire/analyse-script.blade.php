@@ -69,14 +69,14 @@
                     @if ($partie['detectee'])
                         <button type="button" x-on:click="$dispatch('voxia-aller', { ms: {{ $partie['debut'] }} })"
                             class="block w-full cursor-pointer rounded-champ border border-filet bg-fond px-4 py-3 text-left hover:border-accent">
-                            <span class="block font-mono text-[11px] uppercase tracking-wide text-accent-texte">
+                            <span class="block font-mono text-[11px] text-accent-texte">
                                 {{ __('analyse.types.'.$partie['type']->value) }} · {{ \App\Support\Horodatage::format($partie['debut']) }} → {{ \App\Support\Horodatage::format($partie['fin']) }}
                             </span>
                             <span class="mt-1.5 block font-titre text-[19px] font-medium leading-snug text-texte [overflow-wrap:anywhere]">« {{ $partie['texte'] }} »</span>
                         </button>
                     @else
                         <div class="rounded-champ border border-dashed border-filet-contour px-4 py-3" style="background-image: {{ $hachures }};">
-                            <span class="block font-mono text-[11px] uppercase tracking-wide text-texte-discret">
+                            <span class="block font-mono text-[11px] text-texte-discret">
                                 {{ __('analyse.types.'.$partie['type']->value) }} · {{ __('analyse.non_detectee') }}
                             </span>
                         </div>

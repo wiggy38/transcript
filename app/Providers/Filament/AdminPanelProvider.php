@@ -21,7 +21,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 /**
  * Back-office Voxia sur /admin (cahier §5). Réservé aux comptes is_admin : voir User::canAccessPanel().
- * Thème sombre de Filament, accent de la charte Signal (#FF6A3D).
+ * Thème sombre de Filament, direction « Nocturne » (resources/css/filament/admin/theme.css).
  */
 class AdminPanelProvider extends PanelProvider
 {
@@ -33,8 +33,10 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName(__('administration.marque'))
             ->login()
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
-                'primary' => Color::hex('#FF6A3D'),
+                'primary' => Color::hex('#C8F25A'),
+                'gray' => Color::Indigo,
             ])
             ->defaultThemeMode(ThemeMode::Dark)
             ->pages([

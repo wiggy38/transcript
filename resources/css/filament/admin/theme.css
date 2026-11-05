@@ -1,0 +1,16 @@
+/*
+ * Thème du back-office (Filament 4, /admin) : direction « Nocturne » (handoff, étape 5).
+ * Base Filament, police Onest, rayons 12 px, jetons Voxia pour les couleurs de marque.
+ * Les gris passent sur l'échelle indigo ; l'accent d'action est le vert citron de Nocturne.
+ */
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '@fontsource-variable/onest/wght.css';
+@import '../../voxia-tokens.css';
+
+@source '../../../../app/Filament';
+@source '../../../../resources/views/filament';
+
+@theme {
+    --font-sans: "Onest", ui-sans-serif, system-ui, sans-serif;
+    --radius: 0.75rem;
+}

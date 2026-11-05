@@ -1,7 +1,7 @@
 <x-layouts::marketing :titre="__('comptes.mot_de_passe.oublie_titre')">
     <section class="mx-auto max-w-md py-16" aria-labelledby="titre-oubli">
         <x-panneau class="p-8">
-            <h1 id="titre-oubli" class="text-2xl font-semibold tracking-tight">{{ __('comptes.mot_de_passe.oublie_titre') }}</h1>
+            <h1 id="titre-oubli" class="titre-h2">{{ __('comptes.mot_de_passe.oublie_titre') }}</h1>
             <p class="mt-2 text-texte-secondaire">{{ __('comptes.mot_de_passe.oublie_texte') }}</p>
 
             @if (session('status'))

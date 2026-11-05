@@ -28,7 +28,7 @@
                     required :erreur="$errors->first('email')" />
 
                 <div class="flex flex-col gap-2">
-                    <label for="contact-sujet" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('pages.contact.champs.sujet') }}</label>
+                    <label for="contact-sujet" class="font-mono text-xs text-texte-discret">{{ __('pages.contact.champs.sujet') }}</label>
                     <select id="contact-sujet" name="sujet" required class="min-h-10 w-full rounded-champ border border-filet-contour bg-panneau px-3.5 text-[14px] text-texte">
                         @foreach ($sujets as $sujet)
                             <option value="{{ $sujet }}" @selected(old('sujet') === $sujet)>{{ __('pages.contact.sujets.'.$sujet) }}</option>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="flex flex-col gap-2">
-                    <label for="contact-message" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('pages.contact.champs.message') }}</label>
+                    <label for="contact-message" class="font-mono text-xs text-texte-discret">{{ __('pages.contact.champs.message') }}</label>
                     <textarea id="contact-message" name="message" rows="6" required minlength="10" maxlength="5000"
                         aria-describedby="contact-message-aide{{ $errors->has('message') ? ' contact-message-erreur' : '' }}"
                         @if ($errors->has('message')) aria-invalid="true" @endif

@@ -6,7 +6,7 @@
         </p>
 
         <x-panneau class="p-6">
-            <h1 class="text-2xl font-semibold tracking-tight">{{ __('historique.confirmation.titre') }}</h1>
+            <h1 class="titre-h2">{{ __('historique.confirmation.titre') }}</h1>
             <p class="mt-3 text-texte-secondaire [overflow-wrap:anywhere]">
                 {{ __('historique.confirmation.texte', ['titre' => $transcription->titre ?? __('historique.sans_titre')]) }}
             </p>

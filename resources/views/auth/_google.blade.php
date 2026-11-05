@@ -4,6 +4,6 @@
         <a href="{{ route('google.redirect') }}" class="inline-flex min-h-10 items-center justify-center rounded-bouton border border-filet-contour px-5 text-[14px] font-semibold text-texte no-underline hover:border-accent hover:text-accent-texte">
             {{ __('comptes.google.bouton') }}
         </a>
-        <p class="text-center font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('comptes.google.ou') }}</p>
+        <p class="text-center font-mono text-xs text-texte-discret">{{ __('comptes.google.ou') }}</p>
     </div>
 @endif

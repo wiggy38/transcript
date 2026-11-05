@@ -1,7 +1,7 @@
 <x-layouts::marketing :titre="__('comptes.verification.titre')">
     <section class="mx-auto max-w-md py-16" aria-labelledby="titre-verification">
         <x-panneau class="p-8">
-            <h1 id="titre-verification" class="text-2xl font-semibold tracking-tight">{{ __('comptes.verification.titre') }}</h1>
+            <h1 id="titre-verification" class="titre-h2">{{ __('comptes.verification.titre') }}</h1>
             <p class="mt-2 text-texte-secondaire">{{ __('comptes.verification.texte') }}</p>
 
             @if (session('status') === 'verification-link-sent')

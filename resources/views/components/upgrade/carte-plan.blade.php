@@ -7,7 +7,7 @@
     @endif
 
     <div class="flex items-center justify-between gap-3">
-        <h3 id="carte-{{ $carte['cle'] }}" class="font-mono text-xs uppercase tracking-wide {{ $carte['vedette'] ? 'text-accent-texte' : 'text-texte-discret' }}">{{ $carte['nom'] }}</h3>
+        <h3 id="carte-{{ $carte['cle'] }}" class="font-mono text-xs {{ $carte['vedette'] ? 'text-accent-texte' : 'text-texte-discret' }}">{{ $carte['nom'] }}</h3>
         @if ($carte['actuel'])
             <span class="font-mono text-[11px] text-texte-secondaire">{{ __('upgrade.actions.ton_plan') }}</span>
         @endif

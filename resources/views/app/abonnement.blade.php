@@ -9,7 +9,7 @@
         <p role="status" class="mb-8 border-l-2 border-accent py-1 pl-3 text-sm text-texte">{{ $messageStatut }}</p>
     @endif
 
-    <h1 class="text-2xl font-semibold tracking-tight">{{ __('abonnement.titre') }}</h1>
+    <h1 class="titre-h2">{{ __('abonnement.titre') }}</h1>
 
     @if ($impayee)
         <p role="alert" class="mt-6 border-l-2 border-accent py-1 pl-3 text-sm text-texte">{{ __('abonnement.impayee') }}</p>

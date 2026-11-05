@@ -12,7 +12,7 @@
         <div class="text-texte-secondaire">{{ $slot }}</div>
 
         <section aria-label="{{ __('upgrade.tarifs.titre') }}" class="flex flex-col gap-4">
-            <h3 class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('upgrade.tarifs.titre') }}</h3>
+            <h3 class="font-mono text-xs text-texte-discret">{{ __('upgrade.tarifs.titre') }}</h3>
 
             <div class="grid gap-4 md:grid-cols-2 {{ count($cartes) > 2 ? 'lg:grid-cols-3' : '' }}">
                 @foreach ($cartes as $carte)

@@ -4,7 +4,7 @@
     @endif
 
     <section aria-labelledby="titre-nouvelle" class="max-w-[720px]">
-        <h1 id="titre-nouvelle" class="text-2xl font-semibold tracking-tight">{{ __('comptes.tableau.titre') }}</h1>
+        <h1 id="titre-nouvelle" class="titre-h2">{{ __('comptes.tableau.titre') }}</h1>
         <p class="mt-2 text-texte-secondaire">{{ __('comptes.tableau.sous_titre') }}</p>
 
         @unless ($verifie)
@@ -20,7 +20,7 @@
     </div>
 
     <section aria-labelledby="titre-historique" class="mt-16">
-        <h2 id="titre-historique" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('comptes.tableau.historique') }}</h2>
+        <h2 id="titre-historique" class="font-mono text-xs text-texte-discret">{{ __('comptes.tableau.historique') }}</h2>
 
         @if ($transcriptions->isEmpty())
             <p class="mt-4 text-texte-secondaire">{{ __('comptes.tableau.vide') }}</p>

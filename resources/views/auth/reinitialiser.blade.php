@@ -1,7 +1,7 @@
 <x-layouts::marketing :titre="__('comptes.mot_de_passe.reinitialiser_titre')">
     <section class="mx-auto max-w-md py-16" aria-labelledby="titre-reinitialisation">
         <x-panneau class="p-8">
-            <h1 id="titre-reinitialisation" class="text-2xl font-semibold tracking-tight">{{ __('comptes.mot_de_passe.reinitialiser_titre') }}</h1>
+            <h1 id="titre-reinitialisation" class="titre-h2">{{ __('comptes.mot_de_passe.reinitialiser_titre') }}</h1>
 
             <form method="post" action="{{ route('password.update') }}" class="mt-8 flex flex-col gap-5" novalidate>
                 @csrf

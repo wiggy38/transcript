@@ -7,7 +7,7 @@
 @endphp
 
 <div class="flex min-w-0 flex-col gap-2">
-    <label for="{{ $id }}" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ $label }}</label>
+    <label for="{{ $id }}" class="font-mono text-xs text-texte-discret">{{ $label }}</label>
 
     <input
         id="{{ $id }}"

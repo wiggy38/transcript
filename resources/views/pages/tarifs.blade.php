@@ -22,7 +22,7 @@
 
 <x-layouts::marketing :titre="__('pages.tarifs.titre').' — '.__('interface.marque')" :description="__('pages.tarifs.intro')">
     <section class="pt-2.5" aria-labelledby="titre-page-tarifs">
-        <p class="font-mono text-xs font-medium text-accent-texte uppercase">{{ __('interface.pied.tarifs') }}</p>
+        <p class="font-mono text-xs font-medium text-accent-texte">{{ __('interface.pied.tarifs') }}</p>
         <h1 id="titre-page-tarifs" class="mt-4 text-[clamp(40px,5vw,64px)] leading-none font-semibold tracking-[-0.04em]">{{ __('pages.tarifs.titre') }}</h1>
         <p class="mt-6 max-w-[40em] text-lg text-texte-secondaire">{{ __('pages.tarifs.intro') }}</p>
 
@@ -31,10 +31,10 @@
                 <caption class="sr-only">{{ __('pages.tarifs.titre') }}</caption>
                 <thead>
                     <tr class="border-b border-filet bg-panneau">
-                        <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret uppercase">{{ __('pages.tarifs.colonnes.fonctionnalite') }}</th>
-                        <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret uppercase">{{ $plans['free']['label'] }}</th>
-                        <th scope="col" class="p-5 font-mono text-xs font-medium text-accent-texte uppercase">{{ $plans['pro']['label'] }}</th>
-                        <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret uppercase">{{ $plans['pack']['label'] }}</th>
+                        <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret">{{ __('pages.tarifs.colonnes.fonctionnalite') }}</th>
+                        <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret">{{ $plans['free']['label'] }}</th>
+                        <th scope="col" class="p-5 font-mono text-xs font-medium text-accent-texte">{{ $plans['pro']['label'] }}</th>
+                        <th scope="col" class="p-5 font-mono text-xs font-medium text-texte-discret">{{ $plans['pack']['label'] }}</th>
                     </tr>
                 </thead>
                 <tbody class="text-texte-secondaire">
@@ -105,7 +105,7 @@
 
     <section class="pt-2.5 pb-10" aria-labelledby="titre-faq-tarifs">
         <div class="flex flex-wrap gap-8 border-t border-filet pt-8">
-            <h2 id="titre-faq-tarifs" class="flex-[1_1_280px] font-mono text-xs font-medium text-texte-discret uppercase">{{ __('pages.tarifs.faq.titre') }}</h2>
+            <h2 id="titre-faq-tarifs" class="flex-[1_1_280px] font-mono text-xs font-medium text-texte-discret">{{ __('pages.tarifs.faq.titre') }}</h2>
 
             <dl class="m-0 min-w-0 flex-[3_1_640px]">
                 @foreach (__('pages.tarifs.faq.liste') as $numero => $entree)

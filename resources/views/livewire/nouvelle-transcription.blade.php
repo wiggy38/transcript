@@ -13,7 +13,7 @@
 
     {{-- Lien --}}
     <section aria-labelledby="titre-lien" class="max-w-[720px]">
-        <h2 id="titre-lien" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('transcriptions.lien.titre') }}</h2>
+        <h2 id="titre-lien" class="font-mono text-xs text-texte-discret">{{ __('transcriptions.lien.titre') }}</h2>
 
         <form wire:submit="soumettreLien" class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end" novalidate>
             <div class="min-w-0 flex-1">
@@ -93,7 +93,7 @@
 
     {{-- Fichier --}}
     <section aria-labelledby="titre-fichier" class="max-w-[720px]">
-        <h2 id="titre-fichier" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('transcriptions.fichier.titre') }}</h2>
+        <h2 id="titre-fichier" class="font-mono text-xs text-texte-discret">{{ __('transcriptions.fichier.titre') }}</h2>
 
         <div x-data="televersement($wire, @js([
                 'url' => route('televersements.morceau'),
