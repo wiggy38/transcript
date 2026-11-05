@@ -37,13 +37,13 @@ class GoogleController extends Controller
         } catch (Throwable $erreur) {
             Log::warning('Connexion Google interrompue.', ['exception' => $erreur::class]);
 
-            return redirect()->route('login')->withErrors(['email' => __('comptes.google.echec')]);
+            return redirect()->route('login')->withErrors(['google' => __('comptes.google.echec')]);
         }
 
         $raw = (array) $google->getRaw();
 
         if (($raw['email_verified'] ?? false) !== true || ! is_string($google->getEmail())) {
-            return redirect()->route('login')->withErrors(['email' => __('comptes.google.echec')]);
+            return redirect()->route('login')->withErrors(['google' => __('comptes.google.echec')]);
         }
 
         $utilisateur = User::query()->where('google_id', $google->getId())->first();
@@ -52,7 +52,7 @@ class GoogleController extends Controller
             $utilisateur = $this->compteParEmail($google->getEmail(), $google->getId(), $google->getName(), $request);
 
             if ($utilisateur === null) {
-                return redirect()->route('login')->withErrors(['email' => __('comptes.google.echec')]);
+                return redirect()->route('login')->withErrors(['google' => __('comptes.google.echec')]);
             }
         }
 
