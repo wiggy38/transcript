@@ -133,6 +133,8 @@ Décisions du back-office :
 - [x] Emails transactionnels au style Signal ; en local, journal (`MAIL_MAILER=log`). *(EmailsTransactionnelsTest)* *(Partiel : Mailpit non essayé, voir P55.)*
 - [x] Limitation des tentatives : connexion 5 par minute, inscription 10 par heure et par IP, réinitialisation 5 par heure. *(ConnexionTest, InscriptionTest)*
 - [x] Écrans au style Signal (`layouts/marketing`, `layouts/app`), accueil avec le champ de lien. *(EcransComptesTest : rendu, sans ressource externe)*
+- [x] Page Compte au style et à la structure de la maquette « Compte - Nocturne » : navigation latérale avec section active (suivi au défilement), formule en pastille et trois cartes de quota selon le plan, profil et mot de passe en grille, langue, factures, données, zone de suppression teintée. *(ReglagesTest, EcransComptesTest. Vérifié par les tests, pas encore dans un navigateur.)*
+  - Décision : les cartes « Exports » (Gratuit, Pack) lisent la config (`voxia.plans.*.exports`) ; la maquette affiche « MP3 » pour le Gratuit, qui n'y figure pas. À confirmer.
 
 ### Page d'accueil (cahier §7, maquette Signal)
 

@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Comptes;
 
 use App\Contracts\BillingProvider;
+use App\Enums\FormatExport;
 use App\Http\Controllers\Controller;
 use App\Jobs\ExporterDonneesCompte;
 use App\Jobs\SupprimerFichiersTranscriptions;
 use App\Mail\CompteSupprime;
+use App\Models\PackAchat;
 use App\Models\User;
 use App\Services\Plans\PlanFeatures;
 use App\Services\Quota\QuotaService;
 use App\Support\Duree;
+use App\Support\Formats;
 use App\Support\Langue;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -51,43 +54,76 @@ class ReglagesController extends Controller
     private function formule(User $utilisateur): array
     {
         $droits = app(PlanFeatures::class);
-        $resume = app(QuotaService::class)->resume($utilisateur);
-        $quotas = [];
+        $service = app(QuotaService::class);
+        $resume = $service->resume($utilisateur);
+        $plan = $resume['plan'];
+        $cle = in_array($plan->value, ['free', 'pro', 'pack'], true) ? $plan->value : 'free';
 
-        if (isset($resume['videos_limite'])) {
-            $quotas[] = [
-                'libelle' => __('comptes.reglages.formule.videos'),
-                'valeur' => $resume['videos_utilisees'].' / '.$resume['videos_limite'],
-                'pourcentage' => $resume['videos_limite'] > 0
-                    ? min(100, (int) round($resume['videos_utilisees'] / $resume['videos_limite'] * 100))
-                    : null,
-            ];
-        } else {
-            $secondesMois = $resume['secondes_mois'] ?? null;
-            $secondesPacks = (int) ($resume['secondes_packs'] ?? 0);
+        $formats = $droits->formatsExport($utilisateur);
+        $exports = count($formats) === count(FormatExport::cases())
+            ? __('comptes.reglages.formule.tous')
+            : implode(', ', array_map(fn (FormatExport $format) => strtoupper($format->value), $formats));
 
-            if ($secondesMois !== null) {
-                $quotas[] = ['libelle' => __('comptes.reglages.formule.heures_mois'), 'valeur' => Duree::formater($secondesMois), 'pourcentage' => null];
-            }
+        $quotas = match ($cle) {
+            'free' => [
+                ...(isset($resume['videos_limite']) ? [[
+                    'libelle' => __('comptes.reglages.formule.videos'),
+                    'valeur' => $resume['videos_utilisees'].' / '.$resume['videos_limite'],
+                    'pourcentage' => $resume['videos_limite'] > 0
+                        ? min(100, (int) round($resume['videos_utilisees'] / $resume['videos_limite'] * 100))
+                        : null,
+                ]] : []),
+                ['libelle' => __('comptes.reglages.formule.duree_max'), 'valeur' => intdiv($droits->dureeMaxSecondes($plan), 60).' min', 'pourcentage' => null],
+                ['libelle' => __('comptes.reglages.formule.exports'), 'valeur' => $exports, 'pourcentage' => null],
+            ],
+            'pro' => [
+                ...(isset($resume['secondes_mois']) ? [[
+                    'libelle' => __('comptes.reglages.formule.heures_mois'),
+                    'valeur' => Duree::formater($resume['secondes_mois']),
+                    'pourcentage' => null,
+                ]] : []),
+                ['libelle' => __('comptes.reglages.formule.packs'), 'valeur' => Duree::formater((int) ($resume['secondes_packs'] ?? 0)), 'pourcentage' => null],
+                ...(isset($resume['credits_ia']) ? [[
+                    'libelle' => __('comptes.reglages.formule.credits_ia'),
+                    'valeur' => (string) $resume['credits_ia'],
+                    'pourcentage' => null,
+                ]] : []),
+            ],
+            'pack' => [
+                ['libelle' => __('comptes.reglages.formule.heures_packs'), 'valeur' => Duree::formater((int) ($resume['secondes_packs'] ?? 0)), 'pourcentage' => null],
+                ['libelle' => __('comptes.reglages.formule.expiration'), 'valeur' => $this->expirationPack($utilisateur), 'pourcentage' => null],
+                ['libelle' => __('comptes.reglages.formule.exports'), 'valeur' => $exports, 'pourcentage' => null],
+            ],
+        };
 
-            if ($secondesMois === null || $secondesPacks > 0) {
-                $quotas[] = ['libelle' => __('comptes.reglages.formule.heures_packs'), 'valeur' => Duree::formater($secondesPacks), 'pourcentage' => null];
+        $detail = __('comptes.reglages.formule.detail.'.$cle);
+
+        if ($cle === 'pro') {
+            $abonnement = $utilisateur->subscription((string) config('voxia.paiement.type_abonnement_pro'));
+
+            if ($abonnement && ! $abonnement->onGracePeriod()) {
+                $prochaine = $service->debutCycleAnniversaire($utilisateur, now())->addMonthNoOverflow();
+                $detail = __('comptes.reglages.formule.detail.pro_facturation', ['date' => Formats::date($prochaine)]);
             }
         }
-
-        $creditsIa = $resume['credits_ia'] ?? null;
-
-        if ($creditsIa !== null) {
-            $quotas[] = ['libelle' => __('comptes.reglages.formule.credits_ia'), 'valeur' => (string) $creditsIa, 'pourcentage' => null];
-        }
-
-        $cle = in_array($resume['plan']->value, ['free', 'pro', 'pack'], true) ? $resume['plan']->value : 'free';
 
         return [
-            'nom' => $droits->libellePlan($resume['plan']),
-            'detail' => __('comptes.reglages.formule.detail.'.$cle),
+            'nom' => $droits->libellePlan($plan),
+            'detail' => $detail,
             'quotas' => $quotas,
         ];
+    }
+
+    /** Date d'expiration du Pack qui expire en premier, ou un tiret s'il n'y en a pas. */
+    private function expirationPack(User $utilisateur): string
+    {
+        $expire = PackAchat::query()
+            ->where('user_id', $utilisateur->getKey())
+            ->where('expire_at', '>', now())
+            ->orderBy('expire_at')
+            ->value('expire_at');
+
+        return $expire ? Formats::date($expire) : '—';
     }
 
     /** « auto » efface la préférence : l'interface suit alors le navigateur (App\Support\Langue). */

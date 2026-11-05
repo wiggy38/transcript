@@ -8,7 +8,7 @@
     $formulaire = $variante === 'formulaire';
 @endphp
 
-<div class="flex min-w-0 flex-col gap-2">
+<div @class(['flex min-w-0 flex-col', 'gap-2' => ! $formulaire, 'gap-1.5' => $formulaire])>
     <label for="{{ $id }}" @class(['font-mono text-xs text-texte-discret' => ! $formulaire, 'text-sm font-semibold text-texte' => $formulaire])>{{ $label }}</label>
 
     <input
@@ -21,7 +21,8 @@
         @if ($erreur) aria-invalid="true" @endif
         @required($required)
         {{ $attributes->class([
-            'min-h-10 w-full min-w-0 rounded-champ border border-filet-contour bg-panneau px-3.5 text-texte outline-none focus-visible:border-accent',
+            'w-full min-w-0 rounded-champ border border-filet-contour px-3.5 text-texte outline-none focus-visible:border-accent',
+            'min-h-10 bg-panneau' => ! $formulaire,
             'min-h-11 bg-fond text-[15px]' => $formulaire,
             'font-mono text-sm' => $mono,
             'text-[14px]' => ! $mono && ! $formulaire,
@@ -29,7 +30,7 @@
     >
 
     @if ($aide)
-        <p id="{{ $idAide }}" class="text-sm text-texte-discret">{{ $aide }}</p>
+        <p id="{{ $idAide }}" @class(['text-sm' => ! $formulaire, 'text-aide' => $formulaire, 'text-texte-discret'])>{{ $aide }}</p>
     @endif
 
     @if ($erreur)
