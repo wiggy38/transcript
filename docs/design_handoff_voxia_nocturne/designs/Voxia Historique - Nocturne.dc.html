@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root, [data-theme="dark"] {
+  --vx-bg: #0D0B1A; --vx-surface: #15122A; --vx-surface-2: #1D1938; --vx-line: #2C2750; --vx-line-strong: #6E68A0;
+  --vx-text: #EEEBFF; --vx-text-2: #C0BAE6; --vx-text-3: #9690C4;
+  --vx-accent: #C8F25A; --vx-on-accent: #0D0B1A; --vx-accent-text: #C8F25A;
+  --vx-mark: #2A2152; --vx-mark-text: #EEEBFF; --vx-mark-time: #4FD1E0;
+  --vx-success: #4FE0A6; --vx-warning: #FFC266; --vx-error: #FF7A7A; --vx-focus: #4FD1E0; --vx-live: #4FD1E0; --vx-wave-idle: #3A3468;
+  --vx-shadow: 0 0 0 1px rgb(255 255 255 / 0.02) inset, 0 16px 40px -18px rgb(0 0 0 / 0.8);
+  --vx-shadow-hero: 0 30px 60px -24px rgb(0 0 0 / 0.85);
+}
+[data-theme="light"] {
+  --vx-bg: #F6F5FF; --vx-surface: #FFFFFF; --vx-surface-2: #ECEAFB; --vx-line: #DDDAF2; --vx-line-strong: #7C77A6;
+  --vx-text: #14112B; --vx-text-2: #423D66; --vx-text-3: #5C5785;
+  --vx-accent: #4A6A00; --vx-on-accent: #FFFFFF; --vx-accent-text: #4A6A00;
+  --vx-mark: #EEF8C8; --vx-mark-text: #14112B; --vx-mark-time: #3E5700;
+  --vx-success: #157A4F; --vx-warning: #8A5A00; --vx-error: #C0262D; --vx-focus: #4A6A00; --vx-live: #0E7C8A; --vx-wave-idle: #CFCBEA;
+  --vx-shadow: 0 1px 2px rgb(20 17 43 / 0.06), 0 12px 32px -16px rgb(60 40 160 / 0.25);
+  --vx-shadow-hero: 0 2px 4px rgb(20 17 43 / 0.06), 0 28px 56px -22px rgb(20 17 43 / 0.28);
+}
+:root {
+  --vx-font-text: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --vx-font-title: "Unbounded", ui-sans-serif, sans-serif;
+  --vx-font-data: "JetBrains Mono", ui-monospace, monospace;
+}
+html, body { margin: 0; }
+* { box-sizing: border-box; }
+a { color: var(--vx-accent-text); text-underline-offset: 3px; }
+a:hover { color: var(--vx-text); }
+:focus-visible { outline: 2px solid var(--vx-focus); outline-offset: 2px; }
+@keyframes vx-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes vx-indet { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div data-theme="{{ theme }}" style="min-height: 100vh; background: var(--vx-bg); color: var(--vx-text); font: 15px/1.6 var(--vx-font-text); -webkit-font-smoothing: antialiased; overflow-x: clip;">
+
+  <header style="border-bottom: 1px solid var(--vx-line); background: var(--vx-surface);">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 10px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px;">
+      <a href="#" style="display: inline-flex; align-items: center; gap: 8px; color: var(--vx-text); text-decoration: none; font-weight: 600; font-size: 17px; letter-spacing: -0.01em;">
+        <svg width="18" height="16" viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="6" width="3" height="6" rx="1.5" fill="var(--vx-accent)"></rect><rect x="5" y="2" width="3" height="14" rx="1.5" fill="currentColor"></rect><rect x="10" y="0" width="3" height="18" rx="1.5" fill="currentColor"></rect><rect x="15" y="4" width="3" height="10" rx="1.5" fill="currentColor"></rect><rect x="20" y="7" width="2" height="4" rx="1" fill="currentColor"></rect></svg>Voxia</a>
+      <nav aria-label="Navigation de l'application">
+        <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 4px;">
+          <li><a href="Voxia Tableau de bord - Nocturne.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; color: var(--vx-text-2); text-decoration: none; font-size: 14px;" style-hover="color: var(--vx-text); background: var(--vx-surface-2);">Nouvelle transcription</a></li>
+          <li><a href="#" aria-current="page" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; background: var(--vx-surface-2); color: var(--vx-text); text-decoration: none; font-size: 14px; font-weight: 500;">Historique</a></li>
+          <li><a href="#" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; color: var(--vx-text-2); text-decoration: none; font-size: 14px;" style-hover="color: var(--vx-text); background: var(--vx-surface-2);">Compte</a></li>
+        </ul>
+      </nav>
+      <div style="margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;">
+        <a href="#" title="Voir mon abonnement" style="display: grid; gap: 4px; min-width: 168px; text-decoration: none;">
+          <span style="display: flex; justify-content: space-between; gap: 12px; font: 11px var(--vx-font-data); color: var(--vx-text-2);"><span>[n] / [limite] vidéos ce mois-ci</span></span>
+          <span aria-hidden="true" style="height: 4px; border-radius: 999px; background: var(--vx-surface-2); overflow: hidden;"><span style="display: block; height: 100%; width: 60%; border-radius: 999px; background: var(--vx-accent);"></span></span>
+        </a>
+        <button type="button" aria-label="Langue : français" style="min-height: 36px; padding: 0 10px; border: 1px solid var(--vx-line); border-radius: 10px; background: transparent; color: var(--vx-text-2); font: 12px var(--vx-font-data); cursor: pointer;">FR</button>
+        <button type="button" style="min-height: 36px; padding: 0 4px; border: 0; background: transparent; color: var(--vx-text-2); font: 14px var(--vx-font-text); cursor: pointer; white-space: nowrap;" style-hover="color: var(--vx-text);">Se déconnecter</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu" style="max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; display: grid; gap: 24px;">
+
+    <sc-if value="{{ supprimee }}" hint-placeholder-val="{{ false }}">
+      <p role="status" style="margin: 0; display: flex; gap: 10px; align-items: center; padding: 12px 14px; border: 1px solid color-mix(in oklab, var(--vx-success) 40%, transparent); border-radius: 12px; background: color-mix(in oklab, var(--vx-success) 10%, transparent); font-size: 14px; color: var(--vx-text);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vx-success)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;"><circle cx="12" cy="12" r="9"></circle><path d="m8 12.5 2.5 2.5L16 9.5"></path></svg>Transcription supprimée. Elle a disparu de ton historique et de la recherche.</p>
+    </sc-if>
+
+    <section aria-labelledby="titre-historique" style="display: grid; gap: 6px;">
+      <h1 id="titre-historique" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3vw, 30px); line-height: 1.15; letter-spacing: -0.03em;">Historique</h1>
+      <p style="margin: 0; font-size: 15px; color: var(--vx-text-2);">Toutes tes transcriptions, de la plus récente à la plus ancienne.</p>
+    </section>
+
+    <div style="display: grid; gap: 10px;">
+      <form role="search" onSubmit="{{ noop }}" style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; padding: 16px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface);">
+        <div style="flex: 999 1 280px; min-width: 0; display: grid; gap: 6px;">
+          <label for="recherche-historique" style="font-size: 14px; font-weight: 600;">Chercher dans mes transcriptions</label>
+          <div style="position: relative;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+            <input id="recherche-historique" name="q" type="search" defaultValue="{{ terme }}" aria-describedby="aide-recherche" style="width: 100%; min-height: 44px; padding: 0 14px 0 40px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: var(--vx-bg); color: var(--vx-text); font: 15px var(--vx-font-text);">
+          </div>
+        </div>
+        <div style="flex: 1 1 200px; min-width: 0; display: grid; gap: 6px;">
+          <label for="tri-historique" style="font-size: 14px; font-weight: 600;">Trier par date</label>
+          <select id="tri-historique" name="tri" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: var(--vx-bg); color: var(--vx-text); font: 14px var(--vx-font-text);">
+            <option>Plus récentes d’abord</option><option>Plus anciennes d’abord</option>
+          </select>
+        </div>
+        <button type="submit" style="flex: 0 0 auto; min-height: 44px; padding: 0 20px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: transparent; color: var(--vx-text); font: 600 14px var(--vx-font-text); cursor: pointer;" style-hover="border-color: var(--vx-accent-text); color: var(--vx-accent-text);">Chercher</button>
+        <p id="aide-recherche" style="flex: 1 1 100%; margin: 0; font-size: 13px; color: var(--vx-text-3);">Un mot ou une expression, dans tout ton texte.</p>
+      </form>
+      <sc-if value="{{ gratuit }}" hint-placeholder-val="{{ false }}">
+        <p style="margin: 0; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; padding: 12px 14px; border-radius: 12px; background: var(--vx-surface-2); font-size: 14px; color: var(--vx-text);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;"><rect x="4.5" y="10.5" width="15" height="10" rx="2"></rect><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"></path></svg>
+          <span style="flex: 1 1 260px;">La recherche dans tes transcriptions est réservée au plan Pro et Pack. Passe au Pro pour retrouver un passage en un mot.</span>
+          <button type="button" aria-haspopup="dialog" style="min-height: 36px; padding: 0 14px; border: 0; border-radius: 10px; background: var(--vx-accent); color: var(--vx-on-accent); font: 600 13px var(--vx-font-text); cursor: pointer; white-space: nowrap;">Passer au Pro</button>
+        </p>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ modeRecherche }}" hint-placeholder-val="{{ false }}">
+      <section aria-labelledby="titre-resultats" style="display: grid; gap: 12px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px;">
+          <h2 id="titre-resultats" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 17px; letter-spacing: -0.02em;">{{ titreResultats }}</h2>
+          <a href="#" style="font-size: 13px; color: var(--vx-text-2); text-decoration: none;" style-hover="color: var(--vx-accent-text);">Effacer la recherche</a>
+        </div>
+        <sc-if value="{{ aResultats }}" hint-placeholder-val="{{ true }}">
+          <ol aria-label="Résultats de la recherche" style="margin: 0; padding: 0; list-style: none; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow); overflow: hidden;">
+            <sc-for list="{{ resultats }}" as="r" hint-placeholder-count="3">
+              <li style="display: grid; gap: 8px; padding: 16px 18px; border-top: {{ r.sep }};">
+                <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px;">
+                  <a href="#" aria-label="Ouvrir à ce moment : {{ r.titre }}" style="display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px; border-radius: 999px; background: var(--vx-mark); color: var(--vx-mark-time); font: 500 13px var(--vx-font-data); font-variant-numeric: tabular-nums; text-decoration: none;"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"></path></svg>{{ r.t }}</a>
+                  <span style="min-width: 0; font-weight: 600; overflow-wrap: anywhere;">{{ r.titre }}</span>
+                  <sc-if value="{{ r.analyse }}" hint-placeholder-val="{{ false }}"><span style="font: 11px var(--vx-font-data); color: var(--vx-accent-text);">Script analysé</span></sc-if>
+                </p>
+                <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); overflow-wrap: anywhere;">{{ r.avant }}<mark style="padding: 0 3px; border-radius: 4px; background: var(--vx-accent); color: var(--vx-on-accent);">{{ r.terme }}</mark>{{ r.apres }}</p>
+              </li>
+            </sc-for>
+          </ol>
+        </sc-if>
+        <sc-if value="{{ sansResultat }}" hint-placeholder-val="{{ false }}">
+          <div style="display: grid; gap: 6px; padding: 24px; border: 1px dashed var(--vx-line-strong); border-radius: 20px; text-align: center;">
+            <p style="margin: 0; font-size: 14px; color: var(--vx-text-2);">Aucun résultat à afficher.</p>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ modeListe }}" hint-placeholder-val="{{ true }}">
+      <section aria-labelledby="titre-liste" style="display: grid; gap: 16px;">
+        <h2 id="titre-liste" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Historique</h2>
+        <ul style="margin: 0; padding: 0; list-style: none; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow); overflow: hidden;">
+          <sc-for list="{{ items }}" as="it" hint-placeholder-count="6">
+            <li style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 14px 18px; border-top: {{ it.sep }};" style-hover="background: color-mix(in oklab, var(--vx-surface-2) 60%, transparent);">
+              <span aria-hidden="true" style="position: relative; flex: 0 0 96px; height: 54px; border-radius: 10px; border: 1px solid var(--vx-line); background: var(--vx-surface-2); display: grid; place-items: center; overflow: hidden;">
+                <span style="font: 500 11px var(--vx-font-data); color: var(--vx-text-3);">{{ it.ab }}</span>
+                <span style="position: absolute; right: 4px; bottom: 4px; padding: 0 4px; border-radius: 4px; background: color-mix(in oklab, var(--vx-bg) 85%, transparent); font: 10px var(--vx-font-data); color: var(--vx-text);">{{ it.duree }}</span>
+              </span>
+              <div style="flex: 999 1 260px; min-width: 0; display: grid; gap: 4px;">
+                <a href="#" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--vx-text); font-weight: 600; font-size: 15px; text-decoration: none;" style-hover="color: var(--vx-accent-text);">{{ it.titre }}</a>
+                <p style="margin: 0; display: flex; flex-wrap: wrap; gap: 2px 14px; font: 12px var(--vx-font-data); color: var(--vx-text-3);">
+                  <span>{{ it.plateforme }}</span>
+                  <span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Durée : </span>{{ it.duree }}</span>
+                  <time>{{ it.date }}</time>
+                  <sc-if value="{{ it.expire }}" hint-placeholder-val="{{ false }}"><span style="color: var(--vx-warning);">Suppression le {{ it.suppression }}</span></sc-if>
+                </p>
+              </div>
+              <div style="flex: 1 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px 14px;">
+                <sc-if value="{{ it.analyse }}" hint-placeholder-val="{{ false }}"><span style="font: 11px var(--vx-font-data); color: var(--vx-accent-text); white-space: nowrap;">Script analysé</span></sc-if>
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: color-mix(in oklab, {{ it.c }} 18%, transparent); color: {{ it.c }}; font: 500 12px var(--vx-font-data); white-space: nowrap;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: {{ it.anim }};"></span>{{ it.statut }}</span>
+                <a href="#" style="display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 10px; border-radius: 10px; color: var(--vx-text-2); font-size: 13px; text-decoration: none;" style-hover="color: var(--vx-error); background: color-mix(in oklab, var(--vx-error) 10%, transparent);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M6 7l1 13h10l1-13"></path><path d="M9 7V4h6v3"></path></svg>Supprimer<span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);"> : Supprimer « {{ it.titre }} »</span></a>
+              </div>
+            </li>
+          </sc-for>
+        </ul>
+        <nav aria-label="Pages de l’historique" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+          <span style="flex-shrink: 0; white-space: nowrap; display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 1px dashed var(--vx-line); border-radius: 12px; font-size: 14px; color: var(--vx-text-3);">← Précédente</span>
+          <span style="font: 12px var(--vx-font-data); color: var(--vx-text-3); text-align: center;">Page 1 sur 4</span>
+          <a href="#" rel="next" style="flex-shrink: 0; white-space: nowrap; display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 1px solid var(--vx-line-strong); border-radius: 12px; font-size: 14px; color: var(--vx-text); text-decoration: none;" style-hover="border-color: var(--vx-accent-text); color: var(--vx-accent-text);">Suivante →</a>
+        </nav>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ modeVide }}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; justify-items: center; gap: 14px; padding: 48px 24px; border: 1px dashed var(--vx-line-strong); border-radius: 20px; text-align: center;">
+        <span aria-hidden="true" style="display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: var(--vx-surface-2); color: var(--vx-text-2);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h3"></path><path d="M10 6h10"></path><path d="M4 12h3"></path><path d="M10 12h8"></path><path d="M4 18h3"></path><path d="M10 18h10"></path></svg></span>
+        <p style="margin: 0; max-width: 30em; font-size: 15px; color: var(--vx-text-2);">Aucune transcription pour l’instant. Lance-en une depuis « Nouvelle transcription ».</p>
+        <a href="Voxia Tableau de bord - Nocturne.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 12px; background: var(--vx-accent); color: var(--vx-on-accent); font-weight: 600; font-size: 14px; text-decoration: none;">Nouvelle transcription</a>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pageTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'dark' | 'light'&quot;,&quot;section&quot;:&quot;Affichage&quot;},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;liste&quot;,&quot;recherche&quot;,&quot;recherche-vide&quot;,&quot;vide&quot;],&quot;default&quot;:&quot;liste&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;États&quot;},&quot;plan&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pro&quot;,&quot;gratuit&quot;],&quot;default&quot;:&quot;pro&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;États&quot;},&quot;statutSupprimee&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;États&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const mode = p.mode ?? 'liste';
+    const live = 'vx-pulse 1.6s ease-in-out infinite';
+    const S = {
+      attente: ['En attente', 'var(--vx-text-2)', 'none'],
+      telechargement: ['Téléchargement', 'var(--vx-live)', live],
+      transcription: ['Transcription', 'var(--vx-live)', live],
+      termine: ['Terminé', 'var(--vx-success)', 'none'],
+      echec: ['Échec', 'var(--vx-error)', 'none']
+    };
+    const gratuit = (p.plan ?? 'pro') === 'gratuit';
+    const data = [
+      ['YT', 'Lancement de la collection automne', 'YouTube', '08:41', '05/11/2026 10:12', 'transcription', false],
+      ['FI', 'webinaire-acquisition-q3.mp4', 'Fichier importé', '47:20', '05/11/2026 10:05', 'attente', false],
+      ['TT', 'Unboxing gourde isotherme', 'TikTok', '00:58', '04/11/2026 18:30', 'termine', true],
+      ['YT', 'Vlog #34 — Mon atelier de céramique', 'YouTube', '12:03', '03/11/2026 14:12', 'termine', false],
+      ['YT', 'Interview fondatrice — version longue', 'YouTube', '—', '02/11/2026 09:47', 'echec', false],
+      ['TT', 'Tuto : nouer un foulard en 3 façons', 'TikTok', '01:12', '28/10/2026 16:03', 'termine', true]
+    ];
+    const res = [
+      ['00:13', 'Vlog #34 — Mon atelier de céramique', '… le secret, c’est de ', 'centrer', ' la terre avant de vouloir aller vite.', false],
+      ['00:19', 'Vlog #34 — Mon atelier de céramique', 'Si elle n’est pas ', 'centrée', ', rien ne tiendra.', false],
+      ['02:47', 'Tuto : nouer un foulard en 3 façons', '… on ', 'centre', ' le nœud sous le menton, puis on resserre.', true]
+    ];
+    const terme = mode === 'recherche' || mode === 'recherche-vide' ? 'centrer' : '';
+    const n = mode === 'recherche' ? res.length : 0;
+    return {
+      theme: p.pageTheme ?? 'dark',
+      noop: e => e.preventDefault(),
+      supprimee: p.statutSupprimee ?? false,
+      gratuit,
+      terme,
+      modeRecherche: !gratuit && (mode === 'recherche' || mode === 'recherche-vide'),
+      modeListe: mode === 'liste' || (gratuit && mode !== 'vide'),
+      modeVide: mode === 'vide',
+      aResultats: n > 0,
+      sansResultat: n === 0,
+      titreResultats: n === 0 ? 'Aucun résultat pour « ' + terme + ' ».' : n === 1 ? 'Un résultat pour « ' + terme + ' ».' : n + ' résultats pour « ' + terme + ' ».',
+      resultats: res.map(([t, titre, avant, tm, apres, analyse], i) => ({ t, titre, avant, terme: tm, apres, analyse, sep: i ? '1px solid var(--vx-line)' : '0' })),
+      items: data.map(([ab, titre, plateforme, duree, date, s, analyse], i) => ({
+        ab, titre, plateforme, duree, date, analyse,
+        statut: S[s][0], c: S[s][1], anim: S[s][2],
+        expire: gratuit, suppression: ['04/12', '04/12', '03/12', '02/12', '01/12', '27/11'][i],
+        sep: i ? '1px solid var(--vx-line)' : '0'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

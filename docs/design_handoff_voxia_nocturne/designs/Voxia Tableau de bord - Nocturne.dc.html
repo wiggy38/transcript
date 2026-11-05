@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#0E0F13"><svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg"><rect x="60" y="78" width="12" height="24" rx="6" fill="#C8F25A"/><rect x="82" y="58" width="12" height="64" rx="6" fill="#C8F25A"/><rect x="104" y="40" width="12" height="100" rx="6" fill="#C8F25A"/><rect x="126" y="62" width="12" height="56" rx="6" fill="#C8F25A"/><rect x="148" y="80" width="12" height="20" rx="6" fill="#C8F25A"/></svg></template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root, [data-theme="dark"] {
+  --vx-bg: #0D0B1A; --vx-surface: #15122A; --vx-surface-2: #1D1938; --vx-line: #2C2750; --vx-line-strong: #6E68A0;
+  --vx-text: #EEEBFF; --vx-text-2: #C0BAE6; --vx-text-3: #9690C4;
+  --vx-accent: #C8F25A; --vx-on-accent: #0D0B1A; --vx-accent-text: #C8F25A;
+  --vx-mark: #2A2152; --vx-mark-text: #EEEBFF; --vx-mark-time: #4FD1E0;
+  --vx-success: #4FE0A6; --vx-warning: #FFC266; --vx-error: #FF7A7A; --vx-focus: #4FD1E0; --vx-live: #4FD1E0; --vx-wave-idle: #3A3468;
+  --vx-shadow: 0 0 0 1px rgb(255 255 255 / 0.02) inset, 0 16px 40px -18px rgb(0 0 0 / 0.8);
+  --vx-shadow-hero: 0 30px 60px -24px rgb(0 0 0 / 0.85);
+}
+[data-theme="light"] {
+  --vx-bg: #F6F5FF; --vx-surface: #FFFFFF; --vx-surface-2: #ECEAFB; --vx-line: #DDDAF2; --vx-line-strong: #7C77A6;
+  --vx-text: #14112B; --vx-text-2: #423D66; --vx-text-3: #5C5785;
+  --vx-accent: #4A6A00; --vx-on-accent: #FFFFFF; --vx-accent-text: #4A6A00;
+  --vx-mark: #EEF8C8; --vx-mark-text: #14112B; --vx-mark-time: #3E5700;
+  --vx-success: #157A4F; --vx-warning: #8A5A00; --vx-error: #C0262D; --vx-focus: #4A6A00; --vx-live: #0E7C8A; --vx-wave-idle: #CFCBEA;
+  --vx-shadow: 0 1px 2px rgb(20 17 43 / 0.06), 0 12px 32px -16px rgb(60 40 160 / 0.25);
+  --vx-shadow-hero: 0 2px 4px rgb(20 17 43 / 0.06), 0 28px 56px -22px rgb(20 17 43 / 0.28);
+}
+:root {
+  --vx-font-text: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --vx-font-title: "Unbounded", ui-sans-serif, sans-serif;
+  --vx-font-data: "JetBrains Mono", ui-monospace, monospace;
+}
+html, body { margin: 0; }
+* { box-sizing: border-box; }
+a { color: var(--vx-accent-text); text-underline-offset: 3px; }
+a:hover { color: var(--vx-text); }
+:focus-visible { outline: 2px solid var(--vx-focus); outline-offset: 2px; }
+@keyframes vx-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes vx-indet { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div data-theme="{{ theme }}" style="min-height: 100vh; background: var(--vx-bg); color: var(--vx-text); font: 15px/1.6 var(--vx-font-text); -webkit-font-smoothing: antialiased; overflow-x: clip;">
+
+  <header style="border-bottom: 1px solid var(--vx-line); background: var(--vx-surface);">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 10px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px;">
+      <a href="#" style="display: inline-flex; align-items: center; gap: 8px; color: var(--vx-text); text-decoration: none; font-weight: 600; font-size: 17px; letter-spacing: -0.01em;">
+        <svg width="18" height="16" viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="6" width="3" height="6" rx="1.5" fill="var(--vx-accent)"></rect><rect x="5" y="2" width="3" height="14" rx="1.5" fill="currentColor"></rect><rect x="10" y="0" width="3" height="18" rx="1.5" fill="currentColor"></rect><rect x="15" y="4" width="3" height="10" rx="1.5" fill="currentColor"></rect><rect x="20" y="7" width="2" height="4" rx="1" fill="currentColor"></rect></svg>Voxia</a>
+      <nav aria-label="Navigation de l'application">
+        <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 4px;">
+          <li><a href="#" aria-current="page" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; background: var(--vx-surface-2); color: var(--vx-text); text-decoration: none; font-size: 14px; font-weight: 500;">Nouvelle transcription</a></li>
+          <li><a href="Voxia Historique - Nocturne.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; color: var(--vx-text-2); text-decoration: none; font-size: 14px;" style-hover="color: var(--vx-text); background: var(--vx-surface-2);">Historique</a></li>
+          <li><a href="#" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; color: var(--vx-text-2); text-decoration: none; font-size: 14px;" style-hover="color: var(--vx-text); background: var(--vx-surface-2);">Compte</a></li>
+        </ul>
+      </nav>
+      <div style="margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;">
+        <a href="#" title="Voir mon abonnement" style="display: grid; gap: 4px; min-width: 168px; text-decoration: none;">
+          <span style="display: flex; justify-content: space-between; gap: 12px; font: 11px var(--vx-font-data); color: var(--vx-text-2);"><span>[n] / [limite] vidéos ce mois-ci</span></span>
+          <span aria-hidden="true" style="height: 4px; border-radius: 999px; background: var(--vx-surface-2); overflow: hidden;"><span style="display: block; height: 100%; width: 60%; border-radius: 999px; background: var(--vx-accent);"></span></span>
+        </a>
+        <button type="button" aria-label="Langue : français" style="min-height: 36px; padding: 0 10px; border: 1px solid var(--vx-line); border-radius: 10px; background: transparent; color: var(--vx-text-2); font: 12px var(--vx-font-data); cursor: pointer;">FR</button>
+        <button type="button" style="min-height: 36px; padding: 0 4px; border: 0; background: transparent; color: var(--vx-text-2); font: 14px var(--vx-font-text); cursor: pointer; white-space: nowrap;" style-hover="color: var(--vx-text);">Se déconnecter</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu" style="max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start;">
+
+    <div style="flex: 999 1 560px; min-width: 0; display: grid; gap: 20px;">
+      <div style="display: grid; gap: 6px;">
+        <h1 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3vw, 30px); line-height: 1.15; letter-spacing: -0.03em;">Nouvelle transcription</h1>
+        <p style="margin: 0; font-size: 15px; color: var(--vx-text-2);">Colle le lien d'une vidéo publique.</p>
+      </div>
+
+      <sc-if value="{{ nonVerifie }}" hint-placeholder-val="{{ false }}">
+        <p role="status" style="margin: 0; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; padding: 12px 14px; border: 1px solid color-mix(in oklab, var(--vx-warning) 45%, transparent); border-radius: 12px; background: color-mix(in oklab, var(--vx-warning) 10%, transparent); font-size: 14px; color: var(--vx-text);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vx-warning)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+          <span style="flex: 1 1 240px;">Vérifie ton email pour lancer une transcription. Le lien que tu as collé est gardé.</span>
+          <a href="#" style="font-weight: 600; white-space: nowrap;">Renvoyer le lien</a>
+        </p>
+      </sc-if>
+
+      <section aria-labelledby="titre-lien" style="padding: 20px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow-hero); display: grid; gap: 10px;">
+        <h2 id="titre-lien" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Lien de la vidéo</h2>
+        <form onSubmit="{{ noop }}" novalidate style="display: grid; gap: 10px;">
+          <label for="lien-transcription" style="font-weight: 600; font-size: 15px;">Lien YouTube ou TikTok</label>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <div style="flex: 1 1 260px; min-width: 0; position: relative;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%);"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"></path><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"></path></svg>
+              <input id="lien-transcription" type="url" inputmode="url" autocomplete="off" placeholder="https://" defaultValue="{{ lienValeur }}" aria-describedby="aide-lien" aria-invalid="{{ lienInvalide }}" style="width: 100%; min-height: 54px; padding: 0 14px 0 42px; border: {{ lienBordure }}; border-radius: 12px; background: var(--vx-bg); color: var(--vx-text); font: 15px var(--vx-font-data);">
+            </div>
+            <button type="submit" style="min-height: 54px; padding: 0 24px; border: 0; border-radius: 12px; background: var(--vx-accent); color: var(--vx-on-accent); font: 600 16px var(--vx-font-text); cursor: pointer; white-space: nowrap;" style-hover="filter: brightness(1.1);">Transcrire →</button>
+          </div>
+          <p id="aide-lien" style="margin: 0; font-size: 13px; color: var(--vx-text-3);">Une vidéo publique suffit.</p>
+        </form>
+
+        <div aria-live="polite" style="display: grid;">
+          <sc-if value="{{ eLecture }}" hint-placeholder-val="{{ false }}">
+            <p role="status" style="margin: 6px 0 0; display: flex; align-items: center; gap: 10px; padding: 14px; border-radius: 14px; background: var(--vx-surface-2); font-size: 14px; color: var(--vx-text-2);"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: var(--vx-live); animation: vx-pulse 1.6s ease-in-out infinite;"></span>Lecture des informations de la vidéo…</p>
+          </sc-if>
+          <sc-if value="{{ eErreur }}" hint-placeholder-val="{{ false }}">
+            <p role="alert" style="margin: 6px 0 0; display: flex; gap: 10px; padding: 12px 14px; border-radius: 12px; background: color-mix(in oklab, var(--vx-error) 12%, transparent); font-size: 14px; color: var(--vx-text);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vx-error)" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5h.01"></path></svg>Cette vidéo est privée. Aucun décompte n'a été fait.</p>
+          </sc-if>
+          <sc-if value="{{ eApercu }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top: 6px; display: flex; flex-wrap: wrap; gap: 16px; padding: 14px; border: 1px solid var(--vx-line); border-radius: 14px; background: var(--vx-bg);">
+              <div role="img" aria-label="Miniature de la vidéo" style="flex: 0 0 168px; align-self: flex-start; max-width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; border: 1px solid var(--vx-line); background: var(--vx-surface-2); display: grid; place-items: center; font: 11px var(--vx-font-data); color: var(--vx-text-3);">miniature</div>
+              <div style="flex: 1 1 260px; min-width: 0; display: grid; gap: 10px; align-content: start;">
+                <p style="margin: 0; font-weight: 600; font-size: 16px; line-height: 1.35; overflow-wrap: anywhere;">Vlog #34 — Mon atelier de céramique</p>
+                <dl style="margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 14px; font-size: 13px;">
+                  <dt style="color: var(--vx-text-3);">Durée</dt><dd style="margin: 0; font-family: var(--vx-font-data);">12:03</dd>
+                  <dt style="color: var(--vx-text-3);">Chaîne</dt><dd style="margin: 0; overflow-wrap: anywhere;">Atelier Terre &amp; Tour</dd>
+                </dl>
+                <sc-if value="{{ eLimite }}" hint-placeholder-val="{{ false }}">
+                  <p style="margin: 0; padding: 10px 12px; border-radius: 10px; background: color-mix(in oklab, var(--vx-warning) 12%, transparent); font-size: 13px; color: var(--vx-text);">Ta vidéo dépasse les [n] minutes du plan Gratuit. Seules les [n] premières minutes seront transcrites. <a href="#">Passe au Pro</a> pour la transcription complète.</p>
+                </sc-if>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;">
+                  <div style="display: grid; gap: 6px; flex: 1 1 180px; min-width: 0;">
+                    <label for="langue-lien" style="font-size: 13px; font-weight: 600;">Langue</label>
+                    <select id="langue-lien" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: var(--vx-surface); color: var(--vx-text); font: 14px var(--vx-font-text);">
+                      <option>Détection automatique</option><option>Français</option><option>Anglais</option><option>Espagnol</option><option>Allemand</option><option>Italien</option><option>Portugais</option>
+                    </select>
+                  </div>
+                  <button type="button" style="min-height: 44px; padding: 0 18px; border: 0; border-radius: 12px; background: var(--vx-accent); color: var(--vx-on-accent); font: 600 14px var(--vx-font-text); cursor: pointer; white-space: nowrap;">Lancer la transcription</button>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </section>
+
+      <div aria-hidden="true" style="display: flex; align-items: center; gap: 12px; font: 12px var(--vx-font-data); color: var(--vx-text-3);"><span style="flex: 1; height: 1px; background: var(--vx-line);"></span>ou<span style="flex: 1; height: 1px; background: var(--vx-line);"></span></div>
+
+      <section aria-labelledby="titre-fichier" style="display: grid; gap: 10px;">
+        <h2 id="titre-fichier" style="margin: 0; font-weight: 600; font-size: 15px;">Ou un fichier</h2>
+        <sc-if value="{{ fZone }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; padding: 20px; border: 1.5px dashed var(--vx-line-strong); border-radius: 20px; background: var(--vx-surface);">
+            <span aria-hidden="true" style="display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--vx-surface-2); color: var(--vx-text-2);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg></span>
+            <p style="margin: 0; flex: 1 1 260px; font-size: 14px; color: var(--vx-text-2);"><strong style="display: block; color: var(--vx-text); font-weight: 600; font-size: 15px;">Glisse ton fichier ici</strong>Formats : MP3, M4A, WAV, MP4, MOV, WEBM. Taille maximale : [max] Go.</p>
+            <button type="button" style="min-height: 44px; padding: 0 18px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: transparent; color: var(--vx-text); font: 600 14px var(--vx-font-text); cursor: pointer;" style-hover="border-color: var(--vx-accent-text); color: var(--vx-accent-text);">Parcourir</button>
+            <sc-if value="{{ fEnvoi }}" hint-placeholder-val="{{ false }}">
+              <div style="flex: 1 1 100%; display: grid; gap: 6px;">
+                <div style="display: flex; justify-content: space-between; gap: 12px; font: 12px var(--vx-font-data); color: var(--vx-text-2);"><span>Envoi : 64 %</span><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--vx-text-3);">webinaire-lancement.mp4</span></div>
+                <div role="progressbar" aria-label="Envoi du fichier" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64" style="height: 6px; border-radius: 999px; background: var(--vx-surface-2); overflow: hidden;"><div style="width: 64%; height: 100%; border-radius: 999px; background: var(--vx-accent);"></div></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ fErreur }}" hint-placeholder-val="{{ false }}">
+              <p role="alert" style="flex: 1 1 100%; margin: 0; display: flex; gap: 8px; align-items: flex-start; font-size: 14px; color: var(--vx-error);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 3px;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5h.01"></path></svg>Ce type de fichier n'est pas accepté. Prends du MP3, M4A, WAV, MP4, MOV ou WEBM.</p>
+            </sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ fPret }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 16px; padding: 18px 20px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface);">
+            <p style="margin: 0; flex: 1 1 220px; min-width: 0; display: flex; gap: 10px; align-items: center; overflow-wrap: anywhere;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vx-success)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0;"><circle cx="12" cy="12" r="9"></circle><path d="m8 12.5 2.5 2.5L16 9.5"></path></svg><span>Fichier prêt : <span style="font-family: var(--vx-font-data); font-size: 14px;">webinaire-lancement.mp4</span></span></p>
+            <div style="display: grid; gap: 6px; flex: 0 1 200px; min-width: 0;">
+              <label for="langue-fichier" style="font-size: 13px; font-weight: 600;">Langue</label>
+              <select id="langue-fichier" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: var(--vx-bg); color: var(--vx-text); font: 14px var(--vx-font-text);"><option>Détection automatique</option><option>Français</option><option>Anglais</option></select>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" style="min-height: 44px; padding: 0 18px; border: 0; border-radius: 12px; background: var(--vx-accent); color: var(--vx-on-accent); font: 600 14px var(--vx-font-text); cursor: pointer;">Lancer la transcription du fichier</button>
+              <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: transparent; color: var(--vx-text); font: 600 14px var(--vx-font-text); cursor: pointer;">Retirer</button>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+    </div>
+
+    <section aria-labelledby="titre-historique" style="flex: 1 1 300px; min-width: 0; max-width: 100%; display: grid; gap: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+        <h2 id="titre-historique" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 17px; letter-spacing: -0.02em;">Tes transcriptions</h2>
+        <a href="#" style="font-size: 13px; text-decoration: none; white-space: nowrap;">Tout l'historique →</a>
+      </div>
+      <sc-if value="{{ histVide }}" hint-placeholder-val="{{ false }}">
+        <div style="display: grid; gap: 8px; justify-items: start; padding: 20px; border: 1px dashed var(--vx-line-strong); border-radius: 20px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h3"></path><path d="M10 6h10"></path><path d="M4 12h3"></path><path d="M10 12h8"></path><path d="M4 18h3"></path><path d="M10 18h10"></path></svg>
+          <p style="margin: 0; font-size: 14px; color: var(--vx-text-2);">Aucune transcription pour l'instant.</p>
+        </div>
+      </sc-if>
+      <sc-if value="{{ histPlein }}" hint-placeholder-val="{{ true }}">
+        <ul style="margin: 0; padding: 0; list-style: none; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow); overflow: hidden;">
+          <sc-for list="{{ recents }}" as="r" hint-placeholder-count="5">
+            <li style="border-top: {{ r.sep }};">
+              <a href="#" style="display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px 14px; color: var(--vx-text); text-decoration: none;" style-hover="background: var(--vx-surface-2);">
+                <span aria-hidden="true" style="display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--vx-surface-2); font: 500 10px var(--vx-font-data); color: var(--vx-text-2);">{{ r.ab }}</span>
+                <span style="min-width: 0; display: grid; gap: 4px;">
+                  <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; font-weight: 500;">{{ r.titre }}</span>
+                  <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font: 11px var(--vx-font-data); color: var(--vx-text-3);">
+                    <span style="display: inline-flex; align-items: center; gap: 6px; padding: 1px 8px; border-radius: 999px; background: color-mix(in oklab, {{ r.c }} 18%, transparent); color: {{ r.c }}; font-weight: 500; white-space: nowrap;"><span style="width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: {{ r.anim }};"></span>{{ r.statut }}</span>
+                    <span>{{ r.duree }}</span><span>{{ r.date }}</span>
+                  </span>
+                </span>
+              </a>
+            </li>
+          </sc-for>
+        </ul>
+      </sc-if>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pageTheme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dark&quot;, &quot;light&quot;], &quot;default&quot;: &quot;dark&quot;, &quot;tsType&quot;: &quot;'dark' | 'light'&quot;, &quot;section&quot;: &quot;Affichage&quot;}, &quot;etatLien&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;vide&quot;, &quot;lecture&quot;, &quot;apercu&quot;, &quot;limite&quot;, &quot;erreur&quot;], &quot;default&quot;: &quot;apercu&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;États&quot;}, &quot;etatFichier&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;vide&quot;, &quot;envoi&quot;, &quot;pret&quot;, &quot;erreur&quot;], &quot;default&quot;: &quot;vide&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;États&quot;}, &quot;emailVerifie&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;États&quot;}, &quot;historiqueVide&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;États&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const lien = p.etatLien ?? 'apercu';
+    const fichier = p.etatFichier ?? 'vide';
+    const vide = p.historiqueVide ?? false;
+    const live = 'vx-pulse 1.6s ease-in-out infinite';
+    const S = {
+      attente: ['En attente', 'var(--vx-text-2)', 'none'],
+      telechargement: ['Téléchargement', 'var(--vx-live)', live],
+      transcription: ['Transcription', 'var(--vx-live)', live],
+      termine: ['Terminé', 'var(--vx-success)', 'none'],
+      echec: ['Échec', 'var(--vx-error)', 'none']
+    };
+    const data = [
+      ['YT', 'Lancement de la collection automne', 'transcription', '08:41', "aujourd'hui 10:12"],
+      ['FI', 'webinaire-acquisition-q3.mp4', 'attente', '47:20', "aujourd'hui 10:05"],
+      ['TT', 'Unboxing gourde isotherme', 'termine', '00:58', 'hier 18:30'],
+      ['YT', 'Vlog #34 — Mon atelier de céramique', 'termine', '12:03', '03/11 14:12'],
+      ['YT', 'Interview fondatrice — version longue', 'echec', '—', '02/11 09:47']
+    ];
+    return {
+      theme: p.pageTheme ?? 'dark',
+      noop: e => e.preventDefault(),
+      nonVerifie: !(p.emailVerifie ?? true),
+      lienValeur: lien === 'vide' ? '' : 'https://youtube.com/watch?v=3fK9…',
+      lienInvalide: lien === 'erreur' ? 'true' : 'false',
+      lienBordure: lien === 'erreur' ? '1.5px solid var(--vx-error)' : '1px solid var(--vx-line-strong)',
+      eLecture: lien === 'lecture',
+      eErreur: lien === 'erreur',
+      eApercu: lien === 'apercu' || lien === 'limite',
+      eLimite: lien === 'limite',
+      fZone: fichier !== 'pret',
+      fEnvoi: fichier === 'envoi',
+      fErreur: fichier === 'erreur',
+      fPret: fichier === 'pret',
+      histVide: vide,
+      histPlein: !vide,
+      recents: data.map(([ab, titre, s, duree, date], i) => ({
+        ab, titre, duree, date, statut: S[s][0], c: S[s][1], anim: S[s][2],
+        sep: i ? '1px solid var(--vx-line)' : '0'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

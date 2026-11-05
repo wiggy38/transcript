@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root, [data-theme="dark"] {
+  --vx-bg: #0D0B1A; --vx-surface: #15122A; --vx-surface-2: #1D1938; --vx-line: #2C2750; --vx-line-strong: #6E68A0;
+  --vx-text: #EEEBFF; --vx-text-2: #C0BAE6; --vx-text-3: #9690C4;
+  --vx-accent: #C8F25A; --vx-on-accent: #0D0B1A; --vx-accent-text: #C8F25A;
+  --vx-mark: #2A2152; --vx-mark-text: #EEEBFF; --vx-mark-time: #4FD1E0;
+  --vx-success: #4FE0A6; --vx-warning: #FFC266; --vx-error: #FF7A7A; --vx-focus: #4FD1E0; --vx-live: #4FD1E0; --vx-wave-idle: #3A3468;
+  --vx-shadow: 0 0 0 1px rgb(255 255 255 / 0.02) inset, 0 16px 40px -18px rgb(0 0 0 / 0.8);
+  --vx-shadow-hero: 0 30px 60px -24px rgb(0 0 0 / 0.85);
+}
+[data-theme="light"] {
+  --vx-bg: #F6F5FF; --vx-surface: #FFFFFF; --vx-surface-2: #ECEAFB; --vx-line: #DDDAF2; --vx-line-strong: #7C77A6;
+  --vx-text: #14112B; --vx-text-2: #423D66; --vx-text-3: #5C5785;
+  --vx-accent: #4A6A00; --vx-on-accent: #FFFFFF; --vx-accent-text: #4A6A00;
+  --vx-mark: #EEF8C8; --vx-mark-text: #14112B; --vx-mark-time: #3E5700;
+  --vx-success: #157A4F; --vx-warning: #8A5A00; --vx-error: #C0262D; --vx-focus: #4A6A00; --vx-live: #0E7C8A; --vx-wave-idle: #CFCBEA;
+  --vx-shadow: 0 1px 2px rgb(20 17 43 / 0.06), 0 12px 32px -16px rgb(60 40 160 / 0.25);
+  --vx-shadow-hero: 0 2px 4px rgb(20 17 43 / 0.06), 0 28px 56px -22px rgb(20 17 43 / 0.28);
+}
+:root {
+  --vx-font-text: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --vx-font-title: "Unbounded", ui-sans-serif, sans-serif;
+  --vx-font-data: "JetBrains Mono", ui-monospace, monospace;
+}
+html, body { margin: 0; }
+* { box-sizing: border-box; }
+a { color: var(--vx-accent-text); text-underline-offset: 3px; }
+a:hover { color: var(--vx-text); }
+:focus-visible { outline: 2px solid var(--vx-focus); outline-offset: 2px; }
+@keyframes vx-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes vx-indet { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+@keyframes vx-onde { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div data-theme="{{ theme }}" style="min-height: 100vh; background: var(--vx-bg); color: var(--vx-text); font: 15px/1.6 var(--vx-font-text); -webkit-font-smoothing: antialiased; overflow-x: clip;">
+
+  <header style="border-bottom: 1px solid var(--vx-line); background: var(--vx-surface);">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 10px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px;">
+      <a href="#" style="display: inline-flex; align-items: center; gap: 8px; color: var(--vx-text); text-decoration: none; font-weight: 600; font-size: 17px; letter-spacing: -0.01em;">
+        <svg width="18" height="16" viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="6" width="3" height="6" rx="1.5" fill="var(--vx-accent)"></rect><rect x="5" y="2" width="3" height="14" rx="1.5" fill="currentColor"></rect><rect x="10" y="0" width="3" height="18" rx="1.5" fill="currentColor"></rect><rect x="15" y="4" width="3" height="10" rx="1.5" fill="currentColor"></rect><rect x="20" y="7" width="2" height="4" rx="1" fill="currentColor"></rect></svg>Voxia</a>
+      <nav aria-label="Navigation de l'application">
+        <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 4px;">
+          <li><a href="Voxia Tableau de bord - Nocturne.dc.html" aria-current="page" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; background: var(--vx-surface-2); color: var(--vx-text); text-decoration: none; font-size: 14px; font-weight: 500;">Nouvelle transcription</a></li>
+          <li><a href="Voxia Historique - Nocturne.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; color: var(--vx-text-2); text-decoration: none; font-size: 14px;" style-hover="color: var(--vx-text); background: var(--vx-surface-2);">Historique</a></li>
+          <li><a href="#" style="display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: 10px; color: var(--vx-text-2); text-decoration: none; font-size: 14px;" style-hover="color: var(--vx-text); background: var(--vx-surface-2);">Compte</a></li>
+        </ul>
+      </nav>
+      <div style="margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;">
+        <a href="#" title="Voir mon abonnement" style="display: grid; gap: 4px; min-width: 168px; text-decoration: none;">
+          <span style="display: flex; justify-content: space-between; gap: 12px; font: 11px var(--vx-font-data); color: var(--vx-text-2);"><span>[n] / [limite] vidéos ce mois-ci</span></span>
+          <span aria-hidden="true" style="height: 4px; border-radius: 999px; background: var(--vx-surface-2); overflow: hidden;"><span style="display: block; height: 100%; width: 60%; border-radius: 999px; background: var(--vx-accent);"></span></span>
+        </a>
+        <button type="button" aria-label="Langue : français" style="min-height: 36px; padding: 0 10px; border: 1px solid var(--vx-line); border-radius: 10px; background: transparent; color: var(--vx-text-2); font: 12px var(--vx-font-data); cursor: pointer;">FR</button>
+        <button type="button" style="min-height: 36px; padding: 0 4px; border: 0; background: transparent; color: var(--vx-text-2); font: 14px var(--vx-font-text); cursor: pointer; white-space: nowrap;" style-hover="color: var(--vx-text);">Se déconnecter</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu" style="max-width: 1120px; margin: 0 auto; padding: 24px 16px 64px;">
+    <p style="margin: 0 0 18px;"><a href="Voxia Tableau de bord - Nocturne.dc.html" style="display: inline-flex; align-items: center; min-height: 36px; font-size: 14px; color: var(--vx-text-2); text-decoration: none;" style-hover="color: var(--vx-accent-text);">← Retour à la nouvelle transcription</a></p>
+    <sc-if value="{{ termine }}" hint-placeholder-val="{{ true }}">
+      <section aria-labelledby="titre-transcription" style="border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow);">
+        <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 10px 24px; padding: 18px 20px; border-bottom: 1px solid var(--vx-line);">
+          <div style="min-width: 0; display: grid; gap: 8px;">
+            <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: color-mix(in oklab, var(--vx-success) 18%, transparent); color: var(--vx-success); font: 500 12px var(--vx-font-data); white-space: nowrap;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>Terminé</span>
+            <h1 id="titre-transcription" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(20px, 2.6vw, 26px); line-height: 1.2; letter-spacing: -0.03em; overflow-wrap: anywhere;">Vlog #34 — Mon atelier de céramique</h1>
+          </div>
+          <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px;">
+            <sc-for list="{{ meta }}" as="m" hint-placeholder-count="4">
+              <li style="padding: 3px 10px; border: 1px solid var(--vx-line); border-radius: 999px; font: 12px var(--vx-font-data); color: var(--vx-text-2); white-space: nowrap;"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">{{ m.sr }}</span>{{ m.v }}</li>
+            </sc-for>
+          </ul>
+        </header>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 28px; padding: 20px;">
+          <div style="flex: 1 1 280px; max-width: 380px; min-width: 0; position: sticky; top: 16px; align-self: flex-start; display: grid; gap: 14px;">
+            <sc-if value="{{ youtube }}" hint-placeholder-val="{{ true }}">
+              <div role="img" aria-label="Lecteur de la vidéo YouTube" style="aspect-ratio: 16 / 9; border-radius: 12px; border: 1px solid var(--vx-line); background: var(--vx-bg); display: grid; place-items: center; font: 12px var(--vx-font-data); color: var(--vx-text-3);">Lecteur YouTube (iframe officielle)</div>
+            </sc-if>
+            <sc-if value="{{ audio }}" hint-placeholder-val="{{ false }}">
+              <div style="display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px; border: 1px solid var(--vx-line); border-radius: 14px; background: var(--vx-bg);">
+                <button type="button" aria-label="Pause" style="width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 12px; background: var(--vx-accent); color: var(--vx-on-accent); cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg></button>
+                <input type="range" min="0" max="723" defaultValue="252" aria-label="Position de lecture" style="width: 100%; accent-color: var(--vx-accent);">
+              </div>
+            </sc-if>
+            <div aria-hidden="true" style="height: 56px; display: flex; align-items: center; gap: 2px;">
+              <sc-for list="{{ bars }}" as="b" hint-placeholder-count="48">
+                <span style="flex: 1 1 0; min-width: 1px; height: {{ b.h }}; border-radius: 1px; background: {{ b.c }}; animation: vx-onde 1.6s ease-in-out infinite; animation-delay: {{ b.d }};"></span>
+              </sc-for>
+            </div>
+            <p style="margin: 0; font: 14px var(--vx-font-data); font-variant-numeric: tabular-nums; color: var(--vx-text-2);">04:12 <span style="color: var(--vx-text-3);">/ 12:03</span></p>
+          </div>
+
+          <div style="flex: 2 1 380px; min-width: 0; display: grid; gap: 14px; align-content: start;">
+            <div role="search" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+              <label for="recherche-transcription" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Rechercher dans la transcription</label>
+              <div style="flex: 1 1 220px; min-width: 0; position: relative;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                <input id="recherche-transcription" type="search" placeholder="Rechercher dans la transcription" defaultValue="centrer" style="width: 100%; min-height: 44px; padding: 0 12px 0 36px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: var(--vx-bg); color: var(--vx-text); font: 15px var(--vx-font-text);">
+              </div>
+              <button type="button" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: transparent; color: var(--vx-text); font: 14px var(--vx-font-text); cursor: pointer;">Précédent</button>
+              <button type="button" style="min-height: 44px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: transparent; color: var(--vx-text); font: 14px var(--vx-font-text); cursor: pointer;">Suivant</button>
+              <span aria-live="polite" style="font: 12px var(--vx-font-data); color: var(--vx-text-3); white-space: nowrap;">1 sur 1</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" aria-pressed="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid var(--vx-accent-text); border-radius: 999px; background: color-mix(in oklab, var(--vx-accent) 14%, transparent); color: var(--vx-accent-text); font: 12px var(--vx-font-data); cursor: pointer; white-space: nowrap;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>Horodatages</button>
+              <button type="button" aria-pressed="false" style="min-height: 36px; padding: 0 12px; border: 1px solid var(--vx-line-strong); border-radius: 999px; background: transparent; color: var(--vx-text); font: 12px var(--vx-font-data); cursor: pointer; white-space: nowrap;">Suivre la lecture</button>
+            </div>
+            <ol style="margin: 0; padding: 0; list-style: none; display: grid; gap: 2px;">
+              <sc-for list="{{ lignes }}" as="l" hint-placeholder-count="8">
+                <li style="display: flex; align-items: baseline; gap: 14px; padding: 10px 12px; border-radius: 12px; background: {{ l.bg }};">
+                  <button type="button" aria-label="Lire à partir de {{ l.t }}" style="flex-shrink: 0; padding: 4px; margin: -4px 0; border: 0; background: transparent; color: {{ l.tc }}; font: 500 12px var(--vx-font-data); font-variant-numeric: tabular-nums; cursor: pointer;">{{ l.t }}</button>
+                  <p style="margin: 0; color: {{ l.c }}; font-weight: {{ l.w }}; font-size: 15px; overflow-wrap: anywhere;">{{ l.avant }}<mark style="padding: 0 2px; border-radius: 4px; background: {{ l.markBg }}; color: var(--vx-on-accent);">{{ l.terme }}</mark>{{ l.apres }}</p>
+                </li>
+              </sc-for>
+            </ol>
+
+            <sc-if value="{{ apercu }}" hint-placeholder-val="{{ false }}">
+              <aside aria-labelledby="bandeau-apercu" style="display: grid; gap: 6px; padding: 16px; border: 1px solid color-mix(in oklab, var(--vx-accent) 45%, transparent); border-radius: 14px; background: color-mix(in oklab, var(--vx-accent) 8%, transparent);">
+                <p id="bandeau-apercu" style="margin: 0; font-weight: 600;">Passe au Pro pour la transcription complète.</p>
+                <p style="margin: 0; font-size: 14px; color: var(--vx-text-2);">Aperçu : seules les [n] premières minutes ont été transcrites. Passe au Pro pour la transcription complète.</p>
+                <button type="button" aria-haspopup="dialog" style="justify-self: start; margin-top: 4px; min-height: 40px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--vx-accent); color: var(--vx-on-accent); font: 600 14px var(--vx-font-text); cursor: pointer;">Voir les formules Pro et transcrire la vidéo en entier</button>
+              </aside>
+            </sc-if>
+
+            <footer style="margin-top: 6px; padding-top: 18px; border-top: 1px solid var(--vx-line); display: grid; gap: 14px;">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px;">
+                <button type="button" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 12px; background: var(--vx-text); color: var(--vx-bg); font: 600 14px var(--vx-font-text); cursor: pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg>Copier le texte</button>
+                <label style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 14px; color: var(--vx-text-2); cursor: pointer;"><input type="checkbox" defaultChecked="{{ true }}" style="width: 18px; height: 18px; accent-color: var(--vx-accent);">Avec horodatages</label>
+                <span role="status" style="font: 12px var(--vx-font-data); color: var(--vx-success);">{{ copie }}</span>
+              </div>
+              <ul aria-label="Télécharger" style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start;">
+                <sc-for list="{{ exports }}" as="x" hint-placeholder-count="5">
+                  <li style="display: grid; gap: 4px; max-width: 170px;">
+                    <a href="#" aria-describedby="{{ x.id }}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid {{ x.b }}; border-radius: 12px; color: {{ x.c }}; font: 500 13px var(--vx-font-data); text-decoration: none; white-space: nowrap;" style-hover="border-color: var(--vx-accent-text); color: var(--vx-accent-text);">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ x.icone }}"></path></svg>{{ x.label }}</a>
+                    <span id="{{ x.id }}" style="font: 11px var(--vx-font-data); color: var(--vx-text-3);">{{ x.note }}</span>
+                  </li>
+                </sc-for>
+              </ul>
+            </footer>
+          </div>
+        </div>
+      </section>
+      <section aria-labelledby="titre-analyse" style="margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 16px 24px; padding: 20px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface);">
+        <div style="flex: 1 1 280px; min-width: 0; display: grid; gap: 4px;">
+          <h2 id="titre-analyse" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 17px; letter-spacing: -0.02em;">Structure du script</h2>
+          <p style="margin: 0; font-size: 14px; color: var(--vx-text-2);">Accroche, problème, preuve, offre et appel à l’action, avec leurs horodatages.</p>
+        </div>
+        <div style="flex: 0 1 300px; display: grid; gap: 6px; justify-items: start;">
+          <button type="button" aria-describedby="aide-analyse" style="min-height: 44px; padding: 0 18px; border: 1px solid var(--vx-line-strong); border-radius: 12px; background: transparent; color: var(--vx-text); font: 600 14px var(--vx-font-text); cursor: pointer; white-space: nowrap;" style-hover="border-color: var(--vx-accent-text); color: var(--vx-accent-text);">Analyser le script</button>
+          <p id="aide-analyse" style="margin: 0; font: 11px var(--vx-font-data); color: var(--vx-text-3);">Une analyse réussie consomme 1 crédit IA. Un échec n’en consomme aucun.</p>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ enTraitement }}" hint-placeholder-val="{{ false }}">
+      <section aria-labelledby="titre-suivi" style="max-width: 720px; display: grid; gap: 14px;">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: color-mix(in oklab, {{ badgeC }} 18%, transparent); color: {{ badgeC }}; font: 500 12px var(--vx-font-data); white-space: nowrap;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: {{ badgeAnim }};"></span>{{ badgeLabel }}</span>
+          <span style="font: 12px var(--vx-font-data); color: var(--vx-text-3);">Lancée le 05/11/2026 à 10:12</span>
+        </div>
+        <h1 id="titre-suivi" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(20px, 2.6vw, 26px); line-height: 1.2; letter-spacing: -0.03em; overflow-wrap: anywhere;">Lancement de la collection automne</h1>
+        <p style="margin: 0; font: 13px var(--vx-font-data); color: var(--vx-text-3); overflow-wrap: anywhere;">https://youtube.com/watch?v=3fK9…</p>
+        <div aria-live="polite" style="margin-top: 6px; display: grid; gap: 16px; padding: 20px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow);">
+          <ol aria-label="Étapes du traitement" style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+            <sc-for list="{{ etapes }}" as="e" hint-placeholder-count="3">
+              <li aria-current="{{ e.current }}" style="display: grid; gap: 8px;">
+                <span style="position: relative; height: 6px; border-radius: 999px; background: {{ e.bg }}; overflow: hidden;"><span style="display: {{ e.indet }}; position: absolute; inset: 0; width: 40%; border-radius: 999px; background: var(--vx-live); animation: vx-indet 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;"></span></span>
+                <span style="font: {{ e.w }} 12px var(--vx-font-data); color: {{ e.c }};">{{ e.label }}</span>
+              </li>
+            </sc-for>
+          </ol>
+          <sc-if value="{{ echec }}" hint-placeholder-val="{{ false }}">
+            <p role="alert" style="margin: 0; display: flex; gap: 10px; padding: 12px 14px; border-radius: 12px; background: color-mix(in oklab, var(--vx-error) 12%, transparent); font-size: 14px; color: var(--vx-text);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vx-error)" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5h.01"></path></svg>Cette vidéo est privée. Aucun décompte n'a été fait.</p>
+          </sc-if>
+          <sc-if value="{{ enCours }}" hint-placeholder-val="{{ true }}">
+            <div style="display: grid; gap: 8px;">
+              <p style="margin: 0; color: var(--vx-text-2);">La transcription est en cours. Tu peux fermer cette page : elle continue, et tu la retrouveras dans ton historique.</p>
+              <p style="margin: 0; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--vx-text-3);"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: var(--vx-live); animation: vx-pulse 1.6s ease-in-out infinite;"></span>Le statut se met à jour tout seul.</p>
+            </div>
+          </sc-if>
+        </div>
+      </section>
+    </sc-if>
+
+    <p style="margin: 24px 0 0;"><a href="Voxia Tableau de bord - Nocturne.dc.html" style="font-size: 14px; font-weight: 600;">Nouvelle transcription</a></p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pageTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'dark' | 'light'&quot;,&quot;section&quot;:&quot;Affichage&quot;},&quot;statut&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;termine&quot;,&quot;attente&quot;,&quot;telechargement&quot;,&quot;transcription&quot;,&quot;echec&quot;],&quot;default&quot;:&quot;termine&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;États&quot;},&quot;source&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;youtube&quot;,&quot;fichier&quot;],&quot;default&quot;:&quot;youtube&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;États&quot;},&quot;plan&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pro&quot;,&quot;gratuit&quot;],&quot;default&quot;:&quot;pro&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;États&quot;},&quot;apercu&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;États&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const statut = p.statut ?? 'termine';
+    const source = p.source ?? 'youtube';
+    const live = 'vx-pulse 1.6s ease-in-out infinite';
+    const B = { attente: ['En attente', 'var(--vx-text-2)', 'none'], telechargement: ['Téléchargement', 'var(--vx-live)', live], transcription: ['Transcription', 'var(--vx-live)', live], echec: ['Échec', 'var(--vx-error)', 'none'], termine: ['Terminé', 'var(--vx-success)', 'none'] };
+    const idx = { attente: -1, telechargement: 0, transcription: 1, echec: 0 }[statut] ?? 3;
+    const etapes = ['Téléchargement', 'Transcription', 'Terminé'].map((label, i) => {
+      const fait = i < idx && statut !== 'echec', cur = i === idx && statut !== 'echec', err = statut === 'echec' && i === 0;
+      return { label, current: cur ? 'step' : 'false', indet: cur ? 'block' : 'none',
+        bg: fait ? 'var(--vx-success)' : err ? 'var(--vx-error)' : 'var(--vx-surface-2)',
+        c: cur ? 'var(--vx-live)' : err ? 'var(--vx-error)' : fait ? 'var(--vx-text-2)' : 'var(--vx-text-3)', w: cur || err ? 500 : 400 };
+    });
+    const bars = Array.from({ length: 48 }, (_, i) => ({ h: Math.round(22 + 78 * Math.abs(Math.sin(i * 1.7 + 0.6) * Math.cos(i * 0.45))) + '%', d: '-' + ((i % 16) / 10) + 's', c: i < 17 ? 'var(--vx-accent)' : 'var(--vx-wave-idle)' }));
+    const src = [
+      ['00:00', "Bienvenue dans l'atelier. Oui, il y a de l'argile partout."],
+      ['00:06', "Aujourd'hui on tourne six bols, et on en rate au moins deux."],
+      ['00:13', "Le secret, c'est de |centrer| la terre avant de vouloir aller vite."],
+      ['00:19', "Si elle n'est pas centrée, rien ne tiendra."],
+      ['00:24', "Je mouille les mains, je pose les coudes sur les genoux."],
+      ['00:31', "Et on laisse le tour faire une bonne partie du travail."],
+      ['00:38', "Quand la motte ne bouge plus sous les paumes, on peut ouvrir."],
+      ['00:45', "Le pouce descend doucement, jusqu'à un centimètre du fond."]
+    ];
+    const lignes = src.map(([t, x], i) => {
+      const [avant, terme = '', apres = ''] = x.split('|');
+      const actif = i === 2;
+      return { t, avant, terme, apres, markBg: terme ? 'var(--vx-accent)' : 'transparent',
+        bg: actif ? 'var(--vx-mark)' : 'transparent', c: actif ? 'var(--vx-mark-text)' : i < 2 ? 'var(--vx-text-3)' : 'var(--vx-text-2)',
+        tc: actif ? 'var(--vx-mark-time)' : 'var(--vx-text-3)', w: actif ? 500 : 400 };
+    });
+    const dl = 'M12 3v12M7 10l5 5 5-5M5 21h14', lock = 'M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4';
+    const verrou = p.plan === 'gratuit';
+    const ex = (id, label, locked, note) => ({ id, label: locked ? label + ' · Pro' : label, icone: locked ? lock : dl, note: locked ? 'Disponible à partir du plan Pro.' : (note || ''), b: locked ? 'var(--vx-line)' : 'var(--vx-line-strong)', c: locked ? 'var(--vx-text-3)' : 'var(--vx-text)' });
+    const termine = statut === 'termine';
+    return {
+      theme: p.pageTheme ?? 'dark',
+      termine, enTraitement: !termine,
+      echec: statut === 'echec', enCours: statut !== 'echec' && !termine,
+      badgeLabel: B[statut][0], badgeC: B[statut][1], badgeAnim: B[statut][2],
+      etapes, bars, lignes,
+      youtube: source === 'youtube', audio: source === 'fichier',
+      apercu: p.apercu ?? false,
+      copie: '',
+      meta: [
+        { sr: 'Plateforme : ', v: source === 'youtube' ? 'YouTube' : 'Fichier' },
+        { sr: 'Durée : ', v: '12:03' }, { sr: 'Langue : ', v: 'FR' }, { sr: '', v: '1 842 mots' }
+      ],
+      exports: [ex('x-txt', 'TXT', false), ex('x-pdf', 'PDF', verrou), ex('x-srt', 'SRT', false), ex('x-vtt', 'VTT', verrou), ex('x-mp3', 'MP3', false)]
+    };
+  }
+}
+</script>
+</body>
+</html>

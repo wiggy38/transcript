@@ -21,7 +21,9 @@ Pour ouvrir les maquettes, ouvrir les fichiers `.dc.html` dans un navigateur, av
 ## Fidélité
 **Haute fidélité** pour les jetons (couleurs, typographie, rayons, ombres), pour la landing page et pour les composants du design system. Les valeurs sont définitives, à l'exception des **prix et quotas, qui sont des valeurs provisoires** (`[prix]`, `[n]`) : ne pas les figer.
 
-Les écrans applicatifs qui n'ont pas de maquette dédiée (historique, réglages, abonnement, création, suivi, résultat, pages légales, contact, FAQ, back-office) se construisent **avec les composants et les jetons** de ce kit, sans changer leur structure fonctionnelle actuelle. Les cinq états de traitement et l'écran de résultat sont montrés dans le design system.
+Les écrans applicatifs ont désormais leurs maquettes dédiées (écran 4) : tableau de bord, transcription, historique, compte, connexion, inscription. Elles sont **haute fidélité** et font foi sur le design system pour ces écrans.
+
+Les écrans qui n'ont toujours pas de maquette dédiée (abonnement, pages légales, contact, FAQ, back-office) se construisent **avec les composants et les jetons** de ce kit, sans changer leur structure fonctionnelle actuelle. Les cinq états de traitement et l'écran de résultat sont montrés dans le design system.
 
 ## Contraintes non négociables
 - Contraste du texte d'au moins 4,5:1 dans les deux thèmes (voir le tableau ci-dessous). Contours d'éléments d'interface d'au moins 3:1.
@@ -149,7 +151,33 @@ Note : dans ce fichier, les maquettes de héros et de tarifs sont des ébauches 
 
 Les étapes Téléchargement → Transcription → Terminé **dérivent des statuts existants**. Aucune nouvelle donnée n'est demandée au serveur. Le seul pourcentage réel est celui de l'envoi de fichier (`livewire-upload-progress`).
 
-### 3. Back-office (Filament 4)
+### 3. Écrans applicatifs (`designs/Voxia * - Nocturne.dc.html`)
+Chaque maquette expose ses états dans le panneau Tweaks (thème sombre ou clair inclus). Tous les états listés sont à implémenter. Gabarit commun : en-tête de l'application (logo, navigation Tableau de bord / Historique / Compte avec `aria-current="page"`, jauge de quota `[n] / [limite]`), conteneur de 1120 px, marge latérale de 16 px.
+
+- **Tableau de bord** (`Voxia Tableau de bord - Nocturne.dc.html`) : point d'entrée après connexion. Bloc « Nouvelle transcription » avec le lien et le fichier, puis les transcriptions récentes.
+  - États du lien (`etatLien`) : vide, lecture des informations de la vidéo, aperçu (titre, durée, source) avant validation, limite atteinte (vidéo trop longue pour le plan), erreur.
+  - États du fichier (`etatFichier`) : vide, envoi (barre déterminée), prêt, erreur.
+  - Bandeau d'avertissement si l'email n'est pas vérifié (`emailVerifie`). Le lien collé est conservé.
+  - Historique vide (`historiqueVide`) : message et invitation à coller un premier lien.
+- **Transcription** (`Voxia Transcription - Nocturne.dc.html`) : remplace le résultat du design system.
+  - Statuts (`statut`) : en attente, téléchargement, transcription, échec, terminé. Ce sont les cinq états, avec les étapes dérivées des statuts existants.
+  - Source (`source`) : YouTube (lecteur en iframe) ou fichier (lecteur audio habillé avec onde). Barre de progression et minuteur sur une seule ligne.
+  - Plan (`plan`) : en gratuit, les formats réservés affichent le cadenas et « À partir du plan Pro ».
+  - Onglets du texte centrés et lisibles sur mobile. Barre d'export en `flex-wrap` : les boutons passent à la ligne sans se chevaucher.
+  - `apercu` : variante de lecture publique (sans actions de compte).
+- **Historique** (`Voxia Historique - Nocturne.dc.html`) : liste avec miniature de source, titre, durée, date et badge de statut.
+  - Modes (`mode`) : liste, résultats de recherche, recherche sans résultat, historique vide.
+  - Plan (`plan`) : en gratuit, mention de la durée de conservation.
+  - Confirmation après suppression (`statutSupprimee`), message `role="status"`.
+- **Compte** (`Voxia Compte - Nocturne.dc.html`) : sections Ta formule, Profil, Mot de passe, Langue de l'interface, Packs et factures, Vos données, Supprimer le compte (zone de danger en `--vx-error`).
+  - Plan (`plan`) : gratuit, pro, pack.
+  - Confirmation d'enregistrement (`statutEnregistre`).
+  - Boutons de langue FR / EN en `aria-pressed`, sans retour à la ligne à l'intérieur d'un bouton.
+- **Connexion** et **Inscription** (`Voxia Connexion - Nocturne.dc.html`, `Voxia Inscription - Nocturne.dc.html`) : carte centrée, boutons Google et Facebook, puis le formulaire email.
+  - Erreurs (`erreur`) : aucune, formulaire (messages sous les champs, `aria-invalid`), échec Google, échec Facebook (`role="alert"` en haut de la carte).
+  - `lienGarde` : si un visiteur a collé un lien avant de se connecter, un rappel indique que le lien sera repris après la connexion.
+
+### 4. Back-office (Filament 4)
 - Créer un thème Filament (fichier CSS compilé par Vite, `->viteTheme(...)` dans `AdminPanelProvider`) qui importe `voxia-tokens.css`.
 - Il mappe la couleur primaire sur `--vx-accent`, les gris sur l'échelle indigo et la police sur Onest. Rayons à 12 px.
 - Garder des tableaux denses : pas de trame ni de lueur, pas d'ombre sur les lignes.
@@ -246,6 +274,7 @@ Attention : en clair, accent (olive) et succès (vert) sont proches. Les badges 
 ## Fichiers
 - `designs/Voxia Landing - B Nocturne.dc.html` : landing, fait foi pour le héros et l'accueil.
 - `designs/Voxia Nocturne - Design System.dc.html` : jetons, composants, animations, résultat, cinq états.
+- `designs/Voxia Tableau de bord - Nocturne.dc.html`, `Voxia Transcription - Nocturne.dc.html`, `Voxia Historique - Nocturne.dc.html`, `Voxia Compte - Nocturne.dc.html`, `Voxia Connexion - Nocturne.dc.html`, `Voxia Inscription - Nocturne.dc.html` : écrans applicatifs.
 - `designs/Voxia Audit.dc.html` : audit de l'existant (points faibles à corriger).
 - `designs/support.js` : moteur nécessaire pour ouvrir les maquettes.
 - `tokens/voxia-tokens.css` : variables CSS des deux thèmes, keyframes, règle reduced-motion.
@@ -256,6 +285,6 @@ Attention : en clair, accent (olive) et succès (vert) sont proches. Les badges 
 1. Ajouter `voxia-tokens.css` et remplacer le bloc `@theme` de `resources/css/app.css`. Remplacer les couleurs codées en dur (`#1B1C1A` → `bg-surlignage`, `#4A4B47` → `bg-onde-repos`, voile de dialogue → `--vx-overlay`).
 2. Charger les polices et retirer Geist et Instrument Serif. Retirer `uppercase` et `tracking-*` des libellés en mono.
 3. Mettre à jour les composants Blade d'après `blade-reference/`, en conservant leurs props actuelles.
-4. Landing, puis tarifs (cartes empilées en mobile), puis création, suivi et résultat (cinq états).
+4. Landing, puis tarifs (cartes empilées en mobile), puis connexion et inscription, tableau de bord, transcription (cinq états), historique et compte.
 5. Thème Filament.
 6. Vérifier : axe ou Lighthouse sur chaque page, navigation clavier, `prefers-reduced-motion`, largeur de 320 px sans défilement horizontal, interface EN.
