@@ -276,7 +276,7 @@ La page de l'utilisateur interroge le statut de la tâche jusqu'à la fin ; aucu
 | Audio | FFmpeg | Proposé |
 | Base de données | MySQL ou PostgreSQL | Proposé |
 | Stockage des fichiers | Stockage objet compatible S3 | Proposé |
-| Paiement | Laravel Cashier avec Stripe ou Paddle | À décider |
+| Paiement | Laravel Cashier avec Paddle | Validé (décision du 5 novembre 2026) |
 | Emails transactionnels | Vérification de compte, notifications de fin de traitement | À décider |
 
 F7 ajoute une étape après la transcription : un modèle de langage, appelé par API, reçoit le texte horodaté et renvoie les cinq parties dans un format structuré. Le fournisseur reste à choisir et le coût par analyse sera mesuré pendant la bêta.
@@ -299,7 +299,8 @@ Le risque principal est technique et juridique : la récupération des vidéos Y
 - [ ] L'extraction MP3 seule, sans transcription, décompte-t-elle une vidéo en gratuit ?
 - [ ] Durée de conservation des MP3 et des fichiers importés (proposition : 30 jours).
 - [ ] Taille maximale d'un fichier importé (proposition : 2 Go).
-- [ ] Prestataire de paiement et structure juridique qui encaisse.
+- [x] Prestataire de paiement : Paddle, définitif (décision du 5 novembre 2026).
+- [ ] Structure juridique qui encaisse.
 - [ ] Langues de l'interface au lancement (proposition : anglais et français).
 - [ ] Autoriser un premier essai sans compte depuis la page d'accueil ?
 - [ ] Nombre de crédits IA inclus chaque mois dans le Pro ; une analyse d'essai en Gratuit pour déclencher l'upgrade ?
