@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Contracts\AudioExtractor;
 use App\Contracts\BillingProvider;
+use App\Contracts\LanguageModel;
 use App\Contracts\ScriptAnalyzer;
 use App\Contracts\TranscriptionEngine;
 use App\Contracts\VideoFetcher;
@@ -11,6 +12,7 @@ use App\Models\User;
 use App\Services\Analyse\ClaudeScriptAnalyzer;
 use App\Services\Audio\FfmpegAudioExtractor;
 use App\Services\Comptes\LienEnAttente;
+use App\Services\Ia\AnthropicLanguageModel;
 use App\Services\Paiement\PaddleBillingProvider;
 use App\Services\Transcription\ElevenLabsScribeEngine;
 use App\Services\Video\YtDlpVideoFetcher;
@@ -34,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AudioExtractor::class, FfmpegAudioExtractor::class);
         $this->app->bind(TranscriptionEngine::class, ElevenLabsScribeEngine::class);
         $this->app->bind(ScriptAnalyzer::class, ClaudeScriptAnalyzer::class);
+        $this->app->bind(LanguageModel::class, AnthropicLanguageModel::class);
         $this->app->bind(BillingProvider::class, PaddleBillingProvider::class);
 
         // Les webhooks sont déclarés dans routes/web.php (réception vérifiée et mise en file).

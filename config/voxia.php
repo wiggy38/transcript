@@ -586,4 +586,30 @@ return [
         'date_brouillon' => env('VOXIA_LEGAL_DRAFT_DATE', '2026-11-04'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Modèle de langage (V2, derrière App\Contracts\LanguageModel)
+    |--------------------------------------------------------------------------
+    |
+    | Clé et URL du fournisseur : config/services.php. « tarifs » : prix par million de jetons,
+    | par modèle (à vérifier sur la grille officielle avant toute facturation). « tentatives » :
+    | appels au total pour une erreur transitoire (délai, débit, connexion, 5xx). « relances_sortie_invalide » :
+    | relances d'une sortie structurée invalide.
+    |
+    */
+
+    'ia' => [
+        'modele' => [
+            'modele' => env('ANTHROPIC_MODEL', 'claude-haiku-5-5'),
+            'tarifs' => [
+                'claude-haiku-5-5' => ['entree' => 0.10, 'sortie' => 0.50],
+            ],
+            'delai_secondes' => (int) env('VOXIA_IA_TIMEOUT_SECONDS', 30),
+            'connexion_secondes' => (int) env('VOXIA_IA_CONNECT_TIMEOUT_SECONDS', 10),
+            'tentatives' => (int) env('VOXIA_IA_ATTEMPTS', 2),
+            'delai_entre_tentatives_ms' => (int) env('VOXIA_IA_RETRY_DELAY_MS', 2000),
+            'relances_sortie_invalide' => (int) env('VOXIA_IA_INVALID_OUTPUT_RETRIES', 1),
+        ],
+    ],
+
 ];
