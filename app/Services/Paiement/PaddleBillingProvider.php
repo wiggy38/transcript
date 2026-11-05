@@ -51,21 +51,40 @@ final class PaddleBillingProvider implements BillingProvider
 
     public function changerFormule(User $utilisateur, string $formule): void
     {
-        $abonnement = $this->abonnementPro($utilisateur);
+        $abonnement = $this->abonnementPayant($utilisateur);
+        $prix = self::prixDe($formule);
 
-        // Prorata immédiat : le nouveau tarif prend effet tout de suite, l'écart est facturé au prorata.
-        $abonnement->prorateImmediately()->swap(self::prixDe($formule));
+        // Vers Business, ou entre mensuel et annuel : prorata immédiat, l'écart est facturé au prorata.
+        if (str_starts_with($formule, 'business_') || ! $this->estBusiness($abonnement)) {
+            $abonnement->prorateImmediately()->swap($prix);
+
+            return;
+        }
+
+        // Business vers Pro : effectif à la fin de la période payée, sans facture d'écart.
+        // Le plan Business reste en place jusqu'à cette date (voir SynchroniserPlan).
+        $abonnement->updatePaddleSubscription([
+            'items' => [['price_id' => $prix, 'quantity' => 1]],
+            'proration_billing_mode' => 'do_not_bill',
+            'effective_from' => 'next_billing_period',
+        ]);
+    }
+
+    /** Vrai si l'abonnement porte un prix Business (mensuel ou annuel). */
+    private function estBusiness(object $abonnement): bool
+    {
+        return app(SynchroniserPlan::class)->estFormuleBusiness($abonnement);
     }
 
     public function resilier(User $utilisateur): void
     {
         // Sans « immediately » : Paddle résilie à la fin de la période payée.
-        $this->abonnementPro($utilisateur)->cancel();
+        $this->abonnementPayant($utilisateur)->cancel();
     }
 
     public function annulerResiliation(User $utilisateur): void
     {
-        $this->abonnementPro($utilisateur)->stopCancelation();
+        $this->abonnementPayant($utilisateur)->stopCancelation();
     }
 
     public function factures(User $utilisateur): array
@@ -102,8 +121,8 @@ final class PaddleBillingProvider implements BillingProvider
         return $prix;
     }
 
-    /** Abonnement Pro valide (actif, ou résilié mais encore dans la période payée). */
-    private function abonnementPro(User $utilisateur)
+    /** Abonnement payant valide (Pro ou Business) : actif, ou résilié mais encore dans la période payée. */
+    private function abonnementPayant(User $utilisateur)
     {
         $abonnement = $utilisateur->subscription((string) config('voxia.paiement.type_abonnement_pro'));
 

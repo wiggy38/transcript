@@ -7,6 +7,8 @@ return [
 
     'statut' => [
         'deja-pro' => 'You are already on the Pro plan.',
+        'deja-abonne' => 'You already have a subscription. Change your plan from this page.',
+        'retour-pro-programme' => 'You switch back to Pro at the end of your paid period. Your Business access stays open until then.',
         'paiement-indisponible' => 'Payment is not available right now. Please try again later.',
         'formule-changee' => 'Your plan is being changed. The new price will show shortly.',
         'resiliee' => 'Your subscription is cancelled. You keep Pro access until the end of the paid period.',
@@ -31,6 +33,11 @@ return [
         'souscrire_mensuel' => 'Pro monthly, :montant $ per month',
         'souscrire_annuel' => 'Pro yearly, :montant $ per year',
         'acheter_pack' => 'Pack, :montant $ (one-time payment)',
+        'business' => 'Business',
+        'passer_business' => 'Upgrade to Business',
+        'passer_pro' => 'Switch back to Pro (at the end of the period)',
+        'souscrire_business_mensuel' => 'Business monthly, :montant $ per month',
+        'souscrire_business_annuel' => 'Business yearly, :montant $ per year',
     ],
 
     'packs' => [
@@ -62,9 +69,13 @@ return [
         'titre_pro_mensuel' => 'Upgrade to Pro, monthly',
         'titre_pro_annuel' => 'Upgrade to Pro, yearly',
         'titre_pack' => 'Buy a Pack',
+        'titre_business_mensuel' => 'Upgrade to Business, monthly',
+        'titre_business_annuel' => 'Upgrade to Business, yearly',
         'montant_pro_mensuel' => ':montant $ per month. You can cancel at any time.',
         'montant_pro_annuel' => ':montant $ per year, about :mensuel $ per month.',
         'montant_pack' => ':montant $ for :heures h of transcription, valid :mois months. One-time payment, no subscription.',
+        'montant_business_mensuel' => ':montant $ per month. You can cancel at any time.',
+        'montant_business_annuel' => ':montant $ per year, about :mensuel $ per month.',
         'apercu' => 'Your transcription of “:titre” will be re-run in full once payment is confirmed.',
         'video_sans_titre' => 'this video',
         'taxes' => 'Prices in US dollars. VAT is calculated by Paddle according to your country.',

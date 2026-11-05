@@ -549,3 +549,88 @@ test('bandeau d\'aperçu : la fenêtre mène aux formules avec cet aperçu et l\
         ->assertOk()
         ->assertSee(e(route('paiement.show', ['produit' => 'pro_mensuel', 'retour' => '/transcriptions/'.$apercu->getKey(), 'transcription' => $apercu->getKey()])), false);
 });
+
+/** Prix Business de test, comme ceux que .env fournit en production. */
+function paiementPrixBusiness(): void
+{
+    config([
+        'voxia.paiement.prix.business_mensuel' => 'pri_business_mensuel',
+        'voxia.paiement.prix.business_annuel' => 'pri_business_annuel',
+    ]);
+}
+
+test('abonnement dont le prix est Business : plan Business, ancre du cycle posée', function () {
+    paiementPrixBusiness();
+    $utilisateur = paiementCompte();
+
+    paiementWebhook(paiementEvenement('subscription.created', paiementDonneesAbonnement($utilisateur, 'active', 'pri_business_mensuel'), 'evt_biz_cree'))->assertOk();
+
+    $utilisateur->refresh();
+    expect($utilisateur->plan)->toBe(Plan::Business)
+        ->and($utilisateur->abonnement_debut_at)->not->toBeNull()
+        ->and($utilisateur->subscribed('pro'))->toBeTrue();
+});
+
+test('Pro vers Business : le plan passe à Business et l\'ancre du cycle ne bouge pas', function () {
+    paiementPrixBusiness();
+    $utilisateur = paiementCompte();
+    paiementAbonnementPro($utilisateur);
+    $ancre = $utilisateur->refresh()->abonnement_debut_at->toIso8601String();
+
+    paiementWebhook(paiementEvenement('subscription.updated', paiementDonneesAbonnement($utilisateur, 'active', 'pri_business_mensuel'), 'evt_pro_vers_biz'))->assertOk();
+
+    $utilisateur->refresh();
+    expect($utilisateur->plan)->toBe(Plan::Business)
+        ->and($utilisateur->abonnement_debut_at->toIso8601String())->toBe($ancre);
+});
+
+test('Business vers Pro programmé : le plan reste Business tant que l\'article est Business, puis passe à Pro', function () {
+    paiementPrixBusiness();
+    $utilisateur = paiementCompte();
+    paiementAbonnementPro($utilisateur, 'active', 'pri_business_mensuel');
+    $utilisateur->forceFill(['plan' => Plan::Business])->save();
+
+    $programme = ['effective_at' => '2026-12-04T00:00:00Z', 'action' => 'change'];
+    paiementWebhook(paiementEvenement('subscription.updated', paiementDonneesAbonnement($utilisateur, 'active', 'pri_business_mensuel', $programme), 'evt_retour_pro_prevu'))->assertOk();
+    expect($utilisateur->refresh()->plan)->toBe(Plan::Business);
+
+    paiementWebhook(paiementEvenement('subscription.updated', paiementDonneesAbonnement($utilisateur, 'active', 'pri_pro_mensuel'), 'evt_retour_pro_effectif'))->assertOk();
+    expect($utilisateur->refresh()->plan)->toBe(Plan::Pro);
+});
+
+test('changement Business reçu deux fois : une seule ligne d\'abonnement, plan inchangé', function () {
+    paiementPrixBusiness();
+    $utilisateur = paiementCompte();
+    paiementAbonnementPro($utilisateur);
+    $evenement = paiementEvenement('subscription.updated', paiementDonneesAbonnement($utilisateur, 'active', 'pri_business_annuel'), 'evt_biz_double');
+
+    paiementWebhook($evenement)->assertOk();
+    $ancre = $utilisateur->refresh()->abonnement_debut_at->toIso8601String();
+    paiementWebhook($evenement)->assertOk();
+
+    expect(Subscription::query()->where('paddle_id', 'sub_'.$utilisateur->getKey())->count())->toBe(1)
+        ->and(Subscription::query()->where('paddle_id', 'sub_'.$utilisateur->getKey())->first()->items()->count())->toBe(1)
+        ->and($utilisateur->refresh()->plan)->toBe(Plan::Business)
+        ->and($utilisateur->abonnement_debut_at->toIso8601String())->toBe($ancre);
+});
+
+test('résiliation d\'un abonnement Business : retour au plan Gratuit une fois la période finie', function () {
+    paiementPrixBusiness();
+    $utilisateur = paiementCompte();
+    paiementAbonnementPro($utilisateur, 'active', 'pri_business_mensuel');
+    $utilisateur->forceFill(['plan' => Plan::Business])->save();
+
+    paiementWebhook(paiementEvenement('subscription.canceled', paiementDonneesAbonnement($utilisateur, 'canceled', 'pri_business_mensuel'), 'evt_biz_resilie'))->assertOk();
+
+    expect($utilisateur->refresh()->plan)->toBe(Plan::Free);
+});
+
+test('échec de paiement d\'un abonnement Business : statut impayé enregistré', function () {
+    paiementPrixBusiness();
+    $utilisateur = paiementCompte();
+    paiementAbonnementPro($utilisateur, 'active', 'pri_business_mensuel');
+
+    paiementWebhook(paiementEvenement('subscription.past_due', paiementDonneesAbonnement($utilisateur, 'past_due', 'pri_business_mensuel'), 'evt_biz_impaye'))->assertOk();
+
+    expect(Subscription::query()->where('paddle_id', 'sub_'.$utilisateur->getKey())->value('status'))->toBe('past_due');
+});

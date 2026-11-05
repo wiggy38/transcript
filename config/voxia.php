@@ -142,10 +142,9 @@ return [
             'business_mensuel' => env('VOXIA_PADDLE_PRICE_BUSINESS_MONTHLY'),
             'business_annuel' => env('VOXIA_PADDLE_PRICE_BUSINESS_YEARLY'),
         ],
-        // Type d'abonnement enregistré par Cashier (subscriptions.type) pour le plan Pro.
+        // Type d'abonnement enregistré par Cashier (subscriptions.type) pour toutes les formules payantes
+        // (Pro et Business). Un seul abonnement par compte : le plan se déduit du prix de l'abonnement.
         'type_abonnement_pro' => 'pro',
-        // Type d'abonnement distinct pour le plan Business (un compte n'a qu'une formule à la fois).
-        'type_abonnement_business' => 'business',
         'heure_recalcul' => env('VOXIA_PLANS_RECOMPUTE_AT', '03:45'),
     ],
 

@@ -23,6 +23,8 @@ class PaiementController extends Controller
     private const FORMULES = [
         'pro_mensuel' => 'voxia.plans.pro.price_monthly_usd',
         'pro_annuel' => 'voxia.plans.pro.price_yearly_usd',
+        'business_mensuel' => 'voxia.plans.business.price_monthly_usd',
+        'business_annuel' => 'voxia.plans.business.price_yearly_usd',
         'pack' => 'voxia.plans.pack.price_usd',
     ];
 
@@ -32,8 +34,9 @@ class PaiementController extends Controller
 
         $utilisateur = $request->user();
 
-        if (str_starts_with($produit, 'pro_') && $utilisateur->subscribed((string) config('voxia.paiement.type_abonnement_pro'))) {
-            return redirect()->route('abonnement')->with('statut', 'deja-pro');
+        // Un seul abonnement par compte : une formule déjà souscrise se change depuis l'espace Abonnement.
+        if ($produit !== 'pack' && $utilisateur->subscribed((string) config('voxia.paiement.type_abonnement_pro'))) {
+            return redirect()->route('abonnement')->with('statut', str_starts_with($produit, 'business_') ? 'deja-abonne' : 'deja-pro');
         }
 
         $apercu = $this->apercuDuCompte($request);
@@ -55,7 +58,7 @@ class PaiementController extends Controller
                 'montant' => (float) config(self::FORMULES[$produit]),
                 'heures' => (int) config('voxia.plans.pack.hours'),
                 'mois' => (int) config('voxia.plans.pack.validity_months'),
-                'mensuel' => round((float) config('voxia.plans.pro.price_yearly_usd') / 12, 2),
+                'mensuel' => round((float) config(str_starts_with($produit, 'business_') ? 'voxia.plans.business.price_yearly_usd' : 'voxia.plans.pro.price_yearly_usd') / 12, 2),
             ],
             'ouverture' => $ouverture->versTableau(),
             'apercu' => $apercu,

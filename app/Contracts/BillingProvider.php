@@ -12,8 +12,9 @@ use Carbon\CarbonInterface;
  * via Laravel Cashier) n'apparaît que dans App\Services\Paiement\PaddleBillingProvider.
  *
  * Les formules sont désignées par leur clé de config (voxia.paiement.prix) : « pro_mensuel »,
- * « pro_annuel », « pack ». Cette interface ne fait que déclencher les opérations chez le
- * prestataire : l'état local (plan, Packs, factures) est mis à jour par les webhooks, pas ici.
+ * « pro_annuel », « business_mensuel », « business_annuel », « pack ». Cette interface ne fait que
+ * déclencher les opérations chez le prestataire : l'état local (plan, Packs, factures) est mis à jour
+ * par les webhooks, pas ici.
  */
 interface BillingProvider
 {
@@ -26,7 +27,10 @@ interface BillingProvider
      */
     public function ouvrirPaiement(User $utilisateur, string $formule, ?int $transcriptionId = null, ?string $retour = null): Ouverture;
 
-    /** Passe l'abonnement Pro en cours à une autre formule (mensuel ↔ annuel), au prorata. */
+    /**
+     * Passe l'abonnement en cours à une autre formule. Vers Business, ou entre mensuel et annuel :
+     * immédiat, au prorata. Business vers Pro : effectif à la fin de la période payée.
+     */
     public function changerFormule(User $utilisateur, string $formule): void;
 
     /** Résiliation : l'accès reste ouvert jusqu'à la fin de la période payée. */

@@ -49,7 +49,7 @@ class AbonnementController extends Controller
     public function changerFormule(Request $request, BillingProvider $facturation): RedirectResponse
     {
         $donnees = $request->validate([
-            'formule' => ['required', 'in:pro_mensuel,pro_annuel'],
+            'formule' => ['required', 'in:pro_mensuel,pro_annuel,business_mensuel,business_annuel'],
         ]);
 
         $utilisateur = $request->user();
@@ -64,6 +64,9 @@ class AbonnementController extends Controller
             return redirect()->route('abonnement');
         }
 
+        // Business vers Pro : Paddle ne change le prix qu'à la fin de la période payée.
+        $retourProProgramme = str_starts_with((string) $actuelle, 'business_') && str_starts_with($donnees['formule'], 'pro_');
+
         try {
             $facturation->changerFormule($utilisateur, $donnees['formule']);
         } catch (PaiementIndisponible $erreur) {
@@ -72,7 +75,7 @@ class AbonnementController extends Controller
             return redirect()->route('abonnement')->with('statut', 'paiement-indisponible');
         }
 
-        return redirect()->route('abonnement')->with('statut', 'formule-changee');
+        return redirect()->route('abonnement')->with('statut', $retourProProgramme ? 'retour-pro-programme' : 'formule-changee');
     }
 
     public function resilier(Request $request, BillingProvider $facturation): RedirectResponse
@@ -116,7 +119,7 @@ class AbonnementController extends Controller
             return null;
         }
 
-        return collect(['pro_mensuel', 'pro_annuel'])
+        return collect(['pro_mensuel', 'pro_annuel', 'business_mensuel', 'business_annuel'])
             ->first(fn (string $formule) => config("voxia.paiement.prix.{$formule}") === $prix);
     }
 }

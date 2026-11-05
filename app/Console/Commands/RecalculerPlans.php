@@ -14,13 +14,13 @@ class RecalculerPlans extends Command
 {
     protected $signature = 'voxia:recalculer-plans';
 
-    protected $description = 'Recalcule le plan des comptes Pro et Pack (Packs expirés, abonnements terminés)';
+    protected $description = 'Recalcule le plan des comptes Pro, Business et Pack (Packs expirés, abonnements terminés)';
 
     public function handle(SynchroniserPlan $plans): int
     {
         $comptes = 0;
 
-        User::query()->whereIn('plan', ['pro', 'pack'])->chunkById(200, function ($lot) use ($plans, &$comptes) {
+        User::query()->whereIn('plan', ['pro', 'business', 'pack'])->chunkById(200, function ($lot) use ($plans, &$comptes) {
             foreach ($lot as $utilisateur) {
                 $plans->pour($utilisateur);
                 $comptes++;
