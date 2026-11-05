@@ -10,85 +10,77 @@
 <helmet>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Bricolage+Grotesque:opsz,wght@12..96,600..800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* TOKENS */
-:root, [data-theme="light"] {
-  --vx-bg: #F4F1EA;
-  --vx-surface: #FFFDF8;
-  --vx-surface-2: #EAE6DB;
-  --vx-line: #DDD7CA;
-  --vx-line-strong: #817A6B;
-  --vx-text: #1A1814;
-  --vx-text-2: #4B463D;
-  --vx-text-3: #655F53;
-  --vx-accent: #E4521F;
-  --vx-on-accent: #1A1814;
-  --vx-accent-text: #B23A0E;
-  --vx-mark: #DDF37A;
-  --vx-mark-text: #1A1814;
-  --vx-success: #1D7444;
-  --vx-warning: #875700;
-  --vx-error: #BA2530;
-  --vx-focus: #1A1814;
-  --vx-live: #E4521F;
-  --vx-wave-idle: #CFC8B8;
-  --vx-accent-word: #1A1814;
-  --vx-mark-time: #1A1814;
-  --vx-accent-word-bg: #D7F46A;
-  --vx-shadow: 0 1px 0 rgb(26 24 20 / 0.04), 0 12px 32px -16px rgb(26 24 20 / 0.22);
+:root, [data-theme="dark"] {
+  --vx-bg: #0D0B1A;
+  --vx-surface: #15122A;
+  --vx-surface-2: #1D1938;
+  --vx-line: #2C2750;
+  --vx-line-strong: #6E68A0;
+  --vx-text: #EEEBFF;
+  --vx-text-2: #C0BAE6;
+  --vx-text-3: #9690C4;
+  --vx-accent: #C8F25A;
+  --vx-on-accent: #0D0B1A;
+  --vx-accent-text: #C8F25A;
+  --vx-mark: #2A2152;
+  --vx-mark-text: #EEEBFF;
+  --vx-mark-time: #4FD1E0;
+  --vx-success: #4FE0A6;
+  --vx-warning: #FFC266;
+  --vx-error: #FF7A7A;
+  --vx-focus: #4FD1E0;
+  --vx-live: #4FD1E0;
+  --vx-wave-idle: #3A3468;
+  --vx-shadow: 0 0 0 1px rgb(255 255 255 / 0.02) inset, 0 16px 40px -18px rgb(0 0 0 / 0.8);
 }
-[data-theme="dark"] {
-  --vx-bg: #13120F;
-  --vx-surface: #1B1A16;
-  --vx-surface-2: #24231E;
-  --vx-line: #34322B;
-  --vx-line-strong: #77725F;
-  --vx-text: #F2EEE4;
-  --vx-text-2: #C4BEB0;
-  --vx-text-3: #9C9686;
-  --vx-accent: #FF7A4D;
-  --vx-on-accent: #13120F;
-  --vx-accent-text: #FF8A5C;
-  --vx-mark: #3A4419;
-  --vx-mark-text: #F2EEE4;
-  --vx-success: #5DD394;
-  --vx-warning: #F0B64A;
-  --vx-error: #FF8077;
-  --vx-focus: #D7F46A;
-  --vx-live: #FF7A4D;
-  --vx-wave-idle: #45423A;
-  --vx-accent-word: #1A1814;
-  --vx-accent-word-bg: #D7F46A;
-  --vx-mark-time: #D7F46A;
-  --vx-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.7);
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) { color-scheme: dark; }
+[data-theme="light"] {
+  --vx-bg: #F6F5FF;
+  --vx-surface: #FFFFFF;
+  --vx-surface-2: #ECEAFB;
+  --vx-line: #DDDAF2;
+  --vx-line-strong: #7C77A6;
+  --vx-text: #14112B;
+  --vx-text-2: #423D66;
+  --vx-text-3: #5C5785;
+  --vx-accent: #4A6A00;
+  --vx-on-accent: #FFFFFF;
+  --vx-accent-text: #4A6A00;
+  --vx-mark: #EEF8C8;
+  --vx-mark-text: #14112B;
+  --vx-mark-time: #3E5700;
+  --vx-success: #157A4F;
+  --vx-warning: #8A5A00;
+  --vx-error: #C0262D;
+  --vx-focus: #4A6A00;
+  --vx-live: #0E7C8A;
+  --vx-wave-idle: #CFCBEA;
+  --vx-shadow: 0 1px 2px rgb(20 17 43 / 0.06), 0 12px 32px -16px rgb(60 40 160 / 0.25);
 }
 :root {
-  --vx-font-text: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --vx-font-title: "Bricolage Grotesque", "Geist", ui-sans-serif, sans-serif;
-  --vx-font-data: "Geist Mono", ui-monospace, monospace;
-  --vx-font-accent: "Bricolage Grotesque", "Geist", sans-serif;
-  --vx-title-weight: 700;
+  --vx-font-text: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --vx-font-title: "Unbounded", ui-sans-serif, sans-serif;
+  --vx-font-data: "JetBrains Mono", ui-monospace, monospace;
+  --vx-font-accent: "Unbounded", ui-sans-serif, sans-serif;
+  --vx-title-weight: 600;
   --vx-title-track: -0.035em;
   --vx-accent-style: normal;
-  --vx-accent-weight: 700;
-  --vx-accent-word-pad: 0 0.12em;
+  --vx-accent-weight: 600;
+  --vx-accent-word-pad: 0;
   --vx-label-transform: none;
   --vx-label-track: 0;
-  --vx-r-btn: 999px;
+  --vx-r-btn: 12px;
   --vx-r-field: 12px;
   --vx-r-panel: 20px;
   --vx-r-badge: 999px;
-  --vx-badge-tint: 16%;
+  --vx-badge-tint: 18%;
   --vx-badge-border: 0%;
   --vx-corner: none;
-  --vx-icon-stroke: 1.5;
   --vx-ease: cubic-bezier(0.65, 0, 0.35, 1);
-  --vx-pattern: none;
-  --vx-pattern-size: auto;
+  --vx-pattern: radial-gradient(color-mix(in oklab, currentColor 14%, transparent) 1px, transparent 1.5px);
+  --vx-pattern-size: 20px 20px;
 }
 /* FIN TOKENS */
 html, body { margin: 0; }
@@ -112,39 +104,28 @@ a:hover { color: var(--vx-text); }
 
   <nav aria-label="Livrables de la refonte" style="border-bottom: 1px solid var(--vx-line); background: var(--vx-surface);">
     <div style="max-width: 1240px; margin: 0 auto; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; font-family: var(--vx-font-data); font-size: 13px;">
-      <span style="font-weight: 500; color: var(--vx-text);">Voxia · Refonte</span>
-      <a href="Voxia Audit.dc.html" style="color: var(--vx-text-2);">Audit</a>
-      <a href="Voxia Direction 1 - Signal.dc.html" style="color: var(--vx-text-2);">1 · Signal affiné</a>
-      <a href="Voxia Direction 2 - Studio.dc.html" style="color: var(--vx-text-2);">2 · Studio</a>
-      <a href="Voxia Direction 3 - Surligneur.dc.html" style="color: var(--vx-text-2);">3 · Surligneur</a>
-      <a href="Voxia Recommandation.dc.html" style="color: var(--vx-text-2);">Recommandation</a>
+      <span style="font-weight: 500; color: var(--vx-text);">Voxia · Nocturne</span>
+      <a href="Voxia Nocturne - Design System.dc.html" aria-current="page" style="color: var(--vx-accent-text);">Design system</a>
+      <a href="Voxia Landing - B Nocturne.dc.html" style="color: var(--vx-text-2);">Landing</a>
     </div>
   </nav>
 
   <main style="max-width: 1240px; margin: 0 auto; padding: 0 16px 120px;">
 
-    <header style="padding: 72px 0 48px; display: grid; gap: 28px;">
+    <header style="padding: 40px 0 32px; display: grid; gap: 28px;">
       <p style="margin: 0; font-family: var(--vx-font-data); font-size: 13px; color: var(--vx-accent-text); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">{{ d.kicker }}</p>
-      <h1 style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: clamp(44px, 7vw, 96px); line-height: 0.98; letter-spacing: var(--vx-title-track); max-width: 14ch; text-wrap: balance;">{{ d.titre }} <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{ d.titreAccent }}</span></h1>
+      <h1 style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: clamp(28px, 4vw, 48px); line-height: 1.1; letter-spacing: var(--vx-title-track); max-width: 14ch; text-wrap: balance;">{{ d.titre }} <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em; -webkit-box-decoration-break: clone; box-decoration-break: clone;">{{ d.titreAccent }}</span></h1>
       <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; justify-content: space-between;">
-        <p style="margin: 0; max-width: 38em; font-size: 19px; color: var(--vx-text-2); text-wrap: pretty;">{{ d.these }}</p>
-        <div style="display: grid; gap: 8px; min-width: 220px;">
-          <span style="font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Écart avec Signal</span>
-          <div role="img" aria-label="{{ d.ecartLabel }}" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
-            <sc-for list="{{ ecart }}" as="e" hint-placeholder-count="3">
-              <span style="height: 8px; border-radius: 2px; background: {{ e.c }};"></span>
-            </sc-for>
-          </div>
-          <span style="font-family: var(--vx-font-data); font-size: 13px; color: var(--vx-text-2);">{{ d.ecartLabel }}</span>
-        </div>
+        <p style="margin: 0; max-width: 38em; font-size: 16px; color: var(--vx-text-2); text-wrap: pretty;">{{ d.these }}</p>
+        
       </div>
     </header>
 
     <section aria-labelledby="t-change" style="border-top: 1px solid var(--vx-line); padding-top: 32px;">
-      <h2 id="t-change" style="margin: 0 0 24px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Ce qui change par rapport à Signal</h2>
+      <h2 id="t-change" style="margin: 0 0 24px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Ce qui change par rapport à l'existant</h2>
       <div style="display: grid; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); overflow: hidden; background: var(--vx-surface);">
         <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 1.3fr) minmax(0, 2fr); gap: 16px; padding: 12px 20px; background: var(--vx-surface-2); font-family: var(--vx-font-data); font-size: 12px; color: var(--vx-text-3); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">
-          <span>Élément</span><span>Signal</span><span>Proposé</span><span>Pourquoi</span>
+          <span>Élément</span><span>Aujourd'hui</span><span>Proposé</span><span>Pourquoi</span>
         </div>
         <sc-for list="{{ d.changes }}" as="c" hint-placeholder-count="6">
           <div style="display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.3fr) minmax(0, 1.3fr) minmax(0, 2fr); gap: 16px; padding: 14px 20px; border-top: 1px solid var(--vx-line); font-size: 14px; line-height: 1.5;">
@@ -157,8 +138,8 @@ a:hover { color: var(--vx-text); }
       </div>
     </section>
 
-    <section aria-labelledby="t-palette" style="margin-top: 96px;">
-      <h2 id="t-palette" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Palette</h2>
+    <section aria-labelledby="t-palette" style="margin-top: 64px;">
+      <h2 id="t-palette" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Palette</h2>
       <p style="margin: 0 0 28px; color: var(--vx-text-2); max-width: 44em;">Ratios calculés en direct depuis les variables CSS, contre le fond et contre la surface 2 (le cas le plus défavorable). Texte : 4,5:1 minimum. Filet de contour : 3:1 minimum (élément d'interface).</p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 24px;">
         <sc-for list="{{ themes }}" as="th" hint-placeholder-count="2">
@@ -181,11 +162,11 @@ a:hover { color: var(--vx-text); }
       </div>
     </section>
 
-    <section aria-labelledby="t-type" style="margin-top: 96px;">
-      <h2 id="t-type" style="margin: 0 0 28px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Typographie</h2>
+    <section aria-labelledby="t-type" style="margin-top: 64px;">
+      <h2 id="t-type" style="margin: 0 0 28px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Typographie</h2>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: start;">
         <div style="display: grid; gap: 20px; padding: 28px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); box-shadow: var(--vx-shadow);">
-          <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 56px; line-height: 1; letter-spacing: var(--vx-title-track);">Du lien <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em;">au texte.</span></p>
+          <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 40px; line-height: 1.1; letter-spacing: var(--vx-title-track);">Du lien <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em;">au texte.</span></p>
           <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 28px; line-height: 1.15; letter-spacing: -0.02em;">Vlog #34 — Mon atelier de céramique</p>
           <p style="margin: 0; font-size: 16px; color: var(--vx-text-2); max-width: 34em;">Colle un lien YouTube ou TikTok, ou dépose ton fichier. Tu récupères la transcription horodatée, les sous-titres et l'audio.</p>
           <p style="margin: 0; font-size: 14px; color: var(--vx-text-3);">Le statut se met à jour tout seul.</p>
@@ -205,8 +186,8 @@ a:hover { color: var(--vx-text); }
       </div>
     </section>
 
-    <section aria-labelledby="t-icones" style="margin-top: 96px;">
-      <h2 id="t-icones" style="margin: 0 0 28px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Icônes et illustrations</h2>
+    <section aria-labelledby="t-icones" style="margin-top: 64px;">
+      <h2 id="t-icones" style="margin: 0 0 28px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Icônes et illustrations</h2>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px;">
         <div style="padding: 24px; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface);">
           <div style="display: flex; flex-wrap: wrap; gap: 12px; color: var(--vx-text);">
@@ -231,8 +212,8 @@ a:hover { color: var(--vx-text); }
       </div>
     </section>
 
-    <section aria-labelledby="t-compo" style="margin-top: 96px;">
-      <h2 id="t-compo" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Composants clés</h2>
+    <section aria-labelledby="t-compo" style="margin-top: 64px;">
+      <h2 id="t-compo" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Composants clés</h2>
       <p style="margin: 0 0 28px; color: var(--vx-text-2); max-width: 44em;">Mêmes composants, mêmes jetons, dans les deux thèmes. Les libellés anglais sont affichés à côté des libellés français pour vérifier la tenue des textes longs.</p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr)); gap: 24px;">
         <sc-for list="{{ themes }}" as="th" hint-placeholder-count="2">
@@ -336,9 +317,9 @@ a:hover { color: var(--vx-text); }
       </div>
     </section>
 
-    <section aria-labelledby="t-anim" style="margin-top: 96px;">
+    <section aria-labelledby="t-anim" style="margin-top: 64px;">
       <div style="display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: baseline; justify-content: space-between; margin-bottom: 28px;">
-        <h2 id="t-anim" style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Micro-animations</h2>
+        <h2 id="t-anim" style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Micro-animations</h2>
         <button type="button" onClick="{{ toggleMotion }}" aria-pressed="{{ motionOff }}" style="min-height: 44px; padding: 0 16px; border: 1px solid var(--vx-line-strong); border-radius: var(--vx-r-btn); background: transparent; color: var(--vx-text); font: 13px var(--vx-font-data); cursor: pointer; white-space: nowrap;">{{ motionLabel }}</button>
       </div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px;">
@@ -374,8 +355,8 @@ a:hover { color: var(--vx-text); }
       <p style="margin: 20px 0 0; font-size: 14px; color: var(--vx-text-3); max-width: 52em;">Sous <span style="font-family: var(--vx-font-data);">prefers-reduced-motion: reduce</span>, une règle globale coupe animations et transitions : l'onde reste figée à sa forme, la barre indéterminée devient un segment fixe, le texte s'affiche en entier et le curseur ne clignote plus. Le bouton ci-dessus simule ce réglage.</p>
     </section>
 
-    <section aria-labelledby="t-ecrans" style="margin-top: 96px;">
-      <h2 id="t-ecrans" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Accueil</h2>
+    <section aria-labelledby="t-ecrans" style="margin-top: 64px;">
+      <h2 id="t-ecrans" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Accueil</h2>
       <p style="margin: 0 0 28px; color: var(--vx-text-2);">Desktop en {{ themeMain }}, mobile (375 px, marges de 16 px) en {{ themeAlt }}. Prix et quotas en valeurs provisoires.</p>
       <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start;">
 
@@ -394,7 +375,7 @@ a:hover { color: var(--vx-text); }
             </div>
             <div style="padding: 56px 28px 0;">
               <p style="margin: 0 0 24px; display: inline-flex; align-items: center; gap: 10px; padding: 6px 12px; border: 1px solid var(--vx-line); border-radius: 999px; background: var(--vx-bg); white-space: nowrap; font: 12px var(--vx-font-data); color: var(--vx-text-2);"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: var(--vx-live); animation: vx-pulse 1.6s ease-in-out infinite;"></span>Vidéo → texte, en une ou deux minutes</p>
-              <h3 style="margin: 0; max-width: 15ch; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: clamp(40px, 5.4vw, 72px); line-height: 0.98; letter-spacing: var(--vx-title-track); text-wrap: balance;">Chaque vidéo contient un texte. <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em; -webkit-box-decoration-break: clone; box-decoration-break: clone;">Voxia te l'écrit.</span></h3>
+              <h3 style="margin: 0; max-width: 15ch; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: clamp(22px, 3.9vw, 44px); line-height: 1.15; letter-spacing: var(--vx-title-track); text-wrap: balance;">Chaque vidéo contient un texte. <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); letter-spacing: -0.01em; -webkit-box-decoration-break: clone; box-decoration-break: clone;">Voxia te l'écrit.</span></h3>
               <div style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-end; justify-content: space-between;">
                 <p style="margin: 0; flex: 1 1 280px; max-width: 30em; font-size: 17px; color: var(--vx-text-2);">Colle un lien YouTube ou TikTok, ou dépose ton fichier. Tu récupères la transcription horodatée, les sous-titres et l'audio, rangés dans ta bibliothèque.</p>
                 <form onSubmit="{{ noop }}" style="flex: 1 1 380px; max-width: 520px; display: grid; gap: 8px;">
@@ -454,7 +435,7 @@ a:hover { color: var(--vx-text); }
           </div>
           <div style="padding: 32px 16px 24px; background-image: var(--vx-pattern); background-size: var(--vx-pattern-size);">
             <p style="margin: 0 0 18px; display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border: 1px solid var(--vx-line); border-radius: 999px; background: var(--vx-bg); white-space: nowrap; font: 11px var(--vx-font-data); color: var(--vx-text-2);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: var(--vx-live);"></span>Vidéo → texte, en une ou deux minutes</p>
-            <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 42px; line-height: 1; letter-spacing: var(--vx-title-track);">Chaque vidéo contient un texte. <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); -webkit-box-decoration-break: clone; box-decoration-break: clone;">Voxia te l'écrit.</span></p>
+            <p style="margin: 0; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 24px; line-height: 1.15; letter-spacing: var(--vx-title-track);">Chaque vidéo contient un texte. <span style="font-family: var(--vx-font-accent); font-style: var(--vx-accent-style); font-weight: var(--vx-accent-weight); color: var(--vx-accent-word, var(--vx-accent-text)); background: var(--vx-accent-word-bg); padding: var(--vx-accent-word-pad); -webkit-box-decoration-break: clone; box-decoration-break: clone;">Voxia te l'écrit.</span></p>
             <p style="margin: 18px 0 0; font-size: 16px; color: var(--vx-text-2);">Colle un lien YouTube ou TikTok, ou dépose ton fichier.</p>
             <div style="margin-top: 22px; display: grid; gap: 8px;">
               <label for="m-lien" style="font: 12px var(--vx-font-data); color: var(--vx-text-2); text-transform: var(--vx-label-transform); letter-spacing: var(--vx-label-track);">Lien de la vidéo</label>
@@ -491,8 +472,8 @@ a:hover { color: var(--vx-text); }
       </div>
     </section>
 
-    <section aria-labelledby="t-resultat" style="margin-top: 96px;">
-      <h2 id="t-resultat" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Résultat et export</h2>
+    <section aria-labelledby="t-resultat" style="margin-top: 64px;">
+      <h2 id="t-resultat" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Résultat et export</h2>
       <p style="margin: 0 0 28px; color: var(--vx-text-2);">Plan Gratuit : PDF et VTT verrouillés, avec le plan qui les débloque. Le lecteur reste visible pendant le défilement du texte.</p>
       <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start;">
 
@@ -620,8 +601,8 @@ a:hover { color: var(--vx-text); }
       </div>
     </section>
 
-    <section aria-labelledby="t-etats" style="margin-top: 96px;">
-      <h2 id="t-etats" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Création et suivi : les cinq états</h2>
+    <section aria-labelledby="t-etats" style="margin-top: 64px;">
+      <h2 id="t-etats" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Création et suivi : les cinq états</h2>
       <p style="margin: 0 0 28px; color: var(--vx-text-2); max-width: 50em;">Chaque carte a la largeur d'un écran mobile. Les étapes reprennent les statuts existants (En attente, Téléchargement, Transcription, Terminé, Échec) : aucune donnée nouvelle n'est demandée au serveur, seul l'envoi de fichier a un pourcentage réel.</p>
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 16px;">
 
@@ -699,8 +680,8 @@ a:hover { color: var(--vx-text); }
       </div>
     </section>
 
-    <section aria-labelledby="t-css" style="margin-top: 96px;">
-      <h2 id="t-css" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 32px; letter-spacing: -0.02em;">Variables CSS</h2>
+    <section aria-labelledby="t-css" style="margin-top: 64px;">
+      <h2 id="t-css" style="margin: 0 0 8px; font-family: var(--vx-font-title); font-weight: var(--vx-title-weight); font-size: 22px; letter-spacing: -0.03em;">Variables CSS</h2>
       <p style="margin: 0 0 20px; color: var(--vx-text-2); max-width: 50em;">Bloc lu directement dans la feuille de cette page : c'est celui qui colore tout ce qui précède. Le thème suit l'attribut <span style="font-family: var(--vx-font-data);">data-theme</span> posé sur <span style="font-family: var(--vx-font-data);">&lt;html&gt;</span> (piloté par Alpine et le réglage du compte), avec <span style="font-family: var(--vx-font-data);">prefers-color-scheme</span> en repli.</p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); gap: 16px; align-items: start;">
         <pre style="margin: 0; padding: 20px; max-height: 640px; overflow: auto; border: 1px solid var(--vx-line); border-radius: var(--vx-r-panel); background: var(--vx-surface); color: var(--vx-text); font: 12.5px/1.6 var(--vx-font-data); white-space: pre;">{{ css }}</pre>
@@ -750,43 +731,37 @@ a:hover { color: var(--vx-text); }
   </main>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;pageTheme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;light&quot;, &quot;dark&quot;], &quot;default&quot;: &quot;light&quot;, &quot;tsType&quot;: &quot;'dark' | 'light'&quot;, &quot;section&quot;: &quot;Affichage&quot;}, &quot;animations&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Affichage&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;pageTheme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dark&quot;, &quot;light&quot;], &quot;default&quot;: &quot;dark&quot;, &quot;tsType&quot;: &quot;'dark' | 'light'&quot;, &quot;section&quot;: &quot;Affichage&quot;}, &quot;animations&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Affichage&quot;}}">
 class Component extends DCLogic {
   state = { css: '', pal: {}, motionOff: false };
 
   D = {
-    kicker: 'Direction 3 sur 3 · Rupture',
-    titre: 'Le',
-    titreAccent: 'surligneur.',
-    these: "Le geste du produit, c'est trouver la bonne phrase. Cette direction en fait l'identité : papier clair par défaut, encre presque noire, et un surligneur jaune-vert qui marque la phrase lue, les mots d'accent et le focus. L'orange reste, plus profond, pour les actions et la progression. Titres en Bricolage Grotesque, boutons en pilule, plus de capitales mono.",
-    ecart: 3,
-    ecartLabel: '3 sur 3 · nouvelle identité, même ADN',
-    defaultTheme: 'light',
+    kicker: 'Design system · version retenue',
+    titre: 'Voxia',
+    titreAccent: 'Nocturne.',
+    these: "Sombre d'abord. Nuit indigo, vert citron pour agir, cyan pour tout ce qui est en direct (lecture, traitement). Titres en Unbounded, texte en Onest, données en JetBrains Mono. Surfaces arrondies, ombres profondes, tailles compactes. Le thème clair (lavande, vert olive) est complet et partage les mêmes noms de jetons.",
+    ecart: 3, ecartLabel: '', defaultTheme: 'dark',
     changes: [
-      { quoi: 'Thème par défaut', avant: 'Sombre uniquement', apres: 'Clair (papier #F4F1EA), sombre en option', pourquoi: "Marketeurs et e-commerçants lisent de longs textes en journée : le clair est plus confortable pour la lecture continue." },
-      { quoi: 'Signature', avant: 'Orange + repères d\'angle', apres: 'Surligneur #D7F46A', pourquoi: "Relie directement l'image de marque à la fonction : la phrase lue est surlignée, comme sur une feuille." },
-      { quoi: 'Accent d\'action', avant: '#FF6A3D, texte foncé', apres: '#E4521F clair · #FF7A4D sombre, texte encre', pourquoi: "Garde la filiation Signal ; l'orange plus profond tient 3,4:1 comme forme sur papier et 4,7:1 avec texte encre." },
-      { quoi: 'Titres', avant: 'Geist 600', apres: 'Bricolage Grotesque 700', pourquoi: 'Plus de caractère pour l’accueil et les tarifs ; Geist reste le texte courant.' },
-      { quoi: 'Mots d\'accent', avant: 'Instrument Serif italique', apres: 'Même police, surlignés', pourquoi: "Supprime une troisième famille ; l'accent devient un geste (surligner) plutôt qu'un changement de police." },
-      { quoi: 'Rayons', avant: '4 · 6 · 10 px', apres: 'Pilule · 12 · 20 px', pourquoi: 'Plus accueillant pour un public peu technique ; les boutons se distinguent nettement des champs.' },
-      { quoi: 'Libellés', avant: 'Mono en capitales', apres: 'Mono en casse normale', pourquoi: 'Les capitales allongent les libellés anglais et ralentissent la lecture des libellés français longs.' },
-      { quoi: 'Icônes', avant: 'Aucune bibliothèque définie', apres: 'Phosphor (MIT), Regular + Duotone pour les états vides', pourquoi: "Formes plus rondes, cohérentes avec la pilule ; le duotone accueille le surligneur." }
+      { quoi: 'Fond', avant: 'Noir neutre #0E0F0E', apres: 'Indigo nuit #0D0B1A · lavande #F6F5FF', pourquoi: 'Un sombre coloré paraît vivant sans fatiguer ; les surfaces se distinguent par la teinte.' },
+      { quoi: 'Action', avant: 'Orange #FF6A3D', apres: 'Vert citron #C8F25A · olive #4A6A00 en clair', pourquoi: "15:1 avec texte nuit sur bouton sombre, 6,3:1 avec texte blanc en clair. Énergique, neutre, éloigné du rouge d'erreur." },
+      { quoi: 'Direct', avant: 'Même orange', apres: 'Cyan #4FD1E0 · #0E7C8A en clair', pourquoi: "Sépare l'action (vert) de l'état « en cours » (cyan)." },
+      { quoi: 'Titres', avant: 'Geist 600', apres: 'Unbounded 600, 22–44 px', pourquoi: 'Forme large et reconnaissable, réservée aux titres.' },
+      { quoi: 'Texte et données', avant: 'Geist, Geist Mono', apres: 'Onest 15 px, JetBrains Mono 12 px', pourquoi: 'Onest compacte et lisible en sombre ; zéro barré utile pour les horodatages.' },
+      { quoi: 'Libellés', avant: 'Mono capitales', apres: 'Casse normale', pourquoi: 'Les libellés longs FR/EN restent lisibles sans élargissement.' },
+      { quoi: 'Rayons', avant: '4 · 6 · 10 px', apres: '12 · 12 · 20 px, pastilles 999 px', pourquoi: 'Boutons et champs alignés au même rayon.' },
+      { quoi: 'Badges', avant: 'Filet', apres: 'Fond teinté à 18 %, point + libellé', pourquoi: 'Lisibles dans une liste dense ; jamais la couleur seule.' }
     ],
     type: [
-      { role: 'Texte', police: 'Geist 400 / 500 · 16–17 px', usage: 'Corps et transcription, un point plus grand qu’aujourd’hui pour la lecture longue.' },
-      { role: 'Titres', police: 'Bricolage Grotesque 700 · −0,035 em', usage: 'Police variable libre (OFL), axe de taille optique : serrée en héros, plus ouverte à 20 px.' },
-      { role: 'Données', police: 'Geist Mono 400 / 500 · 12–14 px', usage: 'Horodatages tabulaires, durées, formats. Casse normale.' },
-      { role: 'Mots d\'accent', police: 'Bricolage Grotesque 700, surligné', usage: 'Fond #D7F46A, texte encre (14,4:1) dans les deux thèmes.' }
+      { role: 'Texte', police: 'Onest 400 / 500 / 600 · 13–16 px', usage: 'Corps 15 px / 1,6 ; texte d’appui 16 px ; libellés de champ 15 px 600 ; aides 13 px.' },
+      { role: 'Titres', police: 'Unbounded 600 · −0,035 em', usage: 'H1 clamp(22 px, 3,9 vw, 44 px) ; H2 clamp(22 px, 3 vw, 30 px) ; prix 28 px.' },
+      { role: 'Données', police: 'JetBrains Mono 400 / 500 · 12–15 px', usage: 'Horodatages tabulaires, formats, URL saisies (15 px), métadonnées.' },
+      { role: 'Mots d\'accent', police: 'Unbounded 600, couleur accent', usage: 'Seconde moitié du titre, même police.' }
     ],
-    icones: "Phosphor (licence MIT), graisse Regular, 22 px. Les états vides utilisent la variante Duotone, la couche claire prenant le surligneur.",
-    illus: [
-      "Pas d'illustration figurative. Le surligneur sert de motif : bandes posées sous un mot, une ligne, un horodatage.",
-      "Aucun quadrillage ni trame : le papier suffit, les panneaux se détachent par l'ombre.",
-      "Les extraits de transcription mis en avant sur l'accueil sont des citations surlignées, en grand."
-    ],
-    animOnde: "Barres en scaleY 0,4 → 1, 1,6 s, ease-in-out, décalage de −0,1 s par barre. Barres lues en orange, à venir en gris chaud. Figée en pause.",
-    animProg: "Barre orange déterminée pour l'envoi (pourcentage réel) ; segment indéterminé de 1,6 s pour l'étape en cours ; point orange pulsé.",
-    animTexte: "Apparition mot à mot (400 ms, décalage 60 ms) sur la ligne surlignée, à l'accueil uniquement ; jamais dans une vraie transcription."
+    icones: "Tabler Icons (MIT) ou Lucide (ISC), trait 1,6–1,8 px, 16–22 px, extrémités rondes, couleur héritée. Logos YouTube et TikTok en couleurs de marque, uniquement comme identifiants de source.",
+    illus: ["Pas d'illustration figurative : l'onde audio sert d'image de marque.", "Trame de points à 12 % et lueur indigo derrière le héros uniquement.", "Le cyan n'apparaît que sur ce qui bouge."],
+    animOnde: "Barres en scaleY 0,4 → 1, 1,6 s, ease-in-out, décalage −0,1 s par barre. Partie lue en vert, reste en indigo.",
+    animProg: "Barre verte pour l'envoi (pourcentage réel) ; segment indéterminé de 1,6 s ; point cyan pulsé pour l'étape en cours.",
+    animTexte: "Apparition mot à mot (400 ms, décalage 60 ms), à l'accueil uniquement."
   };
 
   componentDidMount() {

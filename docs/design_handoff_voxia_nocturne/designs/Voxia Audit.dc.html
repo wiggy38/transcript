@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap">
+<style>
+html, body { margin: 0; background: #0E0F0E; }
+* { box-sizing: border-box; }
+a { color: #FF6A3D; text-underline-offset: 3px; }
+a:hover { color: #EDEBE6; }
+:focus-visible { outline: 2px solid #FF6A3D; outline-offset: 2px; }
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #0E0F0E; color: #EDEBE6; font: 16px/1.6 'Geist', system-ui, sans-serif; -webkit-font-smoothing: antialiased;">
+  <nav aria-label="Livrables de la refonte" style="border-bottom: 1px solid #2A2B28; background: #121311;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px 20px; font: 13px 'Geist Mono', monospace;">
+      <span style="font-weight: 500;">Voxia · Refonte</span>
+      <a href="Voxia Audit.dc.html" aria-current="page" style="color: #FF6A3D;">Audit</a>
+      <a href="Voxia v2 - A Editorial.dc.html" style="color: #BDBBB5;">A · Éditorial</a>
+      <a href="Voxia v2 - B Nocturne.dc.html" style="color: #BDBBB5;">B · Nocturne</a>
+      <a href="Voxia v2 - C Contraste.dc.html" style="color: #BDBBB5;">C · Contraste</a>
+      <a href="Voxia v2 - Recommandation.dc.html" style="color: #BDBBB5;">Recommandation</a>
+    </div>
+  </nav>
+  <main style="max-width: 1240px; margin: 0 auto; padding: 56px 16px 96px;">
+    <header style="display: grid; gap: 16px; max-width: 60em;">
+      <p style="margin: 0; font: 13px 'Geist Mono', monospace; color: #FF6A3D; text-transform: uppercase; letter-spacing: 0.04em;">Audit visuel · charte Signal</p>
+      <h1 style="margin: 0; font-weight: 600; font-size: clamp(36px, 5vw, 60px); line-height: 1; letter-spacing: -0.04em;">Ce qui existe <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: #FF6A3D;">aujourd'hui.</span></h1>
+      <p style="margin: 0; color: #BDBBB5; text-wrap: pretty;">Relevé fait sur le code (branche feat/recuperation-videos) : resources/css/app.css, 12 composants Blade, 3 composants Livewire, les gabarits marketing et application, le panneau Filament. Une seule source de jetons, des choix d'accessibilité déjà solides (labels visibles, focus, aria-live, coupures sous prefers-reduced-motion). Les faiblesses sont surtout de hiérarchie et de couverture des états.</p>
+    </header>
+
+    <section aria-labelledby="a-socle" style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px;">
+      <h2 id="a-socle" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);">Socle</h2>
+      <div style="padding: 18px; border: 1px solid #2A2B28; border-radius: 10px; background: #121311; display: grid; gap: 10px; align-content: start;">
+        <p style="margin: 0; font: 12px 'Geist Mono', monospace; color: #8B8A85; text-transform: uppercase;">Couleurs</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+          <sc-for list="{{ couleurs }}" as="c" hint-placeholder-count="12">
+            <span title="{{ c.n }} {{ c.h }}" style="width: 26px; height: 26px; border-radius: 4px; border: 1px solid #2A2B28; background: {{ c.h }};"></span>
+          </sc-for>
+        </div>
+        <p style="margin: 0; font-size: 14px; color: #BDBBB5;">10 jetons dans @theme, plus 3 valeurs codées dans les vues (#1B1C1A, #4A4B47, voile de dialogue). Pas de succès ni d'avertissement ; l'erreur est notée « hors charte, à valider ».</p>
+      </div>
+      <div style="padding: 18px; border: 1px solid #2A2B28; border-radius: 10px; background: #121311; display: grid; gap: 10px; align-content: start;">
+        <p style="margin: 0; font: 12px 'Geist Mono', monospace; color: #8B8A85; text-transform: uppercase;">Typographie</p>
+        <p style="margin: 0; font-weight: 600; font-size: 22px; letter-spacing: -0.03em;">Geist <span style="font: 15px 'Geist Mono', monospace; letter-spacing: 0; color: #BDBBB5;">Geist Mono</span> <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: #FF6A3D;">Instrument</span></p>
+        <p style="margin: 0; font-size: 14px; color: #BDBBB5;">Corps 16 px / 1,6. Titres de 30 à 104 px. Libellés, métadonnées et titres de section en mono 11–13 px capitales : 33 occurrences dans les vues.</p>
+      </div>
+      <div style="padding: 18px; border: 1px solid #2A2B28; border-radius: 10px; background: #121311; display: grid; gap: 10px; align-content: start;">
+        <p style="margin: 0; font: 12px 'Geist Mono', monospace; color: #8B8A85; text-transform: uppercase;">Composants</p>
+        <p style="margin: 0; font-size: 14px; color: #BDBBB5;">bouton (principal, clair, filet), champ, panneau, badge-statut, horodatage, onde-audio, compteur-quota, compteur-plan, message-erreur, fenêtre superposée, sélecteur de langue, marque. Rayons 4 / 6 / 10 px.</p>
+      </div>
+      <div style="padding: 18px; border: 1px solid #2A2B28; border-radius: 10px; background: #121311; display: grid; gap: 10px; align-content: start;">
+        <p style="margin: 0; font: 12px 'Geist Mono', monospace; color: #8B8A85; text-transform: uppercase;">Contrastes mesurés</p>
+        <p style="margin: 0; font: 13px/1.7 'Geist Mono', monospace; color: #BDBBB5;">texte 16,1:1 · secondaire 10,0:1<br>discret 5,6:1 (5,2:1 sur #161715)<br>accent 6,8:1 · erreur 7,6:1<br>filet de contour 3,6:1 · filet 1,6:1 (décor)</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="a-trans" style="margin-top: 48px;">
+      <h2 id="a-trans" style="margin: 0 0 16px; font-weight: 600; font-size: 26px; letter-spacing: -0.02em;">Constats transversaux</h2>
+      <ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 0 32px;">
+        <sc-for list="{{ constats }}" as="k" hint-placeholder-count="8">
+          <li style="display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 14px 0; border-top: 1px solid #2A2B28;">
+            <span style="font: 13px 'Geist Mono', monospace; color: #FF6A3D;">{{ k.n }}</span>
+            <span style="display: grid; gap: 2px;"><strong style="font-weight: 600;">{{ k.t }}</strong><span style="font-size: 14px; color: #BDBBB5;">{{ k.d }}</span></span>
+          </li>
+        </sc-for>
+      </ol>
+    </section>
+
+    <section aria-labelledby="a-ecrans" style="margin-top: 48px;">
+      <h2 id="a-ecrans" style="margin: 0 0 16px; font-weight: 600; font-size: 26px; letter-spacing: -0.02em;">Écran par écran</h2>
+      <div style="border: 1px solid #2A2B28; border-radius: 10px; overflow: hidden; background: #121311;">
+        <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr); gap: 16px; padding: 10px 18px; background: #161715; font: 12px 'Geist Mono', monospace; color: #8B8A85; text-transform: uppercase;">
+          <span>Écran · fichier</span><span>Couleurs, typo, composants</span><span>Incohérences, points faibles</span>
+        </div>
+        <sc-for list="{{ ecrans }}" as="e" hint-placeholder-count="11">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 2fr); gap: 16px; padding: 14px 18px; border-top: 1px solid #2A2B28; font-size: 14px; line-height: 1.5;">
+            <span style="display: grid; gap: 2px; min-width: 0;"><strong style="font-weight: 600; font-size: 15px;">{{ e.nom }}</strong><span style="font: 11px 'Geist Mono', monospace; color: #8B8A85; overflow-wrap: anywhere;">{{ e.f }}</span></span>
+            <span style="color: #BDBBB5;">{{ e.vu }}</span>
+            <span>{{ e.pb }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <p style="margin: 32px 0 0; font-size: 14px; color: #8B8A85;">Suite : trois directions en rupture avec Signal — <a href="Voxia v2 - A Editorial.dc.html">A · Éditorial</a>, <a href="Voxia v2 - B Nocturne.dc.html">B · Nocturne</a>, <a href="Voxia v2 - C Contraste.dc.html">C · Contraste</a>. Les premières propositions (évolutions de Signal) restent consultables : <a href="Voxia Direction 1 - Signal.dc.html">1</a>, <a href="Voxia Direction 2 - Studio.dc.html">2</a>, <a href="Voxia Direction 3 - Surligneur.dc.html">3</a>.</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      couleurs: [
+        ['fond', '#0E0F0E'], ['panneau', '#121311'], ['panneau-eleve', '#161715'], ['(codé) actif', '#1B1C1A'], ['filet', '#2A2B28'], ['(codé) onde', '#4A4B47'], ['filet-contour', '#6A6B65'],
+        ['discret', '#8B8A85'], ['secondaire', '#BDBBB5'], ['texte', '#EDEBE6'], ['accent', '#FF6A3D'], ['erreur', '#FF7A73']
+      ].map(([n, h]) => ({ n, h })),
+      constats: [
+        { n: '01', t: 'Un accent pour quatre rôles', d: "#FF6A3D sert au bouton principal, aux liens, à l'état « en cours », aux messages d'information et même à l'alerte du formulaire de contact. Rien ne distingue une action d'une information." },
+        { n: '02', t: 'Pas de thème clair', d: 'color-scheme: dark et theme-color figés. Un #FF6A3D posé tel quel sur blanc tomberait à 2,9:1.' },
+        { n: '03', t: 'États incomplets', d: "Pas de couleur de succès : « Terminé » est un badge neutre. Le suivi n'affiche qu'un point clignotant, alors que les statuts Téléchargement et Transcription existent." },
+        { n: '04', t: 'Titres de section = libellés de champ', d: "Les h2 « Lien de la vidéo » et « Ou un fichier » ont la même classe que les labels (mono 12 px capitales, discret). La page Nouvelle transcription n'a pas de titre visible." },
+        { n: '05', t: 'Capitales mono partout', d: "33 occurrences. Elles allongent les libellés, surtout les longs libellés français, et pèsent sur la lecture des textes longs en français." },
+        { n: '06', t: 'Hauteurs de bouton variables', d: '44, 46, 36 et 34 px selon les écrans ; la bascule mensuel/annuel des tarifs (36 px) passe sous la cible tactile de 44 px.' },
+        { n: '07', t: "Animations simultanées à l'accueil", d: "Onde de 64 barres, bandeau défilant, frappe, curseur et deux pastilles pulsées en même temps. Toutes coupées sous reduced-motion, mais chargées sinon." },
+        { n: '08', t: 'Back-office hors charte', d: "Filament 4 avec seulement primary #FF6A3D et thème sombre : police Inter, rayons et gris Filament. Deux langages visuels pour la même équipe." }
+      ],
+      ecrans: [
+        { nom: 'Accueil', f: 'accueil/hero, apercu, bandeau, usages, fonctionnement, fiche-technique, tarifs, questions', vu: "Héros clamp(46–104 px) + mot en Instrument Serif orange, fond quadrillé, pastille pulsée, champ lien + bouton clair, aperçu produit animé (onde, ligne surlignée #1B1C1A, frappe), bandeau défilant 48 s, pied avec « voxia » géant en contour.", pb: "Bouton du héros en variante claire alors que le bouton d'en-tête est orange : deux CTA principaux de couleurs différentes. Boutons d'export décoratifs de l'aperçu qui ressemblent à de vrais boutons. Navigation qui passe sur trois lignes en mobile (pas de menu)." },
+        { nom: 'Tarifs', f: 'pages/tarifs', vu: 'Tableau comparatif dans un panneau, en-têtes mono capitales, colonne Pro signalée par la seule couleur du libellé, CTA en dernière ligne, FAQ en dl.', pb: 'min-w-[640px] + overflow-x-auto : défilement horizontal sur mobile, contraire à la contrainte. Colonne recommandée peu visible. CTA loin des prix.' },
+        { nom: 'Questions fréquentes', f: 'pages/questions', vu: 'Catégories en mono capitales à gauche, questions en 20 px semi-gras, réponses en secondaire, filets entre entrées.', pb: "Liste longue sans sommaire ni repli. Le titre de catégorie (12 px) est plus petit que les questions qu'il chapeaute." },
+        { nom: 'CGU · Confidentialité', f: 'pages/juridique', vu: 'Colonne 760 px, bandeau « brouillon » encadré orange en mono, h2 20 px.', pb: "Le bandeau d'avertissement utilise l'accent, pas une couleur d'avertissement. Pas de sommaire pour des textes longs." },
+        { nom: 'Contact', f: 'pages/contact', vu: 'Formulaire 640 px, labels mono capitales, select natif, textarea, aide et erreurs reliées.', pb: "L'erreur de formulaire (role=alert) est un filet gauche orange, identique au message « envoyé ». Select au style du navigateur." },
+        { nom: 'Espace utilisateur', f: 'layouts/app, app/tableau-de-bord, historique, reglages, abonnement', vu: "En-tête : logo, liens texte (actif en orange), compteur de plan, langue, déconnexion. Historique : lignes avec miniature 96 × 54, titre tronqué, métadonnées mono, badge, lien Supprimer.", pb: "En-tête en flex-wrap : quatre blocs empilés en mobile. Page active signalée par la couleur seule. « Supprimer » au même poids visuel que les autres liens jusqu'au survol." },
+        { nom: 'Création', f: 'livewire/nouvelle-transcription', vu: 'Deux sections 720 px : champ lien + bouton orange, aperçu (miniature, durée, chaîne, langue, lancer) ; zone de dépôt pointillée, barre 4 px, panneau « fichier prêt ».', pb: "Pas de titre de page. Lien et fichier présentés comme deux formulaires de même poids. Barre d'envoi de 4 px peu visible ; seuls les états erreur et envoi sont stylés." },
+        { nom: 'Suivi de traitement', f: 'livewire/suivi-transcription', vu: "Badge de statut, date mono, titre 30 px, URL, panneau avec phrase « en cours » et point pulsé, rafraîchi toutes les 3 s.", pb: 'Aucune visualisation des étapes. « En attente » et « Transcription » ont le même panneau. Échec : message seul, sans action de sortie mise en avant.' },
+        { nom: 'Résultat et export', f: 'partials/lecture-transcription', vu: "Panneau à repères d'angle, méta mono capitales, grille 380 px / texte, lecteur YouTube ou <audio controls>, onde décorative, recherche, bascules aria-pressed, paragraphes cliquables, barre d'export.", pb: "Lecteur audio natif : apparence différente selon le navigateur. Onde non reliée à la lecture. « Copier le texte » et les formats ont tous le même bouton à filet ; un format verrouillé ne diffère que par un filet plus sombre et une note de 11 px." },
+        { nom: 'Fenêtres d\'upgrade', f: 'upgrade/fenetre, carte-plan', vu: 'dialog natif, voile #0E0F0E à 78 %, cartes de plan avec libellé mono.', pb: 'Voile codé en dur, à décliner en clair.' },
+        { nom: 'Back-office', f: 'app/Filament, AdminPanelProvider', vu: 'Filament 4, thème sombre par défaut, primary #FF6A3D, tableaux Transcriptions, Utilisateurs, Journal, widget d\'indicateurs.', pb: "Police et gris de Filament (Inter, zinc) : aucune parenté avec Signal hors de l'orange. Un thème Filament personnalisé (fichier CSS Vite) suffirait à reprendre les jetons." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

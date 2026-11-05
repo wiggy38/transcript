@@ -1,0 +1,129 @@
+/* ============================================================
+   Voxia · Nocturne — jetons de design
+   Sombre par défaut. Clair via [data-theme="light"] ou
+   prefers-color-scheme: light quand aucun data-theme n'est posé.
+   Tous les textes ≥ 4,5:1 sur --vx-bg et --vx-surface-2.
+   ============================================================ */
+
+:root, [data-theme="dark"] {
+  --vx-bg: #0D0B1A; /* Fond de page */
+  --vx-surface: #15122A; /* Panneaux, cartes, champs du héros */
+  --vx-surface-2: #1D1938; /* Surface élevée, pistes de progression, en-têtes de tableau */
+  --vx-line: #2C2750; /* Filet décoratif (séparateurs) */
+  --vx-line-strong: #6E68A0; /* Contour de champ et de bouton secondaire (≥ 3:1) */
+  --vx-text: #EEEBFF; /* Texte principal */
+  --vx-text-2: #C0BAE6; /* Texte secondaire */
+  --vx-text-3: #9690C4; /* Texte discret (aides, métadonnées) ≥ 4,5:1 */
+  --vx-accent: #C8F25A; /* Fond du bouton principal, partie lue de l’onde, barre d’envoi */
+  --vx-on-accent: #0D0B1A; /* Texte sur accent */
+  --vx-accent-text: #C8F25A; /* Accent utilisé comme texte (liens, mots d’accent) */
+  --vx-mark: #2A2152; /* Fond de la ligne en cours de lecture */
+  --vx-mark-text: #EEEBFF; /* Texte sur mark */
+  --vx-mark-time: #4FD1E0; /* Horodatage de la ligne en cours */
+  --vx-success: #4FE0A6; /* Terminé */
+  --vx-warning: #FFC266; /* Avertissement (quota bientôt atteint, brouillon juridique) */
+  --vx-error: #FF7A7A; /* Échec, erreurs de champ */
+  --vx-focus: #4FD1E0; /* Anneau de focus */
+  --vx-live: #4FD1E0; /* « En direct » : traitement en cours, curseur de lecture */
+  --vx-wave-idle: #3A3468; /* Barres non lues de l’onde */
+  --vx-overlay: rgb(13 11 26 / 0.78); /* Voile des fenêtres superposées */
+  --vx-shadow: 0 0 0 1px rgb(255 255 255 / 0.02) inset, 0 16px 40px -18px rgb(0 0 0 / 0.8); /* Élévation des panneaux */
+  --vx-shadow-hero: 0 30px 60px -24px rgb(0 0 0 / 0.85); /* Élévation du formulaire du héros */
+  --vx-glow: radial-gradient(60% 50% at 50% 0%, rgb(120 100 255 / 0.18), transparent 70%), radial-gradient(40% 40% at 85% 30%, rgb(79 209 224 / 0.08), transparent 70%); /* Lueur de fond du héros */
+}
+
+[data-theme="light"] {
+  --vx-bg: #F6F5FF;
+  --vx-surface: #FFFFFF;
+  --vx-surface-2: #ECEAFB;
+  --vx-line: #DDDAF2;
+  --vx-line-strong: #7C77A6;
+  --vx-text: #14112B;
+  --vx-text-2: #423D66;
+  --vx-text-3: #5C5785;
+  --vx-accent: #4A6A00;
+  --vx-on-accent: #FFFFFF;
+  --vx-accent-text: #4A6A00;
+  --vx-mark: #EEF8C8;
+  --vx-mark-text: #14112B;
+  --vx-mark-time: #3E5700;
+  --vx-success: #157A4F;
+  --vx-warning: #8A5A00;
+  --vx-error: #C0262D;
+  --vx-focus: #4A6A00;
+  --vx-live: #0E7C8A;
+  --vx-wave-idle: #CFCBEA;
+  --vx-overlay: rgb(20 17 43 / 0.45);
+  --vx-shadow: 0 1px 2px rgb(20 17 43 / 0.06), 0 12px 32px -16px rgb(60 40 160 / 0.25);
+  --vx-shadow-hero: 0 2px 4px rgb(20 17 43 / 0.06), 0 28px 56px -22px rgb(20 17 43 / 0.28);
+  --vx-glow: radial-gradient(60% 50% at 50% 0%, rgb(110 100 220 / 0.12), transparent 70%);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --vx-bg: #F6F5FF;
+    --vx-surface: #FFFFFF;
+    --vx-surface-2: #ECEAFB;
+    --vx-line: #DDDAF2;
+    --vx-line-strong: #7C77A6;
+    --vx-text: #14112B;
+    --vx-text-2: #423D66;
+    --vx-text-3: #5C5785;
+    --vx-accent: #4A6A00;
+    --vx-on-accent: #FFFFFF;
+    --vx-accent-text: #4A6A00;
+    --vx-mark: #EEF8C8;
+    --vx-mark-text: #14112B;
+    --vx-mark-time: #3E5700;
+    --vx-success: #157A4F;
+    --vx-warning: #8A5A00;
+    --vx-error: #C0262D;
+    --vx-focus: #4A6A00;
+    --vx-live: #0E7C8A;
+    --vx-wave-idle: #CFCBEA;
+    --vx-overlay: rgb(20 17 43 / 0.45);
+    --vx-shadow: 0 1px 2px rgb(20 17 43 / 0.06), 0 12px 32px -16px rgb(60 40 160 / 0.25);
+    --vx-shadow-hero: 0 2px 4px rgb(20 17 43 / 0.06), 0 28px 56px -22px rgb(20 17 43 / 0.28);
+    --vx-glow: radial-gradient(60% 50% at 50% 0%, rgb(110 100 220 / 0.12), transparent 70%);
+  }
+}
+
+:root {
+  color-scheme: dark;
+  --vx-font-text: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --vx-font-title: "Unbounded", ui-sans-serif, sans-serif;
+  --vx-font-data: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Rayons */
+  --vx-r-btn: 12px;
+  --vx-r-field: 12px;
+  --vx-r-panel: 20px;
+  --vx-r-pill: 999px;
+
+  /* Mouvement */
+  --vx-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --vx-dur-fast: 150ms;
+  --vx-dur-loop: 1.6s;
+}
+[data-theme="light"] { color-scheme: light; }
+
+@keyframes vx-onde  { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+@keyframes vx-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes vx-indet { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+@keyframes vx-word  { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+@keyframes vx-line  { 0% { transform: scaleX(0); } 17%, 92% { transform: scaleX(1); } 100% { transform: scaleX(1); opacity: 0; } }
+@keyframes vx-cap   { 0% { opacity: 0; transform: translateY(6px); } 4%, 30% { opacity: 1; transform: none; } 34%, 100% { opacity: 0; transform: none; } }
+@keyframes vx-scan  { 0% { transform: translateY(0); opacity: 0; } 8% { opacity: 1; } 18% { transform: translateY(0); } 28% { transform: translateY(28px); } 38%, 88% { transform: translateY(56px); opacity: 1; } 100% { transform: translateY(56px); opacity: 0; } }
+@keyframes vx-pop   { 0%, 42% { opacity: 0; transform: translateY(4px) scale(0.96); } 48%, 88% { opacity: 1; transform: none; } 100% { opacity: 0; transform: none; } }
+@keyframes vx-type  { 0% { clip-path: inset(0 100% 0 0); } 16%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes vx-grow  { 0%, 6% { transform: scaleX(0); } 22%, 88% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+@keyframes vx-flow  { 0% { transform: translateX(-6px); opacity: 0; } 30%, 70% { opacity: 1; } 100% { transform: translateX(6px); opacity: 0; } }
+
+@media (max-width: 560px) { [data-connecteur] { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

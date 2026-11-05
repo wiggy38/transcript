@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root, [data-theme="light"] {
+  --vx-bg: #F6F5FF; --vx-surface: #FFFFFF; --vx-surface-2: #ECEAFB; --vx-line: #DDDAF2; --vx-line-strong: #7C77A6;
+  --vx-text: #14112B; --vx-text-2: #423D66; --vx-text-3: #5C5785;
+  --vx-accent: #4A6A00; --vx-on-accent: #FFFFFF; --vx-accent-text: #4A6A00;
+  --vx-mark: #EEF8C8; --vx-mark-text: #14112B; --vx-mark-time: #3E5700;
+  --vx-success: #157A4F; --vx-warning: #8A5A00; --vx-error: #C0262D; --vx-focus: #4A6A00; --vx-live: #0E7C8A; --vx-wave-idle: #CFCBEA;
+  --vx-shadow: 0 1px 2px rgb(20 17 43 / 0.06), 0 12px 32px -16px rgb(60 40 160 / 0.25);
+  --vx-shadow-hero: 0 2px 4px rgb(20 17 43 / 0.06), 0 28px 56px -22px rgb(20 17 43 / 0.28);
+  --vx-glow: radial-gradient(60% 50% at 50% 0%, rgb(110 100 220 / 0.12), transparent 70%);
+}
+[data-theme="dark"] {
+  --vx-bg: #0D0B1A; --vx-surface: #15122A; --vx-surface-2: #1D1938; --vx-line: #2C2750; --vx-line-strong: #6E68A0;
+  --vx-text: #EEEBFF; --vx-text-2: #C0BAE6; --vx-text-3: #9690C4;
+  --vx-accent: #C8F25A; --vx-on-accent: #0D0B1A; --vx-accent-text: #C8F25A;
+  --vx-mark: #2A2152; --vx-mark-text: #EEEBFF; --vx-mark-time: #4FD1E0;
+  --vx-success: #4FE0A6; --vx-warning: #FFC266; --vx-error: #FF7A7A; --vx-focus: #4FD1E0; --vx-live: #4FD1E0; --vx-wave-idle: #3A3468;
+  --vx-shadow: 0 0 0 1px rgb(255 255 255 / 0.02) inset, 0 16px 40px -18px rgb(0 0 0 / 0.8);
+  --vx-shadow-hero: 0 30px 60px -24px rgb(0 0 0 / 0.85);
+  --vx-glow: radial-gradient(60% 50% at 50% 0%, rgb(120 100 255 / 0.18), transparent 70%), radial-gradient(40% 40% at 85% 30%, rgb(79 209 224 / 0.08), transparent 70%);
+}
+:root {
+  --vx-font-text: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --vx-font-title: "Unbounded", ui-sans-serif, sans-serif;
+  --vx-font-data: "JetBrains Mono", ui-monospace, monospace;
+}
+html, body { margin: 0; }
+* { box-sizing: border-box; }
+a { color: var(--vx-accent-text); text-underline-offset: 3px; }
+a:hover { color: var(--vx-text); }
+:focus-visible { outline: 2px solid var(--vx-focus); outline-offset: 2px; }
+summary::-webkit-details-marker { display: none; }
+@keyframes vx-onde { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+@keyframes vx-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@keyframes vx-cap { 0% { opacity: 0; transform: translateY(6px); } 4%, 30% { opacity: 1; transform: none; } 34%, 100% { opacity: 0; transform: none; } }
+@keyframes vx-scan { 0% { transform: translateY(0); opacity: 0; } 8% { opacity: 1; } 18% { transform: translateY(0); } 28% { transform: translateY(28px); } 38%, 88% { transform: translateY(56px); opacity: 1; } 100% { transform: translateY(56px); opacity: 0; } }
+@keyframes vx-pop { 0%, 42% { opacity: 0; transform: translateY(4px) scale(0.96); } 48%, 88% { opacity: 1; transform: none; } 100% { opacity: 0; transform: none; } }
+@keyframes vx-type { 0% { clip-path: inset(0 100% 0 0); } 16%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes vx-indet { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+@keyframes vx-line { 0% { transform: scaleX(0); } 17%, 92% { transform: scaleX(1); } 100% { transform: scaleX(1); opacity: 0; } }
+@keyframes vx-grow { 0%, 6% { transform: scaleX(0); } 22%, 88% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+@keyframes vx-flow { 0% { transform: translateX(-6px); opacity: 0; } 30%, 70% { opacity: 1; } 100% { transform: translateX(6px); opacity: 0; } }
+@media (max-width: 560px) { [data-connecteur] { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div data-theme="{{ theme }}" style="min-height: 100vh; background: var(--vx-bg); color: var(--vx-text); font: 15px/1.6 var(--vx-font-text); -webkit-font-smoothing: antialiased; overflow-x: clip;">
+
+  <header style="position: sticky; top: 0; z-index: 10; background: color-mix(in oklab, var(--vx-bg) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--vx-line);">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 24px;">
+      <a href="#" style="display: inline-flex; align-items: center; gap: 8px; color: var(--vx-text); text-decoration: none; font-weight: 600; font-size: 17px; letter-spacing: -0.01em;">
+        <svg width="18" height="16" viewBox="0 0 22 18" aria-hidden="true"><rect x="0" y="6" width="3" height="6" rx="1.5" fill="var(--vx-accent)"></rect><rect x="5" y="2" width="3" height="14" rx="1.5" fill="currentColor"></rect><rect x="10" y="0" width="3" height="18" rx="1.5" fill="currentColor"></rect><rect x="15" y="4" width="3" height="10" rx="1.5" fill="currentColor"></rect><rect x="20" y="7" width="2" height="4" rx="1" fill="currentColor"></rect></svg>Voxia</a>
+      <nav aria-label="Navigation principale" style="display: flex; flex-wrap: wrap; gap: 4px 20px; font-size: 14px; margin-left: 8px;">
+        <a href="#fonctionnement" style="color: var(--vx-text-2); text-decoration: none;">Fonctionnement</a>
+        <a href="#usages" style="color: var(--vx-text-2); text-decoration: none;">Usages</a>
+        <a href="#tarifs" style="color: var(--vx-text-2); text-decoration: none;">Tarifs</a>
+        <a href="#questions" style="color: var(--vx-text-2); text-decoration: none;">Questions</a>
+      </nav>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 12px;">
+        <button type="button" aria-label="Langue : français" style="min-height: 36px; padding: 0 10px; border: 1px solid var(--vx-line); border-radius: 12px; background: transparent; color: var(--vx-text-2); font: 12px var(--vx-font-data); cursor: pointer;">FR</button>
+        <a href="#" style="color: var(--vx-text); text-decoration: none; font-size: 14px; font-weight: 500; white-space: nowrap;">Se connecter</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section aria-labelledby="hero-titre" style="position: relative; padding: 32px 16px 48px; background-image: var(--vx-glow), radial-gradient(color-mix(in oklab, var(--vx-text) 12%, transparent) 1px, transparent 1.5px); background-size: auto, 20px 20px;">
+      <div style="max-width: 1040px; margin: 0 auto; display: grid; justify-items: center; text-align: center; gap: 18px;">
+        <p style="margin: 0; display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 14px; max-width: 100%; padding: 6px 14px; border: 1px solid var(--vx-line-strong); border-radius: 18px; background: var(--vx-surface); font: 500 13px var(--vx-font-text); color: var(--vx-text);">
+          <span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: var(--vx-live); animation: vx-pulse 1.6s ease-in-out infinite;"></span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;"><svg width="18" height="13" viewBox="0 0 24 17" aria-hidden="true"><rect width="24" height="17" rx="4" fill="#FF0000"></rect><path d="M9.6 4.9v7.2l6.2-3.6z" fill="#FFFFFF"></path></svg>YouTube</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;"><svg width="14" height="16" viewBox="0 0 24 27" aria-hidden="true"><path d="M17.6 0h-4.5v18.2a3.9 3.9 0 1 1-3.9-3.9c.4 0 .8.1 1.2.2V9.9a8.4 8.4 0 1 0 7.2 8.3V9a10.6 10.6 0 0 0 6.2 2V6.6A6.2 6.2 0 0 1 17.6 0z" fill="#25F4EE" transform="translate(-1 -1)"></path><path d="M17.6 0h-4.5v18.2a3.9 3.9 0 1 1-3.9-3.9c.4 0 .8.1 1.2.2V9.9a8.4 8.4 0 1 0 7.2 8.3V9a10.6 10.6 0 0 0 6.2 2V6.6A6.2 6.2 0 0 1 17.6 0z" fill="#FE2C55" transform="translate(1 1)"></path><path d="M17.6 0h-4.5v18.2a3.9 3.9 0 1 1-3.9-3.9c.4 0 .8.1 1.2.2V9.9a8.4 8.4 0 1 0 7.2 8.3V9a10.6 10.6 0 0 0 6.2 2V6.6A6.2 6.2 0 0 1 17.6 0z" fill="currentColor"></path></svg>TikTok</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><path d="m10 11.5v5l4-2.5z"></path></svg>Fichiers audio et vidéo</span>
+        </p>
+        <h1 id="hero-titre" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3.9vw, 44px); line-height: 1.15; letter-spacing: -0.035em; text-wrap: balance;"><span style="display: block;">Chaque vidéo contient un texte.</span> <span style="display: block; color: var(--vx-accent-text);">Voxia te l'écrit.</span></h1>
+        <p style="margin: 0; max-width: 34em; font-size: 16px; color: var(--vx-text-2); text-wrap: pretty;">Transcription horodatée, sous-titres SRT et VTT, fichier MP3. Tout est prêt en quelques minutes et rangé dans ta bibliothèque.</p>
+      </div>
+
+      <form onSubmit="{{ submit }}" novalidate style="max-width: 680px; margin: 32px auto 0; padding: 20px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow-hero); display: grid; gap: 10px;">
+        <label for="hero-lien" style="font-weight: 600; font-size: 15px;">Lien de la vidéo</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <div style="flex: 1 1 260px; min-width: 0; position: relative;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%);"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"></path><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"></path></svg>
+            <input id="hero-lien" type="url" inputmode="url" autocomplete="off" placeholder="https://youtube.com/watch?v=…" value="{{ lien }}" onInput="{{ onLien }}" aria-invalid="{{ invalid }}" aria-describedby="hero-aide" style="width: 100%; min-height: 54px; padding: 0 14px 0 42px; border: 1px solid {{ fieldBorder }}; border-radius: 12px; background: var(--vx-bg); color: var(--vx-text); font: 15px var(--vx-font-data);">
+          </div>
+          <button type="submit" style="flex: 0 0 auto; min-height: 54px; padding: 0 24px; border: 0; border-radius: 12px; background: var(--vx-accent); color: var(--vx-on-accent); font: 600 16px var(--vx-font-text); cursor: pointer; white-space: nowrap;" style-hover="filter: brightness(1.1);">Transcrire</button>
+        </div>
+        <sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+          <p role="alert" style="margin: 0; display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--vx-error);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5"></path><path d="M12 16.5h.01"></path></svg>{{ error }}</p>
+        </sc-if>
+        <p id="hero-aide" style="margin: 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font-size: 13px; color: var(--vx-text-3);">
+          <span>Ou <a href="#">dépose un fichier</a> · MP3, M4A, WAV, MP4, MOV, WEBM</span>
+          <span>Gratuit pour commencer</span>
+        </p>
+      </form>
+    </section>
+
+    <section aria-label="Aperçu du résultat" style="padding: 0 16px 80px;">
+      <div style="max-width: 920px; margin: 0 auto; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow); overflow: hidden;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding: 10px 16px; border-bottom: 1px solid var(--vx-line); font: 12px var(--vx-font-data); color: var(--vx-text-3);">
+          <span style="color: var(--vx-text);">Vlog #34 — Mon atelier de céramique</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; color: var(--vx-success);"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>Terminé</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap;">
+          <div style="flex: 1 1 260px; min-width: 0; padding: 20px 16px; display: grid; gap: 12px; align-content: center; border-right: 1px solid var(--vx-line);">
+            <div aria-hidden="true" style="height: 72px; display: flex; align-items: center; gap: 2px;">
+              <sc-for list="{{ bars }}" as="b" hint-placeholder-count="48">
+                <span style="flex: 1 1 0; min-width: 1px; height: {{ b.h }}; border-radius: 1px; background: {{ b.c }}; animation: vx-onde 1.6s ease-in-out infinite; animation-delay: {{ b.d }};"></span>
+              </sc-for>
+            </div>
+            <p style="margin: 0; font: 12px var(--vx-font-data); color: var(--vx-text-2);">00:13 <span style="color: var(--vx-text-3);">/ 12:03</span></p>
+          </div>
+          <ol style="flex: 2 1 340px; min-width: 0; margin: 0; padding: 12px; list-style: none; display: grid; gap: 2px;">
+            <sc-for list="{{ lignes }}" as="l" hint-placeholder-count="4">
+              <li style="display: flex; gap: 12px; padding: 8px 10px; border-radius: 12px; background: {{ l.bg }};">
+                <span style="flex-shrink: 0; width: 40px; padding-top: 1px; font: 12px var(--vx-font-data); color: {{ l.tc }};">{{ l.t }}</span>
+                <p style="margin: 0; font-size: 14px; color: {{ l.c }};">{{ l.texte }}</p>
+              </li>
+            </sc-for>
+          </ol>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; border-top: 1px solid var(--vx-line); background: var(--vx-surface-2);">
+          <sc-for list="{{ formats }}" as="f" hint-placeholder-count="5">
+            <span style="padding: 2px 8px; border: 1px solid var(--vx-line); border-radius: 999px; background: var(--vx-surface); font: 12px var(--vx-font-data); color: var(--vx-text-2);">{{ f }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section id="fonctionnement" aria-labelledby="t-fonc" style="padding: 64px 16px; border-top: 1px solid var(--vx-line);">
+      <div style="max-width: 1120px; margin: 0 auto;">
+        <div style="display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 32px; margin-bottom: 32px;">
+          <h2 id="t-fonc" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3vw, 30px); letter-spacing: -0.03em; line-height: 1.15;">Trois étapes, <span style="font-weight: 600; color: var(--vx-accent-text);">aucun réglage.</span></h2>
+          <p style="margin: 0; max-width: 30em; font-size: 15px; color: var(--vx-text-2);">Pas de compte à configurer ni de format à choisir avant de commencer.</p>
+        </div>
+        <ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 32px 0;">
+            <li style="display: grid; gap: 16px; align-content: start; min-width: 0; padding-bottom: 8px;">
+              <div style="position: relative; display: flex; justify-content: center; align-items: center; height: 40px;">
+                <span data-connecteur aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 19px; height: 2px; background: var(--vx-line); overflow: hidden;"><span style="position: absolute; inset: 0; background: var(--vx-accent); transform-origin: left; animation: vx-line 4.8s linear 0s infinite backwards;"></span></span>
+                <span style="position: relative; flex-shrink: 0; box-shadow: 0 0 0 6px var(--vx-bg); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--vx-surface); color: var(--vx-accent-text); border: 1px solid var(--vx-line-strong); font: 500 14px var(--vx-font-data);">1</span>
+              </div>
+              <div style="display: grid; gap: 8px; padding: 0 12px;">
+                <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 19px; line-height: 1.25; letter-spacing: -0.02em;">Colle un lien ou dépose un fichier</h3>
+                <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); max-width: 30em;">Une vidéo YouTube ou TikTok publique, ou un fichier audio ou vidéo.</p>
+              </div>
+              <div aria-hidden="true" style="margin: 0 12px; padding: 12px; border: 1px solid var(--vx-line); border-radius: 14px; background: var(--vx-surface); display: grid; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px solid var(--vx-line-strong); border-radius: 10px; background: var(--vx-bg); min-width: 0;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="1.8" stroke-linecap="round" style="flex-shrink: 0;"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"></path><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"></path></svg>
+                  <span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px var(--vx-font-data); color: var(--vx-text);">youtube.com/watch?v=…</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; font: 11px var(--vx-font-data); color: var(--vx-text-3);"><span style="flex: 1; height: 1px; background: var(--vx-line);"></span>ou<span style="flex: 1; height: 1px; background: var(--vx-line);"></span></div>
+                <div style="display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px dashed var(--vx-line-strong); border-radius: 10px; min-width: 0;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path></svg>
+                  <span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 12px var(--vx-font-data); color: var(--vx-text-2);">atelier-ceramique.mp4</span>
+                </div>
+              </div>
+            </li>
+            <li style="display: grid; gap: 16px; align-content: start; min-width: 0; padding-bottom: 8px;">
+              <div style="position: relative; display: flex; justify-content: center; align-items: center; height: 40px;">
+                <span data-connecteur aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 19px; height: 2px; background: var(--vx-line); overflow: hidden;"><span style="position: absolute; inset: 0; background: var(--vx-accent); transform-origin: left; animation: vx-line 4.8s linear 0.8s infinite backwards;"></span></span>
+                <span style="position: relative; flex-shrink: 0; box-shadow: 0 0 0 6px var(--vx-bg); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--vx-surface); color: var(--vx-accent-text); border: 1px solid var(--vx-line-strong); font: 500 14px var(--vx-font-data);">2</span>
+              </div>
+              <div style="display: grid; gap: 8px; padding: 0 12px;">
+                <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 19px; line-height: 1.25; letter-spacing: -0.02em;">Voxia transcrit</h3>
+                <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); max-width: 30em;">Le statut se met à jour tout seul. Tu peux fermer la page pendant le traitement.</p>
+              </div>
+              <div aria-hidden="true" style="margin: 0 12px; padding: 12px; border: 1px solid var(--vx-line); border-radius: 14px; background: var(--vx-surface); display: grid; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; background: color-mix(in oklab, var(--vx-live) 18%, transparent); color: var(--vx-live); font: 500 11px var(--vx-font-data); white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: vx-pulse 1.6s ease-in-out infinite;"></span>Transcription</span>
+                  <span style="font: 11px var(--vx-font-data); color: var(--vx-text-3); white-space: nowrap;">mise à jour auto</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px;">
+                  <span style="height: 4px; border-radius: 2px; background: var(--vx-success);"></span>
+                  <span style="position: relative; height: 4px; border-radius: 2px; background: var(--vx-surface-2); overflow: hidden;"><span style="position: absolute; inset: 0; width: 40%; border-radius: 2px; background: var(--vx-live); animation: vx-indet 1.6s var(--vx-ease) infinite;"></span></span>
+                  <span style="height: 4px; border-radius: 2px; background: var(--vx-surface-2);"></span>
+                </div>
+                <div style="display: grid; gap: 6px; padding-top: 2px;">
+                  <span style="display: flex; gap: 8px; align-items: center;"><span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:00</span><span style="height: 5px; width: 72%; border-radius: 3px; background: var(--vx-wave-idle);"></span></span>
+                  <span style="display: flex; gap: 8px; align-items: center;"><span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:06</span><span style="height: 5px; width: 54%; border-radius: 3px; background: var(--vx-wave-idle);"></span></span>
+                </div>
+              </div>
+            </li>
+            <li style="display: grid; gap: 16px; align-content: start; min-width: 0; padding-bottom: 8px;">
+              <div style="position: relative; display: flex; justify-content: center; align-items: center; height: 40px;">
+                <span data-connecteur aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 19px; height: 2px; background: var(--vx-line); overflow: hidden;"><span style="position: absolute; inset: 0; background: var(--vx-accent); transform-origin: left; animation: vx-line 4.8s linear 1.6s infinite backwards;"></span></span>
+                <span style="position: relative; flex-shrink: 0; box-shadow: 0 0 0 6px var(--vx-bg); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--vx-accent); color: var(--vx-on-accent); border: 1px solid var(--vx-accent); font: 500 14px var(--vx-font-data);">3</span>
+              </div>
+              <div style="display: grid; gap: 8px; padding: 0 12px;">
+                <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 19px; line-height: 1.25; letter-spacing: -0.02em;">Copie ou télécharge</h3>
+                <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); max-width: 30em;">Texte horodaté, sous-titres et audio, rangés dans ta bibliothèque.</p>
+              </div>
+              <div aria-hidden="true" style="margin: 0 12px; padding: 12px; border: 1px solid var(--vx-line); border-radius: 14px; background: var(--vx-surface); display: grid; gap: 8px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid var(--vx-line-strong); border-radius: 999px; font: 11px var(--vx-font-data); color: var(--vx-text);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>TXT</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid var(--vx-line-strong); border-radius: 999px; font: 11px var(--vx-font-data); color: var(--vx-text);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>PDF</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid var(--vx-line-strong); border-radius: 999px; font: 11px var(--vx-font-data); color: var(--vx-text);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>SRT</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid var(--vx-line-strong); border-radius: 999px; font: 11px var(--vx-font-data); color: var(--vx-text);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>VTT</span>
+                  <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid var(--vx-line-strong); border-radius: 999px; font: 11px var(--vx-font-data); color: var(--vx-text);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>MP3</span>
+                </div>
+                <span style="justify-self: start; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 10px; background: var(--vx-accent); color: var(--vx-on-accent); font: 600 12px var(--vx-font-text);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg>Copier le texte</span>
+              </div>
+            </li>
+        </ol>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-sortie" style="padding: 64px 16px; border-top: 1px solid var(--vx-line); background: var(--vx-surface);">
+      <div style="max-width: 1120px; margin: 0 auto;">
+        <div style="display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 32px; margin-bottom: 28px;">
+          <h2 id="t-sortie" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3vw, 30px); letter-spacing: -0.03em; line-height: 1.15;">Ce que tu récupères</h2>
+          <p style="margin: 0; max-width: 30em; font-size: 15px; color: var(--vx-text-2);">Trois livrables pour chaque vidéo, à copier ou télécharger.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 16px;">
+          <article style="display: grid; gap: 14px; align-content: start; padding: 20px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-bg);">
+            <ul aria-label="Formats" style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px;">
+              <li><span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border: 1px solid var(--vx-line-strong); border-radius: 10px; background: var(--vx-surface); white-space: nowrap;">
+                  <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true"><path d="M3 1h11l6 6v16a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="var(--vx-surface-2)" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><path d="M14 1v6h6" fill="none" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><rect x="0" y="13" width="18" height="9" rx="2" fill="var(--vx-text-2)"></rect><text x="9" y="19.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5.6" font-weight="700" fill="var(--vx-bg)">TXT</text></svg>
+                  <span style="font: 500 12px var(--vx-font-data); color: var(--vx-text);">.txt</span>
+                </span></li>
+              <li><span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border: 1px solid var(--vx-line-strong); border-radius: 10px; background: var(--vx-surface); white-space: nowrap;">
+                  <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true"><path d="M3 1h11l6 6v16a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="var(--vx-surface-2)" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><path d="M14 1v6h6" fill="none" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><rect x="0" y="13" width="18" height="9" rx="2" fill="var(--vx-error)"></rect><text x="9" y="19.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5.6" font-weight="700" fill="var(--vx-bg)">PDF</text></svg>
+                  <span style="font: 500 12px var(--vx-font-data); color: var(--vx-text);">.pdf</span>
+                </span></li>
+            </ul>
+            <div style="display: grid; gap: 6px;">
+              <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 19px; line-height: 1.25; letter-spacing: -0.02em;">Transcription horodatée</h3>
+              <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); text-wrap: pretty;">Chaque phrase avec son horodatage. Clique dessus pour réécouter le passage.</p>
+            </div>
+          </article>
+          <article style="display: grid; gap: 14px; align-content: start; padding: 20px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-bg);">
+            <ul aria-label="Formats" style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px;">
+              <li><span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border: 1px solid var(--vx-line-strong); border-radius: 10px; background: var(--vx-surface); white-space: nowrap;">
+                  <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true"><path d="M3 1h11l6 6v16a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="var(--vx-surface-2)" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><path d="M14 1v6h6" fill="none" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><rect x="0" y="13" width="18" height="9" rx="2" fill="var(--vx-live)"></rect><text x="9" y="19.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5.6" font-weight="700" fill="var(--vx-bg)">SRT</text></svg>
+                  <span style="font: 500 12px var(--vx-font-data); color: var(--vx-text);">.srt</span>
+                </span></li>
+              <li><span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border: 1px solid var(--vx-line-strong); border-radius: 10px; background: var(--vx-surface); white-space: nowrap;">
+                  <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true"><path d="M3 1h11l6 6v16a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="var(--vx-surface-2)" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><path d="M14 1v6h6" fill="none" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><rect x="0" y="13" width="18" height="9" rx="2" fill="var(--vx-live)"></rect><text x="9" y="19.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5.6" font-weight="700" fill="var(--vx-bg)">VTT</text></svg>
+                  <span style="font: 500 12px var(--vx-font-data); color: var(--vx-text);">.vtt</span>
+                </span></li>
+            </ul>
+            <div style="display: grid; gap: 6px;">
+              <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 19px; line-height: 1.25; letter-spacing: -0.02em;">Sous-titres</h3>
+              <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); text-wrap: pretty;">Prêts à importer dans ton logiciel de montage ou sur ta plateforme.</p>
+            </div>
+          </article>
+          <article style="display: grid; gap: 14px; align-content: start; padding: 20px; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-bg);">
+            <ul aria-label="Formats" style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px;">
+              <li><span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border: 1px solid var(--vx-line-strong); border-radius: 10px; background: var(--vx-surface); white-space: nowrap;">
+                  <svg width="22" height="26" viewBox="0 0 22 26" aria-hidden="true"><path d="M3 1h11l6 6v16a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="var(--vx-surface-2)" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><path d="M14 1v6h6" fill="none" stroke="var(--vx-line-strong)" stroke-width="1.2"></path><rect x="0" y="13" width="18" height="9" rx="2" fill="var(--vx-accent)"></rect><text x="9" y="19.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5.6" font-weight="700" fill="var(--vx-bg)">MP3</text></svg>
+                  <span style="font: 500 12px var(--vx-font-data); color: var(--vx-text);">.mp3</span>
+                </span></li>
+            </ul>
+            <div style="display: grid; gap: 6px;">
+              <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 19px; line-height: 1.25; letter-spacing: -0.02em;">Fichier audio</h3>
+              <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); text-wrap: pretty;">La piste son de la vidéo, à réutiliser en podcast ou en extrait.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="usages" aria-labelledby="t-usages" style="padding: 64px 16px; border-top: 1px solid var(--vx-line);">
+      <div style="max-width: 1120px; margin: 0 auto;">
+        <div style="display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 32px; margin-bottom: 28px;">
+          <h2 id="t-usages" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3vw, 30px); letter-spacing: -0.03em; line-height: 1.15;">Pour qui ?</h2>
+          <p style="margin: 0; max-width: 30em; font-size: 15px; color: var(--vx-text-2);">Trois usages, un même point de départ : un lien ou un fichier.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 16px;">
+          <article style="display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow); overflow: hidden; transition: border-color 150ms;" style-hover="border-color: var(--vx-line-strong);">
+            <div aria-hidden="true" style="position: relative; height: 176px; margin: 12px 12px 0; border-radius: 14px; background: var(--vx-surface-2); overflow: hidden;">
+              <div style="position: absolute; inset: 0; background-image: radial-gradient(color-mix(in oklab, var(--vx-text) 10%, transparent) 1px, transparent 1.5px); background-size: 16px 16px;"></div>
+              <span style="position: absolute; top: 10px; left: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: 999px; background: var(--vx-bg); font: 11px var(--vx-font-data); color: var(--vx-text-2);"><svg width="13" height="9" viewBox="0 0 24 17"><rect width="24" height="17" rx="4" fill="#FF0000"></rect><path d="M9.6 4.9v7.2l6.2-3.6z" fill="#FFFFFF"></path></svg>12:03</span>
+              <span style="position: absolute; top: 10px; right: 10px; padding: 2px 8px; border-radius: 999px; background: var(--vx-accent); color: var(--vx-on-accent); font: 500 11px var(--vx-font-data);">.srt</span>
+              <span style="position: absolute; top: 46px; left: 50%; transform: translateX(-50%); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--vx-line-strong); background: var(--vx-bg); color: var(--vx-text);"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l12-7.5z"></path></svg></span>
+              <div style="position: absolute; left: 12px; right: 12px; bottom: 12px; height: 52px;">
+                <div style="position: absolute; inset: 0; display: grid; justify-items: center; align-content: end; gap: 4px; text-align: center; opacity: 1; animation: vx-cap 7.5s var(--vx-ease) 0s infinite;">
+                  <span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:00:13,000 → 00:00:19,000</span>
+                  <span style="padding: 3px 8px; border-radius: 6px; background: color-mix(in oklab, var(--vx-bg) 88%, transparent); font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--vx-text);">Le secret, c'est de centrer la terre.</span>
+                </div>
+                <div style="position: absolute; inset: 0; display: grid; justify-items: center; align-content: end; gap: 4px; text-align: center; opacity: 0; animation: vx-cap 7.5s var(--vx-ease) -5s infinite;">
+                  <span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:00:19,000 → 00:00:24,000</span>
+                  <span style="padding: 3px 8px; border-radius: 6px; background: color-mix(in oklab, var(--vx-bg) 88%, transparent); font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--vx-text);">Si elle n'est pas centrée, rien ne tiendra.</span>
+                </div>
+                <div style="position: absolute; inset: 0; display: grid; justify-items: center; align-content: end; gap: 4px; text-align: center; opacity: 0; animation: vx-cap 7.5s var(--vx-ease) -2.5s infinite;">
+                  <span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:00:24,000 → 00:00:31,000</span>
+                  <span style="padding: 3px 8px; border-radius: 6px; background: color-mix(in oklab, var(--vx-bg) 88%, transparent); font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--vx-text);">Je mouille les mains, coudes sur les genoux.</span>
+                </div>
+              </div>
+            </div>
+            <div style="display: grid; gap: 8px; align-content: start; padding: 18px 18px 20px;">
+              <span style="font: 12px var(--vx-font-data); color: var(--vx-accent-text);">01 · Sous-titres</span>
+              <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 17px; letter-spacing: -0.02em; line-height: 1.25;">Créateurs de contenu</h3>
+              <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); text-wrap: pretty;">Sous-titre tes vidéos, puis réutilise ce que tu as dit en description, en post ou en article.</p>
+              <ul aria-label="Formats utiles" style="margin: 4px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px;">
+                <li style="padding: 2px 8px; border: 1px solid var(--vx-line); border-radius: 999px; font: 12px var(--vx-font-data); color: var(--vx-text-2);">SRT</li>
+                <li style="padding: 2px 8px; border: 1px solid var(--vx-line); border-radius: 999px; font: 12px var(--vx-font-data); color: var(--vx-text-2);">VTT</li>
+                <li style="padding: 2px 8px; border: 1px solid var(--vx-line); border-radius: 999px; font: 12px var(--vx-font-data); color: var(--vx-text-2);">TXT</li>
+              </ul>
+            </div>
+          </article>
+          <article style="display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow); overflow: hidden; transition: border-color 150ms;" style-hover="border-color: var(--vx-line-strong);">
+            <div aria-hidden="true" style="position: relative; height: 176px; margin: 12px 12px 0; border-radius: 14px; background: var(--vx-surface-2); overflow: hidden;">
+              <div style="position: absolute; top: 12px; left: 12px; right: 12px; display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 10px; border: 1px solid var(--vx-line-strong); border-radius: 10px; background: var(--vx-bg);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--vx-text-3)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                <span style="min-width: 0; overflow: hidden; font: 12px var(--vx-font-data); color: var(--vx-text); white-space: nowrap; animation: vx-type 6s steps(8) infinite;">centrée</span>
+                <span style="margin-left: auto; flex-shrink: 0; white-space: nowrap; font: 10px var(--vx-font-data); color: var(--vx-text-3);">1 résultat</span>
+              </div>
+              <div style="position: absolute; top: 54px; left: 8px; right: 8px;">
+                <div style="position: absolute; left: 0; right: 0; top: 0; height: 28px; border-radius: 8px; background: var(--vx-mark); transform: translateY(56px); animation: vx-scan 6s var(--vx-ease) infinite;"></div>
+                <div style="position: relative; display: flex; gap: 10px; align-items: center; height: 28px; padding: 0 8px;"><span style="flex-shrink: 0; font: 11px var(--vx-font-data); color: var(--vx-text-3);">00:06</span><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--vx-text-3); font-weight: 400;">Aujourd’hui on tourne six bols…</span></div>
+                <div style="position: relative; display: flex; gap: 10px; align-items: center; height: 28px; padding: 0 8px;"><span style="flex-shrink: 0; font: 11px var(--vx-font-data); color: var(--vx-text-3);">00:13</span><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--vx-text-3); font-weight: 400;">Le secret, c’est de bien préparer…</span></div>
+                <div style="position: relative; display: flex; gap: 10px; align-items: center; height: 28px; padding: 0 8px;"><span style="flex-shrink: 0; font: 11px var(--vx-font-data); color: var(--vx-mark-time);">00:19</span><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--vx-mark-text); font-weight: 500;">« Si elle n'est pas centrée, rien ne tiendra. »</span></div>
+                <div style="position: relative; display: flex; gap: 10px; align-items: center; height: 28px; padding: 0 8px;"><span style="flex-shrink: 0; font: 11px var(--vx-font-data); color: var(--vx-text-3);">00:24</span><span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--vx-text-3); font-weight: 400;">Je mouille les mains, coudes…</span></div>
+              </div>
+              <span style="position: absolute; right: 12px; bottom: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: var(--vx-accent); color: var(--vx-on-accent); font: 500 11px var(--vx-font-data); animation: vx-pop 6s var(--vx-ease) infinite;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>Citation copiée · 00:19</span>
+            </div>
+            <div style="display: grid; gap: 8px; align-content: start; padding: 18px 18px 20px;">
+              <span style="font: 12px var(--vx-font-data); color: var(--vx-accent-text);">02 · Citations</span>
+              <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 17px; letter-spacing: -0.02em; line-height: 1.25;">Marketeurs</h3>
+              <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); text-wrap: pretty;">Retrouve la phrase exacte d'un webinaire ou d'une interview, avec son horodatage, sans tout réécouter.</p>
+              <ul aria-label="Formats utiles" style="margin: 4px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px;">
+                <li style="padding: 2px 8px; border: 1px solid var(--vx-line); border-radius: 999px; font: 12px var(--vx-font-data); color: var(--vx-text-2);">TXT</li>
+                <li style="padding: 2px 8px; border: 1px solid var(--vx-line); border-radius: 999px; font: 12px var(--vx-font-data); color: var(--vx-text-2);">PDF</li>
+              </ul>
+            </div>
+          </article>
+          <article style="display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--vx-line); border-radius: 20px; background: var(--vx-surface); box-shadow: var(--vx-shadow); overflow: hidden; transition: border-color 150ms;" style-hover="border-color: var(--vx-line-strong);">
+            <div aria-hidden="true" style="position: relative; height: 176px; margin: 12px 12px 0; border-radius: 14px; background: var(--vx-surface-2); overflow: hidden;">
+              <div style="position: absolute; inset: 12px; display: grid; grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1.15fr); gap: 8px; align-items: center;">
+                <div style="display: grid; gap: 8px; align-content: center;">
+                  <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 10px var(--vx-font-data); color: var(--vx-text-3);">Démo · 03:42</span>
+                  <div style="display: flex; gap: 6px; align-items: center;"><span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:08</span><span style="display: block; height: 5px; width: 64%; border-radius: 3px; background: var(--vx-wave-idle);"></span></div>
+                  <div style="display: flex; gap: 6px; align-items: center;"><span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:21</span><span style="display: block; height: 5px; width: 82%; border-radius: 3px; background: var(--vx-wave-idle);"></span></div>
+                  <div style="display: flex; gap: 6px; align-items: center;"><span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:35</span><span style="display: block; height: 5px; width: 56%; border-radius: 3px; background: var(--vx-wave-idle);"></span></div>
+                  <div style="display: flex; gap: 6px; align-items: center;"><span style="font: 10px var(--vx-font-data); color: var(--vx-text-3);">00:52</span><span style="display: block; height: 5px; width: 74%; border-radius: 3px; background: var(--vx-wave-idle);"></span></div>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--vx-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: vx-flow 1.6s ease-in-out infinite;"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+                <div style="display: grid; gap: 8px; align-content: start; padding: 10px; border-radius: 10px; border: 1px solid var(--vx-line); background: var(--vx-bg);">
+                  <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 10px var(--vx-font-data); color: var(--vx-accent-text);">Fiche produit</span>
+                  <span style="display: block; height: 6px; width: 78%; border-radius: 3px; background: var(--vx-text); opacity: 0.55; transform-origin: left; animation: vx-grow 6s var(--vx-ease) 0s infinite backwards;"></span>
+                  <div style="display: flex; gap: 6px; align-items: center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--vx-success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span style="display: block; height: 6px; width: 88%; border-radius: 3px; background: var(--vx-text-3); opacity: 0.55; transform-origin: left; animation: vx-grow 6s var(--vx-ease) 0.35s infinite backwards;"></span></div>
+                  <div style="display: flex; gap: 6px; align-items: center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--vx-success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span style="display: block; height: 6px; width: 70%; border-radius: 3px; background: var(--vx-text-3); opacity: 0.55; transform-origin: left; animation: vx-grow 6s var(--vx-ease) 0.65s infinite backwards;"></span></div>
+                  <div style="display: flex; gap: 6px; align-items: center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--vx-success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg><span style="display: block; height: 6px; width: 80%; border-radius: 3px; background: var(--vx-text-3); opacity: 0.55; transform-origin: left; animation: vx-grow 6s var(--vx-ease) 0.95s infinite backwards;"></span></div>
+                  <span style="justify-self: start; margin-top: 2px; padding: 1px 7px; border-radius: 999px; background: var(--vx-mark); color: var(--vx-mark-text); font: 10px var(--vx-font-data); white-space: nowrap;">FAQ · 4 Q</span>
+                </div>
+              </div>
+            </div>
+            <div style="display: grid; gap: 8px; align-content: start; padding: 18px 18px 20px;">
+              <span style="font: 12px var(--vx-font-data); color: var(--vx-accent-text);">03 · Fiches produit</span>
+              <h3 style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: 17px; letter-spacing: -0.02em; line-height: 1.25;">E-commerçants</h3>
+              <p style="margin: 0; font-size: 14px; color: var(--vx-text-2); text-wrap: pretty;">Transforme une démonstration produit en fiche, en FAQ ou en script de publicité.</p>
+              <ul aria-label="Formats utiles" style="margin: 4px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px;">
+                <li style="padding: 2px 8px; border: 1px solid var(--vx-line); border-radius: 999px; font: 12px var(--vx-font-data); color: var(--vx-text-2);">TXT</li>
+                <li style="padding: 2px 8px; border: 1px solid var(--vx-line); border-radius: 999px; font: 12px var(--vx-font-data); color: var(--vx-text-2);">MP3</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="tarifs" aria-labelledby="t-tarifs" style="padding: 64px 16px; border-top: 1px solid var(--vx-line); background: var(--vx-surface);">
+      <div style="max-width: 1120px; margin: 0 auto;">
+        <h2 id="t-tarifs" style="margin: 0 0 28px; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3vw, 30px); letter-spacing: -0.03em; line-height: 1.15;">Tarifs</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px;">
+          <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+            <div style="display: grid; gap: 10px; align-content: start; padding: 20px; border: {{ p.bord }}; border-radius: 20px; background: var(--vx-bg);">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                <span style="font-weight: 600; font-size: 15px;">{{ p.nom }}</span>
+                <span style="font: 12px var(--vx-font-data); color: var(--vx-accent-text);">{{ p.reco }}</span>
+              </div>
+              <span style="font-family: var(--vx-font-title); font-weight: 600; font-size: 28px; line-height: 1;">[prix]<span style="font: 13px var(--vx-font-text); color: var(--vx-text-3);"> {{ p.suffixe }}</span></span>
+              <ul style="margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 14px; color: var(--vx-text-2);">
+                <sc-for list="{{ p.items }}" as="i" hint-placeholder-count="3"><li style="display: flex; gap: 8px;"><span aria-hidden="true" style="color: var(--vx-success);">✓</span>{{ i }}</li></sc-for>
+              </ul>
+              <a href="#" style="justify-self: start; display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; margin-top: 4px; border-radius: 12px; background: {{ p.bbg }}; color: {{ p.bfg }}; border: 1px solid {{ p.bb }}; font-weight: 600; font-size: 14px; text-decoration: none; white-space: nowrap;">{{ p.cta }}</a>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin: 12px 0 0; font-size: 13px; color: var(--vx-text-3);">Prix et quotas provisoires.</p>
+      </div>
+    </section>
+
+    <section id="questions" aria-labelledby="t-faq" style="padding: 64px 16px; border-top: 1px solid var(--vx-line);">
+      <div style="max-width: 760px; margin: 0 auto;">
+        <h2 id="t-faq" style="margin: 0 0 20px; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3vw, 30px); letter-spacing: -0.03em; line-height: 1.15;">Questions fréquentes</h2>
+        <sc-for list="{{ faq }}" as="q" hint-placeholder-count="4">
+          <details style="border-top: 1px solid var(--vx-line);">
+            <summary style="list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 48px; padding: 10px 0; cursor: pointer; font-weight: 600; font-size: 15px;">{{ q.q }}<span aria-hidden="true" style="font: 16px var(--vx-font-data); color: var(--vx-text-3);">+</span></summary>
+            <p style="margin: 0 0 16px; font-size: 14px; color: var(--vx-text-2);">{{ q.r }}</p>
+          </details>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-cta" style="padding: 64px 16px; border-top: 1px solid var(--vx-line); background: var(--vx-surface);">
+      <div style="max-width: 680px; margin: 0 auto; display: grid; justify-items: center; text-align: center; gap: 16px;">
+        <h2 id="t-cta" style="margin: 0; font-family: var(--vx-font-title); font-weight: 600; font-size: clamp(22px, 3vw, 30px); letter-spacing: -0.03em; line-height: 1.15;">Ta prochaine vidéo, <span style="font-weight: 600; color: var(--vx-accent-text);">en texte.</span></h2>
+        <a href="#hero-lien" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 12px; background: var(--vx-accent); color: var(--vx-on-accent); font-weight: 600; text-decoration: none;">Coller un lien</a>
+      </div>
+    </section>
+  </main>
+
+  <footer style="border-top: 1px solid var(--vx-line);">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 24px 16px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; font-size: 13px; color: var(--vx-text-3);">
+      <span>© Voxia</span>
+      <nav aria-label="Liens légaux" style="display: flex; flex-wrap: wrap; gap: 6px 20px;">
+        <a href="#" style="color: var(--vx-text-2); text-decoration: none;">CGU</a>
+        <a href="#" style="color: var(--vx-text-2); text-decoration: none;">Confidentialité</a>
+        <a href="#" style="color: var(--vx-text-2); text-decoration: none;">Contact</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pageTheme&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;dark&quot;, &quot;light&quot;], &quot;default&quot;: &quot;dark&quot;, &quot;tsType&quot;: &quot;'dark' | 'light'&quot;, &quot;section&quot;: &quot;Affichage&quot;}}">
+class Component extends DCLogic {
+  state = { lien: '', error: '' };
+  renderVals() {
+    const theme = this.props.pageTheme ?? 'dark';
+    const bars = Array.from({ length: 48 }, (_, i) => ({
+      h: Math.round(22 + 78 * Math.abs(Math.sin(i * 1.7 + 0.6) * Math.cos(i * 0.45))) + '%',
+      d: '-' + ((i % 16) / 10) + 's',
+      c: i < 18 ? 'var(--vx-accent)' : 'var(--vx-wave-idle)'
+    }));
+    const src = [
+      ['00:00', "Bienvenue dans l'atelier. Oui, il y a de l'argile partout."],
+      ['00:06', "Aujourd'hui on tourne six bols, et on en rate au moins deux."],
+      ['00:13', "Le secret, c'est de centrer la terre avant de vouloir aller vite."],
+      ['00:19', "Si elle n'est pas centrée, rien ne tiendra."]
+    ];
+    const err = this.state.error;
+    return {
+      theme,
+      lien: this.state.lien,
+      onLien: e => this.setState({ lien: e.target.value, error: '' }),
+      submit: e => {
+        e.preventDefault();
+        const v = this.state.lien.trim();
+        if (!v) return this.setState({ error: 'Colle le lien d’une vidéo YouTube ou TikTok.' });
+        if (!/youtu\.?be|tiktok\.com/i.test(v)) return this.setState({ error: 'Ce lien n’est ni YouTube ni TikTok. Pour un autre fichier, dépose-le directement.' });
+        this.setState({ error: '' });
+      },
+      hasError: !!err,
+      error: err,
+      invalid: err ? 'true' : 'false',
+      fieldBorder: err ? 'var(--vx-error)' : 'var(--vx-line-strong)',
+      bars,
+      lignes: src.map(([t, texte], i) => i === 2
+        ? { t, texte, bg: 'var(--vx-mark)', c: 'var(--vx-mark-text)', tc: 'var(--vx-mark-time)' }
+        : { t, texte, bg: 'transparent', c: i < 2 ? 'var(--vx-text-3)' : 'var(--vx-text-2)', tc: 'var(--vx-text-3)' }),
+      formats: ['TXT', 'PDF', 'SRT', 'VTT', 'MP3'],
+      plans: [
+        { nom: 'Gratuit', reco: '', suffixe: '', items: ['[n] vidéos par mois', 'Export TXT et SRT', 'Audio MP3'], cta: 'Commencer', bord: '1px solid var(--vx-line)', bbg: 'transparent', bfg: 'var(--vx-text)', bb: 'var(--vx-line-strong)' },
+        { nom: 'Pro', reco: 'Recommandé', suffixe: '/ mois', items: ['[n] heures par mois', 'Tous les exports, dont PDF et VTT', 'Fichiers jusqu’à [n] Go'], cta: 'Passer à Pro', bord: '2px solid var(--vx-accent)', bbg: 'var(--vx-accent)', bfg: 'var(--vx-on-accent)', bb: 'var(--vx-accent)' },
+        { nom: 'Pack', reco: '', suffixe: 'paiement unique', items: ['[n] heures', 'Valables [n] mois', 'Tous les exports'], cta: 'Acheter un Pack', bord: '1px solid var(--vx-line)', bbg: 'transparent', bfg: 'var(--vx-text)', bb: 'var(--vx-line-strong)' }
+      ],
+      faq: [
+        { q: 'Quels liens sont acceptés ?', r: 'Les vidéos YouTube et TikTok publiques.' },
+        { q: 'Quels fichiers puis-je déposer ?', r: 'MP3, M4A, WAV, MP4, MOV et WEBM, jusqu’à la taille maximale de ton plan.' },
+        { q: 'Dans quels formats puis-je exporter ?', r: 'TXT, SRT et MP3 sur tous les plans ; PDF et VTT à partir du plan Pro.' },
+        { q: 'Une vidéo en échec est-elle décomptée ?', r: 'Non. Seules les transcriptions terminées comptent dans ton quota.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

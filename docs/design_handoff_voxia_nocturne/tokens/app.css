@@ -1,0 +1,83 @@
+/* resources/css/app.css — Tailwind CSS v4 */
+@import 'tailwindcss';
+@import './voxia-tokens.css';
+
+@source '../views';
+
+/* dark: cible le thème sombre (par défaut) ; utile seulement pour des exceptions */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *, :root:not([data-theme=light]) *));
+
+@theme inline {
+  /* Couleurs — conserver les noms déjà utilisés dans les vues */
+  --color-fond: var(--vx-bg);
+  --color-panneau: var(--vx-surface);
+  --color-panneau-eleve: var(--vx-surface-2);
+  --color-filet: var(--vx-line);
+  --color-filet-contour: var(--vx-line-strong);
+  --color-texte: var(--vx-text);
+  --color-texte-secondaire: var(--vx-text-2);
+  --color-texte-discret: var(--vx-text-3);
+  --color-accent: var(--vx-accent);
+  --color-sur-accent: var(--vx-on-accent);
+  --color-accent-texte: var(--vx-accent-text);
+  --color-surlignage: var(--vx-mark);
+  --color-surlignage-texte: var(--vx-mark-text);
+  --color-surlignage-temps: var(--vx-mark-time);
+  --color-succes: var(--vx-success);
+  --color-avertissement: var(--vx-warning);
+  --color-erreur: var(--vx-error);
+  --color-focus: var(--vx-focus);
+  --color-direct: var(--vx-live);
+  --color-onde-repos: var(--vx-wave-idle);
+
+  /* Polices */
+  --font-sans: var(--vx-font-text);
+  --font-titre: var(--vx-font-title);
+  --font-mono: var(--vx-font-data);
+
+  /* Rayons */
+  --radius-bouton: var(--vx-r-btn);
+  --radius-champ: var(--vx-r-field);
+  --radius-panneau: var(--vx-r-panel);
+
+  /* Ombres */
+  --shadow-panneau: var(--vx-shadow);
+  --shadow-heros: var(--vx-shadow-hero);
+
+  /* Échelle typographique */
+  --text-donnee: 12px;
+  --text-donnee--line-height: 1.5;
+  --text-aide: 13px;
+  --text-aide--line-height: 1.5;
+  --text-petit: 14px;
+  --text-petit--line-height: 1.5;
+  --text-corps: 15px;
+  --text-corps--line-height: 1.6;
+  --text-appui: 16px;
+  --text-appui--line-height: 1.6;
+
+  /* Animations */
+  --animate-onde: vx-onde 1.6s ease-in-out infinite;
+  --animate-pulse-direct: vx-pulse 1.6s ease-in-out infinite;
+  --animate-indetermine: vx-indet 1.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@layer base {
+  html { background: var(--vx-bg); color: var(--vx-text); font-family: var(--vx-font-text); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: var(--vx-accent-text); text-underline-offset: 3px; }
+  a:hover { color: var(--vx-text); }
+  :focus-visible { outline: 2px solid var(--vx-focus); outline-offset: 2px; }
+}
+
+@utility titre-h1 {
+  font-family: var(--vx-font-title); font-weight: 600;
+  font-size: clamp(22px, 3.9vw, 44px); line-height: 1.15; letter-spacing: -0.035em; text-wrap: balance;
+}
+@utility titre-h2 {
+  font-family: var(--vx-font-title); font-weight: 600;
+  font-size: clamp(22px, 3vw, 30px); line-height: 1.15; letter-spacing: -0.03em;
+}
+@utility fond-heros {
+  background-image: var(--vx-glow), radial-gradient(color-mix(in oklab, var(--vx-text) 12%, transparent) 1px, transparent 1.5px);
+  background-size: auto, 20px 20px;
+}
