@@ -75,7 +75,7 @@ Route::middleware('auth')->group(function () {
 
     // Export d'une transcription (cahier F4) : TXT, PDF, SRT, VTT selon le plan. Lien signé et temporaire.
     Route::get('/transcriptions/{transcription}/exports/{format}', ExportController::class)
-        ->whereIn('format', ['txt', 'pdf', 'srt', 'vtt'])
+        ->whereIn('format', ['txt', 'pdf', 'srt', 'vtt', 'docx', 'json'])
         ->middleware('signed')
         ->name('transcriptions.export');
 

@@ -14,6 +14,8 @@ final class Exporteurs
             FormatExport::Pdf => app(ExporteurPdf::class),
             FormatExport::Srt => app(ExporteurSrt::class),
             FormatExport::Vtt => app(ExporteurVtt::class),
+            FormatExport::Docx => app(ExporteurDocx::class),
+            FormatExport::Json => app(ExporteurJson::class),
         };
     }
 }

@@ -30,6 +30,8 @@ class ExportAnalyseController extends Controller
 
         $analyse = $transcription->scriptAnalysis;
         abort_unless($analyse !== null && $analyse->statut === StatutAnalyseScript::Termine, 404);
+        // L'analyse n'existe qu'en TXT et PDF : les autres formats n'ont pas de rendu, donc pas de page.
+        abort_unless(in_array($format, [FormatExport::Txt, FormatExport::Pdf], true), 404);
         abort_unless($plans->peutExporter($request->user(), $format), 403);
 
         $contenu = $exporteur->exporter($analyse, $format);

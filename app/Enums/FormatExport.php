@@ -9,6 +9,10 @@ enum FormatExport: string
     case Pdf = 'pdf';
     case Srt = 'srt';
     case Vtt = 'vtt';
+    /** Word, avec horodatages, titre, lien source et date : réservé au Business. */
+    case Docx = 'docx';
+    /** Segments horodatés en JSON : réservé au Business. */
+    case Json = 'json';
 
     public function libelle(): string
     {
@@ -27,6 +31,8 @@ enum FormatExport: string
             self::Pdf => 'application/pdf',
             self::Srt => 'application/x-subrip; charset=UTF-8',
             self::Vtt => 'text/vtt; charset=UTF-8',
+            self::Docx => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            self::Json => 'application/json; charset=UTF-8',
         };
     }
 }
