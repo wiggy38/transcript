@@ -4,7 +4,7 @@
     @if ($termine)
         @include('livewire.partials.lecture-transcription')
         {{-- Hors de la zone wire:ignore du lecteur : le composant doit pouvoir se rafraîchir seul. --}}
-        <div class="mt-8">
+        <div class="mt-5">
             <livewire:analyse-script :transcription="$transcription" />
         </div>
     @else
@@ -20,56 +20,63 @@
                 'transcription' => 1,
                 default => -1,
             };
+            // Échec : la maquette marque la première étape en erreur, sans savoir où le traitement a cassé.
+            $echec = $transcription->statut->value === 'echec';
         @endphp
 
-        <section aria-labelledby="titre-transcription" class="max-w-[720px]">
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-                <x-badge-statut :statut="$transcription->statut" />
-                <span class="font-mono text-xs text-texte-discret">{{ __('transcriptions.page.lancee_le', ['date' => \App\Support\Formats::dateHeure($transcription->created_at)]) }}</span>
+        <section aria-labelledby="titre-suivi" class="grid max-w-[720px] gap-3.5">
+            <div class="flex flex-wrap items-center gap-x-3.5 gap-y-2">
+                <x-statut-transcription :statut="$transcription->statut" />
+                <span class="font-mono text-xs leading-normal text-texte-discret">{{ __('transcriptions.page.lancee_le', ['date' => \App\Support\Formats::dateHeure($transcription->created_at)]) }}</span>
             </div>
 
-            <h1 id="titre-transcription" class="mt-3 text-[22px] leading-tight font-semibold tracking-tight [overflow-wrap:anywhere]">
+            <h1 id="titre-suivi" class="titre-page">
                 {{ $transcription->titre ?? __('transcriptions.page.titre') }}
             </h1>
 
             @if ($transcription->url_origine)
-                <p class="mt-2 font-mono text-sm break-all text-texte-discret">{{ $transcription->url_origine }}</p>
+                <p class="m-0 font-mono text-[13px] leading-normal break-all text-texte-discret [overflow-wrap:anywhere]">{{ $transcription->url_origine }}</p>
             @endif
 
-            <div class="mt-8 flex flex-col gap-5 rounded-panneau border border-filet bg-panneau p-5" aria-live="polite">
-                <ol aria-label="{{ __('transcriptions.page.etapes') }}" class="grid gap-3 sm:grid-cols-3">
+            <div class="mt-1.5 grid gap-4 rounded-panneau border border-filet bg-panneau p-5 shadow-panneau" aria-live="polite">
+                <ol aria-label="{{ __('transcriptions.page.etapes') }}" class="m-0 grid list-none grid-cols-3 gap-2 p-0">
                     @foreach ($etapes as $cle => $libelle)
                         @php
                             $indice = array_search($cle, array_keys($etapes), true);
-                            $fait = $rang > $indice;
-                            $actuelle = $rang === $indice;
+                            $fait = ! $echec && $rang > $indice;
+                            $actuelle = ! $echec && $rang === $indice;
+                            $erreur = $echec && $indice === 0;
                         @endphp
-                        <li @if ($actuelle) aria-current="step" @endif
-                            class="flex items-center gap-3 rounded-champ border px-3.5 py-3 text-sm {{ $actuelle ? 'border-accent text-texte' : ($fait ? 'border-filet text-texte-secondaire' : 'border-filet text-texte-discret') }}">
-                            <span aria-hidden="true" class="grid size-6 shrink-0 place-items-center rounded-full font-mono text-[11px] {{ $fait ? 'bg-accent text-sur-accent' : ($actuelle ? 'border border-accent text-accent-texte' : 'border border-filet-contour') }}">
-                                {{ $fait ? '✓' : $indice + 1 }}
+                        <li @if ($actuelle) aria-current="step" @endif class="grid gap-2">
+                            <span class="relative h-1.5 overflow-hidden rounded-full {{ $fait ? 'bg-succes' : ($erreur ? 'bg-erreur' : 'bg-panneau-eleve') }}">
+                                @if ($actuelle)
+                                    <span class="vx-indeterminee absolute inset-0 w-2/5 rounded-full bg-direct"></span>
+                                @endif
                             </span>
-                            <span>{{ $libelle }}</span>
+                            <span class="font-mono text-xs leading-normal {{ $actuelle || $erreur ? 'font-medium' : '' }} {{ $actuelle ? 'text-direct' : ($erreur ? 'text-erreur' : ($fait ? 'text-texte-secondaire' : 'text-texte-discret')) }}"><span>{{ $libelle }}</span></span>
                         </li>
                     @endforeach
                 </ol>
 
-                @if ($transcription->statut->value === 'echec')
-                    <x-message-erreur>
-                        {{ __('videos.motifs.'.($transcription->motif_echec?->value ?? 'erreur_technique')) }}
-                    </x-message-erreur>
-                @elseif ($enCours)
-                    <p class="text-texte-secondaire">{{ __('transcriptions.page.en_cours') }}</p>
-                    <p class="flex items-center gap-3 text-sm text-texte-discret">
-                        <span aria-hidden="true" class="vx-pulsation size-2 rounded-full bg-direct"></span>
-                        {{ __('transcriptions.page.actualisation') }}
+                @if ($echec)
+                    <p role="alert" class="m-0 flex gap-2.5 rounded-champ bg-[color-mix(in_oklab,var(--vx-error)_12%,transparent)] px-3.5 py-3 text-sm text-texte">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" class="mt-0.5 shrink-0 text-erreur"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5"/><path d="M12 16.5h.01"/></svg>
+                        <span>{{ __('videos.motifs.'.($transcription->motif_echec?->value ?? 'erreur_technique')) }}</span>
                     </p>
+                @elseif ($enCours)
+                    <div class="grid gap-2">
+                        <p class="m-0 text-texte-secondaire">{{ __('transcriptions.page.en_cours') }}</p>
+                        <p class="m-0 flex items-center gap-2.5 text-[13px] text-texte-discret">
+                            <span aria-hidden="true" class="vx-pulsation size-[7px] rounded-full bg-direct"></span>
+                            {{ __('transcriptions.page.actualisation') }}
+                        </p>
+                    </div>
                 @endif
             </div>
         </section>
     @endif
 
-    <p class="mt-6 text-sm">
-        <a href="{{ route('tableau-de-bord') }}" class="text-accent-texte hover:underline">{{ __('transcriptions.page.nouvelle') }}</a>
+    <p class="mt-6">
+        <a href="{{ route('tableau-de-bord') }}" class="text-sm font-semibold">{{ __('transcriptions.page.nouvelle') }}</a>
     </p>
 </div>

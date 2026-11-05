@@ -108,7 +108,7 @@ function ecrireSurlignage(noeud, texte, passages, courant) {
         }
 
         const marque = document.createElement('mark');
-        marque.className = 'rounded-sm bg-accent/25 px-0.5 text-texte data-[courant=true]:bg-accent data-[courant=true]:text-fond';
+        marque.className = 'rounded-sm bg-accent/25 px-0.5 text-texte data-[courant=true]:bg-accent data-[courant=true]:text-sur-accent';
         marque.textContent = texte.slice(passage.debut, passage.fin);
 
         if (passage === courant) {
@@ -261,6 +261,33 @@ export default function lecteurTranscription(config) {
             }
 
             this.suivreLecture(ms);
+        },
+
+        /** Bouton lecture / pause du lecteur audio (maquette « Transcription »). */
+        basculerLecture() {
+            const audio = this.$refs.audio;
+
+            if (! audio) {
+                return;
+            }
+
+            if (audio.paused) {
+                Promise.resolve(audio.play()).catch(() => {});
+            } else {
+                audio.pause();
+            }
+        },
+
+        /** Curseur de position, en secondes : place la lecture sans la lancer. */
+        positionner(secondes) {
+            const audio = this.$refs.audio;
+
+            if (! audio) {
+                return;
+            }
+
+            audio.currentTime = Number(secondes);
+            this.synchroniser();
         },
 
         suivreLecture(ms) {

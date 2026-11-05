@@ -124,6 +124,16 @@
     letter-spacing: -0.03em;
 }
 
+/* Titre de page de transcription (maquette « Transcription - Nocturne ») */
+@utility titre-page {
+    font-family: var(--font-titre);
+    font-weight: 600;
+    font-size: clamp(20px, 2.6vw, 26px);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+}
+
 /* Fond de héros : lueur indigo et trame de points de 20 px à 12 % */
 @utility fond-heros {
     background-image: var(--vx-glow), radial-gradient(color-mix(in oklab, var(--vx-text) 12%, transparent) 1px, transparent 1.5px);
@@ -191,6 +201,16 @@
 .vx-paragraphe {
     content-visibility: auto;
     contain-intrinsic-size: auto 88px;
+}
+
+/* Phrase en cours : texte et graisse de la maquette ; les lignes avant elle sont discrètes. */
+.vx-paragraphe[data-actif='true'] [data-texte] {
+    color: var(--color-sur-surlignage);
+    font-weight: 500;
+}
+
+.vx-paragraphe:has(~ [data-actif='true']) [data-texte] {
+    color: var(--color-texte-discret);
 }
 
 /* Horodatages masqués : visuellement cachés, mais toujours lisibles et actionnables par un lecteur d'écran. */

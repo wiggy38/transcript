@@ -8,22 +8,23 @@
     $detectees = collect($parties)->where('detectee', true)->count();
 @endphp
 
-<section aria-labelledby="titre-analyse" class="mt-10 rounded-panneau border border-filet bg-panneau p-5"
+<section aria-labelledby="titre-analyse" class="rounded-panneau border border-filet bg-panneau p-5"
     @if ($enCours) wire:poll.2s @endif>
 
-    <div class="flex flex-wrap items-start justify-between gap-6">
-        <div class="min-w-0">
-            <h2 id="titre-analyse" class="text-lg font-semibold">{{ __('analyse.titre') }}</h2>
-            <p class="mt-1 text-sm text-texte-secondaire">{{ __('analyse.sous_titre') }}</p>
+    {{-- En-tête de la maquette « Transcription - Nocturne » : titre et description à gauche, bouton et note à droite. --}}
+    <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+        <div class="grid min-w-0 flex-[1_1_280px] gap-1">
+            <h2 id="titre-analyse" class="font-titre text-[17px] font-semibold tracking-[-0.02em]">{{ __('analyse.titre') }}</h2>
+            <p class="m-0 text-sm text-texte-secondaire">{{ __('analyse.sous_titre') }}</p>
         </div>
 
         @unless ($termine)
-            <div class="flex flex-col items-start gap-2 sm:items-end">
+            <div class="grid max-w-[300px] flex-[0_1_300px] justify-items-start gap-1.5">
                 <button type="button" wire:click="analyser" @disabled($bloque || $enCours) aria-describedby="aide-analyse"
-                    class="min-h-10 cursor-pointer rounded-bouton bg-accent px-5 text-[14px] font-semibold text-sur-accent hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
+                    class="min-h-11 cursor-pointer rounded-bouton border border-filet-contour px-[18px] text-sm font-semibold whitespace-nowrap text-texte hover:border-accent hover:text-accent-texte disabled:cursor-not-allowed disabled:opacity-50">
                     {{ __('analyse.bouton') }}
                 </button>
-                <p id="aide-analyse" class="max-w-xs font-mono text-[11px] text-texte-discret sm:text-right">
+                <p id="aide-analyse" class="m-0 font-mono text-[11px] leading-normal text-texte-discret">
                     @if ($motifRefus)
                         {{ __('analyse.refus.'.$motifRefus, ['minutes' => $minutes]) }}
                     @else
