@@ -8,7 +8,7 @@
 @endphp
 
 <a href="{{ route('abonnement') }}" title="{{ __('interface.quota.voir_abonnement') }}"
-   {{ $attributes->class(['grid min-w-44 gap-1 no-underline']) }}>
+   {{ $attributes->class(['grid min-w-[168px] gap-1 no-underline']) }}>
     <span class="flex justify-between gap-3 font-mono text-[11px] text-texte-secondaire">
         @if (isset($resume['videos_limite']))
             <span>{{ __('interface.quota.videos_mois', ['utilisees' => $resume['videos_utilisees'], 'limite' => $resume['videos_limite']]) }}</span>
