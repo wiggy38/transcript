@@ -1,15 +1,37 @@
 /*
- * Thème du back-office (Filament 4, /admin) : direction « Nocturne » (handoff, étape 5).
- * Base Filament, police Onest, rayons 12 px, jetons Voxia pour les couleurs de marque.
- * Les couleurs (primary, gray) sont données dans AdminPanelProvider::colors() : Filament les injecte après ce fichier.
+ * Thème du back-office (Filament 4, /admin) : même style que la landing « Nocturne » (handoff, étape 5).
+ * Les palettes primary et gray sont données dans AdminPanelProvider::colors(). Ce fichier règle ce que
+ * les palettes ne couvrent pas : bouton principal lime à texte encre, titres en Unbounded, police Onest.
  */
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
 @import '@fontsource-variable/onest/wght.css';
+@import '@fontsource/unbounded/latin-600.css';
 
 @source '../../../../app/Filament';
 @source '../../../../resources/views/filament';
 
 @theme {
     --font-sans: "Onest", ui-sans-serif, system-ui, sans-serif;
+    --font-titre: "Unbounded", ui-sans-serif, system-ui, sans-serif;
     --radius: 0.75rem;
+    /* Blanc de la landing (texte principal #EEEBFF), pas le blanc pur de Filament */
+    --color-white: #EEEBFF;
+}
+
+/* Bouton principal en sombre : fond vert citron #C8F25A, texte encre #0D0B1A, survol plus clair (brightness 1.1). */
+.dark .fi-btn.fi-color-primary.fi-color {
+    --dark-bg: #C8F25A;
+    --dark-text: #0D0B1A;
+    --dark-hover-bg: #D7F46A;
+    --dark-hover-text: #0D0B1A;
+}
+
+/* Titres de page et de section : Unbounded 600, comme les H1 et H2 de la landing. */
+.fi-header-heading,
+.fi-section-header-heading,
+.fi-modal-heading,
+.fi-wi-stats-overview-stat-value {
+    font-family: var(--font-titre);
+    font-weight: 600;
+    letter-spacing: -0.03em;
 }
