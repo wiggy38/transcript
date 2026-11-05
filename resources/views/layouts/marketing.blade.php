@@ -9,7 +9,7 @@
     $alternatives = \App\Support\Langue::alternatives(request());
 @endphp
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +24,7 @@
         <link rel="alternate" hreflang="x-default" href="{{ url('/') }}">
     @endif
 
-    {{-- Partage (Open Graph et Twitter) : carte au style Signal, 1200 × 630. --}}
+    {{-- Partage (Open Graph et Twitter) : carte au style Nocturne, 1200 × 630. --}}
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ __('interface.marque') }}">
     <meta property="og:locale" content="{{ $localeOg }}">
@@ -52,55 +52,57 @@
         {{ __('interface.acces.aller_contenu') }}
     </a>
 
-    {{-- En-tête et héros partagent le fond quadrillé (maquette). --}}
-    <div class="border-b border-filet {{ isset($tete) ? 'vx-grille' : '' }}">
-        <header>
-            <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 py-5">
-                <x-marque />
+    {{-- En-tête collant, fond légèrement translucide et flou (handoff). Menu replié sous 768 px. --}}
+    <header class="sticky top-0 z-40 border-b border-filet bg-fond/88 backdrop-blur-[10px]" x-data="{ menu: false }">
+        <div class="mx-auto flex w-full max-w-[1120px] flex-wrap items-center justify-between gap-x-4 gap-y-3 px-4 py-2.5">
+            <x-marque />
 
-                <nav aria-label="{{ __('interface.navigation.principale') }}">
-                    <ul class="flex flex-wrap items-center gap-x-7 gap-y-3 text-sm">
-                        <li><a href="{{ route('accueil') }}#usages" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.navigation.usages') }}</a></li>
-                        <li><a href="{{ route('accueil') }}#fonctionnement" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.navigation.fonctionnement') }}</a></li>
-                        <li><a href="{{ route('accueil') }}#tarifs" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.navigation.tarifs') }}</a></li>
-                        @auth
-                            <li><x-bouton href="{{ route('tableau-de-bord') }}">{{ __('interface.navigation.espace') }}</x-bouton></li>
-                        @else
-                            <li><a href="{{ route('login') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.navigation.connexion') }}</a></li>
-                            <li><x-bouton href="{{ route('register') }}">{{ __('interface.navigation.essayer') }}</x-bouton></li>
-                        @endauth
-                    </ul>
-                </nav>
-                <x-selecteur-langue />
-            </div>
-        </header>
+            <button type="button" class="inline-flex min-h-11 items-center rounded-bouton border border-filet-contour px-3.5 text-sm font-medium text-texte md:hidden"
+                aria-controls="menu-principal" :aria-expanded="menu.toString()" @click="menu = !menu">
+                {{ __('interface.navigation.menu') }}
+            </button>
 
-        @isset($tete)
+            <nav id="menu-principal" aria-label="{{ __('interface.navigation.principale') }}"
+                class="order-last w-full md:order-none md:w-auto" :class="menu ? 'block' : 'hidden md:block'">
+                <ul class="m-0 flex list-none flex-col gap-x-5 gap-y-1 p-0 text-sm md:flex-row md:items-center md:gap-y-0">
+                    <li><a href="{{ route('accueil') }}#fonctionnement" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-texte">{{ __('interface.navigation.fonctionnement') }}</a></li>
+                    <li><a href="{{ route('accueil') }}#usages" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-texte">{{ __('interface.navigation.usages') }}</a></li>
+                    <li><a href="{{ route('accueil') }}#tarifs" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-texte">{{ __('interface.navigation.tarifs') }}</a></li>
+                    <li><a href="{{ route('accueil') }}#questions" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-texte">{{ __('interface.navigation.questions') }}</a></li>
+                    @auth
+                        <li><x-bouton href="{{ route('tableau-de-bord') }}" class="mt-2 md:mt-0">{{ __('interface.navigation.espace') }}</x-bouton></li>
+                    @else
+                        <li><a href="{{ route('login') }}" class="inline-flex min-h-11 items-center font-medium text-texte no-underline hover:text-accent-texte">{{ __('interface.navigation.connexion') }}</a></li>
+                    @endauth
+                </ul>
+            </nav>
+
+            <x-selecteur-langue />
+        </div>
+    </header>
+
+    @isset($tete)
+        <div class="border-b border-filet">
             {{ $tete }}
-        @endisset
-    </div>
-
-    {{-- Bandeau pleine largeur, hors du conteneur de page. --}}
-    @isset($bandeau)
-        {{ $bandeau }}
+        </div>
     @endisset
 
-    <main id="contenu" class="mx-auto w-full max-w-[1240px] px-6">
+    {{-- Pages de texte : conteneur centré. La landing gère sa largeur section par section (fonds pleine largeur). --}}
+    <main id="contenu" class="{{ isset($tete) ? 'w-full' : 'mx-auto w-full max-w-[1120px] px-4' }}">
         {{ $slot }}
     </main>
 
-    <footer class="mt-32 border-t border-filet">
-        <div class="mx-auto flex max-w-[1240px] flex-wrap items-center justify-between gap-4 px-6 pt-7 text-sm text-texte-discret">
+    <footer class="mt-24 border-t border-filet bg-panneau">
+        <div class="mx-auto flex w-full max-w-[1120px] flex-wrap items-center justify-between gap-4 px-4 py-7 text-aide text-texte-discret">
             <span>{{ __('interface.pied.droits', ['annee' => now()->year]) }}</span>
-            <ul class="flex flex-wrap gap-6">
-                <li><a href="{{ route('tarifs') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.tarifs') }}</a></li>
-                <li><a href="{{ route('questions') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.questions') }}</a></li>
-                <li><a href="{{ route('confidentialite') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.confidentialite') }}</a></li>
-                <li><a href="{{ route('conditions') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.conditions') }}</a></li>
-                <li><a href="{{ route('contact') }}" class="text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.contact') }}</a></li>
+            <ul class="m-0 flex list-none flex-wrap gap-x-6 gap-y-2 p-0">
+                <li><a href="{{ route('tarifs') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.tarifs') }}</a></li>
+                <li><a href="{{ route('questions') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.questions') }}</a></li>
+                <li><a href="{{ route('conditions') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.conditions') }}</a></li>
+                <li><a href="{{ route('confidentialite') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.confidentialite') }}</a></li>
+                <li><a href="{{ route('contact') }}" class="inline-flex min-h-11 items-center text-texte-secondaire no-underline hover:text-accent-texte">{{ __('interface.pied.contact') }}</a></li>
             </ul>
         </div>
-        <p aria-hidden="true" class="mt-6 overflow-hidden px-4 text-center text-[clamp(120px,24vw,360px)] leading-[0.78] font-bold tracking-[-0.06em] whitespace-nowrap text-transparent [-webkit-text-stroke:1px_var(--color-filet-contour)]">voxia</p>
     </footer>
 
     @livewireScripts

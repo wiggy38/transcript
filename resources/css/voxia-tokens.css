@@ -1,8 +1,7 @@
 /*
  * Voxia — jetons de la direction « Nocturne » (cahier §7).
  * Source : docs/design_handoff_voxia_nocturne/tokens/voxia-tokens.css.
- * Sombre par défaut ; clair sous data-theme="light", et en repli quand le système le demande
- * et qu'aucun data-theme n'est posé.
+ * Sombre par défaut, y compris quand le système est en clair ; clair seulement sous data-theme="light".
  */
 
 :root,
@@ -65,38 +64,6 @@
     --vx-accent-word: #FFFFFF;
     --vx-accent-word-bg: #4A6A00;
     color-scheme: light;
-}
-
-@media (prefers-color-scheme: light) {
-    :root:not([data-theme]) {
-        --vx-bg: #F6F5FF;
-        --vx-surface: #FFFFFF;
-        --vx-surface-2: #ECEAFB;
-        --vx-line: #DDDAF2;
-        --vx-line-strong: #7C77A6;
-        --vx-text: #14112B;
-        --vx-text-2: #423D66;
-        --vx-text-3: #5C5785;
-        --vx-accent: #4A6A00;
-        --vx-on-accent: #FFFFFF;
-        --vx-accent-text: #4A6A00;
-        --vx-mark: #EEF8C8;
-        --vx-mark-text: #14112B;
-        --vx-mark-time: #3E5700;
-        --vx-success: #157A4F;
-        --vx-warning: #8A5A00;
-        --vx-error: #C0262D;
-        --vx-focus: #4A6A00;
-        --vx-live: #0E7C8A;
-        --vx-wave-idle: #CFCBEA;
-        --vx-overlay: rgb(20 17 43 / 0.45);
-        --vx-shadow: 0 1px 2px rgb(20 17 43 / 0.06), 0 12px 32px -16px rgb(60 40 160 / 0.25);
-        --vx-shadow-hero: 0 2px 4px rgb(20 17 43 / 0.06), 0 28px 56px -22px rgb(20 17 43 / 0.28);
-        --vx-glow: radial-gradient(60% 50% at 50% 0%, rgb(110 100 220 / 0.12), transparent 70%);
-        --vx-accent-word: #FFFFFF;
-        --vx-accent-word-bg: #4A6A00;
-        color-scheme: light;
-    }
 }
 
 :root {

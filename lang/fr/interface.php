@@ -18,6 +18,8 @@ return [
         'usages' => 'Usages',
         'fonctionnement' => 'Fonctionnement',
         'tarifs' => 'Tarifs',
+        'questions' => 'Questions',
+        'menu' => 'Menu',
         'connexion' => 'Se connecter',
         'essayer' => 'Essayer gratuitement',
         'espace' => 'Mon espace',

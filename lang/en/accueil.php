@@ -1,7 +1,7 @@
 <?php
 
-// Landing page (Signal mock-up, docs/maquette-signal.html). Prices and figures are not written
-// here: they come from config/voxia.php and are passed as replacements (:name).
+// Landing page (« Nocturne » direction, docs/design_handoff_voxia_nocturne). Prices and figures are not
+// written here: they come from config/voxia.php and are passed as replacements (:name).
 
 return [
 
@@ -17,21 +17,26 @@ return [
     'separateur_decimal' => '.',
 
     'hero' => [
-        'pastille' => 'Video → text, in a minute or two',
-        'titre' => 'Every video has words in it.',
-        'titre_accent' => 'Voxia writes them down.',
-        'sous_titre' => 'Paste a YouTube or TikTok link, or drop your file. You get the timestamped transcript, the subtitles and the audio, filed in your library.',
+        'sources' => [
+            'youtube' => 'YouTube',
+            'tiktok' => 'TikTok',
+            'fichiers' => 'Audio and video files',
+        ],
+        'titre' => 'Every video contains text.',
+        'titre_accent' => 'Voxia writes it down.',
+        'sous_titre' => 'Timestamped transcript, SRT and VTT subtitles, MP3 audio. Everything is ready in a few minutes and filed in your library.',
         'champ' => 'Video link',
         'placeholder' => 'https://youtube.com/watch?v=…',
         'bouton' => 'Transcribe',
-        'depot' => 'Or :lien. Accepted formats: :formats. Free to start.',
+        'depot' => 'Or :lien · :formats',
         'depot_lien' => 'drop a file',
+        'gratuit' => 'Free to start',
     ],
 
     'apercu' => [
         'fenetre' => 'Vlog #34 — My pottery studio',
-        'source' => 'YOUTUBE · 12:03 · EN · 1,842 WORDS',
-        'panneau' => 'TRANSCRIPT',
+        'statut' => 'Done',
+        'temps' => '00:13 / 12:03',
         'onde' => 'Decorative audio waveform',
         'lignes' => [
             ['temps' => '00:00', 'texte' => "Welcome to the studio. Yes, there's clay everywhere."],
@@ -39,79 +44,96 @@ return [
             ['temps' => '00:13', 'texte' => 'The secret is centring the clay before you try to go fast.'],
             ['temps' => '00:19', 'texte' => "If it isn't centred, nothing will hold."],
         ],
-        'boutons' => ['Copy', '.txt', '.srt', '.vtt', '.mp3'],
+        'formats' => ['TXT', 'PDF', 'SRT', 'VTT', 'MP3'],
     ],
 
-    'bandeau' => [
-        'extraits' => [
-            ['temps' => '00:00', 'texte' => 'Do you wake up with tight skin?'],
-            ['temps' => '02:14', 'texte' => 'Three tools, one workflow'],
-            ['temps' => '00:31', 'texte' => 'The link is right below'],
-            ['temps' => '14:52', 'texte' => 'What I wish I had known before starting my channel'],
-            ['temps' => '00:06', 'texte' => 'Today we throw six bowls'],
-            ['temps' => '08:40', 'texte' => 'The question I get asked most often'],
+    'fonctionnement' => [
+        'titre' => 'Three steps,',
+        'titre_accent' => 'no setup.',
+        'sous_titre' => 'No account to configure and no format to choose before you start.',
+        'etapes' => [
+            [
+                'titre' => 'Paste a link or drop a file',
+                'texte' => 'A public YouTube or TikTok video, or an audio or video file.',
+            ],
+            [
+                'titre' => 'Voxia transcribes',
+                'texte' => 'The status updates on its own. You can close the page while it processes.',
+            ],
+            [
+                'titre' => 'Copy or download',
+                'texte' => 'Timestamped text, subtitles and audio, filed in your library.',
+            ],
+        ],
+        'illustrations' => [
+            'lien' => 'youtube.com/watch?v=…',
+            'ou' => 'or',
+            'fichier' => 'pottery-studio.mp4',
+            'transcription' => 'Transcription',
+            'auto' => 'updates automatically',
+            'copier' => 'Copy text',
+        ],
+    ],
+
+    'livrables' => [
+        'titre' => 'What you get',
+        'sous_titre' => 'Three deliverables for every video, to copy or download.',
+        'cartes' => [
+            [
+                'formats' => ['TXT', 'PDF'],
+                'titre' => 'Timestamped transcript',
+                'texte' => 'Every sentence with its timestamp. Click one to replay that passage.',
+            ],
+            [
+                'formats' => ['SRT', 'VTT'],
+                'titre' => 'Subtitles',
+                'texte' => 'Ready to import into your editing software or your platform.',
+            ],
+            [
+                'formats' => ['MP3'],
+                'titre' => 'Audio file',
+                'texte' => 'The video’s soundtrack, to reuse as a podcast or a clip.',
+            ],
         ],
     ],
 
     'usages' => [
-        'titre' => 'Two jobs,',
-        'titre_accent' => 'one same move.',
-        'intro' => 'You make videos, or you study other people’s. Either way, you need the text.',
-        'createurs' => [
-            'numero' => '01 — CREATORS',
-            'titre' => 'One transcription, four formats.',
-            'texte' => 'You talked for twenty minutes. Now you only need to cut, not rewrite everything.',
-            'formats' => [
-                ['libelle' => 'Plain text', 'extension' => '.txt'],
-                ['libelle' => 'Document', 'extension' => '.pdf'],
-                ['libelle' => 'Subtitles', 'extension' => '.srt .vtt', 'accent' => true],
-                ['libelle' => 'Podcast', 'extension' => '.mp3'],
+        'titre' => 'Who is it for?',
+        'sous_titre' => 'Three uses, one starting point: a link or a file.',
+        'cartes' => [
+            'createurs' => [
+                'numero' => '01 · Subtitles',
+                'titre' => 'Content creators',
+                'texte' => 'Subtitle your videos, then reuse what you said in a description, a post or an article.',
+                'formats' => ['SRT', 'VTT', 'TXT'],
+            ],
+            'marketeurs' => [
+                'numero' => '02 · Quotes',
+                'titre' => 'Marketers',
+                'texte' => 'Find the exact sentence from a webinar or an interview, with its timestamp, without replaying it all.',
+                'formats' => ['TXT', 'PDF'],
+            ],
+            'ecommerce' => [
+                'numero' => '03 · Product sheets',
+                'titre' => 'E-commerce sellers',
+                'texte' => 'Turn a product demo into a sheet, an FAQ or an ad script.',
+                'formats' => ['TXT', 'MP3'],
             ],
         ],
-        'marketeurs' => [
-            'numero' => '02 — MARKETERS',
-            'titre' => 'A video ad script, broken down.',
-            'texte' => 'Spot the hook, the proof and the call to action without watching the video ten times.',
-            'pub' => 'Serum ad — competitor A',
-            'duree' => '0:42',
-            'parties' => [
-                ['libelle' => 'hook', 'secondes' => 3],
-                ['libelle' => 'problem', 'secondes' => 6],
-                ['libelle' => 'proof', 'secondes' => 12],
-                ['libelle' => 'offer', 'secondes' => 13],
-                ['libelle' => 'call to action', 'secondes' => 8],
-            ],
-            'description_parties' => 'A 42-second ad split into five parts: hook 3 s, problem 6 s, proof 12 s, offer 13 s, call to action 8 s.',
-            'citation_repere' => 'HOOK · 00:00 → 00:03',
-            'citation' => '“Do you wake up with tight skin?”',
+        'scene' => [
+            'citation_copiee' => 'Quote copied · 00:19',
+            'fiche' => 'Product sheet',
+            'faq' => 'FAQ · 4 Q',
+            'demo' => 'Demo · 03:42',
+            'recherche' => 'centred',
         ],
-    ],
-
-    'fonctionnement' => [
-        'titre' => 'From link to text.',
-        'etapes' => [
-            ['titre' => 'Paste the link', 'texte' => 'YouTube, TikTok, or your own file.'],
-            ['titre' => 'We extract the audio', 'texte' => 'Clean, as MP3, ready to listen to.'],
-            ['titre' => 'We transcribe', 'texte' => 'Punctuated, split into sentences, timestamped.'],
-            ['titre' => 'You export', 'texte' => 'TXT, PDF, SRT, VTT or MP3, in one click.'],
-        ],
-    ],
-
-    'fiche' => [
-        'titre' => 'Tech specs',
-        'entrees' => 'Inputs',
-        'entrees_valeur' => 'YouTube · TikTok · :fichiers',
-        'sorties' => 'Outputs',
-        'sorties_valeur' => 'TXT · PDF · :sous_titres · MP3',
-        'horodatage' => 'Timestamps',
-        'horodatage_valeur' => 'Every sentence',
-        'langues' => 'Languages',
-        'langues_valeur' => 'Auto-detection · :codes',
     ],
 
     'tarifs' => [
         'titre' => 'Pricing',
-        'intro' => 'Start for free. Move up to Pro when Voxia becomes a work tool.',
+        'intro' => 'Start for free. Move to Pro when Voxia becomes a working tool.',
+        'provisoire' => 'Prices and quotas are provisional.',
+        'recommande' => 'Recommended',
         'gratuit' => [
             'lignes' => [
                 ':nombre videos per month',
@@ -150,21 +172,38 @@ return [
     ],
 
     'questions' => [
-        'titre' => 'Questions',
+        'titre' => 'Frequently asked questions',
         'liste' => [
             [
-                'question' => 'Which languages are supported?',
-                'reponse' => 'Voxia detects the spoken language. You can also force one of these: :langues.',
+                'question' => 'Which links are accepted?',
+                'reponse' => 'Public YouTube and TikTok videos.',
             ],
             [
-                'question' => 'Can I transcribe any video?',
-                'reponse' => 'Your own videos, your clients’ videos, or public videos you analyse. You remain responsible for how you use the text.',
+                'question' => 'Which files can I upload?',
+                'reponse' => 'MP3, M4A, WAV, MP4, MOV and WEBM, up to the maximum size of your plan.',
+            ],
+            [
+                'question' => 'Which formats can I export?',
+                'reponse' => 'TXT, SRT and MP3 on every plan; PDF and VTT from the Pro plan.',
+            ],
+            [
+                'question' => 'Is a failed video counted?',
+                'reponse' => 'No. Only finished transcripts count towards your quota.',
+            ],
+            [
+                'question' => 'Which languages are recognised?',
+                'reponse' => 'Voxia detects the spoken language. You can also force it among: :langues.',
             ],
             [
                 'question' => 'How long are my files kept?',
-                'reponse' => 'Free: transcripts kept :historique days; MP3s and uploaded files kept :media days [TO CONFIRM]. Pro and Pack: unlimited history. You can delete a transcript at any time.',
+                'reponse' => 'Free: transcripts kept :historique days; MP3 and uploaded files kept :media days [TO CONFIRM]. Pro and Pack: history without limit. You can delete a transcript at any time.',
             ],
         ],
+    ],
+
+    'cta' => [
+        'titre' => 'Your next video, in text.',
+        'bouton' => 'Paste a link',
     ],
 
     'langues' => [

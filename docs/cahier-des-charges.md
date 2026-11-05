@@ -224,7 +224,7 @@ La direction « Nocturne » remplace la charte précédente. Elle est sombre par
 | Rayons | 12 px boutons et champs ; 20 px panneaux et cartes ; pilule (999 px) badges et pastilles |
 | Ombres | `--vx-shadow` pour les panneaux ; `--vx-shadow-hero` pour le formulaire du héros |
 | Icônes | Tabler Icons (MIT) ou Lucide (ISC), trait 1,6 à 1,8 px, `currentColor` ; aucune bibliothèque payante |
-| Thème | sombre par défaut ; clair sous `data-theme="light"`, ou repli sur `prefers-color-scheme: light` si aucun attribut n'est posé |
+| Thème | sombre par défaut, sans repli sur le thème du système ; clair sous `data-theme="light"` (bascule utilisateur à prévoir, P139) |
 | Animations | onde audio (1,6 s), point « en direct », étape en cours, apparition mot à mot de l'aperçu, scènes d'usage de la landing ; toutes coupées sous `prefers-reduced-motion` |
 
 **Contraintes**

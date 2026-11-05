@@ -1,7 +1,7 @@
 <?php
 
-// Page d'accueil (maquette Signal, docs/maquette-signal.html). Les chiffres et prix ne sont pas
-// écrits ici : ils viennent de config/voxia.php et sont passés en remplacements (:nom).
+// Page d'accueil (direction « Nocturne », docs/design_handoff_voxia_nocturne). Les chiffres et prix
+// ne sont pas écrits ici : ils viennent de config/voxia.php et sont passés en remplacements (:nom).
 
 return [
 
@@ -17,21 +17,26 @@ return [
     'separateur_decimal' => ',',
 
     'hero' => [
-        'pastille' => 'Vidéo → texte, en une ou deux minutes',
+        'sources' => [
+            'youtube' => 'YouTube',
+            'tiktok' => 'TikTok',
+            'fichiers' => 'Fichiers audio et vidéo',
+        ],
         'titre' => 'Chaque vidéo contient un texte.',
         'titre_accent' => "Voxia te l'écrit.",
-        'sous_titre' => "Colle un lien YouTube ou TikTok, ou dépose ton fichier. Tu récupères la transcription horodatée, les sous-titres et l'audio, rangés dans ta bibliothèque.",
+        'sous_titre' => 'Transcription horodatée, sous-titres SRT et VTT, fichier MP3. Tout est prêt en quelques minutes et rangé dans ta bibliothèque.',
         'champ' => 'Lien de la vidéo',
         'placeholder' => 'https://youtube.com/watch?v=…',
         'bouton' => 'Transcrire',
-        'depot' => 'Ou :lien. Formats acceptés : :formats. Gratuit pour commencer.',
+        'depot' => 'Ou :lien · :formats',
         'depot_lien' => 'dépose un fichier',
+        'gratuit' => 'Gratuit pour commencer',
     ],
 
     'apercu' => [
         'fenetre' => 'Vlog #34 — Mon atelier de céramique',
-        'source' => 'YOUTUBE · 12:03 · FR · 1 842 MOTS',
-        'panneau' => 'TRANSCRIPTION',
+        'statut' => 'Terminé',
+        'temps' => '00:13 / 12:03',
         'onde' => 'Onde audio décorative',
         'lignes' => [
             ['temps' => '00:00', 'texte' => "Bienvenue dans l'atelier. Oui, il y a de l'argile partout."],
@@ -39,79 +44,96 @@ return [
             ['temps' => '00:13', 'texte' => "Le secret, c'est de centrer la terre avant de vouloir aller vite."],
             ['temps' => '00:19', 'texte' => "Si elle n'est pas centrée, rien ne tiendra."],
         ],
-        'boutons' => ['Copier', '.txt', '.srt', '.vtt', '.mp3'],
+        'formats' => ['TXT', 'PDF', 'SRT', 'VTT', 'MP3'],
     ],
 
-    'bandeau' => [
-        'extraits' => [
-            ['temps' => '00:00', 'texte' => 'Tu te réveilles avec la peau qui tire ?'],
-            ['temps' => '02:14', 'texte' => 'Trois outils, un seul workflow'],
-            ['temps' => '00:31', 'texte' => 'Le lien est juste en dessous'],
-            ['temps' => '14:52', 'texte' => "Ce que j'aurais aimé savoir avant de lancer ma chaîne"],
-            ['temps' => '00:06', 'texte' => "Aujourd'hui on tourne six bols"],
-            ['temps' => '08:40', 'texte' => "La question qu'on me pose le plus souvent"],
+    'fonctionnement' => [
+        'titre' => 'Trois étapes,',
+        'titre_accent' => 'aucun réglage.',
+        'sous_titre' => 'Pas de compte à configurer ni de format à choisir avant de commencer.',
+        'etapes' => [
+            [
+                'titre' => 'Colle un lien ou dépose un fichier',
+                'texte' => 'Une vidéo YouTube ou TikTok publique, ou un fichier audio ou vidéo.',
+            ],
+            [
+                'titre' => 'Voxia transcrit',
+                'texte' => 'Le statut se met à jour tout seul. Tu peux fermer la page pendant le traitement.',
+            ],
+            [
+                'titre' => 'Copie ou télécharge',
+                'texte' => 'Texte horodaté, sous-titres et audio, rangés dans ta bibliothèque.',
+            ],
+        ],
+        'illustrations' => [
+            'lien' => 'youtube.com/watch?v=…',
+            'ou' => 'ou',
+            'fichier' => 'atelier-ceramique.mp4',
+            'transcription' => 'Transcription',
+            'auto' => 'mise à jour auto',
+            'copier' => 'Copier le texte',
+        ],
+    ],
+
+    'livrables' => [
+        'titre' => 'Ce que tu récupères',
+        'sous_titre' => 'Trois livrables pour chaque vidéo, à copier ou télécharger.',
+        'cartes' => [
+            [
+                'formats' => ['TXT', 'PDF'],
+                'titre' => 'Transcription horodatée',
+                'texte' => 'Chaque phrase avec son horodatage. Clique dessus pour réécouter le passage.',
+            ],
+            [
+                'formats' => ['SRT', 'VTT'],
+                'titre' => 'Sous-titres',
+                'texte' => 'Prêts à importer dans ton logiciel de montage ou sur ta plateforme.',
+            ],
+            [
+                'formats' => ['MP3'],
+                'titre' => 'Fichier audio',
+                'texte' => 'La piste son de la vidéo, à réutiliser en podcast ou en extrait.',
+            ],
         ],
     ],
 
     'usages' => [
-        'titre' => 'Deux métiers,',
-        'titre_accent' => 'un même geste.',
-        'intro' => 'Tu fabriques des vidéos, ou tu étudies celles des autres. Dans les deux cas, tu as besoin du texte.',
-        'createurs' => [
-            'numero' => '01 — CRÉATEURS',
-            'titre' => 'Une transcription, quatre formats.',
-            'texte' => 'Tu as parlé vingt minutes. Il te reste à couper, pas à tout réécrire.',
-            'formats' => [
-                ['libelle' => 'Texte', 'extension' => '.txt'],
-                ['libelle' => 'Document', 'extension' => '.pdf'],
-                ['libelle' => 'Sous-titres', 'extension' => '.srt .vtt', 'accent' => true],
-                ['libelle' => 'Podcast', 'extension' => '.mp3'],
+        'titre' => 'Pour qui ?',
+        'sous_titre' => 'Trois usages, un même point de départ : un lien ou un fichier.',
+        'cartes' => [
+            'createurs' => [
+                'numero' => '01 · Sous-titres',
+                'titre' => 'Créateurs de contenu',
+                'texte' => 'Sous-titre tes vidéos, puis réutilise ce que tu as dit en description, en post ou en article.',
+                'formats' => ['SRT', 'VTT', 'TXT'],
+            ],
+            'marketeurs' => [
+                'numero' => '02 · Citations',
+                'titre' => 'Marketeurs',
+                'texte' => "Retrouve la phrase exacte d'un webinaire ou d'une interview, avec son horodatage, sans tout réécouter.",
+                'formats' => ['TXT', 'PDF'],
+            ],
+            'ecommerce' => [
+                'numero' => '03 · Fiches produit',
+                'titre' => 'E-commerçants',
+                'texte' => 'Transforme une démonstration produit en fiche, en FAQ ou en script de publicité.',
+                'formats' => ['TXT', 'MP3'],
             ],
         ],
-        'marketeurs' => [
-            'numero' => '02 — MARKETEURS',
-            'titre' => "Le script d'une pub, découpé.",
-            'texte' => "Repère l'accroche, la preuve et l'appel à l'action sans regarder la vidéo dix fois.",
-            'pub' => 'Pub sérum — concurrent A',
-            'duree' => '0:42',
-            'parties' => [
-                ['libelle' => 'accroche', 'secondes' => 3],
-                ['libelle' => 'problème', 'secondes' => 6],
-                ['libelle' => 'preuve', 'secondes' => 12],
-                ['libelle' => 'offre', 'secondes' => 13],
-                ['libelle' => "appel à l'action", 'secondes' => 8],
-            ],
-            'description_parties' => 'Pub de 42 secondes découpée en cinq parties : accroche 3 s, problème 6 s, preuve 12 s, offre 13 s, appel à l\'action 8 s.',
-            'citation_repere' => 'ACCROCHE · 00:00 → 00:03',
-            'citation' => '« Tu te réveilles avec la peau qui tire ? »',
+        'scene' => [
+            'citation_copiee' => 'Citation copiée · 00:19',
+            'fiche' => 'Fiche produit',
+            'faq' => 'FAQ · 4 Q',
+            'demo' => 'Démo · 03:42',
+            'recherche' => 'centrée',
         ],
-    ],
-
-    'fonctionnement' => [
-        'titre' => 'Du lien au texte.',
-        'etapes' => [
-            ['titre' => 'Colle le lien', 'texte' => 'YouTube, TikTok, ou ton propre fichier.'],
-            ['titre' => "On extrait l'audio", 'texte' => 'Propre, en MP3, prêt à écouter.'],
-            ['titre' => 'On transcrit', 'texte' => 'Ponctué, découpé en phrases, horodaté.'],
-            ['titre' => 'Tu exportes', 'texte' => 'TXT, PDF, SRT, VTT ou MP3, en un clic.'],
-        ],
-    ],
-
-    'fiche' => [
-        'titre' => 'Fiche technique',
-        'entrees' => 'Entrées',
-        'entrees_valeur' => 'YouTube · TikTok · :fichiers',
-        'sorties' => 'Sorties',
-        'sorties_valeur' => 'TXT · PDF · :sous_titres · MP3',
-        'horodatage' => 'Horodatage',
-        'horodatage_valeur' => 'À chaque phrase',
-        'langues' => 'Langues',
-        'langues_valeur' => 'Détection auto · :codes',
     ],
 
     'tarifs' => [
         'titre' => 'Tarifs',
         'intro' => 'Commence sans payer. Passe à Pro quand Voxia devient un outil de travail.',
+        'provisoire' => 'Prix et quotas provisoires.',
+        'recommande' => 'Recommandé',
         'gratuit' => [
             'lignes' => [
                 ':nombre vidéos par mois',
@@ -150,21 +172,38 @@ return [
     ],
 
     'questions' => [
-        'titre' => 'Questions',
+        'titre' => 'Questions fréquentes',
         'liste' => [
             [
-                'question' => 'Quelles langues sont reconnues ?',
-                'reponse' => 'Voxia détecte la langue parlée. Tu peux aussi la forcer : :langues.',
+                'question' => 'Quels liens sont acceptés ?',
+                'reponse' => 'Les vidéos YouTube et TikTok publiques.',
             ],
             [
-                'question' => "Je peux transcrire n'importe quelle vidéo ?",
-                'reponse' => "Tes vidéos, celles de tes clients, ou des vidéos publiques que tu analyses. Tu restes responsable de l'usage que tu fais du texte.",
+                'question' => 'Quels fichiers puis-je déposer ?',
+                'reponse' => 'MP3, M4A, WAV, MP4, MOV et WEBM, jusqu’à la taille maximale de ton plan.',
+            ],
+            [
+                'question' => 'Dans quels formats puis-je exporter ?',
+                'reponse' => 'TXT, SRT et MP3 sur tous les plans ; PDF et VTT à partir du plan Pro.',
+            ],
+            [
+                'question' => 'Une vidéo en échec est-elle décomptée ?',
+                'reponse' => 'Non. Seules les transcriptions terminées comptent dans ton quota.',
+            ],
+            [
+                'question' => 'Quelles langues sont reconnues ?',
+                'reponse' => 'Voxia détecte la langue parlée. Tu peux aussi la forcer parmi : :langues.',
             ],
             [
                 'question' => 'Combien de temps mes fichiers sont-ils gardés ?',
                 'reponse' => 'Gratuit : transcriptions gardées :historique jours ; MP3 et fichiers importés gardés :media jours [À CONFIRMER]. Pro et Pack : historique sans limite. Tu peux supprimer une transcription à tout moment.',
             ],
         ],
+    ],
+
+    'cta' => [
+        'titre' => 'Ta prochaine vidéo, en texte.',
+        'bouton' => 'Coller un lien',
     ],
 
     'langues' => [

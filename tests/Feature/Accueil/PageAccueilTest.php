@@ -15,24 +15,26 @@ function pageAccueilDecodee(string $adresse): string
     return html_entity_decode(test()->get($adresse)->assertOk()->getContent(), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 
-it('affiche la carte Créateurs « Une transcription, quatre formats. » avec les formats réels', function () {
+// Direction « Nocturne » (handoff) : trois cartes d'usage et trois livrables, aux formats réels.
+it('affiche les cartes Créateurs, Marketeurs et E-commerçants avec les formats réels', function () {
     $html = pageAccueilDecodee('/fr');
 
     expect($html)
-        ->toContain('Une transcription, quatre formats.')
+        ->toContain('Créateurs de contenu')
+        ->toContain('Marketeurs')
+        ->toContain('E-commerçants')
         ->toContain('.txt')
         ->toContain('.pdf')
-        ->toContain('.srt .vtt')
+        ->toContain('.srt')
+        ->toContain('.vtt')
         ->toContain('.mp3')
         ->not->toContain('Une vidéo, quatre contenus');
 });
 
-it('garde la carte Marketeurs telle quelle, avec l\'analyse de script', function () {
+it('garde l\'analyse de script dans l\'offre Pro (F7)', function () {
     $html = pageAccueilDecodee('/fr');
 
-    expect($html)
-        ->toContain('Le script d\'une pub, découpé.')
-        ->toContain('Analyse de scripts');
+    expect($html)->toContain('Analyse de scripts');
 });
 
 it('affiche les prix en dollars US lus dans config/voxia.php', function () {
@@ -120,7 +122,7 @@ it('branche les liens de l\'en-tête et du pied de page', function () {
         ->toContain('href="'.route('accueil').'#fonctionnement"')
         ->toContain('href="'.route('accueil').'#tarifs"')
         ->toContain('href="'.route('login').'"')
-        ->toContain('Essayer gratuitement')
+        ->toContain('Se connecter')
         ->toContain('href="'.route('confidentialite').'"')
         ->toContain('href="'.route('conditions').'"')
         ->toContain('href="'.route('contact').'"');
@@ -163,7 +165,8 @@ it('coupe toutes les animations de la page sous prefers-reduced-motion', functio
 
     expect($coupures)->not->toBeEmpty();
 
-    foreach (['.vx-onde-barre', '.vx-pulsation', '.vx-defilement', '.vx-paquet', '.vx-curseur', '.vx-frappe'] as $classe) {
+    // Le bandeau défilant et la frappe de l'ancienne maquette ont été retirés (handoff).
+    foreach (['.vx-onde-barre', '.vx-pulsation', '.vx-indeterminee'] as $classe) {
         expect($coupures)->toContain($classe);
     }
 });
@@ -171,8 +174,10 @@ it('coupe toutes les animations de la page sous prefers-reduced-motion', functio
 it('affiche la page d\'accueil sans barre de défilement horizontale par construction', function () {
     $html = pageAccueilDecodee('/fr');
 
-    // Le bandeau et la ligne de process sont dans un conteneur qui coupe le débordement.
+    // L'aperçu coupe son débordement ; les cartes et le formulaire passent à la ligne (flex-wrap, grilles auto-fit).
     expect($html)
-        ->toContain('overflow-hidden border-b border-filet py-[18px]')
-        ->toContain('overflow-hidden px-4 text-center');
+        ->toContain('overflow-hidden rounded-panneau border border-filet bg-panneau')
+        ->toContain('flex flex-wrap gap-2')
+        ->toContain('grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))]')
+        ->not->toContain('vx-defilement');
 });

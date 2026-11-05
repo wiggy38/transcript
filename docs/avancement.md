@@ -273,6 +273,10 @@ Décisions des fenêtres d'upgrade :
 - [x] Polices auto-hébergées (fontsource) : Onest (variable), Unbounded 600 (titres), JetBrains Mono 400 et 500 (données). Roboto et Bricolage Grotesque retirés de `package.json`.
 - [x] Emails : thème `nocturne.css` (sombre), `config/mail.php` mis à jour. Le fichier `docs/Voxia Direction 3 - Surligneur.dc.html` est supprimé.
 - [x] Tests : `CharteNocturneTest` (contrastes 4,5:1 et 3:1 dans les deux thèmes, animations coupées, pas de CDN de police). Tests de la page d'accueil et des emails mis à jour. Aucun test désactivé.
+- [x] Étape 2 : composants alignés sur le handoff (`<x-icone>`, héros, aperçu, fonctionnement en trois étapes, « Ce que tu récupères », « Pour qui ? » avec scènes animées, tarifs, questions en `<details>`, appel final). Bandeau défilant et fiche technique retirés. En-tête collant avec menu mobile. Textes FR et EN mis à jour.
+- [x] Thème : sombre par défaut, sans repli sur le thème du système (demande de l'utilisateur ; le handoff prévoyait un repli clair).
+- [x] Tests : `PageAccueilTest` adapté au handoff (cartes, lien « Se connecter » dans l'en-tête, animations du bandeau retirées). Tarifs et FAQ liés à la configuration conservés. Liens Tarifs et Questions gardés au pied de page.
+- [ ] Vérification visuelle : bureau faite en clair ; mobile 375 px non vérifiée (le redimensionnement de Chrome n'a pas pris effet).
 - [ ] Reste à faire (étape 2 et suivantes) : composants Blade selon `blade-reference/`, landing, tarifs, écrans de l'application, thème Filament. Voir P138 à P142.
 
 ## 4. Points ouverts
