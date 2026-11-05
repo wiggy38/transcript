@@ -85,15 +85,19 @@ return [
 
         'business' => [
             'label' => 'Business',
+            // Repassé à true avec la carte Business des écrans d'upgrade (étape 4).
             'sellable' => false,
             'price_monthly_usd' => (float) env('VOXIA_BUSINESS_PRICE_MONTHLY_USD', 29),
             'price_yearly_usd' => (float) env('VOXIA_BUSINESS_PRICE_YEARLY_USD', 276),
             'hours_per_month' => (int) env('VOXIA_BUSINESS_HOURS_PER_MONTH', 150),
-            // Valeur de l'offre (5 h) ; le cahier ne la fixe pas, à confirmer.
+            // Offre du 3 novembre 2026 : 5 h maximum par vidéo.
             'max_video_seconds' => (int) env('VOXIA_BUSINESS_MAX_VIDEO_SECONDS', 5 * 3600),
-            'exports' => ['txt', 'pdf', 'srt', 'vtt'],
+            // Tous les exports : DOCX et JSON sont réservés au Business (décisions du 5 novembre 2026).
+            'exports' => ['txt', 'pdf', 'srt', 'vtt', 'docx', 'json'],
             'history_days' => null,
             'recherche' => true,
+            // Traitement par lots : nombre maximal de liens par lot (étape 6, non construite ici).
+            'batch_links' => (int) env('VOXIA_BUSINESS_BATCH_LINKS', 25),
             // Décision du 5 novembre 2026 (docs/v2/decisions.md) : 300 crédits IA par mois.
             'ai_credits_per_month' => (int) env('VOXIA_BUSINESS_AI_CREDITS_PER_MONTH', 300),
         ],
@@ -135,9 +139,13 @@ return [
             'pro_mensuel' => env('VOXIA_PADDLE_PRICE_PRO_MONTHLY'),
             'pro_annuel' => env('VOXIA_PADDLE_PRICE_PRO_YEARLY'),
             'pack' => env('VOXIA_PADDLE_PRICE_PACK'),
+            'business_mensuel' => env('VOXIA_PADDLE_PRICE_BUSINESS_MONTHLY'),
+            'business_annuel' => env('VOXIA_PADDLE_PRICE_BUSINESS_YEARLY'),
         ],
         // Type d'abonnement enregistré par Cashier (subscriptions.type) pour le plan Pro.
         'type_abonnement_pro' => 'pro',
+        // Type d'abonnement distinct pour le plan Business (un compte n'a qu'une formule à la fois).
+        'type_abonnement_business' => 'business',
         'heure_recalcul' => env('VOXIA_PLANS_RECOMPUTE_AT', '03:45'),
     ],
 
@@ -455,7 +463,7 @@ return [
             'standard' => 'default',
         ],
         // Plans servis dans la file prioritaire.
-        'plans_prioritaires' => ['pro'],
+        'plans_prioritaires' => ['pro', 'business'],
         // Suivi de la progression dans la commande voxia:transcribe.
         'suivi_intervalle_secondes' => (int) env('VOXIA_CLI_POLL_SECONDS', 2),
         'suivi_delai_secondes' => (int) env('VOXIA_CLI_TIMEOUT_SECONDS', 7200),
