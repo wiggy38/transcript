@@ -182,6 +182,30 @@ class PlanFeatures
         return (string) config("voxia.plans.{$plan->value}.label", $plan->name);
     }
 
+    /** Vrai pour le plan Gratuit : quota en nombre de vidéos, aperçu au-delà de la durée max. */
+    public function estGratuit(Plan $plan): bool
+    {
+        return $plan === Plan::Free;
+    }
+
+    /** Vrai pour les formules à abonnement (Pro et Business) : quota mensuel en heures. */
+    public function estAbonnement(Plan $plan): bool
+    {
+        return in_array($plan, [Plan::Pro, Plan::Business], true);
+    }
+
+    /** Plans à abonnement, pour les contrôles qui recalculent le plan (voxia:recalculer-plans). */
+    public function plansAbonnement(): array
+    {
+        return [Plan::Pro, Plan::Business];
+    }
+
+    /** Nombre de liens acceptés dans un lot (Business), ou 0 si le plan n'a pas de traitement par lots. */
+    public function limiteLots(Plan $plan): int
+    {
+        return (int) config("voxia.plans.{$plan->value}.batch_links", 0);
+    }
+
     private function cle(User $utilisateur): string
     {
         return $this->planDe($utilisateur)->value;

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use App\Services\Paiement\SynchroniserPlan;
+use App\Services\Plans\PlanFeatures;
 use Illuminate\Console\Command;
 
 /**
@@ -16,11 +17,13 @@ class RecalculerPlans extends Command
 
     protected $description = 'Recalcule le plan des comptes Pro, Business et Pack (Packs expirés, abonnements terminés)';
 
-    public function handle(SynchroniserPlan $plans): int
+    public function handle(SynchroniserPlan $plans, PlanFeatures $droits): int
     {
         $comptes = 0;
 
-        User::query()->whereIn('plan', ['pro', 'business', 'pack'])->chunkById(200, function ($lot) use ($plans, &$comptes) {
+        $concernes = [...array_map(fn ($plan) => $plan->value, $droits->plansAbonnement()), 'pack'];
+
+        User::query()->whereIn('plan', $concernes)->chunkById(200, function ($lot) use ($plans, &$comptes) {
             foreach ($lot as $utilisateur) {
                 $plans->pour($utilisateur);
                 $comptes++;

@@ -36,7 +36,7 @@ class AjustementQuota
         $plan = $this->droits->planDe($utilisateur);
         $cibles = [];
 
-        if ($plan === Plan::Free) {
+        if ($this->droits->estGratuit($plan)) {
             $cibles[] = CibleAjustement::Videos;
         }
 

@@ -306,7 +306,7 @@ class NouvelleTranscription extends Component
      */
     private function proposerUpgradeQuota(ErreurVideo $erreur): bool
     {
-        return $erreur->motif === MotifEchec::QuotaEpuise && $this->planDeCompte() === Plan::Free;
+        return $erreur->motif === MotifEchec::QuotaEpuise && app(PlanFeatures::class)->estGratuit($this->planDeCompte());
     }
 
     /** Garde le lien ou le fichier pour le retour du paiement, puis ouvre la fenêtre d'upgrade. */
@@ -351,7 +351,7 @@ class NouvelleTranscription extends Component
      */
     private function depasseLeDroitDuPlan(): bool
     {
-        if ($this->planDeCompte() === Plan::Free) {
+        if (app(PlanFeatures::class)->estGratuit($this->planDeCompte())) {
             return false;
         }
 
@@ -361,7 +361,7 @@ class NouvelleTranscription extends Component
     /** Vrai pour le Gratuit si la vidéo dépasse 10 minutes : seules les premières seront transcrites. */
     private function limiteAuPlan(): bool
     {
-        return $this->planDeCompte() === Plan::Free && $this->dureeApercue() > $this->dureeMaxDuPlan();
+        return app(PlanFeatures::class)->estGratuit($this->planDeCompte()) && $this->dureeApercue() > $this->dureeMaxDuPlan();
     }
 
     private function dureeApercue(): int

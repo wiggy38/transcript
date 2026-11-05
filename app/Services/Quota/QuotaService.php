@@ -55,7 +55,7 @@ class QuotaService
             $utilisateur = $this->verrouiller($utilisateur);
             $plan = $this->droits->planDe($utilisateur);
 
-            if ($plan !== Plan::Free && $dureeSecondes !== null && $dureeSecondes > $this->droits->dureeMaxSecondes($plan)) {
+            if (! $this->droits->estGratuit($plan) && $dureeSecondes !== null && $dureeSecondes > $this->droits->dureeMaxSecondes($plan)) {
                 throw new ErreurVideo(MotifEchec::TropLongue, $dureeSecondes.' s pour un maximum de '.$this->droits->dureeMaxSecondes($plan).' s');
             }
 
@@ -104,7 +104,7 @@ class QuotaService
             'motif' => 'transcription',
         ];
 
-        if ($plan === Plan::Free) {
+        if ($this->droits->estGratuit($plan)) {
             $limite = (int) $this->droits->videosMensuelles($plan);
 
             if ($this->consommee($utilisateur, $plan, UniteConsommation::Video, $periode) + 1 > $limite) {
@@ -218,7 +218,7 @@ class QuotaService
         $plan = $this->droits->planDe($utilisateur);
         $periode = $this->periode($utilisateur, $plan);
 
-        if ($plan === Plan::Free) {
+        if ($this->droits->estGratuit($plan)) {
             return [
                 'plan' => $plan,
                 'videos_utilisees' => $this->consommee($utilisateur, $plan, UniteConsommation::Video, $periode),
@@ -245,7 +245,7 @@ class QuotaService
     {
         $maintenant = CarbonImmutable::instance($maintenant ?? now())->utc();
 
-        if ($plan === Plan::Free) {
+        if ($this->droits->estGratuit($plan)) {
             return $maintenant->startOfMonth()->toDateString();
         }
 
@@ -287,7 +287,7 @@ class QuotaService
     {
         $enCours = $this->transcriptionsEnCours($utilisateur, $exclue);
 
-        if ($plan === Plan::Free) {
+        if ($this->droits->estGratuit($plan)) {
             $utilisees = $this->consommee($utilisateur, $plan, UniteConsommation::Video, $this->periode($utilisateur, $plan));
             $limite = (int) $this->droits->videosMensuelles($plan);
 

@@ -36,5 +36,6 @@
         <env name="NIGHTWATCH_ENABLED" value="false"/>
         <env name="VOXIA_GOOGLE_LOGIN" value="false"/>
         <env name="VOXIA_FACEBOOK_LOGIN" value="false"/>
+        <env name="VOXIA_BUSINESS_AI_CREDITS_PER_MONTH" value="300"/>
     </php>
 </phpunit>

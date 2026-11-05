@@ -454,7 +454,7 @@ final class ChaineTranscription
             return;
         }
 
-        if ($plan !== Plan::Free) {
+        if (! $this->droits->estGratuit($plan)) {
             throw new ErreurVideo(MotifEchec::TropLongue, $dureeSecondes.' s pour un maximum de '.$maximum.' s');
         }
 
@@ -464,7 +464,7 @@ final class ChaineTranscription
     /** Gratuit : audio découpé à la durée du plan. Autres plans : pas de découpe. */
     private function decoupeDuPlan(Transcription $transcription): ?int
     {
-        if ($this->droits->planDe($transcription->user) !== Plan::Free) {
+        if (! $this->droits->estGratuit($this->droits->planDe($transcription->user))) {
             return null;
         }
 
