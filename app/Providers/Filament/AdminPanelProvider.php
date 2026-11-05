@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\TableauDeBord;
 use App\Http\Middleware\DefinirLangue;
-use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -46,7 +45,8 @@ class AdminPanelProvider extends PanelProvider
                     500 => '#6E68A0', 600 => '#423D66', 700 => '#2C2750', 800 => '#1D1938', 900 => '#15122A', 950 => '#0D0B1A',
                 ],
             ])
-            ->defaultThemeMode(ThemeMode::Dark)
+            // Nocturne sombre uniquement : pas de bascule vers le clair dans l'administration.
+            ->darkMode(true, isForced: true)
             ->pages([
                 TableauDeBord::class,
             ])
