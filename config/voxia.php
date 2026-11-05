@@ -94,8 +94,8 @@ return [
             'exports' => ['txt', 'pdf', 'srt', 'vtt'],
             'history_days' => null,
             'recherche' => true,
-            // Non fixé dans l'offre : « crédits IA élevés », à chiffrer en V2.
-            'ai_credits_per_month' => (int) env('VOXIA_BUSINESS_AI_CREDITS_PER_MONTH', 0),
+            // Décision du 5 novembre 2026 (docs/v2/decisions.md) : 300 crédits IA par mois.
+            'ai_credits_per_month' => (int) env('VOXIA_BUSINESS_AI_CREDITS_PER_MONTH', 300),
         ],
 
     ],
