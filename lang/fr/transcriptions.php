@@ -37,6 +37,7 @@ return [
     ],
 
     'fichier' => [
+        'ou' => 'ou',
         'titre' => 'Ou un fichier',
         'glisser' => 'Glisse ton fichier ici',
         'aide' => 'Formats : :formats. Taille maximale : :max Go.',
@@ -57,6 +58,7 @@ return [
     ],
 
     'page' => [
+        'etapes' => 'Étapes du traitement',
         'titre' => 'Transcription',
         'retour' => 'Retour à la nouvelle transcription',
         'nouvelle' => 'Nouvelle transcription',

@@ -37,6 +37,7 @@ return [
     ],
 
     'fichier' => [
+        'ou' => 'or',
         'titre' => 'Or a file',
         'glisser' => 'Drop your file here',
         'aide' => 'Formats: :formats. Maximum size: :max GB.',
@@ -57,6 +58,7 @@ return [
     ],
 
     'page' => [
+        'etapes' => 'Processing steps',
         'titre' => 'Transcription',
         'retour' => 'Back to the new transcription',
         'nouvelle' => 'New transcription',

@@ -55,6 +55,7 @@ return [
     ],
 
     'quota' => [
+        'voir_abonnement' => 'Voir mon abonnement',
         'libelle' => 'Vidéos utilisées ce mois-ci',
         'sur' => ':utilise sur :limite vidéos utilisées ce mois-ci',
         'sans_limite' => ':utilise vidéos utilisées ce mois-ci',

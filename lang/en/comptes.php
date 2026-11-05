@@ -29,10 +29,24 @@ return [
         'confirmation' => 'Confirm the password',
         'bouton' => 'Create my account',
         'deja' => 'Already have an account?',
+        'cgu' => 'By creating an account, you accept the',
+        'cgu_lien' => 'Terms',
+        'et' => 'and the',
+        'confidentialite_lien' => 'privacy policy',
         'lien_garde' => 'Your link is kept. It will start as soon as you verify your email.',
         'limite_atteinte' => 'We cannot create a free account from this connection for now.',
     ],
 
+    'apercu' => [
+        'titre' => 'Every video has words in it.',
+        'mot' => 'Voxia writes them down.',
+        'lignes' => [
+            ['00:06', 'Today we throw six bowls.'],
+            ['00:13', 'The secret is centring the clay.'],
+            ['00:19', 'If it isn\'t centred, nothing will hold.'],
+        ],
+        'formats' => ['TXT', 'PDF', 'SRT', 'VTT', 'MP3'],
+    ],
     'connexion' => [
         'titre' => 'Log in',
         'sous_titre' => 'Find your transcripts.',
@@ -77,11 +91,31 @@ return [
         'bouton' => 'Start the transcription',
         'non_verifie' => 'Verify your email to start a transcription. The link you pasted is kept.',
         'historique' => 'Your transcriptions',
+        'tout' => 'Full history →',
         'vide' => 'No transcription yet.',
     ],
 
     'reglages' => [
         'titre' => 'Account settings',
+        'sections' => [
+            'navigation' => 'Account sections',
+            'abonnement' => 'Subscription',
+            'formule' => 'Your plan',
+            'factures' => 'Packs and invoices',
+            'factures_texte' => 'Invoices and Packs are listed on the Subscription page.',
+            'factures_bouton' => 'View invoices',
+        ],
+        'formule' => [
+            'videos' => 'Videos this month',
+            'heures_mois' => 'Hours this month',
+            'heures_packs' => 'Pack hours',
+            'credits_ia' => 'AI credits',
+            'detail' => [
+                'free' => 'No active Pro subscription.',
+                'pro' => 'Monthly plan.',
+                'pack' => 'One-time payment, no subscription.',
+            ],
+        ],
         'donnees' => [
             'titre' => 'Your data',
             'texte' => 'Download all your data in a ZIP file: account, transcriptions, timestamped texts, MP3 files and script analyses. The link arrives by email and is valid for a limited time.',

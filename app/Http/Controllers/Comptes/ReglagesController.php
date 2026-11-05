@@ -7,6 +7,9 @@ use App\Jobs\ExporterDonneesCompte;
 use App\Jobs\SupprimerFichiersTranscriptions;
 use App\Mail\CompteSupprime;
 use App\Models\User;
+use App\Services\Plans\PlanFeatures;
+use App\Services\Quota\QuotaService;
+use App\Support\Duree;
 use App\Support\Langue;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -33,7 +36,56 @@ class ReglagesController extends Controller
             'langues' => Langue::disponibles(),
             'exportDisponible' => Storage::disk((string) config('voxia.stockage.disque'))
                 ->exists(ExporterDonneesCompte::chemin($utilisateur->getKey())),
+            'formule' => $this->formule($utilisateur),
         ]);
+    }
+
+    /**
+     * « Ta formule » (maquette « Compte ») : nom du plan, détail et quotas restants, tirés de
+     * QuotaService et de la configuration. Aucune valeur de plan n'est écrite ici.
+     *
+     * @return array{nom: string, detail: string, quotas: list<array{libelle: string, valeur: string, pourcentage: ?int}>}
+     */
+    private function formule(User $utilisateur): array
+    {
+        $droits = app(PlanFeatures::class);
+        $resume = app(QuotaService::class)->resume($utilisateur);
+        $quotas = [];
+
+        if (isset($resume['videos_limite'])) {
+            $quotas[] = [
+                'libelle' => __('comptes.reglages.formule.videos'),
+                'valeur' => $resume['videos_utilisees'].' / '.$resume['videos_limite'],
+                'pourcentage' => $resume['videos_limite'] > 0
+                    ? min(100, (int) round($resume['videos_utilisees'] / $resume['videos_limite'] * 100))
+                    : null,
+            ];
+        } else {
+            $secondesMois = $resume['secondes_mois'] ?? null;
+            $secondesPacks = (int) ($resume['secondes_packs'] ?? 0);
+
+            if ($secondesMois !== null) {
+                $quotas[] = ['libelle' => __('comptes.reglages.formule.heures_mois'), 'valeur' => Duree::formater($secondesMois), 'pourcentage' => null];
+            }
+
+            if ($secondesMois === null || $secondesPacks > 0) {
+                $quotas[] = ['libelle' => __('comptes.reglages.formule.heures_packs'), 'valeur' => Duree::formater($secondesPacks), 'pourcentage' => null];
+            }
+        }
+
+        $creditsIa = $resume['credits_ia'] ?? null;
+
+        if ($creditsIa !== null) {
+            $quotas[] = ['libelle' => __('comptes.reglages.formule.credits_ia'), 'valeur' => (string) $creditsIa, 'pourcentage' => null];
+        }
+
+        $cle = in_array($resume['plan']->value, ['free', 'pro', 'pack'], true) ? $resume['plan']->value : 'free';
+
+        return [
+            'nom' => $droits->libellePlan($resume['plan']),
+            'detail' => __('comptes.reglages.formule.detail.'.$cle),
+            'quotas' => $quotas,
+        ];
     }
 
     /** « auto » efface la préférence : l'interface suit alors le navigateur (App\Support\Langue). */

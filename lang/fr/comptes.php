@@ -29,10 +29,24 @@ return [
         'confirmation' => 'Confirme le mot de passe',
         'bouton' => 'Créer mon compte',
         'deja' => 'Déjà un compte ?',
+        'cgu' => 'En créant un compte, tu acceptes les',
+        'cgu_lien' => 'CGU',
+        'et' => 'et la',
+        'confidentialite_lien' => 'politique de confidentialité',
         'lien_garde' => 'Ton lien est gardé. Il sera lancé dès que tu auras vérifié ton email.',
         'limite_atteinte' => 'Impossible de créer un compte gratuit depuis cette connexion pour le moment.',
     ],
 
+    'apercu' => [
+        'titre' => 'Chaque vidéo contient un texte.',
+        'mot' => 'Voxia te l\'écrit.',
+        'lignes' => [
+            ['00:06', 'Aujourd\'hui on tourne six bols.'],
+            ['00:13', 'Le secret, c\'est de centrer la terre.'],
+            ['00:19', 'Si elle n\'est pas centrée, rien ne tiendra.'],
+        ],
+        'formats' => ['TXT', 'PDF', 'SRT', 'VTT', 'MP3'],
+    ],
     'connexion' => [
         'titre' => 'Connexion',
         'sous_titre' => 'Retrouve tes transcriptions.',
@@ -77,11 +91,31 @@ return [
         'bouton' => 'Lancer la transcription',
         'non_verifie' => 'Vérifie ton email pour lancer une transcription. Le lien que tu as collé est gardé.',
         'historique' => 'Tes transcriptions',
+        'tout' => 'Tout l\'historique →',
         'vide' => 'Aucune transcription pour l\'instant.',
     ],
 
     'reglages' => [
         'titre' => 'Réglages du compte',
+        'sections' => [
+            'navigation' => 'Sections du compte',
+            'abonnement' => 'Abonnement',
+            'formule' => 'Ta formule',
+            'factures' => 'Packs et factures',
+            'factures_texte' => 'Les factures et les Packs se consultent sur la page Abonnement.',
+            'factures_bouton' => 'Voir les factures',
+        ],
+        'formule' => [
+            'videos' => 'Vidéos ce mois-ci',
+            'heures_mois' => 'Heures ce mois-ci',
+            'heures_packs' => 'Heures de Pack',
+            'credits_ia' => 'Crédits IA',
+            'detail' => [
+                'free' => 'Pas d\'abonnement Pro en cours.',
+                'pro' => 'Formule mensuelle.',
+                'pack' => 'Paiement unique, sans abonnement.',
+            ],
+        ],
         'donnees' => [
             'titre' => 'Vos données',
             'texte' => 'Télécharge toutes tes données dans un fichier ZIP : compte, transcriptions, textes horodatés, MP3 et analyses de script. Le lien arrive par email, valable un temps limité.',
