@@ -210,6 +210,22 @@ Décisions de la langue :
 - Les comptes de test sont créés en français (fabrique), comme avant ; les tests de langue fixent leur langue.
 - Héros en anglais : « Every video has words in it. » / « Voxia writes them down. » (variante A, choix à confirmer, P130).
 
+### V2 — Plan Business (cahier §5, décisions du 5 novembre 2026)
+
+- [x] Définition du plan : 29 $ / 276 $, 150 h par mois, 5 h max par vidéo, exports complets, historique et recherche, file prioritaire, 300 crédits IA, lot de 25 liens (`config/voxia.php`, identifiants de prix lus depuis `.env`). *(étape 1 ; le traitement par lots n'est pas construit, étape 6.)*
+- [x] Pro vers Business : immédiat, au prorata ; quota et crédits Business ouverts tout de suite. *(ChangementFormuleTest, PaiementTest)*
+- [x] Business vers Pro : effectif à la fin de la période payée, sans facture d'écart. *(ChangementFormuleTest, PaiementTest)*
+- [x] Gratuit ou Pack vers Business : même parcours qu'un Pro ; les heures restantes d'un Pack restent utilisables. *(QuotasTest, PlanBusinessTest)*
+- [x] Webhooks création, changement, renouvellement, échec de paiement, résiliation, rejoués deux fois : une seule ligne, plan inchangé. *(PaiementTest)*
+- [x] Droits centralisés dans `PlanFeatures` (estGratuit, estAbonnement, limiteLots) ; comparaisons dispersées remplacées. *(PlanBusinessTest)*
+- [x] Quotas Business : 150 h par mois, volume avant les Packs, arrondi à la minute, remise à zéro à l'anniversaire, 5 h max. *(PlanBusinessTest)*
+- [x] Exports DOCX (titre, source, date, horodatages, accents et écritures non latines) et JSON (segments horodatés). DOCX et JSON refusés aux autres plans. *(ExportBusinessTest)*
+- [x] Écrans d'upgrade : Pro à 30 h propose le Business ; Pro avec vidéo de plus de 3 h propose le Business ; carte Business. *(UpgradeBusinessTest)*
+- [x] Page Abonnement : Business affiché, passage Pro ↔ Business, factures. *(UpgradeBusinessTest)*
+- [ ] Page Abonnement et fenêtres d'upgrade : aucune vérification dans un navigateur (P155).
+- [ ] Traitement par lots (étape 6) : non construit, seul le drapeau `batch_links` existe.
+- [ ] Page des tarifs publique et page d'accueil (étape 8) : non touchées.
+
 ## 3. Décisions
 
 - Comptes : Fortify pour l'authentification (vues Signal dans `resources/views/auth`), sans double authentification ni passkeys (hors MVP, désactivés dans `config/fortify.php`). Socialite pour Google.
@@ -269,6 +285,17 @@ Décisions des fenêtres d'upgrade :
 - Un format verrouillé est un bouton actif (un bouton désactivé ne peut pas ouvrir de fenêtre). Le lien de paiement de l'aperçu garde l'identifiant de la transcription, sinon le webhook ne la relance pas.
 - Tests adaptés : le bandeau d'aperçu mène désormais à la fenêtre (`PaiementTest`), et le test de quota lit le compteur mocké (`NouvelleTranscriptionTest`, helper `mockQuotaCompteur`).
 - Langues : les textes de l'interface et des courriels sont bilingues (voir « Langues » en §2). Tests existants adaptés à la nouvelle adresse de l'accueil (`/fr`) et à la langue explicite des courriels : `ExampleTest`, `PageAccueilTest`, `EcransComptesTest`, `CharteSignalTest`, `EmailsTransactionnelsTest`, `HistoriqueListeTest`, `ConservationTest`.
+
+### V2 — Plan Business (étape 2 à 5)
+
+- **Un seul abonnement payant par compte** : le type reste « pro » dans Cashier, et le plan se déduit du prix porté par l'abonnement (Business si prix Business, sinon Pro). Passer de Pro à Business ou l'inverse ne crée donc pas de second abonnement.
+- **Pro vers Business** : `prorateImmediately()->swap()`. **Business vers Pro** : PATCH Paddle avec `effective_from: next_billing_period` et `proration_billing_mode: do_not_bill`. Le plan Business reste en place jusqu'à la fin de période (voir P150).
+- **Ancre du cycle** (`abonnement_debut_at`) posée au passage d'un état non payant à un état payant ; un changement Pro ↔ Business ne la déplace pas.
+- **Un compte déjà abonné ne rouvre pas de paiement** : « Gérer ma formule » renvoie à la page Abonnement, où le changement se fait en un clic (PUT, protégé par CSRF). Le paiement GET reste réservé aux nouveaux abonnés.
+- **Priorité des plans** : Business > Pro > Pack > Gratuit (`SynchroniserPlan`). Les Packs restent consommables après le volume mensuel, quel que soit le plan payant.
+- **Exports** : DOCX via PhpWord (`phpoffice/phpword` ^1.4), installé avec `--ignore-platform-reqs` car l'extension `pcntl` (Horizon) manque sous Windows (P156). L'analyse de script reste en TXT et PDF.
+- **Sans prix Business configuré** (`VOXIA_PADDLE_PRICE_BUSINESS_*` vides), la formule est refusée (`PaiementIndisponible`), comme les formules Pro.
+- **`phpunit.xml`** fixe `VOXIA_BUSINESS_AI_CREDITS_PER_MONTH=300` : les tests ne dépendent pas du `.env` local, où la valeur peut être restée à 0 (P149).
 
 ### Refonte visuelle « Nocturne » (cahier §7, CLAUDE.md §4)
 
@@ -544,3 +571,13 @@ Décisions des fenêtres d'upgrade :
 - [ ] P146 — Thème : l'espace applicatif était forcé en clair (`data-theme="light"`). Il est passé en sombre, comme la charte et les maquettes. La bascule clair et sombre reste à décider (P139).
 - [ ] P147 — Connexion, inscription, historique et pied de page : aucune vérification dans un navigateur (bureau, 375 px, thème clair et sombre, connexion Google désactivée). Les tests vérifient le rendu HTML et les textes, pas la mise en page.
 - [ ] P148 — Pied de page du back-office : les classes Filament (`gray-*`, `primary-400`) sont en dur, car le thème `/admin` ne charge pas les tokens Voxia. À revoir si le thème Filament change.
+
+- [ ] P149 — Business : le `.env` local peut garder `VOXIA_BUSINESS_AI_CREDITS_PER_MONTH=0`, qui écrase la valeur par défaut de 300 (décision du 5 novembre). À passer à 300 dans `.env`. Les tests ne sont pas touchés (`phpunit.xml`).
+- [ ] P150 — Business vers Pro : l'appel PATCH avec `effective_from: next_billing_period` est vérifié seulement par les tests HTTP simulés. À valider sur le sandbox Paddle réel (le changement doit s'afficher à la prochaine échéance, sans facture d'écart).
+- [ ] P151 — `.env.example` (versionné) contient désormais les identifiants sandbox réels `VOXIA_PADDLE_PRICE_BUSINESS_*` (`pri_…`). Ce ne sont pas des secrets, mais ils ne doivent pas figurer dans un fichier d'exemple : à remettre vides avant commit.
+- [ ] P152 — Business : le format JSON (noms des champs : `titre`, `source`, `date`, `segments`, `debut_ms`, `fin_ms`, `texte`) est une proposition. À confirmer avant de l'annoncer aux clients.
+- [ ] P153 — Business : le traitement par lots (étape 6) n'est pas construit. Le drapeau `batch_links` = 25 est en configuration.
+- [ ] P154 — Business : la page des tarifs publique et la page d'accueil n'affichent pas encore le plan Business (étape 8).
+- [ ] P155 — Business : la page Abonnement et les fenêtres d'upgrade n'ont pas été vérifiées dans un navigateur (bureau, 375 px, thème clair et sombre), comme P140 et P147.
+- [ ] P156 — Installation sous Windows : `composer require` échoue sans `--ignore-platform-reqs` à cause de l'extension `pcntl`, réclamée par Horizon. À mentionner dans la procédure d'installation.
+- [ ] P157 — Business : les textes des fenêtres d'upgrade (« 30 h », « 3 h ») sont écrits en dur dans `lang/*/upgrade.php`. Si les quotas changent dans la config, ces textes doivent suivre (ils ne sont pas calculés depuis `config/voxia.php`, sauf les heures de la fenêtre de quota).
