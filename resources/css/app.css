@@ -82,6 +82,11 @@
         outline-offset: 2px;
     }
 
+    /* Éléments Alpine masqués avant l'initialisation (menu de langue, sections à afficher). */
+    [x-cloak] {
+        display: none !important;
+    }
+
     a {
         color: var(--color-accent-texte);
         text-underline-offset: 3px;

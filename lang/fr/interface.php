@@ -11,6 +11,7 @@ return [
 
     'langue' => [
         'selecteur' => 'Langue',
+        'courante' => 'Langue : :langue',
     ],
 
     'navigation' => [
