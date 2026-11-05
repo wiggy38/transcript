@@ -345,12 +345,15 @@ return [
     | « gratuits_par_ip » : nombre maximal de comptes gratuits créés depuis une
     | même adresse IP (2 par défaut, validé le 3 novembre 2026). null = aucune limite.
     | « google_actif » : connexion Google, désactivée par
-    | défaut. Les limites de tentatives servent à freiner les attaques, pas l'offre.
+    | défaut. « facebook_actif » : bouton Facebook des pages de connexion et
+    | d'inscription, désactivé par défaut (VOXIA_FACEBOOK_LOGIN). Les limites de
+    | tentatives servent à freiner les attaques, pas l'offre.
     |
     */
 
     'comptes' => [
         'google_actif' => filter_var(env('VOXIA_GOOGLE_LOGIN', false), FILTER_VALIDATE_BOOLEAN),
+        'facebook_actif' => filter_var(env('VOXIA_FACEBOOK_LOGIN', false), FILTER_VALIDATE_BOOLEAN),
         'gratuits_par_ip' => ($valeur = env('VOXIA_FREE_ACCOUNTS_PER_IP', 2)) === null || $valeur === ''
             ? null
             : (int) $valeur,

@@ -19,6 +19,7 @@
             </p>
         @endif
 
+        @if (config('voxia.comptes.google_actif') || config('voxia.comptes.facebook_actif'))
         <div class="grid gap-2.5">
             <div class="grid grid-cols-2 gap-2.5">
             @if (config('voxia.comptes.google_actif'))
@@ -28,17 +29,20 @@
                     {{ __('comptes.google.bouton') }}
                 </a>
             @endif
-            {{-- Maquette : bouton Facebook. Pas encore de connexion Facebook côté serveur : le lien reste « # » tant qu'elle n'existe pas. --}}
+            {{-- Maquette : bouton Facebook, affiché seulement si VOXIA_FACEBOOK_LOGIN=true. Le lien reste « # » tant que la connexion Facebook n'existe pas côté serveur. --}}
+            @if (config('voxia.comptes.facebook_actif'))
             <a href="#"
                class="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-bouton border border-filet-contour bg-fond px-2 text-sm font-semibold text-texte no-underline whitespace-nowrap transition-colors hover:border-texte-secondaire">
                 <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="12" fill="#1877F2"/><path d="M16.7 15.5 17.2 12h-3.4V9.8c0-1 .5-1.9 2-1.9h1.5v-3s-1.4-.2-2.7-.2c-2.8 0-4.6 1.7-4.6 4.7V12H7v3.5h3V24h3.8v-8.5z" fill="#FFFFFF"/></svg>
                 {{ __('comptes.inscription.facebook_bouton') }}
             </a>
+            @endif
             </div>
             <p class="flex items-center gap-3 font-mono text-donnee text-texte-discret" aria-hidden="true">
                 <span class="h-px flex-1 bg-filet"></span>{{ __('comptes.inscription.ou_email') }}<span class="h-px flex-1 bg-filet"></span>
             </p>
         </div>
+        @endif
 
         <form method="post" action="{{ route('register.store') }}" class="grid gap-3" novalidate>
             @csrf
