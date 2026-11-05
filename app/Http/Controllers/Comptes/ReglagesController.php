@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Comptes;
 
+use App\Contracts\BillingProvider;
 use App\Http\Controllers\Controller;
 use App\Jobs\ExporterDonneesCompte;
 use App\Jobs\SupprimerFichiersTranscriptions;
@@ -27,7 +28,7 @@ use Illuminate\Validation\ValidationException;
  */
 class ReglagesController extends Controller
 {
-    public function afficher(Request $request): View
+    public function afficher(Request $request, BillingProvider $facturation): View
     {
         $utilisateur = $request->user();
 
@@ -37,6 +38,7 @@ class ReglagesController extends Controller
             'exportDisponible' => Storage::disk((string) config('voxia.stockage.disque'))
                 ->exists(ExporterDonneesCompte::chemin($utilisateur->getKey())),
             'formule' => $this->formule($utilisateur),
+            'factures' => $facturation->factures($utilisateur),
         ]);
     }
 

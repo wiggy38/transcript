@@ -1,13 +1,15 @@
-{{-- Champ avec libellé visible. Le libellé, l'aide et l'erreur sont reliés au champ (label, aria-describedby). --}}
-@props(['id', 'label', 'name' => null, 'type' => 'text', 'value' => null, 'placeholder' => null, 'mono' => false, 'required' => false, 'aide' => null, 'erreur' => null])
+{{-- Champ avec libellé visible. Le libellé, l'aide et l'erreur sont reliés au champ (label, aria-describedby).
+     variante : « mono » (libellé en mono, champ standard) ou « formulaire » (libellé en Onest semi-gras 14 px, champ de 44 px sur fond, comme les réglages du compte). --}}
+@props(['id', 'label', 'name' => null, 'type' => 'text', 'value' => null, 'placeholder' => null, 'mono' => false, 'required' => false, 'aide' => null, 'erreur' => null, 'variante' => 'mono'])
 @php
     $idAide = $id.'-aide';
     $idErreur = $id.'-erreur';
     $decrit = collect([$aide ? $idAide : null, $erreur ? $idErreur : null])->filter()->implode(' ');
+    $formulaire = $variante === 'formulaire';
 @endphp
 
 <div class="flex min-w-0 flex-col gap-2">
-    <label for="{{ $id }}" class="font-mono text-xs text-texte-discret">{{ $label }}</label>
+    <label for="{{ $id }}" @class(['font-mono text-xs text-texte-discret' => ! $formulaire, 'text-sm font-semibold text-texte' => $formulaire])>{{ $label }}</label>
 
     <input
         id="{{ $id }}"
@@ -20,8 +22,9 @@
         @required($required)
         {{ $attributes->class([
             'min-h-10 w-full min-w-0 rounded-champ border border-filet-contour bg-panneau px-3.5 text-texte outline-none focus-visible:border-accent',
+            'min-h-11 bg-fond text-[15px]' => $formulaire,
             'font-mono text-sm' => $mono,
-            'text-[14px]' => ! $mono,
+            'text-[14px]' => ! $mono && ! $formulaire,
         ]) }}
     >
 
