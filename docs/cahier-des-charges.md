@@ -200,54 +200,53 @@ Les cibles ci-dessous sont des propositions à confirmer après les premiers tes
 | Sécurité | HTTPS partout, mots de passe hachés, limitation du nombre de requêtes, fichiers accessibles par liens signés et temporaires |
 | Données personnelles | Conformité RGPD (cible incluant l'UE) : consentement, export et suppression des données, liste des sous-traitants dont ElevenLabs |
 | Interface | Responsive, utilisable sur mobile ; interface en anglais et en français au lancement (proposition) |
-| Direction visuelle | Direction « Surligneur » retenue (remplace Signal) ; charte et structure en section 7 |
+| Direction visuelle | Direction « Nocturne » retenue ; charte et structure en section 7 |
 | Observabilité | Journal de chaque traitement : durée de chaque étape, motif d'échec, plateforme, coût estimé |
 | Accessibilité | Contrastes suffisants, navigation au clavier, lecteur et transcription utilisables au lecteur d'écran |
 
-## 7. Direction retenue : « Surligneur »
+## 7. Direction retenue : « Nocturne »
 
-La direction « Surligneur » (Claude Design, proposition 3) remplace la maquette « Signal », dont la charte n'est plus appliquée. Elle est épurée, vivante et professionnelle : papier clair par défaut, encre presque noire, un surligneur jaune-vert qui marque la phrase lue, les mots d'accent et le focus, et un orange plus profond pour les actions. Source : `docs/Voxia Direction 3 - Surligneur.dc.html` (tokens, composants et animations). Les écrans de l'application reprennent cette charte et ses composants.
+La direction « Nocturne » remplace la charte précédente. Elle est sombre par défaut : nuit indigo, vert citron pour les actions, cyan pour ce qui est en direct (lecture, traitement en cours). Un thème clair complet utilise les mêmes noms de jetons. Source : `docs/design_handoff_voxia_nocturne/` (README, `tokens/voxia-tokens.css`, `tokens/app.css`, maquettes `designs/`). Le handoff fait foi pour les valeurs ; `resources/css/voxia-tokens.css` en est l'intégration.
 
 **Charte**
 
-| Élément | Valeur (clair · sombre) |
+| Élément | Valeur (sombre par défaut · clair) |
 | --- | --- |
-| Fond | #F4F1EA · #13120F |
-| Surfaces | #FFFDF8 · #1B1A16 ; surface élevée #EAE6DB · #24231E |
-| Filets | décoratif #DDD7CA · #34322B ; contour de champ ou de bouton #817A6B · #77725F (3:1 minimum) |
-| Texte | principal #1A1814 · #F2EEE4 ; secondaire #4B463D · #C4BEB0 ; discret #655F53 · #9C9686 (4,5:1 minimum) |
-| Accent d'action | #E4521F · #FF7A4D, avec texte encre #1A1814 · #13120F sur bouton ; texte d'accent #B23A0E · #FF8A5C |
-| Surligneur | #DDF37A (surlignage de lecture) · #3A4419 ; mot d'accent #D7F46A sur encre #1A1814 (14,4:1) |
-| États | succès #1D7444 · #5DD394 ; avertissement #875700 · #F0B64A ; erreur #BA2530 · #FF8077 |
-| Focus | #1A1814 · #D7F46A |
-| Typographies | Google Fonts, auto-hébergées (fontsource) : Roboto 400, 500 et 700 pour le texte et les titres ; Roboto Mono pour horodatages, durées et données, en casse normale. Les mots d'accent gardent la police du titre, surlignés |
-| Rayons | pilule (999 px) boutons et badges ; 12 px champs ; 20 px panneaux |
-| Icônes | Phosphor (MIT), graisse Regular, 22 px ; Duotone pour les états vides |
-| Thème | clair par défaut ; sombre en option ; suit `prefers-color-scheme` en repli |
-| Animations | onde audio (1,6 s), progression (déterminée pour l'envoi, indéterminée pour les étapes), apparition mot à mot sur l'accueil ; toutes coupées quand l'utilisateur réduit les animations |
+| Fond | #0D0B1A · #F6F5FF |
+| Surfaces | #15122A · #FFFFFF ; surface élevée #1D1938 · #ECEAFB |
+| Filets | décoratif #2C2750 · #DDDAF2 ; contour de champ ou de bouton #6E68A0 · #7C77A6 (3:1 minimum) |
+| Texte | principal #EEEBFF · #14112B ; secondaire #C0BAE6 · #423D66 ; discret #9690C4 · #5C5785 (4,5:1 minimum) |
+| Accent d'action | #C8F25A · #4A6A00, avec texte encre #0D0B1A · #FFFFFF sur bouton ; texte d'accent identique |
+| En direct et focus | cyan #4FD1E0 · #0E7C8A (en clair, le focus reprend l'olive #4A6A00) |
+| Surlignage de lecture | ligne #2A2152 · #EEF8C8 ; horodatage de la ligne #4FD1E0 · #3E5700 |
+| États | succès #4FE0A6 · #157A4F ; avertissement #FFC266 · #8A5A00 ; erreur #FF7A7A · #C0262D |
+| Typographies | Auto-hébergées (fontsource) : Onest (texte, variable) ; Unbounded 600 (titres seulement, jamais sous 17 px) ; JetBrains Mono 400 et 500 (horodatages, formats, URL, métadonnées, `tabular-nums`) |
+| Rayons | 12 px boutons et champs ; 20 px panneaux et cartes ; pilule (999 px) badges et pastilles |
+| Ombres | `--vx-shadow` pour les panneaux ; `--vx-shadow-hero` pour le formulaire du héros |
+| Icônes | Tabler Icons (MIT) ou Lucide (ISC), trait 1,6 à 1,8 px, `currentColor` ; aucune bibliothèque payante |
+| Thème | sombre par défaut ; clair sous `data-theme="light"`, ou repli sur `prefers-color-scheme: light` si aucun attribut n'est posé |
+| Animations | onde audio (1,6 s), point « en direct », étape en cours, apparition mot à mot de l'aperçu, scènes d'usage de la landing ; toutes coupées sous `prefers-reduced-motion` |
 
-Anciennes valeurs (Signal, §7 de la version précédente) : fond #0E0F0E, accent #FF6A3D, Instrument Serif, rayons 4-6-10 px. Elles ne sont plus utilisées.
+**Contraintes**
 
-**Structure de la page d'accueil**
+- Contraste du texte d'au moins 4,5:1 dans les deux thèmes ; contours d'interface d'au moins 3:1.
+- Chaque écran qui traite un fichier montre cinq états : vide, en file d'attente, en cours (avec progression), en erreur, terminé.
+- Pas de défilement horizontal à 320 px ; marge latérale de 16 px ; cibles tactiles d'au moins 44 px.
+- Les prix et quotas du kit sont provisoires (`[prix]`, `[n]`) : ils viennent de `config/voxia.php`.
 
-1. En-tête : Usages, Fonctionnement, Tarifs, Se connecter, Essayer gratuitement.
-2. Hero : « Chaque vidéo contient un texte. Voxia te l'écrit. », champ de lien et bouton « Transcrire → », lien de dépôt de fichier.
-3. Aperçu produit : onde audio, transcription horodatée avec la phrase en cours surlignée, boutons Copier, .txt, .srt, .vtt, .mp3.
-4. Bandeau défilant d'extraits horodatés.
-5. Usages : créateurs et marketeurs.
-6. Fonctionnement en 4 étapes : lien, audio, transcription, export.
-7. Fiche technique : entrées, sorties, horodatage, langues.
-8. Tarifs.
-9. Questions fréquentes.
-10. Pied de page : confidentialité, conditions, contact.
+**Structure de la page d'accueil** (maquette « B Nocturne », `designs/Voxia Landing - B Nocturne.dc.html`)
 
-**Ce que la maquette impose au MVP**
+1. En-tête sticky : logo, navigation (Usages, Fonctionnement, Tarifs, Questions), langue, « Se connecter ». Menu mobile.
+2. Héros : pastille des sources (YouTube, TikTok, fichiers audio et vidéo), titre « Chaque vidéo contient un texte. Voxia te l'écrit. », texte d'appui, formulaire du lien (le plus important de la page).
+3. Aperçu du résultat : onde, horodatages, ligne surlignée, pastilles TXT, PDF, SRT, VTT, MP3.
+4. Fonctionnement en trois étapes : lien ou fichier, transcription, copie ou téléchargement.
+5. Ce que tu récupères : trois livrables (transcription horodatée TXT et PDF ; sous-titres SRT et VTT ; fichier audio MP3).
+6. Pour qui : créateurs de contenu, marketeurs, e-commerçants.
+7. Tarifs : Gratuit, Pro (recommandé), Pack ; prix provisoires.
+8. Questions fréquentes (`<details>`).
+9. Appel final « Ta prochaine vidéo, en texte. » et pied de page : CGU, confidentialité, contact.
 
-- Le champ de lien du hero démarre le parcours principal : le lien collé est conservé pendant l'inscription (section 2, étape 2).
-- L'aperçu produit sert de modèle à l'écran de transcription (F2) : horodatages en Geist Mono, phrase en cours surlignée, barre d'export sous le texte.
-- La promesse « en une ou deux minutes » du hero doit tenir sur une vidéo de 10 minutes (cible de la section 1).
-
-**Écarts à trancher avant l'intégration**
+**Écarts à trancher avant l'intégration** (issus de l'ancienne maquette ; à relire pour la landing Nocturne)
 
 | Point | Maquette | Cahier des charges et offre | Proposition |
 | --- | --- | --- | --- |

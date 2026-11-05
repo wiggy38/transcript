@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\URL;
 
 /*
- * Charte « Surligneur » (cahier §7) : jetons des deux thèmes, contrastes, animations, polices
- * auto-hébergées, composants.
+ * Charte « Nocturne » (cahier §7) : jetons des deux thèmes, contrastes,
+ * animations, polices auto-hébergées, composants.
  */
 
 function luminanceCharte(string $hex): float
@@ -41,7 +41,7 @@ function jetonsCharte(string $theme): array
     $css = file_get_contents(resource_path('css/voxia-tokens.css'));
     $motif = $theme === 'sombre'
         ? '/:root\[data-theme="dark"\]\s*\{(.*?)\}/s'
-        : '/:root,\s*:root\[data-theme="light"\]\s*\{(.*?)\}/s';
+        : '/:root\[data-theme="light"\]\s*\{(.*?)\}/s';
     preg_match($motif, $css, $bloc);
 
     preg_match_all('/--vx-([a-z0-9-]+):\s*(#[0-9A-Fa-f]{6});/', $bloc[1] ?? '', $correspondances, PREG_SET_ORDER);

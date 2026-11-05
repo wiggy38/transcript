@@ -1,38 +1,35 @@
-/* Thème « surligneur » : emails transactionnels aux couleurs de la direction « Surligneur » (cahier §7), clair.
+/* Thème « nocturne » : emails transactionnels aux couleurs de la direction « Nocturne » (cahier §7), sombre.
    Aucune police externe : repli système, les clients mail ne chargent pas les polices de toute façon. */
 
 body,
-.wrapper {
-    background-color: #F4F1EA !important;
-}
-
-.wrapper {
-    color: #1A1814;
-}
-
+.wrapper,
 .content {
-    background-color: #F4F1EA !important;
+    background-color: #0D0B1A !important;
+}
+
+.wrapper {
+    color: #EEEBFF;
 }
 
 .inner-body {
-    background-color: #FFFDF8 !important;
-    border: 1px solid #DDD7CA;
+    background-color: #15122A !important;
+    border: 1px solid #2C2750;
     border-radius: 20px;
-    color: #1A1814;
+    color: #EEEBFF;
 }
 
 .body-action {
-    color: #1A1814;
+    color: #EEEBFF;
 }
 
 .content-cell {
     padding: 32px;
     font-family: Arial, Helvetica, sans-serif;
-    color: #1A1814;
+    color: #EEEBFF;
 }
 
 h1 {
-    color: #1A1814;
+    color: #EEEBFF;
     font-size: 20px;
     font-weight: 700;
     margin: 0 0 16px;
@@ -42,39 +39,39 @@ p,
 ul,
 ol,
 blockquote {
-    color: #4B463D;
+    color: #C0BAE6;
     font-size: 15px;
     line-height: 1.6;
 }
 
 a {
-    color: #B23A0E;
+    color: #C8F25A;
 }
 
 .header a {
-    color: #1A1814 !important;
+    color: #EEEBFF !important;
     font-size: 19px;
     font-weight: 700;
     text-decoration: none;
 }
 
 .footer {
-    color: #655F53;
+    color: #9690C4;
 }
 
 .footer p {
-    color: #655F53;
+    color: #9690C4;
     font-size: 12px;
 }
 
 .signature-discrete {
     display: block;
     margin-top: 24px;
-    color: #655F53;
+    color: #9690C4;
     font-size: 13px;
 }
 
-/* Boutons : pilule, accent #E4521F, texte encre. */
+/* Boutons : pilule, accent #C8F25A, texte encre. */
 .button {
     border-radius: 999px;
     text-decoration: none;
@@ -82,11 +79,11 @@ a {
 
 .button-primary,
 .button-primary:visited {
-    background-color: #E4521F;
-    border-bottom: 8px solid #E4521F;
-    border-left: 18px solid #E4521F;
-    border-right: 18px solid #E4521F;
-    border-top: 8px solid #E4521F;
-    color: #1A1814 !important;
+    background-color: #C8F25A;
+    border-bottom: 8px solid #C8F25A;
+    border-left: 18px solid #C8F25A;
+    border-right: 18px solid #C8F25A;
+    border-top: 8px solid #C8F25A;
+    color: #0D0B1A !important;
     font-weight: 600;
 }

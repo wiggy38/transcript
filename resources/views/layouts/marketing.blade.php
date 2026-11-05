@@ -13,7 +13,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#F4F1EA">
+    <meta name="theme-color" content="#0D0B1A">
     <title>{{ $titre }}</title>
     <meta name="description" content="{{ $description }}">
     <link rel="canonical" href="{{ $adresse }}">

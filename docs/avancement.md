@@ -266,18 +266,14 @@ Décisions des fenêtres d'upgrade :
 - Tests adaptés : le bandeau d'aperçu mène désormais à la fenêtre (`PaiementTest`), et le test de quota lit le compteur mocké (`NouvelleTranscriptionTest`, helper `mockQuotaCompteur`).
 - Langues : les textes de l'interface et des courriels sont bilingues (voir « Langues » en §2). Tests existants adaptés à la nouvelle adresse de l'accueil (`/fr`) et à la langue explicite des courriels : `ExampleTest`, `PageAccueilTest`, `EcransComptesTest`, `CharteSignalTest`, `EmailsTransactionnelsTest`, `HistoriqueListeTest`, `ConservationTest`.
 
-### Refonte visuelle « Surligneur » (cahier §7, CLAUDE.md §4)
+### Refonte visuelle « Nocturne » (cahier §7, CLAUDE.md §4)
 
-- [x] Direction 3 « Surligneur » retenue parmi les trois propositions de Claude Design (`docs/Voxia Direction 3 - Surligneur.dc.html`). Elle remplace la charte Signal, dans le cahier (§6, §7) et dans `CLAUDE.md` (§4).
-- [x] Tokens dans `resources/css/voxia-tokens.css` : clair par défaut, sombre sous `data-theme="dark"` et en repli `prefers-color-scheme`. `app.css` les branche en `@theme inline` ; les classes existantes (`bg-fond`, `text-texte`, `border-filet`, `rounded-bouton`…) restent valides.
-- [x] Polices : Bricolage Grotesque Variable ajoutée (fontsource, auto-hébergée), Instrument Serif retirée. Mots d'accent des titres : classe `.vx-surlignage` (même police, fond surligné).
-- [x] Polices remplacées : Roboto (texte et titres) et Roboto Mono (données), auto-hébergées (`@fontsource/roboto`, `@fontsource/roboto-mono`). Geist, Geist Mono et Bricolage Grotesque ne sont plus utilisées. Le cahier (§7) et `CLAUDE.md` (§4) suivent ce choix.
-- [x] Animations existantes conservées, plus `vx-indeterminee` ; toutes coupées sous `prefers-reduced-motion`.
-- [x] Accessibilité : texte d'accent sur `text-accent-texte` (#B23A0E clair, #FF8A5C sombre) ; texte sur fond d'accent sur `text-sur-accent` (encre).
-- [x] Hexadécimaux en dur retirés des vues (aperçu, accueil, analyse de script, lecture, guide de style).
-- [x] Emails : thème `surligneur.css` en clair, remplace `signal.css`.
-- [x] Tests : `CharteSignalTest` remplacé par `CharteSurligneurTest`. Il lit `voxia-tokens.css` dans les deux thèmes et garde les mêmes critères (4,5:1 texte et bouton, 3:1 contour, animations coupées, pas de CDN de police). Les tests de la page d'accueil et des emails suivent la nouvelle charte. Aucun test n'a été désactivé.
-- Non fait dans ce lot : icônes Phosphor, bascule de thème dans les réglages, vérification visuelle dans un navigateur, couleurs des PDF d'export. Voir P138 à P142.
+- [x] Direction « Nocturne » retenue. Elle remplace la charte précédente dans le cahier (§7), dans `CLAUDE.md` (§4) et dans le code. Le handoff est versionné dans `docs/design_handoff_voxia_nocturne/`.
+- [x] Tokens dans `resources/css/voxia-tokens.css` : sombre par défaut, clair sous `data-theme="light"`, repli sur `prefers-color-scheme: light`. `app.css` les branche en `@theme inline` ; les classes existantes (`bg-fond`, `text-texte`, `border-filet`, `rounded-bouton`…) restent valides.
+- [x] Polices auto-hébergées (fontsource) : Onest (variable), Unbounded 600 (titres), JetBrains Mono 400 et 500 (données). Roboto et Bricolage Grotesque retirés de `package.json`.
+- [x] Emails : thème `nocturne.css` (sombre), `config/mail.php` mis à jour. Le fichier `docs/Voxia Direction 3 - Surligneur.dc.html` est supprimé.
+- [x] Tests : `CharteNocturneTest` (contrastes 4,5:1 et 3:1 dans les deux thèmes, animations coupées, pas de CDN de police). Tests de la page d'accueil et des emails mis à jour. Aucun test désactivé.
+- [ ] Reste à faire (étape 2 et suivantes) : composants Blade selon `blade-reference/`, landing, tarifs, écrans de l'application, thème Filament. Voir P138 à P142.
 
 ## 4. Points ouverts
 
@@ -519,8 +515,8 @@ Décisions des fenêtres d'upgrade :
 - [ ] P135 — Tarifs : les crédits IA du Pro s'affichent « inclus, volume à confirmer » (lié à P110).
 - [ ] P136 — Pages publiques : mise en page non vérifiée dans un navigateur. Le tableau des tarifs défile dans son cadre sous 640 px (pas la page entière) : à vérifier à 375 px, avec la règle « aucun défilement horizontal de la page ».
 - [ ] P137 — Langues : `lang/fr/courriels.php` définit deux fois la clé `rappel_suppression` (le second bloc, avec « 3 jours » écrit en dur, remplace le premier, paramétré). À corriger en gardant la version paramétrée.
-- [ ] P138 — Refonte « Surligneur » : icônes Phosphor (MIT, Regular et Duotone) à intégrer en SVG. Non fait : aucune bibliothèque d'icônes n'est installée pour l'instant.
-- [ ] P139 — Refonte « Surligneur » : bascule clair et sombre dans les réglages du compte (Alpine et préférence enregistrée). Aujourd'hui `data-theme="light"` est posé en dur sur `<html>`.
-- [ ] P140 — Refonte « Surligneur » : aucune vérification visuelle dans un navigateur (desktop, mobile à 375 px, animations coupées, thème sombre). À faire avant de fusionner.
-- [ ] P141 — Refonte « Surligneur » : les PDF d'export (`resources/views/exports/*.blade.php`) gardent leurs couleurs d'origine. À aligner sur la charte si le document doit suivre la marque.
-- [ ] P142 — Refonte « Surligneur » : les formes décoratives de la page d'accueil (usages, aperçu) utilisent maintenant les tokens ; à revoir visuellement.
+- [ ] P138 — Refonte « Nocturne » : icônes Tabler ou Lucide (trait 1,6 à 1,8 px) à intégrer en SVG via un composant `<x-icone>`. Non fait : aucune bibliothèque d'icônes n'est installée.
+- [ ] P139 — Refonte « Nocturne » : bascule clair et sombre dans les réglages du compte. Sombre par défaut ; vérifier qu'aucun `data-theme` n'est posé en dur sur `<html>`.
+- [ ] P140 — Refonte « Nocturne » : aucune vérification visuelle dans un navigateur (desktop, 320 et 375 px, animations coupées, thème clair et sombre). À faire avant de fusionner.
+- [ ] P141 — Refonte « Nocturne » : les PDF d'export (`RendeurPdf`, `ExporteurPdf`, `resources/views/exports/*.blade.php`) utilisent encore Geist et Geist Mono (`resources/fonts/`). mPDF exige des TTF : Onest et JetBrains Mono ne sont fournis qu'en woff2 par fontsource. Choix à trancher : fournir des TTF, ou garder Geist pour les PDF.
+- [ ] P142 — Refonte « Nocturne » : la landing actuelle garde son bandeau défilant et la frappe de l'aperçu, que le handoff demande de retirer. Composants et landing à reprendre (étape 2).

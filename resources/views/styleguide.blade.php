@@ -9,15 +9,15 @@
         <section aria-labelledby="s-couleurs" class="flex flex-col gap-6">
             <h2 id="s-couleurs" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('interface.styleguide.couleurs') }}</h2>
             <div class="grid grid-cols-2 gap-3 md:grid-cols-4">
-                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-fond border border-filet"></span><span class="font-mono text-xs">fond · #F4F1EA</span></x-panneau>
-                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-panneau border border-filet"></span><span class="font-mono text-xs">panneau · #FFFDF8</span></x-panneau>
-                <x-panneau eleve class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-panneau-eleve border border-filet"></span><span class="font-mono text-xs">panneau-eleve · #EAE6DB</span></x-panneau>
-                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-accent"></span><span class="font-mono text-xs">accent · #E4521F</span></x-panneau>
-                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-surlignage"></span><span class="font-mono text-xs">surlignage · #DDF37A</span></x-panneau>
-                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-texte"></span><span class="font-mono text-xs">texte · #1A1814</span></x-panneau>
-                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-texte-secondaire"></span><span class="font-mono text-xs">texte-secondaire · #4B463D</span></x-panneau>
-                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-texte-discret"></span><span class="font-mono text-xs">texte-discret · #655F53</span></x-panneau>
-                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-erreur"></span><span class="font-mono text-xs">erreur · #BA2530</span></x-panneau>
+                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-fond border border-filet"></span><span class="font-mono text-xs">fond · #0D0B1A</span></x-panneau>
+                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-panneau border border-filet"></span><span class="font-mono text-xs">panneau · #15122A</span></x-panneau>
+                <x-panneau eleve class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-panneau-eleve border border-filet"></span><span class="font-mono text-xs">panneau-eleve · #1D1938</span></x-panneau>
+                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-accent"></span><span class="font-mono text-xs">accent · #C8F25A</span></x-panneau>
+                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-surlignage"></span><span class="font-mono text-xs">surlignage · #2A2152</span></x-panneau>
+                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-texte"></span><span class="font-mono text-xs">texte · #EEEBFF</span></x-panneau>
+                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-texte-secondaire"></span><span class="font-mono text-xs">texte-secondaire · #C0BAE6</span></x-panneau>
+                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-texte-discret"></span><span class="font-mono text-xs">texte-discret · #9690C4</span></x-panneau>
+                <x-panneau class="flex flex-col gap-2 p-4"><span class="h-12 rounded-champ bg-erreur"></span><span class="font-mono text-xs">erreur · #FF7A7A</span></x-panneau>
             </div>
         </section>
 

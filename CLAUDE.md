@@ -29,14 +29,13 @@ En cas de conflit entre documents, le cahier prime. Pour une valeur absente des 
 - Filament pour `/admin`.
 - Paiement : Stripe ou Paddle, à décider (cahier §8).
 
-## 4. Charte « Surligneur » (cahier §7, remplace Signal)
+## 4. Charte « Nocturne » (cahier §7)
 
-- Clair par défaut : fond `#F4F1EA`, surfaces `#FFFDF8`, surface élevée `#EAE6DB`, filets `#DDD7CA`, contour `#817A6B`. Sombre : fond `#13120F`, surfaces `#1B1A16`.
-- Texte `#1A1814` ; secondaire `#4B463D` ; discret `#655F53` (sombre : `#F2EEE4`, `#C4BEB0`, `#9C9686`).
-- Accent d'action `#E4521F` (sombre `#FF7A4D`), texte encre sur bouton. Surligneur `#DDF37A` (sombre `#3A4419`), mot d'accent `#D7F46A`.
+Source : `docs/design_handoff_voxia_nocturne/README.md` et `tokens/voxia-tokens.css`. Sombre par défaut : fond `#0D0B1A`, surfaces `#15122A`, surface élevée `#1D1938`, filets `#2C2750`, contour `#6E68A0`. Clair sous `data-theme="light"` : fond `#F6F5FF`, surfaces `#FFFFFF`.
+- Texte sombre `#EEEBFF` ; secondaire `#C0BAE6` ; discret `#9690C4`. Texte clair `#14112B` ; secondaire `#423D66` ; discret `#5C5785`.
+- Accent d'action (vert citron) `#C8F25A` en sombre, `#4A6A00` en clair, texte encre sur bouton. Cyan « en direct » et focus `#4FD1E0` en sombre.
+- Typographies (fontsource) : Onest (texte), Unbounded 600 (titres seulement), JetBrains Mono (horodatages, données). Rayons : boutons et champs 12 px, panneaux 20 px, badges en pilule.
 - Tokens dans `resources/css/voxia-tokens.css`, mappés dans `app.css` (`@theme inline`) ; les classes `bg-fond`, `text-texte`, `border-filet`, `rounded-bouton` restent valides.
-- Typographies : Google Fonts, auto-hébergées via fontsource : Roboto (texte et titres) ; Roboto Mono (horodatages, données).
-- Rayons : pilule boutons et badges, 12 px champs, 20 px panneaux.
 - Animations : onde audio, progression, apparition mot à mot ; toutes coupées sous `prefers-reduced-motion`.
 
 ## 5. Règles de code

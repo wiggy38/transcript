@@ -5,11 +5,12 @@
 @source '../../storage/framework/views/*.php';
 
 /*
- * Direction « Surligneur » (cahier §7). Les valeurs sont dans voxia-tokens.css : ici, seulement
- * le branchement sur Tailwind. Les noms de classes existants (bg-fond, text-texte, border-filet,
- * rounded-bouton…) restent valides ; le thème sombre passe par data-theme="dark".
+ * Direction « Nocturne » (cahier §7). Les valeurs sont dans
+ * voxia-tokens.css ; ici, seulement le branchement sur Tailwind. Les noms de classes existants
+ * (bg-fond, text-texte, border-filet, rounded-bouton…) restent valides. Sombre par défaut ;
+ * data-theme="light" pour le thème clair.
  */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, :root:not([data-theme="light"]) *));
 
 @theme inline {
     --font-sans: var(--vx-font-text);
@@ -33,17 +34,37 @@
     --color-sur-accent: var(--vx-on-accent);
     --color-accent-texte: var(--vx-accent-text);
 
-    /* Surligneur : phrase lue, mots d'accent, focus */
+    /* Phrase en cours de lecture, horodatage de la ligne, cyan « en direct », onde non lue */
     --color-surlignage: var(--vx-mark);
     --color-sur-surlignage: var(--vx-mark-text);
+    --color-surlignage-temps: var(--vx-mark-time);
+    --color-direct: var(--vx-live);
+    --color-onde-repos: var(--vx-wave-idle);
 
     --color-succes: var(--vx-success);
     --color-avertissement: var(--vx-warning);
     --color-erreur: var(--vx-error);
+    --color-focus: var(--vx-focus);
 
     --radius-bouton: var(--vx-r-btn);
     --radius-champ: var(--vx-r-field);
     --radius-panneau: var(--vx-r-panel);
+    --radius-pilule: var(--vx-r-badge);
+
+    --shadow-panneau: var(--vx-shadow);
+    --shadow-heros: var(--vx-shadow-hero);
+
+    /* Échelle de texte de la maquette (Onest 15 px pour le corps, 12 px pour les données) */
+    --text-donnee: 12px;
+    --text-donnee--line-height: 1.5;
+    --text-aide: 13px;
+    --text-aide--line-height: 1.5;
+    --text-petit: 14px;
+    --text-petit--line-height: 1.5;
+    --text-corps: 15px;
+    --text-corps--line-height: 1.6;
+    --text-appui: 16px;
+    --text-appui--line-height: 1.6;
 }
 
 @layer base {
@@ -61,23 +82,56 @@
         outline-offset: 2px;
     }
 
+    a {
+        color: var(--color-accent-texte);
+        text-underline-offset: 3px;
+    }
+
+    a:hover {
+        color: var(--color-texte);
+    }
+
     ::placeholder {
         color: var(--color-texte-discret);
         opacity: 1;
     }
 
     dialog::backdrop {
-        background-color: color-mix(in oklab, var(--vx-bg) 78%, transparent);
+        background-color: var(--vx-overlay);
     }
 }
 
+/* Titres : Unbounded, jamais sous 17 px pour les cartes (H3 à 19 px) */
+@utility titre-h1 {
+    font-family: var(--font-titre);
+    font-weight: 600;
+    font-size: clamp(22px, 3.9vw, 44px);
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+}
+
+@utility titre-h2 {
+    font-family: var(--font-titre);
+    font-weight: 600;
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+}
+
+/* Fond de héros : lueur indigo et trame de points de 20 px à 12 % */
+@utility fond-heros {
+    background-image: var(--vx-glow), radial-gradient(color-mix(in oklab, var(--vx-text) 12%, transparent) 1px, transparent 1.5px);
+    background-size: auto, 20px 20px;
+}
+
 /*
- * Mot d'accent des titres : même police que le titre, surligné comme sur une feuille.
- * Remplace l'ancienne police italique : une seule famille de titres.
+ * Mot d'accent des titres : mot en vert citron (ou encre sur fond vert citron en clair, selon le
+ * jeton --vx-accent-word). Une seule famille de titres, la même que le reste du titre.
  */
 .vx-surlignage {
     font-family: var(--font-titre);
-    font-weight: 700;
+    font-weight: 600;
     color: var(--vx-accent-word);
     background-color: var(--vx-accent-word-bg);
     padding: 0 0.12em;

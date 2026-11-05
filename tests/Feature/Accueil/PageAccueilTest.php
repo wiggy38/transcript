@@ -138,7 +138,7 @@ it('répond aux pages du pied de page, sans texte juridique inventé', function 
     'contact' => ['/fr/contact', 'Contact', '[EMAIL DE CONTACT À COMPLÉTER]'],
 ]);
 
-it('donne à la page un titre, une description et des balises de partage au style Surligneur', function () {
+it('donne à la page un titre, une description et des balises de partage au style Nocturne', function () {
     $html = pageAccueilDecodee('/fr');
 
     expect($html)
@@ -149,7 +149,7 @@ it('donne à la page un titre, une description et des balises de partage au styl
         ->toContain('property="og:image" content="'.asset('images/partage-voxia.png').'"')
         ->toContain('property="og:image:width" content="1200"')
         ->toContain('name="twitter:card" content="summary_large_image"')
-        ->toContain('name="theme-color" content="#F4F1EA"');
+        ->toContain('name="theme-color" content="#0D0B1A"');
 
     expect(file_exists(public_path('images/partage-voxia.png')))->toBeTrue();
 });

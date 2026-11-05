@@ -1,15 +1,9 @@
-// Polices Google Fonts (Roboto, Roboto Mono), auto-hébergées via fontsource : aucun appel vers Google.
-// Latin et latin étendu, chacun chargé seulement si la page en a besoin (unicode-range).
-import '@fontsource/roboto/latin-400.css';
-import '@fontsource/roboto/latin-500.css';
-import '@fontsource/roboto/latin-700.css';
-import '@fontsource/roboto/latin-ext-400.css';
-import '@fontsource/roboto/latin-ext-500.css';
-import '@fontsource/roboto/latin-ext-700.css';
-import '@fontsource/roboto-mono/latin-400.css';
-import '@fontsource/roboto-mono/latin-500.css';
-import '@fontsource/roboto-mono/latin-ext-400.css';
-import '@fontsource/roboto-mono/latin-ext-500.css';
+// Polices de la direction « Nocturne », auto-hébergées via fontsource : aucun appel vers Google.
+// Onest (texte, variable), Unbounded 600 (titres), JetBrains Mono 400/500 (données).
+import '@fontsource-variable/onest/wght.css';
+import '@fontsource/unbounded/latin-600.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
 
 // Envoi de fichiers en morceaux (écran Nouvelle transcription). Alpine est fourni par Livewire.
 import televersement from './televersement.js';
