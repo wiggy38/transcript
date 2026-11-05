@@ -13,7 +13,7 @@
         @endif
     </div>
 
-    <p class="text-4xl font-semibold leading-none tracking-tight">
+    <p class="text-3xl font-semibold leading-none tracking-tight">
         {{ $carte['prix'] }}
         @if ($carte['periode'])
             <span class="text-base font-normal tracking-normal text-texte-discret">{{ $carte['periode'] }}</span>

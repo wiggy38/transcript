@@ -5,7 +5,7 @@
     $codesLangues = collect(config('voxia.langues_forcables'))->map(fn ($code) => strtoupper($code))->implode(' · ');
 @endphp
 
-<section class="pt-32" aria-labelledby="titre-fiche">
+<section class="pt-2.5" aria-labelledby="titre-fiche">
     <div class="flex flex-wrap border-t border-filet">
         <div class="min-w-0 flex-[1_1_280px] py-8 pr-8">
             <h2 id="titre-fiche" class="font-mono text-xs font-medium text-texte-discret">{{ __('accueil.fiche.titre') }}</h2>

@@ -271,6 +271,7 @@ Décisions des fenêtres d'upgrade :
 - [x] Direction 3 « Surligneur » retenue parmi les trois propositions de Claude Design (`docs/Voxia Direction 3 - Surligneur.dc.html`). Elle remplace la charte Signal, dans le cahier (§6, §7) et dans `CLAUDE.md` (§4).
 - [x] Tokens dans `resources/css/voxia-tokens.css` : clair par défaut, sombre sous `data-theme="dark"` et en repli `prefers-color-scheme`. `app.css` les branche en `@theme inline` ; les classes existantes (`bg-fond`, `text-texte`, `border-filet`, `rounded-bouton`…) restent valides.
 - [x] Polices : Bricolage Grotesque Variable ajoutée (fontsource, auto-hébergée), Instrument Serif retirée. Mots d'accent des titres : classe `.vx-surlignage` (même police, fond surligné).
+- [x] Polices remplacées : Roboto (texte et titres) et Roboto Mono (données), auto-hébergées (`@fontsource/roboto`, `@fontsource/roboto-mono`). Geist, Geist Mono et Bricolage Grotesque ne sont plus utilisées. Le cahier (§7) et `CLAUDE.md` (§4) suivent ce choix.
 - [x] Animations existantes conservées, plus `vx-indeterminee` ; toutes coupées sous `prefers-reduced-motion`.
 - [x] Accessibilité : texte d'accent sur `text-accent-texte` (#B23A0E clair, #FF8A5C sombre) ; texte sur fond d'accent sur `text-sur-accent` (encre).
 - [x] Hexadécimaux en dur retirés des vues (aperçu, accueil, analyse de script, lecture, guide de style).

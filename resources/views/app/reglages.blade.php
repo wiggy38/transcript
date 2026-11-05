@@ -8,7 +8,7 @@
         <p role="status" class="mb-8 border-l-2 border-accent py-1 pl-3 text-sm text-texte">{{ $messageStatut }}</p>
     @endif
 
-    <h1 class="text-3xl font-semibold tracking-tight">{{ __('comptes.reglages.titre') }}</h1>
+    <h1 class="text-2xl font-semibold tracking-tight">{{ __('comptes.reglages.titre') }}</h1>
 
     <div class="mt-10 grid max-w-[880px] gap-8">
         {{-- Profil : nom et email, traités par Fortify (user-profile-information.update). --}}
@@ -53,7 +53,7 @@
                 @method('PUT')
                 <div class="flex flex-col gap-2">
                     <label for="langue-interface" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('comptes.reglages.langue') }}</label>
-                    <select id="langue-interface" name="locale" class="min-h-11 rounded-champ border border-filet-contour bg-panneau px-3.5 text-texte">
+                    <select id="langue-interface" name="locale" class="min-h-10 rounded-champ border border-filet-contour bg-panneau px-3.5 text-texte">
                         <option value="auto" @selected($utilisateur->locale === null)>{{ __('comptes.reglages.langues.auto') }}</option>
                         @foreach ($langues as $langue)
                             <option value="{{ $langue }}" @selected($utilisateur->locale === $langue)>{{ __('comptes.reglages.langues.'.$langue) }}</option>

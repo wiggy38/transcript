@@ -16,7 +16,7 @@
                 @method('DELETE')
 
                 <button type="submit"
-                        class="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-bouton border border-erreur px-5 text-[15px] font-semibold text-erreur transition-colors duration-150 hover:bg-erreur hover:text-sur-accent">
+                        class="inline-flex min-h-10 cursor-pointer items-center justify-center rounded-bouton border border-erreur px-5 text-[14px] font-semibold text-erreur transition-colors duration-150 hover:bg-erreur hover:text-sur-accent">
                     {{ __('historique.confirmation.bouton') }}
                 </button>
 

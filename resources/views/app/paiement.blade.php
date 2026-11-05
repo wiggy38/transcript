@@ -1,5 +1,5 @@
 <x-layouts::app :titre="__('abonnement.paiement.titre')" actif="compte">
-    <h1 class="text-3xl font-semibold tracking-tight">{{ __('abonnement.paiement.titre_'.$produit) }}</h1>
+    <h1 class="text-2xl font-semibold tracking-tight">{{ __('abonnement.paiement.titre_'.$produit) }}</h1>
 
     <div class="mt-10 grid max-w-[880px] gap-8">
         <x-panneau class="p-6">

@@ -5,7 +5,7 @@
 @endphp
 
 <x-layouts::marketing :titre="__('pages.contact.titre').' — '.__('interface.marque')" :description="__('pages.contact.intro')">
-    <section class="max-w-[640px] pt-20 pb-16">
+    <section class="max-w-[640px] pt-2.5 pb-16">
         <h1 class="text-[clamp(40px,5vw,64px)] leading-none font-semibold tracking-[-0.04em]">{{ __('pages.contact.titre') }}</h1>
         <p class="mt-6 text-lg text-texte-secondaire">{{ __('pages.contact.intro') }}</p>
 
@@ -29,7 +29,7 @@
 
                 <div class="flex flex-col gap-2">
                     <label for="contact-sujet" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('pages.contact.champs.sujet') }}</label>
-                    <select id="contact-sujet" name="sujet" required class="min-h-11 w-full rounded-champ border border-filet-contour bg-panneau px-3.5 text-[15px] text-texte">
+                    <select id="contact-sujet" name="sujet" required class="min-h-10 w-full rounded-champ border border-filet-contour bg-panneau px-3.5 text-[14px] text-texte">
                         @foreach ($sujets as $sujet)
                             <option value="{{ $sujet }}" @selected(old('sujet') === $sujet)>{{ __('pages.contact.sujets.'.$sujet) }}</option>
                         @endforeach
@@ -41,7 +41,7 @@
                     <textarea id="contact-message" name="message" rows="6" required minlength="10" maxlength="5000"
                         aria-describedby="contact-message-aide{{ $errors->has('message') ? ' contact-message-erreur' : '' }}"
                         @if ($errors->has('message')) aria-invalid="true" @endif
-                        class="w-full min-w-0 rounded-champ border border-filet-contour bg-panneau px-3.5 py-3 text-[15px] text-texte outline-none focus-visible:border-accent">{{ old('message') }}</textarea>
+                        class="w-full min-w-0 rounded-champ border border-filet-contour bg-panneau px-3.5 py-3 text-[14px] text-texte outline-none focus-visible:border-accent">{{ old('message') }}</textarea>
                     <p id="contact-message-aide" class="text-sm text-texte-discret">{{ __('pages.contact.champs.message_aide') }}</p>
                     @error('message')
                         <x-message-erreur id="contact-message-erreur">{{ $message }}</x-message-erreur>

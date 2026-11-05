@@ -7,7 +7,7 @@
     $decrit = collect([$erreur ? 'lien-erreur' : null, 'lien-depot'])->filter()->implode(' ');
 @endphp
 
-<section class="mx-auto max-w-[1240px] px-6 pt-24" aria-labelledby="titre-accueil">
+<section class="mx-auto max-w-[1240px] px-6 pt-2.5" aria-labelledby="titre-accueil">
     @if (session('statut') === 'compte-supprime')
         <p role="status" class="mb-8 border-l-2 border-accent py-1 pl-3 text-sm text-texte">
             {{ __('comptes.accueil.compte_supprime') }}

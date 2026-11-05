@@ -1,5 +1,5 @@
 {{-- Fonctionnement en quatre étapes (maquette Signal). Le paquet d'accent parcourt la ligne ; coupé par prefers-reduced-motion. --}}
-<section id="fonctionnement" class="pt-32" aria-labelledby="titre-fonctionnement">
+<section id="fonctionnement" class="pt-2.5" aria-labelledby="titre-fonctionnement">
     <h2 id="titre-fonctionnement" class="mb-14 text-[clamp(36px,4.6vw,64px)] leading-none font-semibold tracking-[-0.04em]">
         {{ __('accueil.fonctionnement.titre') }}
     </h2>
@@ -12,7 +12,7 @@
             @foreach (trans('accueil.fonctionnement.etapes') as $indice => $etape)
                 <li class="min-w-0 flex-[1_1_220px] pt-9">
                     <p class="font-mono text-xs {{ $indice === 3 ? 'text-accent-texte' : 'text-texte-discret' }}">0{{ $indice + 1 }}</p>
-                    <h3 class="mt-2 text-[22px] font-semibold tracking-[-0.02em]">{{ $etape['titre'] }}</h3>
+                    <h3 class="mt-2 text-[19px] font-semibold tracking-[-0.02em]">{{ $etape['titre'] }}</h3>
                     <p class="mt-2 text-texte-secondaire">{{ $etape['texte'] }}</p>
                 </li>
             @endforeach

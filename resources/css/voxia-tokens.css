@@ -89,11 +89,11 @@
 }
 
 :root {
-    --vx-font-text: "Geist", ui-sans-serif, system-ui, sans-serif;
-    --vx-font-title: "Bricolage Grotesque Variable", "Geist", ui-sans-serif, sans-serif;
-    --vx-font-data: "Geist Mono", ui-monospace, monospace;
+    --vx-font-text: "Roboto", ui-sans-serif, system-ui, sans-serif;
+    --vx-font-title: "Roboto", ui-sans-serif, system-ui, sans-serif;
+    --vx-font-data: "Roboto Mono", ui-monospace, monospace;
     --vx-title-weight: 700;
-    --vx-title-track: -0.035em;
+    --vx-title-track: -0.02em;
     --vx-r-btn: 999px;
     --vx-r-field: 12px;
     --vx-r-panel: 20px;

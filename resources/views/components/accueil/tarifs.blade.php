@@ -18,7 +18,7 @@
     $moisPack = $plans['pack']['validity_months'];
 @endphp
 
-<section id="tarifs" class="pt-32" aria-labelledby="titre-tarifs">
+<section id="tarifs" class="pt-2.5" aria-labelledby="titre-tarifs">
     <div class="mb-12 flex flex-wrap items-end justify-between gap-6">
         <h2 id="titre-tarifs" class="text-[clamp(36px,4.6vw,64px)] leading-none font-semibold tracking-[-0.04em]">{{ __('accueil.tarifs.titre') }}</h2>
         <p class="max-w-[26em] text-texte-secondaire">{{ __('accueil.tarifs.intro') }}</p>
@@ -28,7 +28,7 @@
         {{-- Gratuit --}}
         <article class="flex min-w-0 flex-[1_1_300px] flex-col bg-panneau p-6 md:p-10" aria-labelledby="plan-gratuit">
             <h3 id="plan-gratuit" class="font-mono text-[13px] font-medium text-texte-discret uppercase">{{ $plans['free']['label'] }}</h3>
-            <p class="mt-3.5 text-[64px] leading-none font-semibold tracking-[-0.04em]">{{ $montant($plans['free']['price_usd']) }}</p>
+            <p class="mt-3.5 text-[52px] leading-none font-semibold tracking-[-0.04em]">{{ $montant($plans['free']['price_usd']) }}</p>
 
             <ul class="m-0 mt-7 list-none p-0 text-texte-secondaire">
                 <li class="border-t border-filet py-2.5">{{ __('accueil.tarifs.gratuit.lignes.0', ['nombre' => $plans['free']['videos_per_month']]) }}</li>
@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <p class="mt-3.5 text-[64px] leading-none font-semibold tracking-[-0.04em]">
+            <p class="mt-3.5 text-[52px] leading-none font-semibold tracking-[-0.04em]">
                 <span x-show="periode === 'mois'">
                     {{ $montant($plans['pro']['price_monthly_usd']) }}<span class="ml-1 text-lg font-normal tracking-normal text-texte-discret">{{ __('accueil.tarifs.pro.suffixe_mois') }}</span>
                 </span>
@@ -85,7 +85,7 @@
         {{-- Pack : achat unique --}}
         <article class="flex min-w-0 flex-[1_1_300px] flex-col bg-panneau p-6 md:p-10" aria-labelledby="plan-pack">
             <h3 id="plan-pack" class="font-mono text-[13px] font-medium text-texte-discret uppercase">{{ $plans['pack']['label'] }}</h3>
-            <p class="mt-3.5 text-[64px] leading-none font-semibold tracking-[-0.04em]">
+            <p class="mt-3.5 text-[52px] leading-none font-semibold tracking-[-0.04em]">
                 {{ $montant($plans['pack']['price_usd']) }}<span class="ml-1 text-lg font-normal tracking-normal text-texte-discret">{{ __('accueil.tarifs.pack.suffixe') }}</span>
             </p>
 

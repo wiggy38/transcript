@@ -2,7 +2,7 @@
     <div x-data class="flex flex-col gap-20">
         <header class="flex flex-col gap-3">
             <p class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('interface.styleguide.avertissement') }}</p>
-            <h1 class="text-4xl font-semibold tracking-tight">{{ __('interface.styleguide.titre') }}</h1>
+            <h1 class="text-3xl font-semibold tracking-tight">{{ __('interface.styleguide.titre') }}</h1>
         </header>
 
         {{-- Couleurs : jetons de app.css --}}

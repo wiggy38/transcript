@@ -220,7 +220,7 @@ La direction « Surligneur » (Claude Design, proposition 3) remplace la maquett
 | Surligneur | #DDF37A (surlignage de lecture) · #3A4419 ; mot d'accent #D7F46A sur encre #1A1814 (14,4:1) |
 | États | succès #1D7444 · #5DD394 ; avertissement #875700 · #F0B64A ; erreur #BA2530 · #FF8077 |
 | Focus | #1A1814 · #D7F46A |
-| Typographies | Bricolage Grotesque 700 pour les titres et les mots d'accent (surlignés, sans changement de police) ; Geist 400 et 500 pour le texte ; Geist Mono pour horodatages, durées et données, en casse normale |
+| Typographies | Google Fonts, auto-hébergées (fontsource) : Roboto 400, 500 et 700 pour le texte et les titres ; Roboto Mono pour horodatages, durées et données, en casse normale. Les mots d'accent gardent la police du titre, surlignés |
 | Rayons | pilule (999 px) boutons et badges ; 12 px champs ; 20 px panneaux |
 | Icônes | Phosphor (MIT), graisse Regular, 22 px ; Duotone pour les états vides |
 | Thème | clair par défaut ; sombre en option ; suit `prefers-color-scheme` en repli |

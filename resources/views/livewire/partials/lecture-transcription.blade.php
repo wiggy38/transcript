@@ -103,14 +103,14 @@
                         @keydown.escape="effacerRecherche()"
                         placeholder="{{ __('transcriptions.lecture.rechercher') }}"
                         autocomplete="off"
-                        class="min-h-11 w-full min-w-0 rounded-champ border border-filet-contour bg-fond px-3 text-texte placeholder:text-texte-discret">
+                        class="min-h-10 w-full min-w-0 rounded-champ border border-filet-contour bg-fond px-3 text-texte placeholder:text-texte-discret">
                 </div>
                 <button type="button" @click="precedent()" :disabled="nombreResultats === 0"
-                    class="min-h-11 cursor-pointer rounded-bouton border border-filet-contour px-3 text-sm text-texte hover:border-accent hover:text-accent-texte disabled:cursor-not-allowed disabled:opacity-50">
+                    class="min-h-10 cursor-pointer rounded-bouton border border-filet-contour px-3 text-sm text-texte hover:border-accent hover:text-accent-texte disabled:cursor-not-allowed disabled:opacity-50">
                     {{ __('transcriptions.lecture.precedent') }}
                 </button>
                 <button type="button" @click="suivant()" :disabled="nombreResultats === 0"
-                    class="min-h-11 cursor-pointer rounded-bouton border border-filet-contour px-3 text-sm text-texte hover:border-accent hover:text-accent-texte disabled:cursor-not-allowed disabled:opacity-50">
+                    class="min-h-10 cursor-pointer rounded-bouton border border-filet-contour px-3 text-sm text-texte hover:border-accent hover:text-accent-texte disabled:cursor-not-allowed disabled:opacity-50">
                     {{ __('transcriptions.lecture.suivant') }}
                 </button>
                 <p aria-live="polite" class="w-full font-mono text-xs text-texte-discret sm:w-auto" x-text="messageRecherche"></p>
@@ -118,12 +118,12 @@
 
             <div class="mt-3 flex flex-wrap items-center gap-2">
                 <button type="button" @click="basculerHorodatages()" :aria-pressed="horodatagesVisibles ? 'true' : 'false'"
-                    class="min-h-11 cursor-pointer rounded-bouton border px-3 font-mono text-xs"
+                    class="min-h-10 cursor-pointer rounded-bouton border px-3 font-mono text-xs"
                     :class="horodatagesVisibles ? 'border-accent text-accent-texte' : 'border-filet-contour text-texte'">
                     {{ __('transcriptions.lecture.horodatages') }}
                 </button>
                 <button type="button" @click="basculerSuivre()" :aria-pressed="suivre ? 'true' : 'false'"
-                    class="min-h-11 cursor-pointer rounded-bouton border px-3 font-mono text-xs"
+                    class="min-h-10 cursor-pointer rounded-bouton border px-3 font-mono text-xs"
                     :class="suivre ? 'border-accent text-accent-texte' : 'border-filet-contour text-texte'">
                     {{ __('transcriptions.lecture.suivre') }}
                 </button>
@@ -176,14 +176,14 @@
             <footer class="mt-8 border-t border-filet pt-5" x-data="{ horodatages: true }">
                 <div class="flex flex-wrap items-center gap-3">
                     <button type="button" @click="copier()"
-                        class="min-h-11 cursor-pointer rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
+                        class="min-h-10 cursor-pointer rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
                         {{ __('transcriptions.lecture.copier') }}
                     </button>
                     <span role="status" class="font-mono text-xs text-texte-discret" x-text="messageCopie"></span>
                 </div>
 
                 <div class="mt-4">
-                    <label class="inline-flex min-h-11 cursor-pointer items-center gap-2 font-mono text-xs text-texte-secondaire">
+                    <label class="inline-flex min-h-10 cursor-pointer items-center gap-2 font-mono text-xs text-texte-secondaire">
                         <input type="checkbox" x-model="horodatages" class="size-4 accent-accent">
                         {{ __('transcriptions.lecture.avec_horodatages') }}
                     </label>
@@ -200,7 +200,7 @@
                                     $jsSans = \Illuminate\Support\Js::from($urlSans);
                                 @endphp
                                 <a href="{{ $urlAvec }}" x-bind:href="horodatages ? {{ $jsAvec }} : {{ $jsSans }}" download
-                                    class="inline-flex min-h-11 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
+                                    class="inline-flex min-h-10 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
                                     {{ $format->libelle() }}
                                 </a>
                             @else
@@ -210,7 +210,7 @@
                                 {{-- Format verrouillé : le bouton ouvre la fenêtre d'upgrade (cahier §2, déclencheur annexe « export »). --}}
                                 <button type="button" aria-haspopup="dialog" aria-describedby="verrou-{{ $format->value }}"
                                     x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-export-{{ $format->value }}' })"
-                                    class="min-h-11 cursor-pointer rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret hover:border-accent hover:text-accent-texte">
+                                    class="min-h-10 cursor-pointer rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret hover:border-accent hover:text-accent-texte">
                                     {{ $format->libelle() }}
                                 </button>
                                 <p id="verrou-{{ $format->value }}" class="mt-1 font-mono text-[11px] text-texte-discret">
@@ -228,13 +228,13 @@
                     <li class="flex flex-col items-start">
                         @if ($transcription->mp3_chemin !== null)
                             <a href="{{ \Illuminate\Support\Facades\URL::temporarySignedRoute('transcriptions.mp3', $expirationLien, [$transcription]) }}" download
-                                class="inline-flex min-h-11 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
+                                class="inline-flex min-h-10 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
                                 {{ __('transcriptions.lecture.telecharger_mp3') }}
                             </a>
                         @else
                             {{-- MP3 supprimé par la règle de conservation (cahier F5) : le bouton le dit au lieu de disparaître. --}}
                             <button type="button" disabled aria-describedby="mp3-supprime"
-                                class="min-h-11 cursor-not-allowed rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret">
+                                class="min-h-10 cursor-not-allowed rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret">
                                 {{ __('transcriptions.lecture.mp3_supprime_bouton') }}
                             </button>
                             <p id="mp3-supprime" class="mt-1 font-mono text-[11px] text-texte-discret">

@@ -4,7 +4,7 @@
     @endif
 
     <section aria-labelledby="titre-nouvelle" class="max-w-[720px]">
-        <h1 id="titre-nouvelle" class="text-3xl font-semibold tracking-tight">{{ __('comptes.tableau.titre') }}</h1>
+        <h1 id="titre-nouvelle" class="text-2xl font-semibold tracking-tight">{{ __('comptes.tableau.titre') }}</h1>
         <p class="mt-2 text-texte-secondaire">{{ __('comptes.tableau.sous_titre') }}</p>
 
         @unless ($verifie)

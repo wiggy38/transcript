@@ -20,7 +20,7 @@
         @unless ($termine)
             <div class="flex flex-col items-start gap-2 sm:items-end">
                 <button type="button" wire:click="analyser" @disabled($bloque || $enCours) aria-describedby="aide-analyse"
-                    class="min-h-11 cursor-pointer rounded-bouton bg-accent px-5 text-[15px] font-semibold text-sur-accent hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
+                    class="min-h-10 cursor-pointer rounded-bouton bg-accent px-5 text-[14px] font-semibold text-sur-accent hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
                     {{ __('analyse.bouton') }}
                 </button>
                 <p id="aide-analyse" class="max-w-xs font-mono text-[11px] text-texte-discret sm:text-right">
@@ -45,7 +45,7 @@
 
     @if ($termine)
         {{-- Barre proportionnelle : une partie détectée pèse sa durée, une partie absente un poids fixe, hachuré. --}}
-        <div class="mt-8 flex h-11 gap-[3px]" aria-hidden="true">
+        <div class="mt-8 flex h-10 gap-[3px]" aria-hidden="true">
             @foreach ($parties as $partie)
                 @if ($partie['detectee'])
                     <button type="button" tabindex="-1" x-on:click="$dispatch('voxia-aller', { ms: {{ $partie['debut'] }} })"
@@ -72,7 +72,7 @@
                             <span class="block font-mono text-[11px] uppercase tracking-wide text-accent-texte">
                                 {{ __('analyse.types.'.$partie['type']->value) }} · {{ \App\Support\Horodatage::format($partie['debut']) }} → {{ \App\Support\Horodatage::format($partie['fin']) }}
                             </span>
-                            <span class="mt-1.5 block font-titre text-[22px] font-medium leading-snug text-texte [overflow-wrap:anywhere]">« {{ $partie['texte'] }} »</span>
+                            <span class="mt-1.5 block font-titre text-[19px] font-medium leading-snug text-texte [overflow-wrap:anywhere]">« {{ $partie['texte'] }} »</span>
                         </button>
                     @else
                         <div class="rounded-champ border border-dashed border-filet-contour px-4 py-3" style="background-image: {{ $hachures }};">
@@ -96,13 +96,13 @@
                     <li class="flex flex-col items-start">
                         @if ($peutExporter($format))
                             <a href="{{ $urlExport($format) }}" download
-                                class="inline-flex min-h-11 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
+                                class="inline-flex min-h-10 items-center rounded-bouton border border-filet-contour px-4 font-mono text-xs text-texte hover:border-accent hover:text-accent-texte">
                                 {{ $format->libelle() }}
                             </a>
                         @else
                             <button type="button" aria-haspopup="dialog" aria-describedby="verrou-analyse-{{ $format->value }}"
                                 x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-analyse-export-{{ $format->value }}' })"
-                                class="min-h-11 cursor-pointer rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret hover:border-accent hover:text-accent-texte">
+                                class="min-h-10 cursor-pointer rounded-bouton border border-filet px-4 font-mono text-xs text-texte-discret hover:border-accent hover:text-accent-texte">
                                 {{ $format->libelle() }}
                             </button>
                             <p id="verrou-analyse-{{ $format->value }}" class="mt-1 font-mono text-[11px] text-texte-discret">

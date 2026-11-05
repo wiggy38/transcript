@@ -1,19 +1,15 @@
-// Polices auto-hébergées (fontsource) : aucun appel à un CDN de polices.
+// Polices Google Fonts (Roboto, Roboto Mono), auto-hébergées via fontsource : aucun appel vers Google.
 // Latin et latin étendu, chacun chargé seulement si la page en a besoin (unicode-range).
-import '@fontsource/geist/latin-400.css';
-import '@fontsource/geist/latin-500.css';
-import '@fontsource/geist/latin-600.css';
-import '@fontsource/geist/latin-700.css';
-import '@fontsource/geist/latin-ext-400.css';
-import '@fontsource/geist/latin-ext-500.css';
-import '@fontsource/geist/latin-ext-600.css';
-import '@fontsource/geist/latin-ext-700.css';
-import '@fontsource/geist-mono/latin-400.css';
-import '@fontsource/geist-mono/latin-500.css';
-import '@fontsource/geist-mono/latin-ext-400.css';
-import '@fontsource/geist-mono/latin-ext-500.css';
-// Titres et mots surlignés : Bricolage Grotesque, variable (graisse et axe optique).
-import '@fontsource-variable/bricolage-grotesque/wght.css';
+import '@fontsource/roboto/latin-400.css';
+import '@fontsource/roboto/latin-500.css';
+import '@fontsource/roboto/latin-700.css';
+import '@fontsource/roboto/latin-ext-400.css';
+import '@fontsource/roboto/latin-ext-500.css';
+import '@fontsource/roboto/latin-ext-700.css';
+import '@fontsource/roboto-mono/latin-400.css';
+import '@fontsource/roboto-mono/latin-500.css';
+import '@fontsource/roboto-mono/latin-ext-400.css';
+import '@fontsource/roboto-mono/latin-ext-500.css';
 
 // Envoi de fichiers en morceaux (écran Nouvelle transcription). Alpine est fourni par Livewire.
 import televersement from './televersement.js';

@@ -35,7 +35,7 @@ En cas de conflit entre documents, le cahier prime. Pour une valeur absente des 
 - Texte `#1A1814` ; secondaire `#4B463D` ; discret `#655F53` (sombre : `#F2EEE4`, `#C4BEB0`, `#9C9686`).
 - Accent d'action `#E4521F` (sombre `#FF7A4D`), texte encre sur bouton. Surligneur `#DDF37A` (sombre `#3A4419`), mot d'accent `#D7F46A`.
 - Tokens dans `resources/css/voxia-tokens.css`, mappés dans `app.css` (`@theme inline`) ; les classes `bg-fond`, `text-texte`, `border-filet`, `rounded-bouton` restent valides.
-- Typographies : Bricolage Grotesque 700 (titres, mots d'accent surlignés) ; Geist (texte) ; Geist Mono (horodatages, données, casse normale).
+- Typographies : Google Fonts, auto-hébergées via fontsource : Roboto (texte et titres) ; Roboto Mono (horodatages, données).
 - Rayons : pilule boutons et badges, 12 px champs, 20 px panneaux.
 - Animations : onde audio, progression, apparition mot à mot ; toutes coupées sous `prefers-reduced-motion`.
 

@@ -19,9 +19,9 @@
         @if ($erreur) aria-invalid="true" @endif
         @required($required)
         {{ $attributes->class([
-            'min-h-11 w-full min-w-0 rounded-champ border border-filet-contour bg-panneau px-3.5 text-texte outline-none focus-visible:border-accent',
+            'min-h-10 w-full min-w-0 rounded-champ border border-filet-contour bg-panneau px-3.5 text-texte outline-none focus-visible:border-accent',
             'font-mono text-sm' => $mono,
-            'text-[15px]' => ! $mono,
+            'text-[14px]' => ! $mono,
         ]) }}
     >
 

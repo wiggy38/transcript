@@ -5,7 +5,7 @@
     $couleursParties = ['var(--vx-accent)', 'var(--vx-line-strong)', 'var(--vx-wave-idle)', 'var(--vx-line)', 'var(--vx-text)'];
 @endphp
 
-<section id="usages" class="pt-32" aria-labelledby="titre-usages">
+<section id="usages" class="pt-2.5" aria-labelledby="titre-usages">
     <div class="mb-12 flex flex-wrap items-end justify-between gap-6">
         <h2 id="titre-usages" class="max-w-[14ch] text-[clamp(36px,4.6vw,64px)] leading-none font-semibold tracking-[-0.04em]">
             {{ __('accueil.usages.titre') }}
@@ -18,7 +18,7 @@
         {{-- Créateurs --}}
         <article class="min-w-0 flex-[1_1_480px] bg-panneau p-6 md:p-10" aria-labelledby="usage-createurs">
             <p class="font-mono text-xs text-accent-texte">{{ $createurs['numero'] }}</p>
-            <h3 id="usage-createurs" class="mt-3 text-[28px] leading-[1.15] font-semibold tracking-[-0.025em]">{{ $createurs['titre'] }}</h3>
+            <h3 id="usage-createurs" class="mt-3 text-[24px] leading-[1.15] font-semibold tracking-[-0.025em]">{{ $createurs['titre'] }}</h3>
             <p class="mt-3 max-w-[30em] text-texte-secondaire">{{ $createurs['texte'] }}</p>
 
             <div class="mt-9 flex items-center gap-5">
@@ -48,7 +48,7 @@
         {{-- Marketeurs : analyse de script (F7) --}}
         <article class="min-w-0 flex-[1_1_480px] bg-panneau p-6 md:p-10" aria-labelledby="usage-marketeurs">
             <p class="font-mono text-xs text-accent-texte">{{ $marketeurs['numero'] }}</p>
-            <h3 id="usage-marketeurs" class="mt-3 text-[28px] leading-[1.15] font-semibold tracking-[-0.025em]">{{ $marketeurs['titre'] }}</h3>
+            <h3 id="usage-marketeurs" class="mt-3 text-[24px] leading-[1.15] font-semibold tracking-[-0.025em]">{{ $marketeurs['titre'] }}</h3>
             <p class="mt-3 max-w-[30em] text-texte-secondaire">{{ $marketeurs['texte'] }}</p>
 
             <div class="mt-9">
@@ -57,7 +57,7 @@
                     <span>{{ $marketeurs['duree'] }}</span>
                 </div>
 
-                <div role="img" aria-label="{{ $marketeurs['description_parties'] }}" class="mt-2.5 flex h-11 gap-[3px]">
+                <div role="img" aria-label="{{ $marketeurs['description_parties'] }}" class="mt-2.5 flex h-10 gap-[3px]">
                     @foreach ($marketeurs['parties'] as $indice => $partie)
                         <span class="rounded-[3px]" style="flex: {{ $partie['secondes'] }} 1 0; background: {{ $couleursParties[$indice] }}"></span>
                     @endforeach
@@ -71,7 +71,7 @@
 
                 <blockquote class="mt-7 rounded-champ border border-filet bg-fond p-[18px_20px]">
                     <p class="font-mono text-[11px] text-accent-texte">{{ $marketeurs['citation_repere'] }}</p>
-                    <p class="mt-1.5 font-titre text-[26px] leading-[1.25] font-bold tracking-[-0.02em]">{{ $marketeurs['citation'] }}</p>
+                    <p class="mt-1.5 font-titre text-[19px] leading-[1.25] font-bold tracking-[-0.02em]">{{ $marketeurs['citation'] }}</p>
                 </blockquote>
             </div>
         </article>

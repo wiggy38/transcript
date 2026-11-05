@@ -7,7 +7,7 @@
     $medias = config('voxia.retention.media_days');
 @endphp
 
-<section id="questions" class="pt-32" aria-labelledby="titre-questions">
+<section id="questions" class="pt-2.5" aria-labelledby="titre-questions">
     <div class="flex flex-wrap gap-8 border-t border-filet pt-8">
         <h2 id="titre-questions" class="flex-[1_1_280px] font-mono text-xs font-medium text-texte-discret">{{ __('accueil.questions.titre') }}</h2>
 

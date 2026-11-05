@@ -12,7 +12,7 @@
                 <span class="font-mono text-xs text-texte-discret">{{ __('transcriptions.page.lancee_le', ['date' => \App\Support\Formats::dateHeure($transcription->created_at)]) }}</span>
             </div>
 
-            <h1 id="titre-transcription" class="mt-4 text-3xl font-semibold leading-tight tracking-tight [overflow-wrap:anywhere]">
+            <h1 id="titre-transcription" class="mt-4 text-2xl font-semibold leading-tight tracking-tight [overflow-wrap:anywhere]">
                 {{ $transcription->titre ?? __('transcriptions.page.titre') }}
             </h1>
 

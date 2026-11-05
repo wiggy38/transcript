@@ -10,7 +10,7 @@
     @endif
 
     <section aria-labelledby="titre-historique">
-        <h1 id="titre-historique" class="text-3xl font-semibold tracking-tight">{{ __('historique.titre') }}</h1>
+        <h1 id="titre-historique" class="text-2xl font-semibold tracking-tight">{{ __('historique.titre') }}</h1>
         <p class="mt-2 text-texte-secondaire">{{ __('historique.sous_titre') }}</p>
     </section>
 
@@ -20,7 +20,7 @@
 
         <div class="flex min-w-0 flex-col gap-2">
             <label for="tri-historique" class="font-mono text-xs uppercase tracking-wide text-texte-discret">{{ __('historique.tri.libelle') }}</label>
-            <select id="tri-historique" name="tri" class="min-h-11 rounded-champ border border-filet-contour bg-panneau px-3 text-texte">
+            <select id="tri-historique" name="tri" class="min-h-10 rounded-champ border border-filet-contour bg-panneau px-3 text-texte">
                 <option value="recent" @selected($tri === 'recent')>{{ __('historique.tri.recent') }}</option>
                 <option value="ancien" @selected($tri === 'ancien')>{{ __('historique.tri.ancien') }}</option>
             </select>
