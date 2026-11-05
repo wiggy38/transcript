@@ -90,11 +90,20 @@
                         @foreach ($resultats as $resultat)
                             <li class="grid gap-2 px-[18px] py-4">
                                 <p class="m-0 flex flex-wrap items-center gap-x-3 gap-y-1">
-                                    <a href="{{ route('transcriptions.show', ['transcription' => $resultat->transcription, 't' => $resultat->debutMs]) }}"
-                                       aria-label="{{ __('historique.recherche.aller') }} : {{ $resultat->transcription->titre ?? __('historique.sans_titre') }}"
-                                       class="inline-flex min-h-7 items-center gap-1.5 rounded-pilule bg-surlignage px-2.5 font-mono text-[13px] font-medium tabular-nums text-surlignage-temps no-underline">
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7 4.5v15l12-7.5z"></path></svg>{{ Horodatage::format($resultat->debutMs) }}
-                                    </a>
+                                    @if ($resultat->estDuResume())
+                                        {{-- Trouvé dans le résumé : pas de passage précis, la transcription s'ouvre au début. --}}
+                                        <a href="{{ route('transcriptions.show', ['transcription' => $resultat->transcription]) }}"
+                                           aria-label="{{ __('historique.recherche.aller_resume') }} : {{ $resultat->transcription->titre ?? __('historique.sans_titre') }}"
+                                           class="inline-flex min-h-7 items-center gap-1.5 rounded-pilule border border-filet-contour px-2.5 font-mono text-[13px] font-medium text-texte no-underline">
+                                            {{ __('historique.recherche.dans_resume') }}
+                                        </a>
+                                    @else
+                                        <a href="{{ route('transcriptions.show', ['transcription' => $resultat->transcription, 't' => $resultat->debutMs]) }}"
+                                           aria-label="{{ __('historique.recherche.aller') }} : {{ $resultat->transcription->titre ?? __('historique.sans_titre') }}"
+                                           class="inline-flex min-h-7 items-center gap-1.5 rounded-pilule bg-surlignage px-2.5 font-mono text-[13px] font-medium tabular-nums text-surlignage-temps no-underline">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7 4.5v15l12-7.5z"></path></svg>{{ Horodatage::format($resultat->debutMs) }}
+                                        </a>
+                                    @endif
                                     <span class="min-w-0 font-semibold [overflow-wrap:anywhere]">{{ $resultat->transcription->titre ?? __('historique.sans_titre') }}</span>
                                     @if ($resultat->transcription->scriptAnalysis?->statut === \App\Enums\StatutAnalyseScript::Termine)
                                         <span class="font-mono text-[11px] text-accent-texte">{{ __('analyse.pastille') }}</span>

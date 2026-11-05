@@ -1,0 +1,6 @@
+Structure et limites :
+- « objet » : {objet_caracteres} caractères au maximum.
+- « apercu » : {apercu_caracteres} caractères au maximum. Il complète l’objet sans le répéter.
+- « accroche » : 1 à 2 phrases.
+- « corps » : de {corps_min} à {corps_max} paragraphes.
+- « appel_action » : une phrase à l’impératif.

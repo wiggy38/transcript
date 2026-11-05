@@ -5,10 +5,12 @@ namespace App\Services\Quota;
 use App\Enums\MotifEchec;
 use App\Enums\Plan;
 use App\Enums\StatutAnalyseScript;
+use App\Enums\StatutSortieIa;
 use App\Enums\StatutTranscription;
 use App\Enums\UniteConsommation;
 use App\Exceptions\AnalyseRefusee;
 use App\Exceptions\ErreurVideo;
+use App\Models\AiOutput;
 use App\Models\PackAchat;
 use App\Models\ScriptAnalysis;
 use App\Models\Transcription;
@@ -167,27 +169,63 @@ class QuotaService
      */
     public function verifierCreditIa(User $utilisateur): void
     {
-        DB::transaction(function () use ($utilisateur) {
+        if (! $this->creditsIaSuffisants($utilisateur, $this->droits->creditsParAnalyse())) {
+            throw new AnalyseRefusee(AnalyseRefusee::CREDIT_IA_INSUFFISANT);
+        }
+    }
+
+    /**
+     * Vrai si le plan inclut des crédits IA et si le solde du mois, moins les crédits réservés par les
+     * analyses et résumés en cours, couvre le coût demandé. Un plan sans crédits renvoie faux.
+     */
+    public function creditsIaSuffisants(User $utilisateur, int $cout): bool
+    {
+        return DB::transaction(function () use ($utilisateur, $cout) {
             $utilisateur = $this->verrouiller($utilisateur);
             $plan = $this->droits->planDe($utilisateur);
             $mensuel = $this->droits->creditsIaMensuels($plan);
-            $cout = $this->droits->creditsParAnalyse();
 
             if ($mensuel <= 0) {
-                throw new AnalyseRefusee(AnalyseRefusee::CREDIT_IA_INSUFFISANT);
+                return false;
             }
 
             $utilises = $this->consommee($utilisateur, $plan, UniteConsommation::CreditIa, $this->periode($utilisateur, $plan));
 
-            $enCours = ScriptAnalysis::query()
+            $analysesEnCours = ScriptAnalysis::query()
                 ->whereIn('statut', [StatutAnalyseScript::EnAttente, StatutAnalyseScript::Analyse])
                 ->whereHas('transcription', fn ($requete) => $requete->where('user_id', $utilisateur->getKey()))
                 ->count();
 
-            if ($mensuel - $utilises - $enCours * $cout < $cout) {
-                throw new AnalyseRefusee(AnalyseRefusee::CREDIT_IA_INSUFFISANT);
-            }
+            $resumesEnCours = AiOutput::query()
+                ->whereIn('statut', [StatutSortieIa::EnAttente, StatutSortieIa::EnCours])
+                ->whereHas('transcription', fn ($requete) => $requete->where('user_id', $utilisateur->getKey()))
+                ->sum('credits');
+
+            $reserves = $analysesEnCours * $this->droits->creditsParAnalyse() + (int) $resumesEnCours;
+
+            return $mensuel - $utilises - $reserves >= $cout;
         });
+    }
+
+    /**
+     * Décompte d'une sortie IA réussie (résumé), sous verrou sur le compte. Appelé dans la transaction qui
+     * passe la sortie à « Terminé » : un échec ne décompte rien.
+     */
+    public function consommerCredits(User $utilisateur, int $quantite, string $motif, Transcription $transcription, ?AiOutput $sortie = null): UsageRecord
+    {
+        $utilisateur = $this->verrouiller($utilisateur);
+        $plan = $this->droits->planDe($utilisateur);
+
+        return UsageRecord::create([
+            'user_id' => $utilisateur->getKey(),
+            'transcription_id' => $transcription->getKey(),
+            'ai_output_id' => $sortie?->getKey(),
+            'unite' => UniteConsommation::CreditIa,
+            'plan' => $plan,
+            'periode' => $this->periode($utilisateur, $plan),
+            'quantite' => $quantite,
+            'motif' => $motif,
+        ]);
     }
 
     /** Décompte d'une analyse réussie : une ligne au journal, jamais pour un échec. */

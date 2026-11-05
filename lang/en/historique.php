@@ -13,6 +13,8 @@ return [
         'gratuit' => 'Searching your transcriptions is reserved to the Pro and Pack plans. Upgrade to Pro to find a passage in one word.',
         'resultats' => '{0} No result for “:terme”.|{1} One result for “:terme”.|[2,*] :nombre results for “:terme”.',
         'aller' => 'Open at this moment',
+        'aller_resume' => 'Open the transcription',
+        'dans_resume' => 'In the summary',
         'passer_pro' => 'Upgrade to Pro',
         'liste_aria' => 'Search results',
     ],

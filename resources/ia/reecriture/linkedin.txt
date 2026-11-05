@@ -1,0 +1,4 @@
+Structure et limites :
+- « accroche » : la première ligne seule, {accroche_caracteres} caractères au maximum. Elle donne envie de lire la suite.
+- « paragraphes » : des paragraphes courts, de 1 à 3 phrases chacun.
+- Longueur totale (accroche et paragraphes) : {linkedin_caracteres} caractères au maximum, espaces comprises.

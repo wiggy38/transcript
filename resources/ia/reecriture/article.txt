@@ -1,0 +1,6 @@
+Structure et limites :
+- « titre » : une seule ligne, sans point final.
+- « introduction » : 2 à 3 phrases qui posent le problème ou la promesse de la vidéo.
+- « intertitres » : de {intertitres_min} à {intertitres_max}, dans l’ordre de la vidéo. Chacun a un « titre » et une liste de « paragraphes ».
+- « conclusion » : reprend l’idée principale et finit sur une action ou un point de vue.
+- Longueur totale : entre {mots_min} et {mots_max} mots, tous les champs confondus.

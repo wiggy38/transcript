@@ -87,6 +87,12 @@ class Transcription extends Model
         return $this->hasOne(ScriptAnalysis::class);
     }
 
+    /** Sorties générées par le modèle de langage (résumé, V2). */
+    public function aiOutputs(): HasMany
+    {
+        return $this->hasMany(AiOutput::class);
+    }
+
     public function processingLogs(): HasMany
     {
         return $this->hasMany(ProcessingLog::class)->orderBy('created_at')->orderBy('id');

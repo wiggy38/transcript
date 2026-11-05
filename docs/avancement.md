@@ -297,6 +297,55 @@ Décisions des fenêtres d'upgrade :
 - **Sans prix Business configuré** (`VOXIA_PADDLE_PRICE_BUSINESS_*` vides), la formule est refusée (`PaiementIndisponible`), comme les formules Pro.
 - **`phpunit.xml`** fixe `VOXIA_BUSINESS_AI_CREDITS_PER_MONTH=300` : les tests ne dépendent pas du `.env` local, où la valeur peut être restée à 0 (P149).
 
+### V2 — Résumé et points clés (décisions du 5 novembre 2026)
+
+- [x] Sortie structurée validée par schéma (`SchemaResume`) : résumé, points clés, chapitres. Le modèle renvoie le numéro du paragraphe ; l'horodatage est lu dans la base (option B). *(ServiceResumeTest, ValidateurResumeTest)*
+- [x] Résumé de 3 à 5 phrases, 5 à 10 points, chapitres de 2 phrases exactement au-delà de 20 minutes (`voxia.ia.resume`). *(ValidateurResumeTest)*
+- [x] Un horodatage inventé (numéro de paragraphe inconnu ou au-delà de la durée) fait retirer le point ; sous le minimum, la sortie est relancée. *(ServiceResumeTest, ValidateurResumeTest)*
+- [x] Les chiffres d'une sortie doivent figurer dans la transcription (contrôle minimal, voir P160). *(ValidateurResumeTest)*
+- [x] Vidéo longue : découpage par morceaux de 10 min sans couper de paragraphe, puis synthèse. *(ServiceResumeTest)*
+- [x] Langue de sortie : celle de la transcription, ou une autre de `voxia.langues_forcables`. Une langue hors liste est refusée. *(ServiceResumeTest)*
+- [x] Crédits : un par heure entamée (`voxia.ia.resume.credits_par_heure`), affiché avant lancement ; décompte à la réussite seulement. *(ServiceResumeTest)*
+- [x] Réouverture gratuite ; régénérer exige une confirmation puis recompte. *(ServiceResumeTest, AffichageResumeTest)*
+- [x] Solde insuffisant, plan Gratuit ou Pack, transcription d'un autre compte : refus avant tout appel. *(ServiceResumeTest)*
+- [x] Échec technique, réponse invalide relancée sans décompte, délai de la tâche : statut « échec », aucun crédit. *(ServiceResumeTest)*
+- [x] Affichage : panneau à côté de la transcription, clic sur un point ou un chapitre (événement `voxia-aller`), copie, export TXT et PDF, DOCX réservé au Business. *(AffichageResumeTest, ExportResumeTest)*
+- [x] Recherche : le texte d'un résumé terminé (résumé, points, chapitres) est cherché avec les transcriptions ; un résultat trouvé dans le résumé s'affiche « Dans le résumé » et ouvre la transcription. Index GIN partiel par configuration sur `ai_outputs`. *(RechercheResumeHistoriqueTest, exécutés sur PostgreSQL ; RechercheResumeTest sur SQLite)*
+- [ ] Test manuel sur la fixture de 28 minutes avec le vrai modèle : procédure rédigée (`docs/v2/test-manuel-resume.md`), non exécutée (pas de clé d'API dans l'environnement de travail).
+- [ ] Vérification dans un navigateur (bureau, 375 px, thème clair et sombre) : non faite (P162).
+
+Socle : `AiOutput` (table `ai_outputs`, une ligne par transcription et fonctionnalité), `usage_records.ai_output_id`, `QuotaService::creditsIaSuffisants` et `consommerCredits`. Le socle annoncé comme livré à l'étape 1 (`AiOutput`, découpage, registre de crédits) n'existait pas dans le dépôt : il est créé ici.
+
+Décisions :
+- **Horodatages** : option B, le modèle renvoie le numéro du paragraphe (« Paragraphe N »). Un horodatage ne peut pas être inventé.
+- **Crédits** : le lancement vérifie le solde et réserve les crédits (`ai_outputs.credits`) ; le décompte n'a lieu qu'à la réussite. Un échec ne consomme donc rien : la mention « crédits remboursés » de la demande est remplacée par « aucun crédit n'a été consommé ».
+- **Fixture** : `tests/fixtures/transcription-fr-28min.txt` est synthétique et le dit. Elle sert au test manuel et au test automatique du découpage.
+- **Charte** : les écrans reprennent les classes de tokens de l'analyse de script (Nocturne), pour cohérence avec le code existant. Le conflit Signal/Nocturne (CLAUDE.md §4) reste à trancher.
+
+### V2 — Réécriture en article, newsletter, post LinkedIn, thread X (persona 1, décisions du 5 novembre 2026)
+
+- [x] Quatre formats, chacun avec sa sortie structurée (schéma par format, `SchemaReecriture`) : article (titre, introduction, intertitres, conclusion), newsletter (objet, aperçu, accroche, corps, appel à l'action), post LinkedIn (accroche, paragraphes), thread X (messages). *(ServiceReecritureTest : un test par format, avec le faux fournisseur)*
+- [x] Gabarits dans `resources/ia/reecriture/` (un fichier par format, `base.txt`, `tons.php`), limites dans `voxia.ia.reecriture`. *(ConstructeurRequeteReecriture, testé indirectement par ServiceReecritureTest)*
+- [x] Options : ton (professionnel, conversationnel, enthousiaste), longueur de l'article (courte, moyenne, longue : 800 à 1 500 mots), langue de sortie parmi `voxia.langues_forcables`, celle de la vidéo par défaut. *(AffichageReecritureTest, ServiceReecritureTest)*
+- [x] Plusieurs formats d'un coup : une sortie (`ai_outputs`) par format, 1 crédit par format, coût total affiché avant lancement. *(ServiceReecritureTest)*
+- [x] Solde insuffisant pour l'ensemble des formats : rien n'est écrit ni mis en file, message clair. *(ServiceReecritureTest, AffichageReecritureTest)*
+- [x] Fidélité : les nombres et les liens de la sortie doivent figurer dans la transcription ; un lien absent est refusé. Le repère `[à compléter]` est gardé tel quel et le prompt interdit d'inventer un lien. *(ValidateurReecritureTest, ServiceReecritureTest)*
+- [x] Limites de caractères vérifiées côté serveur : post LinkedIn à 1 300 caractères (relance, puis retrait de paragraphes entiers), objet et aperçu de newsletter, messages du thread à 280 caractères numéro compris. Un message trop long est découpé à la frontière d'un mot, jamais au milieu. *(ValidateurReecritureTest, ServiceReecritureTest)*
+- [x] Échec technique ou sortie non conforme après relance : statut « échec », aucun crédit. *(ServiceReecritureTest)*
+- [x] Affichage : panneau « Réécrire » sous le résumé, un onglet par format généré, rendu par bloc, bouton Copier par bloc (par message pour le thread, objet et corps séparés pour la newsletter). *(AffichageReecritureTest)*
+- [x] Exports : TXT (Pro et Business), Markdown et DOCX réservés au Business (`voxia.plans.*.exports_reecriture`, `PlanFeatures`). *(ExportReecritureTest)*
+- [x] Régénérer un format : 1 crédit, après confirmation ; rouvrir un format déjà généré est gratuit. *(ServiceReecritureTest)*
+- [ ] Test manuel sur `tests/fixtures/transcription-fr-28min.txt` avec le vrai modèle : non exécuté (pas de clé d'API dans l'environnement de travail, et il consomme des crédits réels). Voir P163.
+- [ ] Vérification dans un navigateur (onglets, copie, mise en page sur 375 px, thème clair et sombre) : non faite (P164).
+
+Décisions :
+- **Une ligne par format** : `ai_outputs` garde `(transcription, fonctionnalité, format)` comme clé unique (migration `2026_11_07_100000`). Régénérer remplace le contenu sur la même ligne.
+- **Markdown et DOCX** : réservés au Business, comme décidé le 5 novembre. TXT reste à Pro et Business.
+- **Débordement LinkedIn** : après une relance, retrait de paragraphes entiers depuis la fin, sans jamais garder moins d'un paragraphe.
+- **Langue** : `voxia.langues_forcables` (fr, en, es, de, it, pt), et non les dix langues de traduction des décisions.
+- **Accès** : Pro et Business uniquement, par les crédits IA (Gratuit et Pack en ont 0).
+- **Valeurs proposées et validées** : longueurs de l'article (800–1 000, 1 000–1 250, 1 250–1 500 mots), 60 et 90 caractères pour l'objet et l'aperçu, 200 caractères pour l'accroche LinkedIn, 3 à 6 intertitres, 3 à 6 paragraphes de newsletter, 5 à 12 messages de thread, 250 caractères visés par message.
+
 ### Refonte visuelle « Nocturne » (cahier §7, CLAUDE.md §4)
 
 - [x] Direction « Nocturne » retenue. Elle remplace la charte précédente dans le cahier (§7), dans `CLAUDE.md` (§4) et dans le code. Le handoff est versionné dans `docs/design_handoff_voxia_nocturne/`.
@@ -581,3 +630,10 @@ Décisions des fenêtres d'upgrade :
 - [ ] P155 — Business : la page Abonnement et les fenêtres d'upgrade n'ont pas été vérifiées dans un navigateur (bureau, 375 px, thème clair et sombre), comme P140 et P147.
 - [ ] P156 — Installation sous Windows : `composer require` échoue sans `--ignore-platform-reqs` à cause de l'extension `pcntl`, réclamée par Horizon. À mentionner dans la procédure d'installation.
 - [ ] P157 — Business : les textes des fenêtres d'upgrade (« 30 h », « 3 h ») sont écrits en dur dans `lang/*/upgrade.php`. Si les quotas changent dans la config, ces textes doivent suivre (ils ne sont pas calculés depuis `config/voxia.php`, sauf les heures de la fenêtre de quota).
+- [ ] P160 — Résumé : le contrôle des chiffres vérifie seulement qu'un nombre écrit en chiffres figure dans la transcription. Il ne couvre ni les noms propres, ni les affirmations, ni les nombres écrits en toutes lettres. Un nombre tel que « 1000 » contre « 1 000 » est refusé. À relire sur le test manuel (`docs/v2/test-manuel-resume.md`).
+- [x] P161 — Résumé dans la recherche : traité. Le texte est cherché avec une branche `ai_outputs` dans le CTE. Limite restante : un résumé régénéré qui échoue garde l'ancien texte en base, qui n'est plus cherché (statut « échec ») tandis que l'ancien résumé reste affiché. Les tests de recherche ont été lancés sur PostgreSQL (base `voxia_test`).
+- [ ] P162 — Résumé : les écrans n'ont pas été vérifiés dans un navigateur (clic sur un point, copie, confirmation de régénération, mise en page sur 375 px).
+- [ ] P163 — Réécriture : le test manuel avec le vrai modèle n'est pas exécuté. La fixture `transcription-fr-28min.txt` est un texte, pas une transcription en base : il faut la charger dans une transcription terminée pour la tester. À faire avec une clé d'API, en surveillant le coût.
+- [ ] P164 — Réécriture : les écrans n'ont pas été vérifiés dans un navigateur (onglets, copie par bloc, régénération, 375 px, thème clair et sombre). Le libellé « Réécrire » et les textes sont en FR et EN, à relire.
+- [ ] P165 — Réécriture sur une vidéo longue : la transcription entière part dans un seul appel (pas de découpage comme le résumé). À vérifier avec une vidéo de plusieurs heures : taille de la requête, durée, et `max_tokens_sortie` de l'article.
+- [ ] P166 — Réécriture : `docs/voxia-offre.md` ne mentionne pas encore la réécriture ni les exports Markdown. À compléter avant la mise en vente, après validation.

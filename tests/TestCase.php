@@ -3,9 +3,11 @@
 namespace Tests;
 
 use App\Contracts\BillingProvider;
+use App\Contracts\LanguageModel;
 use App\Contracts\ScriptAnalyzer;
 use App\Contracts\TranscriptionEngine;
 use App\Services\Analyse\FakeScriptAnalyzer;
+use App\Services\Ia\FauxLanguageModel;
 use App\Services\Paiement\FauxBillingProvider;
 use App\Services\Transcription\FakeTranscriptionEngine;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -25,6 +27,9 @@ abstract class TestCase extends BaseTestCase
 
         // Idem pour l'analyse de script : le faux analyseur, jamais l'API Claude.
         $this->app->instance(ScriptAnalyzer::class, new FakeScriptAnalyzer);
+
+        // Le résumé (V2) et tout autre appel au modèle de langage : le faux modèle, jamais l'API.
+        $this->app->instance(LanguageModel::class, new FauxLanguageModel);
 
         // Le paiement : le faux fournisseur, jamais Paddle. Les webhooks restent réels (signés, en base).
         $this->app->instance(BillingProvider::class, new FauxBillingProvider);

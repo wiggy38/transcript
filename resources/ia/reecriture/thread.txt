@@ -1,0 +1,4 @@
+Structure et limites :
+- « messages » : de {messages_min} à {messages_max} messages. Chaque « texte » vise {thread_caracteres_cible} caractères et ne dépasse jamais {thread_caracteres} caractères.
+- Le premier message est une accroche. Le dernier résume et propose une action.
+- Chaque message se lit seul. Ne le commence pas par un numéro : le numérotage est ajouté ensuite.

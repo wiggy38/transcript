@@ -4,6 +4,8 @@ use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\Comptes\DonneesController;
 use App\Http\Controllers\Comptes\ExportAnalyseController;
 use App\Http\Controllers\Comptes\ExportController;
+use App\Http\Controllers\Comptes\ExportReecritureController;
+use App\Http\Controllers\Comptes\ExportResumeController;
 use App\Http\Controllers\Comptes\GoogleController;
 use App\Http\Controllers\Comptes\HistoriqueController;
 use App\Http\Controllers\Comptes\LienController;
@@ -84,6 +86,19 @@ Route::middleware('auth')->group(function () {
         ->whereIn('format', ['txt', 'pdf'])
         ->middleware('signed')
         ->name('transcriptions.analyse.export');
+
+    // Export du résumé (V2) : TXT et PDF selon le plan, DOCX réservé au Business. Lien signé et temporaire.
+    Route::get('/transcriptions/{transcription}/resume/{format}', ExportResumeController::class)
+        ->whereIn('format', ['txt', 'pdf', 'docx'])
+        ->middleware('signed')
+        ->name('transcriptions.resume.export');
+
+    // Export d'une réécriture (V2) : format de contenu (article, newsletter, linkedin, thread) et format de fichier. Lien signé.
+    Route::get('/transcriptions/{transcription}/reecriture/{format}/{export}', ExportReecritureController::class)
+        ->whereIn('format', ['article', 'newsletter', 'linkedin', 'thread'])
+        ->whereIn('export', ['txt', 'md', 'docx'])
+        ->middleware('signed')
+        ->name('transcriptions.reecriture.export');
 
     // Morceaux d'un fichier importé (2 Go par défaut, envoi découpé). Email vérifié exigé.
     Route::post('/televersements/morceaux', [TeleversementController::class, 'morceau'])

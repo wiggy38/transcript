@@ -63,6 +63,8 @@ return [
             'hours_per_month' => (int) env('VOXIA_PRO_HOURS_PER_MONTH', 30),
             'max_video_seconds' => (int) env('VOXIA_PRO_MAX_VIDEO_SECONDS', 3 * 3600),
             'exports' => ['txt', 'pdf', 'srt', 'vtt'],
+            // Exports de la réécriture (voxia.ia.reecriture) : Markdown et DOCX réservés au Business.
+            'exports_reecriture' => ['txt'],
             // Historique illimité (null) et recherche incluse (offre).
             'history_days' => null,
             'recherche' => true,
@@ -95,6 +97,7 @@ return [
             'max_video_seconds' => (int) env('VOXIA_BUSINESS_MAX_VIDEO_SECONDS', 5 * 3600),
             // Tous les exports : DOCX et JSON sont réservés au Business (décisions du 5 novembre 2026).
             'exports' => ['txt', 'pdf', 'srt', 'vtt', 'docx', 'json'],
+            'exports_reecriture' => ['txt', 'md', 'docx'],
             'history_days' => null,
             'recherche' => true,
             // Traitement par lots : nombre maximal de liens par lot (étape 6, non construite ici).
@@ -620,6 +623,65 @@ return [
             'tentatives' => (int) env('VOXIA_IA_ATTEMPTS', 2),
             'delai_entre_tentatives_ms' => (int) env('VOXIA_IA_RETRY_DELAY_MS', 2000),
             'relances_sortie_invalide' => (int) env('VOXIA_IA_INVALID_OUTPUT_RETRIES', 1),
+        ],
+
+        // Résumé et points clés (V2, décisions du 5 novembre 2026). Langues : voxia.langues_forcables.
+        'resume' => [
+            // Crédits IA par heure de vidéo entamée (1 h 01 = 2 crédits).
+            'credits_par_heure' => (int) env('VOXIA_RESUME_CREDITS_PAR_HEURE', 1),
+            // Au-delà de cette durée, la sortie contient des chapitres.
+            'seuil_chapitres_secondes' => (int) env('VOXIA_RESUME_CHAPITRES_SECONDES', 1200),
+            // Découpage des vidéos longues : morceaux de cette durée, jamais coupés au milieu d'un paragraphe.
+            'taille_morceau_secondes' => (int) env('VOXIA_RESUME_TAILLE_MORCEAU_SECONDES', 600),
+            'phrases_resume' => ['min' => 3, 'max' => 5],
+            'phrases_chapitre' => 2,
+            'points' => ['min' => 5, 'max' => 10],
+            // Par morceau (vidéo longue) : la synthèse finale reprend les points et applique la règle globale.
+            'points_par_morceau' => ['min' => 1, 'max' => 4],
+            'max_tokens_sortie' => (int) env('VOXIA_RESUME_MAX_OUTPUT_TOKENS', 2048),
+            // Relances par appel après une réponse qui ne respecte pas les règles (schéma, phrases, chiffres).
+            'relances' => (int) env('VOXIA_RESUME_RETRIES', 1),
+            'job_timeout_seconds' => (int) env('VOXIA_RESUME_JOB_TIMEOUT_SECONDS', 600),
+        ],
+
+        // Réécriture en contenu prêt à publier (V2, décisions du 5 novembre 2026). Gabarits : resources/ia/reecriture/.
+        'reecriture' => [
+            // Crédits IA par format demandé (décisions : 1 par format).
+            'credits_par_format' => (int) env('VOXIA_REECRITURE_CREDITS_PAR_FORMAT', 1),
+            'relances' => (int) env('VOXIA_REECRITURE_RETRIES', 1),
+            'job_timeout_seconds' => (int) env('VOXIA_REECRITURE_JOB_TIMEOUT_SECONDS', 600),
+            'ton_defaut' => 'professionnel',
+            'longueur_defaut' => 'moyenne',
+            // Article : fourchette de mots par longueur (800 à 1 500 mots au total).
+            'article' => [
+                'mots' => [
+                    'courte' => ['min' => 800, 'max' => 1000],
+                    'moyenne' => ['min' => 1000, 'max' => 1250],
+                    'longue' => ['min' => 1250, 'max' => 1500],
+                ],
+                'intertitres' => ['min' => 3, 'max' => 6],
+                'max_tokens_sortie' => (int) env('VOXIA_REECRITURE_ARTICLE_MAX_TOKENS', 4096),
+            ],
+            'newsletter' => [
+                'objet_caracteres' => 60,
+                'apercu_caracteres' => 90,
+                'corps' => ['min' => 3, 'max' => 6],
+                'max_tokens_sortie' => (int) env('VOXIA_REECRITURE_NEWSLETTER_MAX_TOKENS', 2048),
+            ],
+            'linkedin' => [
+                'caracteres_max' => (int) env('VOXIA_REECRITURE_LINKEDIN_CARACTERES', 1300),
+                'accroche_caracteres' => 200,
+                'max_tokens_sortie' => (int) env('VOXIA_REECRITURE_LINKEDIN_MAX_TOKENS', 1024),
+            ],
+            'thread' => [
+                'messages' => ['min' => 5, 'max' => 12],
+                // Limite par message, numéro « 12/12 » compris (6 caractères au plus).
+                'caracteres_message' => 280,
+                // Cible donnée au modèle (laisse de la marge pour le numéro et les retouches).
+                'caracteres_cible' => 250,
+                'longueur_numero' => 6,
+                'max_tokens_sortie' => (int) env('VOXIA_REECRITURE_THREAD_MAX_TOKENS', 1024),
+            ],
         ],
     ],
 

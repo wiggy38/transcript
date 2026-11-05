@@ -3,25 +3,28 @@
 namespace App\Services\Recherche;
 
 use App\Data\ResultatRecherche;
+use App\Enums\StatutSortieIa;
+use App\Models\AiOutput;
 use App\Models\TranscriptionParagraph;
 use App\Models\User;
 use App\Support\ConfigurationRecherche;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator as Paginateur;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
- * Recherche plein texte dans toutes les transcriptions d'un compte (cahier F5).
+ * Recherche plein texte dans toutes les transcriptions d'un compte (cahier F5), et dans leur résumé (V2).
  *
  * Deux temps, pour ne calculer l'extrait que des résultats affichés :
- *   1. les paragraphes trouvés, par langue (un index GIN partiel par configuration), dans un
- *      CTE MATERIALIZED : la recherche dans l'index se fait en premier, quelles que soient les
- *      statistiques de la table. Sans ce CTE, PostgreSQL peut choisir, juste après un import
- *      massif (statistiques pas encore recalculées), une jointure par transcription qui prend
- *      plus d'une seconde. Le CTE joint ensuite les transcriptions du compte, triées par date ;
+ *   1. les passages trouvés, par langue (un index GIN partiel par configuration) : les paragraphes
+ *      (transcription_paragraphs) et les résumés terminés (ai_outputs.texte_recherche), dans un CTE
+ *      MATERIALIZED. La recherche dans l'index se fait en premier, quelles que soient les statistiques
+ *      de la table. Le CTE joint ensuite les transcriptions du compte, triées par date. Un résumé porte
+ *      la position 0 : il apparaît avant les passages de sa transcription ;
  *   2. une requête pour la page seulement : extrait avec ts_headline et transcription liée.
+ *
+ * Chaque identifiant porte sa source : « p:<id> » pour un paragraphe, « r:<id> » pour un résumé.
  *
  * La configuration de chaque langue est écrite dans le SQL et non liée en paramètre : c'est
  * elle qui permet à PostgreSQL de choisir l'index partiel. Elle vient de la liste fermée
@@ -52,24 +55,22 @@ class RechercheTranscriptions
             return new Paginateur([], 0, $parPage, $page);
         }
 
-        $ordre = array_flip($identifiants);
+        $trouves = $this->extraits($identifiants, $terme);
+        $resultats = [];
 
-        $resultats = $this->extraits($identifiants, $terme)
-            ->sortBy(fn (TranscriptionParagraph $paragraphe) => $ordre[$paragraphe->getKey()])
-            ->values()
-            ->map(fn (TranscriptionParagraph $paragraphe) => new ResultatRecherche(
-                transcription: $paragraphe->transcription,
-                debutMs: $paragraphe->debut_ms,
-                extraitHtml: $this->surligner((string) $paragraphe->extrait),
-            ));
+        foreach ($identifiants as $identifiant) {
+            if (isset($trouves[$identifiant])) {
+                $resultats[] = $trouves[$identifiant];
+            }
+        }
 
-        return new Paginateur($resultats->all(), $total, $parPage, $page, ['pageName' => 'page']);
+        return new Paginateur($resultats, $total, $parPage, $page, ['pageName' => 'page']);
     }
 
     /**
-     * Identifiants des paragraphes de la page demandée, et nombre total de résultats.
+     * Identifiants (« p:<id> » ou « r:<id> ») des passages de la page demandée, et nombre total de résultats.
      *
-     * @return array{0: list<int>, 1: int}
+     * @return array{0: list<string>, 1: int}
      */
     private function pageDIdentifiants(User $utilisateur, string $terme, int $parPage, int $page): array
     {
@@ -87,16 +88,17 @@ class RechercheTranscriptions
 
         $lignes = DB::select(
             "WITH trouves AS MATERIALIZED ({$trouves}) "
-            .'SELECT r.id FROM trouves r JOIN transcriptions t ON t.id = r.transcription_id '
+            .'SELECT r.source, r.id FROM trouves r JOIN transcriptions t ON t.id = r.transcription_id '
             .'WHERE t.user_id = ? ORDER BY t.created_at DESC, t.id DESC, r.position LIMIT ? OFFSET ?',
             [...$liaisons, $utilisateur->getKey(), $parPage, max(0, ($page - 1) * $parPage)],
         );
 
-        return [array_map(fn ($ligne) => (int) $ligne->id, $lignes), $total];
+        return [array_map(fn ($ligne) => $ligne->source.':'.$ligne->id, $lignes), $total];
     }
 
     /**
-     * Paragraphes qui contiennent le terme, un bloc par configuration de langue, reliés par UNION ALL.
+     * Passages qui contiennent le terme : paragraphes et résumés terminés, un bloc par configuration
+     * de langue, reliés par UNION ALL. Colonnes : source (« p » ou « r »), id, transcription_id, position.
      *
      * @return array{0: string, 1: list<string>} SQL du CTE et valeurs liées, dans l'ordre des « ? »
      */
@@ -104,27 +106,71 @@ class RechercheTranscriptions
     {
         $blocs = [];
         $liaisons = [];
+        $termine = StatutSortieIa::Termine->value;
 
         foreach (ConfigurationRecherche::toutes() as $configuration) {
-            $blocs[] = 'SELECT p.id, p.transcription_id, p.position FROM transcription_paragraphs p '
+            $blocs[] = "SELECT 'p' AS source, p.id, p.transcription_id, p.position FROM transcription_paragraphs p "
                 ."WHERE p.config_recherche = '{$configuration}' "
                 ."AND to_tsvector('{$configuration}', p.texte) @@ plainto_tsquery('{$configuration}', ?)";
+            $liaisons[] = $terme;
+
+            $blocs[] = "SELECT 'r' AS source, s.id, s.transcription_id, 0 AS position FROM ai_outputs s "
+                ."WHERE s.statut = '{$termine}' AND s.config_recherche = '{$configuration}' "
+                ."AND to_tsvector('{$configuration}', s.texte_recherche) @@ plainto_tsquery('{$configuration}', ?)";
             $liaisons[] = $terme;
         }
 
         return [implode(' UNION ALL ', $blocs), $liaisons];
     }
 
-    /** @return Collection<int, TranscriptionParagraph> */
-    private function extraits(array $identifiants, string $terme)
+    /**
+     * Résultats des identifiants donnés, indexés par identifiant.
+     *
+     * @param  list<string>  $identifiants
+     * @return array<string, ResultatRecherche>
+     */
+    private function extraits(array $identifiants, string $terme): array
     {
-        $options = sprintf(
-            'StartSel=%s,StopSel=%s,MaxWords=%d,MinWords=%d,MaxFragments=1',
-            self::DEBUT_SURLIGNAGE,
-            self::FIN_SURLIGNAGE,
-            (int) config('voxia.recherche.extrait_mots'),
-            max(1, intdiv((int) config('voxia.recherche.extrait_mots'), 3)),
-        );
+        $idsParagraphes = [];
+        $idsResumes = [];
+
+        foreach ($identifiants as $identifiant) {
+            [$source, $id] = explode(':', $identifiant);
+
+            if ($source === 'p') {
+                $idsParagraphes[] = (int) $id;
+            } else {
+                $idsResumes[] = (int) $id;
+            }
+        }
+
+        $resultats = [];
+
+        foreach ($this->extraitsParagraphes($idsParagraphes, $terme) as $paragraphe) {
+            $resultats['p:'.$paragraphe->getKey()] = new ResultatRecherche(
+                transcription: $paragraphe->transcription,
+                debutMs: $paragraphe->debut_ms,
+                extraitHtml: $this->surligner((string) $paragraphe->extrait),
+            );
+        }
+
+        foreach ($this->extraitsResumes($idsResumes, $terme) as $sortie) {
+            $resultats['r:'.$sortie->getKey()] = new ResultatRecherche(
+                transcription: $sortie->transcription,
+                debutMs: null,
+                extraitHtml: $this->surligner((string) $sortie->extrait),
+            );
+        }
+
+        return $resultats;
+    }
+
+    /** @return iterable<int, TranscriptionParagraph> */
+    private function extraitsParagraphes(array $identifiants, string $terme): iterable
+    {
+        if ($identifiants === []) {
+            return [];
+        }
 
         return TranscriptionParagraph::query()
             ->with('transcription')
@@ -133,9 +179,39 @@ class RechercheTranscriptions
             ->selectRaw(
                 'ts_headline(transcription_paragraphs.config_recherche::regconfig, transcription_paragraphs.texte, '
                 .'plainto_tsquery(transcription_paragraphs.config_recherche::regconfig, ?), ?) as extrait',
-                [$terme, $options],
+                [$terme, $this->optionsExtrait()],
             )
             ->get();
+    }
+
+    /** @return iterable<int, AiOutput> */
+    private function extraitsResumes(array $identifiants, string $terme): iterable
+    {
+        if ($identifiants === []) {
+            return [];
+        }
+
+        return AiOutput::query()
+            ->with('transcription')
+            ->whereIn('ai_outputs.id', $identifiants)
+            ->select('ai_outputs.*')
+            ->selectRaw(
+                'ts_headline(ai_outputs.config_recherche::regconfig, ai_outputs.texte_recherche, '
+                .'plainto_tsquery(ai_outputs.config_recherche::regconfig, ?), ?) as extrait',
+                [$terme, $this->optionsExtrait()],
+            )
+            ->get();
+    }
+
+    private function optionsExtrait(): string
+    {
+        return sprintf(
+            'StartSel=%s,StopSel=%s,MaxWords=%d,MinWords=%d,MaxFragments=1',
+            self::DEBUT_SURLIGNAGE,
+            self::FIN_SURLIGNAGE,
+            (int) config('voxia.recherche.extrait_mots'),
+            max(1, intdiv((int) config('voxia.recherche.extrait_mots'), 3)),
+        );
     }
 
     /** Échappe le texte transcrit, puis remplace seulement les marqueurs par <mark>. */

@@ -3,6 +3,7 @@
 namespace App\Services\Plans;
 
 use App\Enums\FormatExport;
+use App\Enums\FormatExportReecriture;
 use App\Enums\Plan;
 use App\Models\User;
 
@@ -137,6 +138,26 @@ class PlanFeatures
     public function peutExporter(User $utilisateur, FormatExport $format): bool
     {
         return in_array($format, $this->formatsExport($utilisateur), true);
+    }
+
+    /**
+     * Exports d'une réécriture (voxia.plans.*.exports_reecriture) : TXT en Pro, Markdown et DOCX en Business.
+     *
+     * @return list<FormatExportReecriture>
+     */
+    public function formatsExportReecriture(User $utilisateur): array
+    {
+        $autorises = config("voxia.plans.{$this->cle($utilisateur)}.exports_reecriture", []);
+
+        return array_values(array_filter(
+            FormatExportReecriture::cases(),
+            fn (FormatExportReecriture $format) => in_array($format->value, $autorises, true),
+        ));
+    }
+
+    public function peutExporterReecriture(User $utilisateur, FormatExportReecriture $format): bool
+    {
+        return in_array($format, $this->formatsExportReecriture($utilisateur), true);
     }
 
     /**
