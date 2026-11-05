@@ -85,8 +85,9 @@ return [
 
         'business' => [
             'label' => 'Business',
-            // Repassé à true avec la carte Business des écrans d'upgrade (étape 4).
-            'sellable' => false,
+            // Vendable : la carte Business est présentée dans les fenêtres d'upgrade (étape 4 de la V2).
+            // La page des tarifs publique reste à part (étape 8).
+            'sellable' => true,
             'price_monthly_usd' => (float) env('VOXIA_BUSINESS_PRICE_MONTHLY_USD', 29),
             'price_yearly_usd' => (float) env('VOXIA_BUSINESS_PRICE_YEARLY_USD', 276),
             'hours_per_month' => (int) env('VOXIA_BUSINESS_HOURS_PER_MONTH', 150),

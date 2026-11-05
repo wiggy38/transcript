@@ -81,6 +81,11 @@
 
                         @if ($trop_longue)
                             <x-message-erreur alerte>{{ __('videos.motifs.trop_longue') }}</x-message-erreur>
+                            {{-- Pro : vidéo au-delà de 3 h, le Business monte à 5 h par vidéo. --}}
+                            @if ($plan === 'pro')
+                                <button type="button" aria-haspopup="dialog" x-on:click="$dispatch('voxia-ouvrir', { id: 'upgrade-duree-business' })"
+                                        class="cursor-pointer self-start text-sm text-accent-texte hover:underline">{{ __('upgrade.duree_business.titre') }}</button>
+                            @endif
                         @endif
 
                         @if ($apercu_limite)
@@ -206,5 +211,17 @@
         <p class="text-texte">{{ __('upgrade.quota.texte', ['limite' => (int) config('voxia.plans.free.videos_per_month')]) }}</p>
         <x-compteur-plan class="mt-3" />
         <p class="mt-3 text-sm">{{ __('upgrade.quota.reprise') }}</p>
+    </x-upgrade.fenetre>
+
+    {{-- Pro à court de volume : la fenêtre propose le Business (cahier §5, étape 4 de la V2). --}}
+    <x-upgrade.fenetre id="upgrade-quota-business" :titre="__('upgrade.quota_business.titre')" :retour="route('tableau-de-bord')" :plans="['business']">
+        <p class="text-texte">{{ __('upgrade.quota_business.texte', ['heures' => (int) config('voxia.plans.pro.hours_per_month'), 'business' => (int) config('voxia.plans.business.hours_per_month')]) }}</p>
+        <x-compteur-plan class="mt-3" />
+        <p class="mt-3 text-sm">{{ __('upgrade.quota.reprise') }}</p>
+    </x-upgrade.fenetre>
+
+    {{-- Pro : vidéo de plus de 3 h, la fenêtre propose le Business. --}}
+    <x-upgrade.fenetre id="upgrade-duree-business" :titre="__('upgrade.duree_business.titre')" :retour="route('tableau-de-bord')" :plans="['business']">
+        <p class="text-texte">{{ __('upgrade.duree_business.texte') }}</p>
     </x-upgrade.fenetre>
 </div>

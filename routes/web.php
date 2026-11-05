@@ -102,7 +102,7 @@ Route::middleware('auth')->group(function () {
 
     // Paiement (cahier §5) : ouverture d'une formule, espace Abonnement. Email vérifié exigé pour payer.
     Route::get('/paiement/{produit}', [PaiementController::class, 'afficher'])
-        ->whereIn('produit', ['pro_mensuel', 'pro_annuel', 'pack'])
+        ->whereIn('produit', ['pro_mensuel', 'pro_annuel', 'business_mensuel', 'business_annuel', 'pack'])
         ->middleware('verified')
         ->name('paiement.show');
 

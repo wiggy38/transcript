@@ -333,11 +333,12 @@ it('affiche le compteur de quota dans la mise en page', function () {
         ->assertSee(__('interface.quota.videos_mois', ['utilisees' => 3, 'limite' => 5]));
 });
 
-it('ne vend que Gratuit, Pro et Pack, et donne la file prioritaire au seul Pro', function () {
+it('vend Gratuit, Pro, Pack et Business, et donne la file prioritaire au Pro et au Business', function () {
     $droits = app(PlanFeatures::class);
 
-    expect($droits->plansVendables())->toEqual([Plan::Free, Plan::Pro, Plan::Pack])
-        ->and($droits->estVendable(Plan::Business))->toBeFalse()
+    expect($droits->plansVendables())->toEqual([Plan::Free, Plan::Pro, Plan::Pack, Plan::Business])
+        ->and($droits->estVendable(Plan::Business))->toBeTrue()
+        ->and($droits->fileDe(Plan::Business))->toBe('high')
         ->and($droits->fileDe(Plan::Pro))->toBe('high')
         ->and($droits->fileDe(Plan::Free))->toBe('default')
         ->and($droits->fileDe(Plan::Pack))->toBe('default');

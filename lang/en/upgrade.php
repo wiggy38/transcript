@@ -11,6 +11,8 @@ return [
         'heures_pack' => ':heures h of transcription, valid :mois months',
         'historique' => 'Unlimited history and search',
         'ia' => 'AI credits for script analysis',
+        'lots' => 'Batch processing: up to :liens links at a time',
+        'prioritaire' => 'Priority queue',
     ],
 
     'periode' => [
@@ -25,6 +27,9 @@ return [
         'pro_mensuel' => 'Upgrade to Pro · :prix / month',
         'pro_annuel' => 'Or :prix / year',
         'pack' => 'Buy the Pack · :prix',
+        'business_mensuel' => 'Upgrade to Business · :prix / month',
+        'business_annuel' => 'Or :prix / year',
+        'gerer' => 'Manage my plan',
     ],
 
     'tarifs' => [
@@ -57,6 +62,16 @@ return [
     'analyse' => [
         'titre' => 'Script analysis',
         'texte' => 'Your plan does not include AI credits. Pro includes some every month to analyse the structure of your scripts.',
+    ],
+
+    'quota_business' => [
+        'titre' => 'You have used your 30 hours this month',
+        'texte' => 'The Pro plan includes :heures h of transcription per month. Upgrade to Business for :business h per month and run this video right away.',
+    ],
+
+    'duree_business' => [
+        'titre' => 'This video is longer than 3 hours',
+        'texte' => 'The Pro plan transcribes up to 3 hours per video. Business goes up to 5 hours per video.',
     ],
 
     'reprise' => 'Your link is back in the field. Launch the transcription whenever you like.',

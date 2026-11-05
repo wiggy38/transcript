@@ -17,13 +17,19 @@
 
     <div class="mt-10 grid max-w-[880px] gap-8">
         {{-- Formule actuelle --}}
-        <x-panneau class="p-6">
+        @php
+            // Formule payante : famille (pro ou business) et cadence (mensuelle ou annuelle).
+            $famille = str_starts_with((string) $formule, 'business_') ? 'business' : 'pro';
+            $annuel = str_ends_with((string) $formule, '_annuel');
+            $cadence = $annuel ? 'annuel' : 'mensuel';
+        @endphp
+        <x-panneau id="formule" class="p-6">
             <h2 class="text-lg font-semibold">{{ __('abonnement.formule.titre') }}</h2>
 
             @if ($pro)
                 <p class="mt-2 text-texte">
-                    {{ __('abonnement.formule.pro') }} —
-                    {{ $formule === 'pro_annuel' ? __('abonnement.formule.annuel') : __('abonnement.formule.mensuel') }}
+                    {{ __('abonnement.formule.'.$famille) }} —
+                    {{ $annuel ? __('abonnement.formule.annuel') : __('abonnement.formule.mensuel') }}
                 </p>
 
                 @if ($resiliee)
@@ -34,21 +40,21 @@
 
                 <div class="mt-6 flex flex-wrap gap-3">
                     @if (! $resiliee)
-                        @if ($formule === 'pro_annuel')
-                            <form method="post" action="{{ route('abonnement.formule') }}">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" name="formule" value="pro_mensuel">
-                                <x-bouton type="submit" variante="filet">{{ __('abonnement.formule.passer_mensuel') }}</x-bouton>
-                            </form>
-                        @else
-                            <form method="post" action="{{ route('abonnement.formule') }}">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" name="formule" value="pro_annuel">
-                                <x-bouton type="submit" variante="filet">{{ __('abonnement.formule.passer_annuel') }}</x-bouton>
-                            </form>
-                        @endif
+                        {{-- Même famille, autre cadence : immédiat, au prorata. --}}
+                        <form method="post" action="{{ route('abonnement.formule') }}">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="formule" value="{{ $famille }}_{{ $annuel ? 'mensuel' : 'annuel' }}">
+                            <x-bouton type="submit" variante="filet">{{ $annuel ? __('abonnement.formule.passer_mensuel') : __('abonnement.formule.passer_annuel') }}</x-bouton>
+                        </form>
+
+                        {{-- Pro vers Business : immédiat, au prorata. Business vers Pro : fin de la période payée. --}}
+                        <form method="post" action="{{ route('abonnement.formule') }}">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="formule" value="{{ $famille === 'pro' ? 'business' : 'pro' }}_{{ $cadence }}">
+                            <x-bouton type="submit" variante="filet">{{ $famille === 'pro' ? __('abonnement.formule.passer_business') : __('abonnement.formule.passer_pro') }}</x-bouton>
+                        </form>
 
                         <form method="post" action="{{ route('abonnement.resilier') }}">
                             @csrf
@@ -68,6 +74,8 @@
                 <div class="mt-6 flex flex-wrap gap-3">
                     <x-bouton :href="route('paiement.show', ['produit' => 'pro_mensuel'])" variante="principal">{{ __('abonnement.formule.souscrire_mensuel', ['montant' => (int) config('voxia.plans.pro.price_monthly_usd')]) }}</x-bouton>
                     <x-bouton :href="route('paiement.show', ['produit' => 'pro_annuel'])" variante="filet">{{ __('abonnement.formule.souscrire_annuel', ['montant' => (int) config('voxia.plans.pro.price_yearly_usd')]) }}</x-bouton>
+                    <x-bouton :href="route('paiement.show', ['produit' => 'business_mensuel'])" variante="filet">{{ __('abonnement.formule.souscrire_business_mensuel', ['montant' => (int) config('voxia.plans.business.price_monthly_usd')]) }}</x-bouton>
+                    <x-bouton :href="route('paiement.show', ['produit' => 'business_annuel'])" variante="filet">{{ __('abonnement.formule.souscrire_business_annuel', ['montant' => (int) config('voxia.plans.business.price_yearly_usd')]) }}</x-bouton>
                     <x-bouton :href="route('paiement.show', ['produit' => 'pack'])" variante="filet">{{ __('abonnement.formule.acheter_pack', ['montant' => (int) config('voxia.plans.pack.price_usd')]) }}</x-bouton>
                 </div>
             @endif

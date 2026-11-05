@@ -301,20 +301,26 @@ class NouvelleTranscription extends Component
     }
 
     /**
-     * 6e vidéo du mois en Gratuit (cahier §2, déclencheur principal) : seul ce refus ouvre la fenêtre
-     * d'upgrade. Un Pro ou un Pack à court de quota n'est pas renvoyé vers un plan qu'il a déjà.
+     * Quota épuisé, deux cas. Gratuit : la 6e vidéo du mois (cahier §2, déclencheur principal), vers le Pro.
+     * Pro : les 30 h du mois atteintes, vers le Business. Un Pack à court de quota n'ouvre rien.
      */
     private function proposerUpgradeQuota(ErreurVideo $erreur): bool
     {
-        return $erreur->motif === MotifEchec::QuotaEpuise && app(PlanFeatures::class)->estGratuit($this->planDeCompte());
+        if ($erreur->motif !== MotifEchec::QuotaEpuise) {
+            return false;
+        }
+
+        $plans = app(PlanFeatures::class);
+
+        return $plans->estGratuit($this->planDeCompte()) || $this->planDeCompte() === Plan::Pro;
     }
 
-    /** Garde le lien ou le fichier pour le retour du paiement, puis ouvre la fenêtre d'upgrade. */
+    /** Garde le lien ou le fichier pour le retour du paiement, puis ouvre la fenêtre d'upgrade du plan. */
     private function ouvrirUpgradeQuota(array $reprise): void
     {
         session()->put(self::CLE_REPRISE, $reprise + ['enregistre' => now()->timestamp]);
 
-        $this->dispatch('voxia-ouvrir', id: 'upgrade-quota');
+        $this->dispatch('voxia-ouvrir', id: $this->planDeCompte() === Plan::Pro ? 'upgrade-quota-business' : 'upgrade-quota');
     }
 
     /**

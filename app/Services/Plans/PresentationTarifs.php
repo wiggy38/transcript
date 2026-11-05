@@ -32,6 +32,7 @@ class PresentationTarifs
             return match ($cle) {
                 'free' => $this->gratuit(),
                 'pro' => $this->pro($retour, $transcriptionId),
+                'business' => $this->business($retour, $transcriptionId),
                 'pack' => $this->pack($retour, $transcriptionId),
                 default => throw new InvalidArgumentException("Plan non présenté : {$cle}"),
             };
@@ -72,10 +73,31 @@ class PresentationTarifs
                 __('upgrade.lignes.historique'),
                 __('upgrade.lignes.ia'),
             ],
-            'actions' => [
-                ['libelle' => __('upgrade.actions.pro_mensuel', ['prix' => Montant::dollars($mensuel)]), 'url' => $this->lienPaiement('pro_mensuel', $retour, $transcriptionId)],
-                ['libelle' => __('upgrade.actions.pro_annuel', ['prix' => Montant::dollars($annuel)]), 'url' => $this->lienPaiement('pro_annuel', $retour, $transcriptionId)],
+            'actions' => $this->actionsFormule('pro', $mensuel, $annuel, $retour, $transcriptionId),
+        ]);
+    }
+
+    /** @return array<string, mixed> */
+    private function business(string $retour, ?int $transcriptionId): array
+    {
+        $mensuel = (float) config('voxia.plans.business.price_monthly_usd');
+        $annuel = (float) config('voxia.plans.business.price_yearly_usd');
+
+        return $this->carte('business', Plan::Business, [
+            'prix' => Montant::dollars($mensuel),
+            'periode' => __('upgrade.periode.mois'),
+            'annuel' => __('upgrade.annuel', ['prix' => Montant::dollars($annuel), 'mensuel' => Montant::dollars($annuel / 12)]),
+            'vedette' => false,
+            'lignes' => [
+                __('upgrade.lignes.heures_mois', ['heures' => intdiv((int) $this->droits->secondesMensuelles(Plan::Business), 3600)]),
+                __('upgrade.lignes.duree_heures', ['heures' => intdiv($this->droits->dureeMaxSecondes(Plan::Business), 3600)]),
+                __('upgrade.lignes.exports', ['formats' => $this->formats(Plan::Business)]),
+                __('upgrade.lignes.historique'),
+                __('upgrade.lignes.ia'),
+                __('upgrade.lignes.lots', ['liens' => $this->droits->limiteLots(Plan::Business)]),
+                __('upgrade.lignes.prioritaire'),
             ],
+            'actions' => $this->actionsFormule('business', $mensuel, $annuel, $retour, $transcriptionId),
         ]);
     }
 
@@ -127,6 +149,25 @@ class PresentationTarifs
         );
 
         return implode(', ', $libelles);
+    }
+
+    /**
+     * Actions d'une formule payante (Pro ou Business), mensuelle et annuelle. Un compte qui a déjà un
+     * abonnement ne rouvre pas de paiement : il est renvoyé à son espace Abonnement, où le changement
+     * de formule se fait en un clic (prorata ou fin de période selon le sens).
+     *
+     * @return list<array{libelle: string, url: string}>
+     */
+    private function actionsFormule(string $famille, float $mensuel, float $annuel, string $retour, ?int $transcriptionId): array
+    {
+        if (Auth::check() && Auth::user()->subscribed((string) config('voxia.paiement.type_abonnement_pro'))) {
+            return [['libelle' => __('upgrade.actions.gerer'), 'url' => route('abonnement').'#formule']];
+        }
+
+        return [
+            ['libelle' => __("upgrade.actions.{$famille}_mensuel", ['prix' => Montant::dollars($mensuel)]), 'url' => $this->lienPaiement("{$famille}_mensuel", $retour, $transcriptionId)],
+            ['libelle' => __("upgrade.actions.{$famille}_annuel", ['prix' => Montant::dollars($annuel)]), 'url' => $this->lienPaiement("{$famille}_annuel", $retour, $transcriptionId)],
+        ];
     }
 
     /** Lien vers la page de paiement, avec l'écran d'origine à rejoindre après le paiement (chemin local). */

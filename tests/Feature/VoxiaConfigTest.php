@@ -10,8 +10,8 @@ test('les plans sont définis avec leurs exports', function () {
     }
 });
 
-test('le plan Business n\'est pas vendable dans le MVP', function () {
-    expect(config('voxia.plans.business.sellable'))->toBeFalse()
+test('le plan Business est vendable en V2 (décision du 5 novembre 2026)', function () {
+    expect(config('voxia.plans.business.sellable'))->toBeTrue()
         ->and(config('voxia.plans.free.sellable'))->toBeTrue()
         ->and(config('voxia.plans.pro.sellable'))->toBeTrue()
         ->and(config('voxia.plans.pack.sellable'))->toBeTrue();

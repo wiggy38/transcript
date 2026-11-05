@@ -6,6 +6,7 @@ use App\Contracts\BillingProvider;
 use App\Exceptions\PaiementIndisponible;
 use App\Http\Controllers\Controller;
 use App\Models\Transcription;
+use App\Services\Paiement\SynchroniserPlan;
 use App\Support\CheminLocal;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -36,7 +37,12 @@ class PaiementController extends Controller
 
         // Un seul abonnement par compte : une formule déjà souscrise se change depuis l'espace Abonnement.
         if ($produit !== 'pack' && $utilisateur->subscribed((string) config('voxia.paiement.type_abonnement_pro'))) {
-            return redirect()->route('abonnement')->with('statut', str_starts_with($produit, 'business_') ? 'deja-abonne' : 'deja-pro');
+            $abonnement = $utilisateur->subscription((string) config('voxia.paiement.type_abonnement_pro'));
+            $statut = str_starts_with($produit, 'business_') || app(SynchroniserPlan::class)->estFormuleBusiness($abonnement)
+                ? 'deja-abonne'
+                : 'deja-pro';
+
+            return redirect()->route('abonnement')->with('statut', $statut);
         }
 
         $apercu = $this->apercuDuCompte($request);

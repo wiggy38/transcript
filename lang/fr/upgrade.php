@@ -11,6 +11,8 @@ return [
         'heures_pack' => ':heures h de transcription, valables :mois mois',
         'historique' => 'Historique illimité et recherche',
         'ia' => 'Crédits IA pour l’analyse de script',
+        'lots' => 'Traitement par lots : jusqu’à :liens liens à la fois',
+        'prioritaire' => 'File d’attente prioritaire',
     ],
 
     'periode' => [
@@ -25,6 +27,9 @@ return [
         'pro_mensuel' => 'Passer au Pro · :prix / mois',
         'pro_annuel' => 'Ou :prix / an',
         'pack' => 'Acheter le Pack · :prix',
+        'business_mensuel' => 'Passer au Business · :prix / mois',
+        'business_annuel' => 'Ou :prix / an',
+        'gerer' => 'Gérer ma formule',
     ],
 
     'tarifs' => [
@@ -57,6 +62,16 @@ return [
     'analyse' => [
         'titre' => 'Analyse de script',
         'texte' => 'Ton plan n’inclut pas de crédits IA. Le Pro en inclut chaque mois pour analyser la structure de tes scripts.',
+    ],
+
+    'quota_business' => [
+        'titre' => 'Tu as utilisé tes 30 h du mois',
+        'texte' => 'Le plan Pro inclut :heures h de transcription par mois. Passe au Business pour :business h par mois et lance cette vidéo tout de suite.',
+    ],
+
+    'duree_business' => [
+        'titre' => 'Cette vidéo dépasse 3 h',
+        'texte' => 'Le plan Pro transcrit jusqu’à 3 h par vidéo. Le Business monte à 5 h par vidéo.',
     ],
 
     'reprise' => 'Ton lien est repris dans le champ. Lance la transcription quand tu veux.',
