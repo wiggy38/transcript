@@ -18,8 +18,7 @@ return [
         'lancer' => 'Start transcription',
         'deja' => 'You have already transcribed this video.',
         'voir' => 'View the transcription',
-        'limite' => 'Your video is longer than the :minutes minutes of the Free plan. Only the first :minutes minutes will be transcribed. Upgrade to Pro for the full transcription.',
-    ],
+        'limite' => 'Your video is longer than the :minutes minutes of the Free plan. Only the first :minutes minutes will be transcribed. Upgrade to Pro for the full transcription.',    ],
 
     'langue' => [
         'libelle' => 'Language',
@@ -45,6 +44,7 @@ return [
         'envoi' => 'File upload',
         'progression' => 'Upload: :pourcent%',
         'pret' => 'File ready: :nom',
+        'pret_titre' => 'File ready:',
         'lancer' => 'Start transcription of the file',
         'retirer' => 'Remove',
     ],

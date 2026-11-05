@@ -11,6 +11,22 @@ use NumberFormatter;
  */
 final class Formats
 {
+    /** Date de la liste « Tes transcriptions » (maquette) : « aujourd'hui 10:12 », « hier 18:30 », « 03/11 14:12 ». */
+    public static function dateListe(CarbonInterface $date): string
+    {
+        $heure = $date->format('H:i');
+
+        if ($date->isToday()) {
+            return __('comptes.tableau.aujourdhui').' '.$heure;
+        }
+
+        if ($date->isYesterday()) {
+            return __('comptes.tableau.hier').' '.$heure;
+        }
+
+        return $date->format('d/m').' '.$heure;
+    }
+
     /** Date seule, en toutes lettres. */
     public static function date(CarbonInterface $date): string
     {

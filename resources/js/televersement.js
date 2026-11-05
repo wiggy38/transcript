@@ -66,6 +66,7 @@ export default function televersement($wire, config) {
         progression: 0,
         erreur: '',
         survol: false,
+        nom: '',
 
         async choisir(fichier) {
             if (! fichier || this.etat === 'envoi') {
@@ -88,6 +89,7 @@ export default function televersement($wire, config) {
 
             this.etat = 'envoi';
             this.progression = 0;
+            this.nom = fichier.name;
 
             const envoi = identifiantEnvoi();
             const total = Math.max(1, Math.ceil(fichier.size / config.morceauOctets));

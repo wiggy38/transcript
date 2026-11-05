@@ -18,8 +18,7 @@ return [
         'lancer' => 'Lancer la transcription',
         'deja' => 'Tu as déjà transcrit cette vidéo.',
         'voir' => 'Voir la transcription',
-        'limite' => 'Ta vidéo dépasse les :minutes minutes du plan Gratuit. Seules les :minutes premières minutes seront transcrites. Passe au Pro pour la transcription complète.',
-    ],
+        'limite' => 'Ta vidéo dépasse les :minutes minutes du plan Gratuit. Seules les :minutes premières minutes seront transcrites. Passe au Pro pour la transcription complète.',    ],
 
     'langue' => [
         'libelle' => 'Langue',
@@ -45,6 +44,7 @@ return [
         'envoi' => 'Envoi du fichier',
         'progression' => 'Envoi : :pourcent %',
         'pret' => 'Fichier prêt : :nom',
+        'pret_titre' => 'Fichier prêt :',
         'lancer' => 'Lancer la transcription du fichier',
         'retirer' => 'Retirer',
     ],

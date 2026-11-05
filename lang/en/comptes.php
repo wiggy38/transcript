@@ -93,6 +93,8 @@ return [
         'historique' => 'Your transcriptions',
         'tout' => 'Full history →',
         'vide' => 'No transcription yet.',
+        'aujourdhui' => 'today',
+        'hier' => 'yesterday',
     ],
 
     'reglages' => [

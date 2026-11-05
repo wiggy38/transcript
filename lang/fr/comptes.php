@@ -93,6 +93,8 @@ return [
         'historique' => 'Tes transcriptions',
         'tout' => 'Tout l\'historique →',
         'vide' => 'Aucune transcription pour l\'instant.',
+        'aujourdhui' => 'aujourd\'hui',
+        'hier' => 'hier',
     ],
 
     'reglages' => [
