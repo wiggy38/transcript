@@ -34,6 +34,8 @@ return [
         'et' => 'et la',
         'confidentialite_lien' => 'politique de confidentialité',
         'lien_garde' => 'Ton lien est gardé. Il sera lancé dès que tu auras vérifié ton email.',
+        'ou_email' => 'ou avec ton email',
+        'facebook_bouton' => 'Continuer avec Facebook',
         'limite_atteinte' => 'Impossible de créer un compte gratuit depuis cette connexion pour le moment.',
     ],
 
@@ -58,6 +60,8 @@ return [
         'pas_de_compte' => 'Pas encore de compte ?',
         'creer' => 'Créer un compte',
         'lien_garde' => 'Ton lien est gardé. Il sera lancé dès la connexion.',
+        'ou_email' => 'ou avec ton email',
+        'facebook_bouton' => 'Continuer avec Facebook',
     ],
 
     'google' => [

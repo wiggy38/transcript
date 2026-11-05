@@ -34,6 +34,8 @@ return [
         'et' => 'and the',
         'confidentialite_lien' => 'privacy policy',
         'lien_garde' => 'Your link is kept. It will start as soon as you verify your email.',
+        'ou_email' => 'or with your email',
+        'facebook_bouton' => 'Continue with Facebook',
         'limite_atteinte' => 'We cannot create a free account from this connection for now.',
     ],
 
@@ -58,6 +60,8 @@ return [
         'pas_de_compte' => 'No account yet?',
         'creer' => 'Create an account',
         'lien_garde' => 'Your link is kept. It will start as soon as you log in.',
+        'ou_email' => 'or with your email',
+        'facebook_bouton' => 'Continue with Facebook',
     ],
 
     'google' => [
