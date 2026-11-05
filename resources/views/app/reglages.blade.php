@@ -24,9 +24,9 @@
 
     <h1 class="titre-h2">{{ __('comptes.reglages.titre') }}</h1>
 
-    <div class="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:items-start">
-        <nav aria-label="{{ __('comptes.reglages.sections.navigation') }}" class="lg:sticky lg:top-4">
-            <ul class="flex flex-wrap gap-1 lg:flex-col">
+    <div class="mt-8 grid gap-8 md:grid-cols-[240px_minmax(0,1fr)] md:items-start">
+        <nav aria-label="{{ __('comptes.reglages.sections.navigation') }}" class="md:sticky md:top-4">
+            <ul class="flex flex-wrap gap-1 md:flex-col">
                 @foreach ($sections as $id => $libelle)
                     <li>
                         <a href="#{{ $id }}" class="inline-flex min-h-10 items-center rounded-bouton px-3 text-sm text-texte-secondaire no-underline transition-colors hover:bg-panneau-eleve hover:text-texte">{{ $libelle }}</a>
