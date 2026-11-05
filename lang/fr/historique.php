@@ -13,6 +13,7 @@ return [
         'gratuit' => 'La recherche dans tes transcriptions est réservée au plan Pro et Pack. Passe au Pro pour retrouver un passage en un mot.',
         'resultats' => '{0} Aucun résultat pour « :terme ».|{1} Un résultat pour « :terme ».|[2,*] :nombre résultats pour « :terme ».',
         'aller' => 'Ouvrir à ce moment',
+        'passer_pro' => 'Passer au Pro',
         'liste_aria' => 'Résultats de la recherche',
     ],
 
