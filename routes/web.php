@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\Comptes\BibliothequeController;
 use App\Http\Controllers\Comptes\DonneesController;
 use App\Http\Controllers\Comptes\ExportAnalyseController;
 use App\Http\Controllers\Comptes\ExportController;
@@ -59,6 +60,19 @@ Route::middleware('auth')->group(function () {
 
     // Historique (F5) : liste, tri par date, pagination, recherche plein texte (Pro et Pack).
     Route::get('/historique', HistoriqueController::class)->name('historique');
+
+    // Bibliothèque classée (V2) : dossiers, étiquettes, classement et actions groupées. Pro et Business
+    // pour écrire (Policies) ; les pages restent accessibles en lecture seule.
+    Route::get('/bibliotheque/classement', [BibliothequeController::class, 'gerer'])->name('bibliotheque.gerer');
+    Route::post('/bibliotheque/dossiers', [BibliothequeController::class, 'storeDossier'])->name('bibliotheque.dossiers.store');
+    Route::patch('/bibliotheque/dossiers/{dossier}', [BibliothequeController::class, 'updateDossier'])->name('bibliotheque.dossiers.update');
+    Route::delete('/bibliotheque/dossiers/{dossier}', [BibliothequeController::class, 'destroyDossier'])->name('bibliotheque.dossiers.destroy');
+    Route::post('/bibliotheque/etiquettes', [BibliothequeController::class, 'storeEtiquette'])->name('bibliotheque.etiquettes.store');
+    Route::patch('/bibliotheque/etiquettes/{etiquette}', [BibliothequeController::class, 'updateEtiquette'])->name('bibliotheque.etiquettes.update');
+    Route::delete('/bibliotheque/etiquettes/{etiquette}', [BibliothequeController::class, 'destroyEtiquette'])->name('bibliotheque.etiquettes.destroy');
+    Route::post('/bibliotheque/selection', [BibliothequeController::class, 'selection'])->name('bibliotheque.selection');
+    Route::get('/transcriptions/{transcription}/classement', [BibliothequeController::class, 'classement'])->name('transcriptions.classement');
+    Route::put('/transcriptions/{transcription}/classement', [BibliothequeController::class, 'enregistrerClassement'])->name('transcriptions.classement.update');
 
     // Suppression : une page de confirmation, puis la suppression elle-même (DELETE).
     Route::get('/transcriptions/{transcription}/supprimer', [TranscriptionController::class, 'confirmerSuppression'])

@@ -5,10 +5,12 @@ namespace App\Services\Recherche;
 use App\Data\ResultatRecherche;
 use App\Enums\StatutSortieIa;
 use App\Models\AiOutput;
+use App\Models\Transcription;
 use App\Models\TranscriptionParagraph;
 use App\Models\User;
 use App\Support\ConfigurationRecherche;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator as Paginateur;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -39,9 +41,11 @@ class RechercheTranscriptions
     private const FIN_SURLIGNAGE = "\x03";
 
     /**
+     * @param  ?Builder<Transcription>  $portee  Restriction facultative (vue filtrée de la bibliothèque) : seules
+     *                                           les transcriptions de cette requête sont cherchées.
      * @return LengthAwarePaginator<int, ResultatRecherche>
      */
-    public function rechercher(User $utilisateur, string $terme, int $parPage, int $page): LengthAwarePaginator
+    public function rechercher(User $utilisateur, string $terme, int $parPage, int $page, ?Builder $portee = null): LengthAwarePaginator
     {
         $terme = $this->normaliser($terme);
 
@@ -49,7 +53,7 @@ class RechercheTranscriptions
             return new Paginateur([], 0, $parPage, $page);
         }
 
-        [$identifiants, $total] = $this->pageDIdentifiants($utilisateur, $terme, $parPage, $page);
+        [$identifiants, $total] = $this->pageDIdentifiants($utilisateur, $terme, $parPage, $page, $portee);
 
         if ($total === 0) {
             return new Paginateur([], 0, $parPage, $page);
@@ -72,14 +76,16 @@ class RechercheTranscriptions
      *
      * @return array{0: list<string>, 1: int}
      */
-    private function pageDIdentifiants(User $utilisateur, string $terme, int $parPage, int $page): array
+    private function pageDIdentifiants(User $utilisateur, string $terme, int $parPage, int $page, ?Builder $portee): array
     {
         [$trouves, $liaisons] = $this->cteTrouves($terme);
+        [$restriction, $liaisonsRestriction] = $this->restriction($portee);
 
         $total = (int) DB::selectOne(
             "WITH trouves AS MATERIALIZED ({$trouves}) "
-            .'SELECT count(*) AS total FROM trouves r JOIN transcriptions t ON t.id = r.transcription_id WHERE t.user_id = ?',
-            [...$liaisons, $utilisateur->getKey()],
+            .'SELECT count(*) AS total FROM trouves r JOIN transcriptions t ON t.id = r.transcription_id '
+            ."WHERE t.user_id = ?{$restriction}",
+            [...$liaisons, $utilisateur->getKey(), ...$liaisonsRestriction],
         )->total;
 
         if ($total === 0) {
@@ -89,11 +95,29 @@ class RechercheTranscriptions
         $lignes = DB::select(
             "WITH trouves AS MATERIALIZED ({$trouves}) "
             .'SELECT r.source, r.id FROM trouves r JOIN transcriptions t ON t.id = r.transcription_id '
-            .'WHERE t.user_id = ? ORDER BY t.created_at DESC, t.id DESC, r.position LIMIT ? OFFSET ?',
-            [...$liaisons, $utilisateur->getKey(), $parPage, max(0, ($page - 1) * $parPage)],
+            ."WHERE t.user_id = ?{$restriction} ORDER BY t.created_at DESC, t.id DESC, r.position LIMIT ? OFFSET ?",
+            [...$liaisons, $utilisateur->getKey(), ...$liaisonsRestriction, $parPage, max(0, ($page - 1) * $parPage)],
         );
 
         return [array_map(fn ($ligne) => $ligne->source.':'.$ligne->id, $lignes), $total];
+    }
+
+    /**
+     * Condition SQL qui limite la recherche aux transcriptions d'une requête (vue filtrée), avec ses valeurs liées.
+     * La requête est transformée en sous-requête d'identifiants : elle reprend les mêmes index que la liste.
+     *
+     * @param  ?Builder<Transcription>  $portee
+     * @return array{0: string, 1: list<mixed>}
+     */
+    private function restriction(?Builder $portee): array
+    {
+        if ($portee === null) {
+            return ['', []];
+        }
+
+        $sousRequete = $portee->toBase()->reorder()->select('transcriptions.id');
+
+        return [' AND t.id IN ('.$sousRequete->toSql().')', $sousRequete->getBindings()];
     }
 
     /**

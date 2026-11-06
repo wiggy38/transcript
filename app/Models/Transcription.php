@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -96,6 +97,18 @@ class Transcription extends Model
     public function processingLogs(): HasMany
     {
         return $this->hasMany(ProcessingLog::class)->orderBy('created_at')->orderBy('id');
+    }
+
+    /** Dossier de la bibliothèque (V2) ; nul pour « Non classé ». */
+    public function dossier(): BelongsTo
+    {
+        return $this->belongsTo(Dossier::class);
+    }
+
+    /** Étiquettes de la bibliothèque (V2), plusieurs par transcription. */
+    public function etiquettes(): BelongsToMany
+    {
+        return $this->belongsToMany(Etiquette::class, 'etiquette_transcription');
     }
 
     public function usageRecords(): HasMany

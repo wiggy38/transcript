@@ -106,6 +106,15 @@ class PlanFeatures
         return (bool) config("voxia.plans.{$this->cle($utilisateur)}.recherche", false);
     }
 
+    /**
+     * Bibliothèque classée (dossiers, étiquettes, classement) : Pro et Business (voxia.plans.*.classement).
+     * Gratuit et Pack gardent la liste du MVP ; un compte qui n'a plus ce droit garde ses données en lecture seule.
+     */
+    public function peutClasser(User $utilisateur): bool
+    {
+        return (bool) config("voxia.plans.{$this->cle($utilisateur)}.classement", false);
+    }
+
     /** Jours de conservation des transcriptions, ou null si l'historique est illimité. */
     public function joursConservation(User $utilisateur): ?int
     {

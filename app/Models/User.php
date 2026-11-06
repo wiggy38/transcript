@@ -61,6 +61,16 @@ class User extends Authenticatable implements FilamentUser, HasLocalePreference,
         return $this->hasMany(PackAchat::class);
     }
 
+    public function dossiers(): HasMany
+    {
+        return $this->hasMany(Dossier::class);
+    }
+
+    public function etiquettes(): HasMany
+    {
+        return $this->hasMany(Etiquette::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

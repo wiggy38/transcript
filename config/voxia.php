@@ -52,6 +52,8 @@ return [
             'history_reminder_days_before' => (int) env('VOXIA_FREE_HISTORY_REMINDER_DAYS_BEFORE', 3),
             // Recherche plein texte dans l'historique : réservée aux plans payants (offre).
             'recherche' => false,
+            // Bibliothèque classée (dossiers, étiquettes) : Pro et Business. Gratuit et Pack gardent la liste du MVP.
+            'classement' => false,
             'ai_credits_per_month' => 0,
         ],
 
@@ -68,6 +70,7 @@ return [
             // Historique illimité (null) et recherche incluse (offre).
             'history_days' => null,
             'recherche' => true,
+            'classement' => true,
             // Provisoire : à fixer avant la mise en vente.
             'ai_credits_per_month' => (int) env('VOXIA_PRO_AI_CREDITS_PER_MONTH', 30),
         ],
@@ -82,6 +85,7 @@ return [
             'exports' => ['txt', 'pdf', 'srt', 'vtt'],
             'history_days' => null,
             'recherche' => true,
+            'classement' => false,
             'ai_credits_per_month' => 0,
         ],
 
@@ -100,6 +104,7 @@ return [
             'exports_reecriture' => ['txt', 'md', 'docx'],
             'history_days' => null,
             'recherche' => true,
+            'classement' => true,
             // Traitement par lots : nombre maximal de liens par lot (étape 6, non construite ici).
             'batch_links' => (int) env('VOXIA_BUSINESS_BATCH_LINKS', 25),
             // Décision du 5 novembre 2026 (docs/v2/decisions.md) : 300 crédits IA par mois.
@@ -160,6 +165,21 @@ return [
 
     'historique' => [
         'par_page' => (int) env('VOXIA_HISTORY_PER_PAGE', 20),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Bibliothèque classée (V2, Pro et Business)
+    |--------------------------------------------------------------------------
+    |
+    | « chaines_affichees » : nombre de chaînes ou comptes listés dans la colonne latérale
+    | (le reste est accessible par le filtre). « periodes_jours » : préréglages du filtre période.
+    |
+    */
+
+    'bibliotheque' => [
+        'chaines_affichees' => (int) env('VOXIA_BIBLIOTHEQUE_CHAINES_AFFICHEES', 10),
+        'periodes_jours' => [7, 30, 365],
     ],
 
     /*

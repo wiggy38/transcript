@@ -346,6 +346,36 @@ Décisions :
 - **Accès** : Pro et Business uniquement, par les crédits IA (Gratuit et Pack en ont 0).
 - **Valeurs proposées et validées** : longueurs de l'article (800–1 000, 1 000–1 250, 1 250–1 500 mots), 60 et 90 caractères pour l'objet et l'aperçu, 200 caractères pour l'accroche LinkedIn, 3 à 6 intertitres, 3 à 6 paragraphes de newsletter, 5 à 12 messages de thread, 250 caractères visés par message.
 
+### V2 — Bibliothèque classée (persona 1 et 2, décisions du 5 novembre 2026)
+
+- [x] Dossiers à un niveau, créés, renommés et supprimés ; une transcription est dans un dossier au plus. Supprimer un dossier ne supprime aucune transcription (elles reviennent dans « Non classé »). *(ClassementTest)*
+- [x] Étiquettes des quatre types (niche, produit, concurrent, libre), plusieurs par transcription, autocomplétion sur les étiquettes déjà créées (datalist, réutilisation sans tenir compte de la casse). *(ClassementTest)*
+- [x] Regroupement par chaîne ou compte d'origine (colonne `chaine`), dans la colonne latérale et en filtre. *(NavigationFiltresTest)*
+- [x] Classer depuis la page de la transcription et depuis la liste. *(ClassementTest, DroitsBibliothequeTest)*
+- [x] Sélection multiple : déplacer, étiqueter, supprimer ; seules les transcriptions du compte sont touchées. *(ActionsGroupeesTest, DroitsBibliothequeTest)*
+- [x] Renommer et supprimer un dossier ou une étiquette ; supprimer une étiquette la retire des transcriptions sans les supprimer. *(ClassementTest)*
+- [x] Colonne latérale : Toutes, Non classé, dossiers, chaînes, étiquettes par type, avec effectifs. *(NavigationFiltresTest)*
+- [x] Filtres combinables (dossier, étiquettes, plateforme, chaîne, période, analyse de script, résumé), lus dans l'URL. *(NavigationFiltresTest)*
+- [x] Recherche plein texte limitée à la vue filtrée (portée « filtre »). *(PerformanceBibliothequeTest : PostgreSQL uniquement, ignoré sur SQLite)*
+- [x] Droits : Pro et Business complets ; Gratuit et Pack gardent la liste du MVP, « Classer » ouvre la proposition d'upgrade. *(DroitsBibliothequeTest, NavigationFiltresTest)*
+- [x] Retour au Gratuit : dossiers et étiquettes conservés en lecture seule (visibles, filtrables, sans création, modification ni sortie de dossier ; suppression permise). *(DroitsBibliothequeTest)*
+- [x] Policies : `DossierPolicy`, `EtiquettePolicy`, `TranscriptionPolicy::classer` ; un autre compte reçoit un 404. *(DroitsBibliothequeTest)*
+- [x] Performance : liste filtrée sur 500 transcriptions sous une seconde (SQLite, index `(user_id, dossier_id, created_at)`, `(user_id, source, created_at)`, `(user_id, chaine)`). *(PerformanceBibliothequeTest)*
+- [ ] Vérification dans un navigateur (colonne latérale, tiroir mobile, barre d'actions, thème clair et sombre, 375 px) : non faite (P167).
+- [ ] Recherche dans une vue filtrée sur PostgreSQL : le test est écrit mais ignoré sur SQLite (P168).
+- Dernier passage complet : `php artisan test` : 752 tests, 735 réussis, 17 ignorés (PostgreSQL), 0 échec. `./vendor/bin/pint` appliqué aux fichiers modifiés.
+
+Décisions (réponses données à la demande « décide pour moi ») :
+- **Dossier** : colonne `transcriptions.dossier_id` (nullable, `nullOnDelete`), et non une table de liaison : une transcription est dans un dossier au plus.
+- **Étiquettes** : unicité par `(compte, type, nom normalisé)`. Le même nom peut exister dans deux types.
+- **Compte d'origine** : on regroupe sur `chaine` (channel ou uploader de yt-dlp), sans nouvelle colonne (P169).
+- **Filtres** : intersection. Plusieurs étiquettes choisies = la transcription doit toutes les porter.
+- **Recherche** : portée « toute la bibliothèque » par défaut ; la bascule « seulement la liste filtrée » passe une sous-requête d'identifiants à la recherche.
+- **Retour au Gratuit** : lecture seule. Sortir une transcription de son dossier est un classement, donc interdit ; supprimer reste permis.
+- **Actions groupées sans JavaScript** : formulaire POST à boutons, filtres en GET (URL partageable). Les fenêtres de classement sont des pages, pas des modales.
+- **Page** : le titre reste « Historique » (le libellé « Bibliothèque » est dans la colonne latérale), pour ne pas toucher aux tests de F5.
+- **Pas de limite** de dossiers ou d'étiquettes : l'offre n'en fixe pas, on n'en invente pas (CLAUDE.md §7).
+
 ### Refonte visuelle « Nocturne » (cahier §7, CLAUDE.md §4)
 
 - [x] Direction « Nocturne » retenue. Elle remplace la charte précédente dans le cahier (§7), dans `CLAUDE.md` (§4) et dans le code. Le handoff est versionné dans `docs/design_handoff_voxia_nocturne/`.
@@ -637,3 +667,7 @@ Décisions :
 - [ ] P164 — Réécriture : les écrans n'ont pas été vérifiés dans un navigateur (onglets, copie par bloc, régénération, 375 px, thème clair et sombre). Le libellé « Réécrire » et les textes sont en FR et EN, à relire.
 - [ ] P165 — Réécriture sur une vidéo longue : la transcription entière part dans un seul appel (pas de découpage comme le résumé). À vérifier avec une vidéo de plusieurs heures : taille de la requête, durée, et `max_tokens_sortie` de l'article.
 - [ ] P166 — Réécriture : `docs/voxia-offre.md` ne mentionne pas encore la réécriture ni les exports Markdown. À compléter avant la mise en vente, après validation.
+- [ ] P167 — Bibliothèque : aucune vérification dans un navigateur (colonne latérale, tiroir sur mobile, barre d'actions, thème clair et sombre, 375 px). Les tests vérifient le HTML et les actions, pas le rendu.
+- [ ] P168 — Bibliothèque : le test de recherche dans une vue filtrée (`PerformanceBibliothequeTest`) et la performance de la recherche sur 500 transcriptions doivent être lancés sur PostgreSQL (port 5433, voir P107). Sur SQLite, ils sont ignorés ou ne mesurent pas les index GIN.
+- [ ] P169 — Bibliothèque : « Compte d'origine » s'appuie sur `chaine`, rempli par yt-dlp (`channel`, à défaut `uploader`). À vérifier sur un vrai lien TikTok que `chaine` contient bien le compte ; sinon, ajouter une colonne `compte`.
+- [ ] P170 — Bibliothèque : la règle « Retour au Gratuit » (lecture seule, sortie de dossier interdite, suppression permise) est une décision prise sans validation du produit. À confirmer avec le cahier.
