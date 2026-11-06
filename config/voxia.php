@@ -702,6 +702,22 @@ return [
                 'max_tokens_sortie' => (int) env('VOXIA_REECRITURE_THREAD_MAX_TOKENS', 1024),
             ],
         ],
+
+        // Traduction des sous-titres (V2, décisions du 5 novembre 2026 et décision du 6 novembre : six langues
+        // cibles, tous les plans, accès par crédits). Une traduction par langue et par transcription (ai_outputs).
+        'traduction' => [
+            // Crédits IA par heure de vidéo entamée et par langue (1 h 01 = 2 crédits pour une langue).
+            'credits_par_heure' => (int) env('VOXIA_TRADUCTION_CREDITS_PAR_HEURE', 1),
+            // Langues cibles (même liste que les langues de transcription). La langue source est exclue.
+            'langues' => ['fr', 'en', 'es', 'de', 'it', 'pt'],
+            // Segments traduits par appel au modèle, et segments de contexte avant et après.
+            'segments_par_morceau' => (int) env('VOXIA_TRADUCTION_SEGMENTS_PAR_MORCEAU', 30),
+            'contexte_segments' => (int) env('VOXIA_TRADUCTION_CONTEXTE_SEGMENTS', 3),
+            // Relances d'un morceau dont la sortie ne correspond pas aux segments envoyés.
+            'relances' => (int) env('VOXIA_TRADUCTION_RETRIES', 1),
+            'max_tokens_sortie' => (int) env('VOXIA_TRADUCTION_MAX_TOKENS', 4096),
+            'job_timeout_seconds' => (int) env('VOXIA_TRADUCTION_JOB_TIMEOUT_SECONDS', 1800),
+        ],
     ],
 
 ];

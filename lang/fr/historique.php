@@ -15,6 +15,7 @@ return [
         'aller' => 'Ouvrir à ce moment',
         'aller_resume' => 'Ouvrir la transcription',
         'dans_resume' => 'Dans le résumé',
+        'dans_traduction' => 'Dans la traduction (:langue)',
         'passer_pro' => 'Passer au Pro',
         'liste_aria' => 'Résultats de la recherche',
     ],

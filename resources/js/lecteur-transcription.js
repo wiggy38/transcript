@@ -221,6 +221,8 @@ export default function lecteurTranscription(config) {
             const ms = this.positionMs();
             this.temps = ms;
             this.suivreLecture(ms);
+            // Position diffusée à la vue de traduction (segment en cours surligné des deux côtés).
+            window.dispatchEvent(new CustomEvent('voxia-temps', { detail: { ms } }));
         },
 
         /**

@@ -26,7 +26,8 @@ use Illuminate\Support\Str;
  *      la position 0 : il apparaît avant les passages de sa transcription ;
  *   2. une requête pour la page seulement : extrait avec ts_headline et transcription liée.
  *
- * Chaque identifiant porte sa source : « p:<id> » pour un paragraphe, « r:<id> » pour un résumé.
+ * Chaque identifiant porte sa source : « p:<id> » pour un paragraphe, « r:<id> » pour un résumé,
+ * « t:<id> » pour une traduction (V2).
  *
  * La configuration de chaque langue est écrite dans le SQL et non liée en paramètre : c'est
  * elle qui permet à PostgreSQL de choisir l'index partiel. Elle vient de la liste fermée
@@ -139,7 +140,13 @@ class RechercheTranscriptions
             $liaisons[] = $terme;
 
             $blocs[] = "SELECT 'r' AS source, s.id, s.transcription_id, 0 AS position FROM ai_outputs s "
-                ."WHERE s.statut = '{$termine}' AND s.config_recherche = '{$configuration}' "
+                ."WHERE s.statut = '{$termine}' AND s.fonctionnalite = 'resume' AND s.config_recherche = '{$configuration}' "
+                ."AND to_tsvector('{$configuration}', s.texte_recherche) @@ plainto_tsquery('{$configuration}', ?)";
+            $liaisons[] = $terme;
+
+            // Traductions terminées (V2) : même index que les résumés, une source à part pour l'affichage.
+            $blocs[] = "SELECT 't' AS source, s.id, s.transcription_id, 0 AS position FROM ai_outputs s "
+                ."WHERE s.statut = '{$termine}' AND s.fonctionnalite = 'traduction' AND s.config_recherche = '{$configuration}' "
                 ."AND to_tsvector('{$configuration}', s.texte_recherche) @@ plainto_tsquery('{$configuration}', ?)";
             $liaisons[] = $terme;
         }
@@ -157,12 +164,15 @@ class RechercheTranscriptions
     {
         $idsParagraphes = [];
         $idsResumes = [];
+        $idsTraductions = [];
 
         foreach ($identifiants as $identifiant) {
             [$source, $id] = explode(':', $identifiant);
 
             if ($source === 'p') {
                 $idsParagraphes[] = (int) $id;
+            } elseif ($source === 't') {
+                $idsTraductions[] = (int) $id;
             } else {
                 $idsResumes[] = (int) $id;
             }
@@ -183,6 +193,15 @@ class RechercheTranscriptions
                 transcription: $sortie->transcription,
                 debutMs: null,
                 extraitHtml: $this->surligner((string) $sortie->extrait),
+            );
+        }
+
+        foreach ($this->extraitsResumes($idsTraductions, $terme) as $sortie) {
+            $resultats['t:'.$sortie->getKey()] = new ResultatRecherche(
+                transcription: $sortie->transcription,
+                debutMs: null,
+                extraitHtml: $this->surligner((string) $sortie->extrait),
+                langueTraduction: (string) $sortie->format,
             );
         }
 

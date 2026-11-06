@@ -226,6 +226,31 @@ Décisions de la langue :
 - [ ] Traitement par lots (étape 6) : non construit, seul le drapeau `batch_links` existe.
 - [ ] Page des tarifs publique et page d'accueil (étape 8) : non touchées.
 
+### V2 — Traduction (personas 5 et 6, décisions des 5 et 6 novembre 2026)
+
+- [x] Six langues cibles (fr, en, es, de, it, pt), listées dans `voxia.ia.traduction.langues` ; la langue de la transcription est exclue. *(LancerTraductionTest)*
+- [x] Traduction segment par segment : mêmes segments et mêmes horodatages que l'original, figés au lancement dans `ai_outputs.contenu`. *(ServiceTraductionTest)*
+- [x] Envoi par morceaux de 30 segments, avec 3 segments de contexte avant (original et traduction déjà validée) et 3 après (original). *(ServiceTraductionTest)*
+- [x] Contrôle d'alignement : nombre, identifiants, ordre et texte non vide. Une relance par morceau, puis échec sans décompte. Une fusion, une perte, un doublon ou un ordre inversé sont refusés. *(ServiceTraductionTest)*
+- [x] Traduction trop longue pour sa durée : une demande de raccourcir, puis signalement. Le texte n'est jamais coupé en silence. *(ServiceTraductionTest, DecoupeSousTitresTest)*
+- [x] Crédits : 1 par heure entamée et par langue, coût affiché avant lancement, tout ou rien sur plusieurs langues, décompte à la réussite seulement, réouverture gratuite. *(LancerTraductionTest, AffichageTraductionTest)*
+- [x] Refus : langue source non prise en charge, langue cible égale à la source ou hors liste, transcription d'un autre compte. *(LancerTraductionTest)*
+- [x] Affichage : sélecteur Original et langues traduites, vue côte à côte, segment en cours surligné des deux côtés (événement `voxia-temps` émis par le lecteur), empilé sur mobile. *(AffichageTraductionTest)*
+- [x] Exports : TXT et PDF avec ou sans horodatages, SRT et VTT (redécoupage dans les bornes du segment d'origine), DOCX et JSON réservés au Business, nom `titre.xx.ext`. *(ExportTraductionTest, DecoupeSousTitresTest)*
+- [x] Recherche : les traductions terminées sont cherchées et affichées « Dans la traduction (EN) ». *(RechercheTraductionTest, lancé sur PostgreSQL)*
+- [ ] Arabe, japonais et écritures de droite à gauche : retirés du périmètre le 6 novembre. Les tests « arabe et japonais » du brief ne sont pas écrits.
+- [ ] Vérification dans un navigateur (sélecteur, vue côte à côte, surlignage pendant la lecture, 375 px, thème clair et sombre) : non faite (P171).
+- [ ] Traduction réelle avec le modèle sur une transcription de plusieurs heures : non faite, consomme des crédits (P172).
+
+Décisions :
+- **Segments = sous-titres de F4** (1 à 7 s, 2 lignes de 42 caractères) : seule unité qui a déjà des horodatages et une règle de découpage. Figés au premier lancement, pour qu'un changement de découpage ne décale pas une traduction faite.
+- **Horodatages recopiés côté serveur** : le modèle ne renvoie que l'identifiant et le texte.
+- **Une ligne par langue** dans `ai_outputs`, clé `(transcription, traduction, langue)`. Pas de table de segments.
+- **Crédit décompté à la réussite** : pas de remboursement à gérer, comme pour la réécriture.
+- **Accès** : tous les plans, par crédits. Gratuit et Pack ont 0 crédit IA et ne traduisent donc pas.
+- **Sélecteur dans le panneau de traduction**, sous le lecteur, et non au-dessus de la transcription : le lecteur est dans une zone `wire:ignore` qu'on ne réécrit pas sans risque pour la lecture.
+- **Découpage d'une traduction trop longue** : la durée du segment est partagée entre les sous-titres au prorata des caractères. Un sous-titre ne sort jamais des bornes du segment.
+
 ## 3. Décisions
 
 - Comptes : Fortify pour l'authentification (vues Signal dans `resources/views/auth`), sans double authentification ni passkeys (hors MVP, désactivés dans `config/fortify.php`). Socialite pour Google.
@@ -375,6 +400,13 @@ Décisions (réponses données à la demande « décide pour moi ») :
 - **Actions groupées sans JavaScript** : formulaire POST à boutons, filtres en GET (URL partageable). Les fenêtres de classement sont des pages, pas des modales.
 - **Page** : le titre reste « Historique » (le libellé « Bibliothèque » est dans la colonne latérale), pour ne pas toucher aux tests de F5.
 - **Pas de limite** de dossiers ou d'étiquettes : l'offre n'en fixe pas, on n'en invente pas (CLAUDE.md §7).
+
+### V2 — Traduction (décisions des 5 et 6 novembre 2026)
+
+- **Six langues, pas dix** (décision du 6 novembre) : fr, en, es, de, it, pt. Arabe, néerlandais, turc et japonais sortent de la traduction, ce qui retire aussi le RTL du périmètre. `decisions.md` du 5 novembre en listait dix.
+- **Accès** : tous les plans, par crédits (décision du 6 novembre). Un plan sans crédit IA ne lance rien.
+- **Recherche japonaise** : sans objet, le japonais est retiré. PostgreSQL n'a pas de configuration de recherche japonaise ; les autres langues ont la leur.
+- **Langue source** : une transcription dans une langue hors de `voxia.langues_forcables` ne peut pas être traduite (refus explicite).
 
 ### Refonte visuelle « Nocturne » (cahier §7, CLAUDE.md §4)
 
@@ -671,3 +703,12 @@ Décisions (réponses données à la demande « décide pour moi ») :
 - [ ] P168 — Bibliothèque : le test de recherche dans une vue filtrée (`PerformanceBibliothequeTest`) et la performance de la recherche sur 500 transcriptions doivent être lancés sur PostgreSQL (port 5433, voir P107). Sur SQLite, ils sont ignorés ou ne mesurent pas les index GIN.
 - [ ] P169 — Bibliothèque : « Compte d'origine » s'appuie sur `chaine`, rempli par yt-dlp (`channel`, à défaut `uploader`). À vérifier sur un vrai lien TikTok que `chaine` contient bien le compte ; sinon, ajouter une colonne `compte`.
 - [ ] P170 — Bibliothèque : la règle « Retour au Gratuit » (lecture seule, sortie de dossier interdite, suppression permise) est une décision prise sans validation du produit. À confirmer avec le cahier.
+- [ ] P171 — Traduction : aucune vérification dans un navigateur (sélecteur, vue côte à côte, surlignage pendant la lecture YouTube et MP3, 375 px, thème clair et sombre). Les tests vérifient le HTML et les données, pas le rendu ni le JavaScript à l'exécution. Le JavaScript compile (`npm run build`).
+- [ ] P172 — Traduction : aucun appel réel au modèle. La taille des requêtes et le respect du format sont couverts par les tests avec le faux fournisseur seulement. À faire avec une clé d'API, en surveillant le coût.
+- [ ] P173 — Traduction : une vidéo de 3 heures donne de l'ordre de 3 000 segments, soit une centaine d'appels par langue. Le délai de tâche (`VOXIA_TRADUCTION_JOB_TIMEOUT_SECONDS`, 1 800 s) n'est pas mesuré sur une vraie vidéo, ni la durée totale pour six langues.
+- [ ] P174 — Traduction : `docs/voxia-offre.md` ne mentionne pas la traduction ni son accès (tous les plans, par crédits). À reporter dans l'offre après validation.
+- [ ] P175 — Traduction : `docs/cahier-des-charges.md` et `docs/v2/decisions.md` parlent encore de dix langues de traduction dans certaines lignes. `decisions.md` est mis à jour ; le cahier reste à relire.
+- [ ] P176 — Traduction : la recherche sur les traductions a été lancée sur une base PostgreSQL dédiée (`voxia_traduction_test`, créée pour cette vérification). La base `voxia` et `voxia_test` n'ont pas été touchées. Les autres tests de recherche tournent aussi là.
+- [ ] P177 — Traduction : une traduction trop longue pour sa durée reste affichée en entier, avec un avertissement. Les sous-titres concernés ont alors une durée inférieure à 1 s, ce qui sort de la règle F4 ; à valider avec le produit.
+- [ ] P178 — Traduction : la cohérence des noms propres et du registre (tutoiement, vouvoiement) repose sur le contexte envoyé et sur la consigne. Elle n'est pas mesurée.
+- [ ] P179 — Suite de tests : un test « risqué » (sans assertion) est signalé dans la suite complète. Il n'est pas dans les fichiers de traduction ; à identifier.

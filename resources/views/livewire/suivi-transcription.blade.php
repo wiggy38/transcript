@@ -13,6 +13,9 @@
         <div class="mt-5">
             <livewire:reecrire-transcription :transcription="$transcription" />
         </div>
+        <div class="mt-5">
+            <livewire:traduire-transcription :transcription="$transcription" />
+        </div>
     @else
         {{-- Étapes dérivées du statut (maquette « Transcription », état en cours) : aucune donnée nouvelle. --}}
         @php

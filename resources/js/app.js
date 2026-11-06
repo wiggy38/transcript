@@ -9,8 +9,11 @@ import '@fontsource/jetbrains-mono/latin-500.css';
 import televersement from './televersement.js';
 // Lecteur et texte horodaté d'une transcription terminée (cahier F2).
 import lecteurTranscription from './lecteur-transcription.js';
+// Vue côte à côte d'une traduction (V2).
+import vueTraduction from './vue-traduction.js';
 
 document.addEventListener('alpine:init', () => {
     window.Alpine.data('televersement', televersement);
     window.Alpine.data('lecteurTranscription', lecteurTranscription);
+    window.Alpine.data('vueTraduction', vueTraduction);
 });

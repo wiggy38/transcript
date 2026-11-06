@@ -31,7 +31,8 @@
 | Décision | Valeur retenue |
 | --- | --- |
 | Fournisseur du modèle de langage | Celui déjà utilisé par F7 |
-| Langues de traduction | Anglais, français, espagnol, portugais, allemand, italien, arabe, néerlandais, turc, japonais |
+| Langues de traduction | **6 novembre 2026 : fr, en, es, de, it, pt uniquement.** Arabe, néerlandais, turc et japonais sont retirés de la traduction (le RTL ne fait plus partie du périmètre). La liste d'origine du 5 novembre est remplacée. |
+| Traduction : accès | **6 novembre 2026 : tous les plans, par crédits** (1 crédit par heure entamée et par langue). Un plan sans crédit IA ne traduit pas. |
 
 ## Technique
 

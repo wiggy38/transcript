@@ -15,6 +15,7 @@ return [
         'aller' => 'Open at this moment',
         'aller_resume' => 'Open the transcription',
         'dans_resume' => 'In the summary',
+        'dans_traduction' => 'In the translation (:langue)',
         'passer_pro' => 'Upgrade to Pro',
         'liste_aria' => 'Search results',
     ],

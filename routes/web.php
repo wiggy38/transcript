@@ -7,6 +7,7 @@ use App\Http\Controllers\Comptes\ExportAnalyseController;
 use App\Http\Controllers\Comptes\ExportController;
 use App\Http\Controllers\Comptes\ExportReecritureController;
 use App\Http\Controllers\Comptes\ExportResumeController;
+use App\Http\Controllers\Comptes\ExportTraductionController;
 use App\Http\Controllers\Comptes\GoogleController;
 use App\Http\Controllers\Comptes\HistoriqueController;
 use App\Http\Controllers\Comptes\LienController;
@@ -113,6 +114,13 @@ Route::middleware('auth')->group(function () {
         ->whereIn('export', ['txt', 'md', 'docx'])
         ->middleware('signed')
         ->name('transcriptions.reecriture.export');
+
+    // Export d'une traduction (V2) : langue cible et format de fichier. Lien signé et temporaire.
+    Route::get('/transcriptions/{transcription}/traduction/{langue}/{export}', ExportTraductionController::class)
+        ->whereIn('langue', config('voxia.ia.traduction.langues'))
+        ->whereIn('export', ['txt', 'pdf', 'srt', 'vtt', 'docx', 'json'])
+        ->middleware('signed')
+        ->name('transcriptions.traduction.export');
 
     // Morceaux d'un fichier importé (2 Go par défaut, envoi découpé). Email vérifié exigé.
     Route::post('/televersements/morceaux', [TeleversementController::class, 'morceau'])

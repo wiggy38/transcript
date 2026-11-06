@@ -315,12 +315,14 @@
                             @foreach ($resultats as $resultat)
                                 <li class="grid gap-2 px-[18px] py-4">
                                     <p class="m-0 flex flex-wrap items-center gap-x-3 gap-y-1">
-                                        @if ($resultat->estDuResume())
-                                            {{-- Trouvé dans le résumé : pas de passage précis, la transcription s'ouvre au début. --}}
+                                        @if ($resultat->estDuResume() || $resultat->estUneTraduction())
+                                            {{-- Trouvé dans le résumé ou une traduction : pas de passage précis, la transcription s'ouvre au début. --}}
                                             <a href="{{ route('transcriptions.show', ['transcription' => $resultat->transcription]) }}"
                                                aria-label="{{ __('historique.recherche.aller_resume') }} : {{ $resultat->transcription->titre ?? __('historique.sans_titre') }}"
                                                class="inline-flex min-h-7 items-center gap-1.5 rounded-pilule border border-filet-contour px-2.5 font-mono text-[13px] font-medium text-texte no-underline">
-                                                {{ __('historique.recherche.dans_resume') }}
+                                                {{ $resultat->estUneTraduction()
+                                                    ? __('historique.recherche.dans_traduction', ['langue' => __('traduction.langues.'.$resultat->langueTraduction)])
+                                                    : __('historique.recherche.dans_resume') }}
                                             </a>
                                         @else
                                             <a href="{{ route('transcriptions.show', ['transcription' => $resultat->transcription, 't' => $resultat->debutMs]) }}"
