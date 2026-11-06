@@ -3,6 +3,7 @@
      Bibliothèque (V2) : colonne latérale, filtres dans l'URL et actions groupées, pour les comptes qui classent. --}}
 @php
     use App\Enums\SourceTranscription;
+    use App\Enums\TypeEtiquette;
     use App\Support\Horodatage;
     use Illuminate\Support\Facades\Lang;
 
@@ -149,41 +150,93 @@
                         <fieldset class="m-0 grid w-full min-w-0 gap-3 border-0 p-0 sm:grid-cols-2 lg:grid-cols-3">
                             <legend class="mb-1 font-mono text-xs text-texte-discret">{{ __('bibliotheque.filtres.legende') }}</legend>
 
-                            <div class="grid min-w-0 gap-1.5">
-                                <label for="filtre-etiquettes" class="text-sm font-semibold">{{ __('bibliotheque.filtres.etiquettes') }}</label>
-                                <select id="filtre-etiquettes" name="etiquettes[]" multiple size="4" aria-describedby="aide-etiquettes"
-                                        class="rounded-bouton border border-filet-contour bg-fond px-3 py-1 text-sm text-texte">
-                                    @foreach ($etiquettesTypes as $type)
-                                        @if ($type !== \App\Enums\TypeEtiquette::Produit && $navigation['etiquettes'][$type->value]->isNotEmpty())
-                                            <optgroup label="{{ $type->libelle() }}">
-                                                @foreach ($navigation['etiquettes'][$type->value] as $etiquette)
-                                                    <option value="{{ $etiquette->id }}" @selected(in_array($etiquette->id, $filtre['etiquettes'], true))>{{ $etiquette->nom }}</option>
+                            @php
+                                // Étiquettes de niche, concurrent et libre ; les produits ont leur propre filtre.
+                                $etiquettesHorsProduit = collect($etiquettesTypes)
+                                    ->reject(fn ($type) => $type === TypeEtiquette::Produit)
+                                    ->filter(fn ($type) => $navigation['etiquettes'][$type->value]->isNotEmpty());
+                                $produits = $navigation['etiquettes'][TypeEtiquette::Produit->value];
+                                $produitChoisi = $filtre['produit'] !== null ? $produits->firstWhere('id', $filtre['produit']) : null;
+                                $nombreEtiquettes = count($filtre['etiquettes']);
+
+                                // Un menu déroulant : résumé cliquable, panneau de choix. Sans JavaScript, « details » suffit.
+                                $menu = 'flex min-h-9 w-full cursor-pointer list-none items-center justify-between gap-3 rounded-bouton border border-filet-contour bg-fond px-3 text-[13px] text-texte transition-colors hover:border-accent-texte focus-visible:outline-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden';
+                                $panneau = 'absolute top-full left-0 z-20 mt-1.5 grid max-h-72 w-[min(18rem,calc(100vw-2.5rem))] gap-3 overflow-y-auto rounded-panneau border border-filet bg-panneau-eleve p-2.5 shadow-panneau';
+                                $choix = 'flex min-h-9 cursor-pointer items-center gap-2.5 rounded-[10px] px-2 text-[13px] text-texte transition-colors hover:bg-panneau';
+                                $titreTypes = 'm-0 px-2 font-mono text-[10px] tracking-wide text-texte-discret uppercase';
+                            @endphp
+
+                            <div class="grid min-w-0 gap-1.5 lg:col-span-3">
+                                <div class="flex flex-wrap items-start gap-x-5 gap-y-4">
+                                    {{-- Étiquettes --}}
+                                    <div class="grid w-44 gap-1.5">
+                                        <p class="m-0 font-mono text-[11px] text-texte-discret">{{ __('bibliotheque.filtres.etiquettes') }}</p>
+                                        <details name="filtres-bibliotheque" class="group relative">
+                                            <summary class="{{ $menu }}">
+                                                <span class="truncate">{{ $nombreEtiquettes === 0 ? __('bibliotheque.filtres.etiquettes_toutes') : __('bibliotheque.filtres.etiquettes_nombre', ['nombre' => $nombreEtiquettes]) }}</span>
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false" class="shrink-0 text-texte-discret transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"></path></svg>
+                                            </summary>
+                                            <div class="{{ $panneau }}">
+                                                <p class="m-0 px-2 text-[12px] text-texte-discret">{{ __('bibliotheque.filtres.etiquettes_aide') }}</p>
+                                                @foreach ($etiquettesHorsProduit as $type)
+                                                    <fieldset class="m-0 grid gap-0.5 border-0 p-0">
+                                                        <legend class="{{ $titreTypes }}">{{ $type->libelle() }}</legend>
+                                                        @foreach ($navigation['etiquettes'][$type->value] as $etiquette)
+                                                            <label class="{{ $choix }}">
+                                                                <input type="checkbox" name="etiquettes[]" value="{{ $etiquette->id }}" @checked(in_array($etiquette->id, $filtre['etiquettes'], true))
+                                                                       class="size-4 shrink-0 accent-accent">
+                                                                <span class="min-w-0 truncate">{{ $etiquette->nom }}</span>
+                                                            </label>
+                                                        @endforeach
+                                                    </fieldset>
                                                 @endforeach
-                                            </optgroup>
-                                        @endif
-                                    @endforeach
-                                </select>
-                                <p id="aide-etiquettes" class="m-0 text-[12px] text-texte-discret">{{ __('bibliotheque.filtres.etiquettes_aide') }}</p>
-                            </div>
+                                            </div>
+                                        </details>
+                                    </div>
 
-                            <div class="grid min-w-0 gap-1.5">
-                                <label for="filtre-produit" class="text-sm font-semibold">{{ __('bibliotheque.filtres.produit') }}</label>
-                                <select id="filtre-produit" name="produit" class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
-                                    <option value="">{{ __('bibliotheque.filtres.produit_tous') }}</option>
-                                    @foreach ($navigation['etiquettes'][\App\Enums\TypeEtiquette::Produit->value] as $produit)
-                                        <option value="{{ $produit->id }}" @selected($filtre['produit'] === $produit->id)>{{ $produit->nom }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                    {{-- Produit : un seul choix --}}
+                                    <div class="grid w-44 gap-1.5">
+                                        <p class="m-0 font-mono text-[11px] text-texte-discret">{{ __('bibliotheque.filtres.produit') }}</p>
+                                        <details name="filtres-bibliotheque" class="group relative">
+                                            <summary class="{{ $menu }}">
+                                                <span class="truncate">{{ $produitChoisi?->nom ?? __('bibliotheque.filtres.produit_tous') }}</span>
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false" class="shrink-0 text-texte-discret transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"></path></svg>
+                                            </summary>
+                                            <div class="{{ $panneau }}">
+                                                <fieldset class="m-0 grid gap-0.5 border-0 p-0">
+                                                    <legend class="{{ $titreTypes }}">{{ TypeEtiquette::Produit->libelle() }}</legend>
+                                                    <label class="{{ $choix }}">
+                                                        <input type="radio" name="produit" value="" @checked($filtre['produit'] === null) class="size-4 shrink-0 accent-accent">
+                                                        <span class="min-w-0 truncate">{{ __('bibliotheque.filtres.produit_tous') }}</span>
+                                                    </label>
+                                                    @foreach ($produits as $produit)
+                                                        <label class="{{ $choix }}">
+                                                            <input type="radio" name="produit" value="{{ $produit->id }}" @checked($filtre['produit'] === $produit->id) class="size-4 shrink-0 accent-accent">
+                                                            <span class="min-w-0 truncate">{{ $produit->nom }}</span>
+                                                        </label>
+                                                    @endforeach
+                                                </fieldset>
+                                            </div>
+                                        </details>
+                                    </div>
 
-                            <div class="grid min-w-0 gap-1.5">
-                                <label for="filtre-plateforme" class="text-sm font-semibold">{{ __('bibliotheque.filtres.plateforme') }}</label>
-                                <select id="filtre-plateforme" name="plateforme" class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
-                                    <option value="">{{ __('bibliotheque.filtres.plateforme_toutes') }}</option>
-                                    @foreach (SourceTranscription::cases() as $source)
-                                        <option value="{{ $source->value }}" @selected($filtre['plateforme'] === $source->value)>{{ __('historique.plateformes.'.$source->value) }}</option>
-                                    @endforeach
-                                </select>
+                                    {{-- Plateforme : sélecteur segmenté --}}
+                                    <fieldset class="m-0 grid min-w-0 gap-1.5 border-0 p-0">
+                                        <legend class="mb-1.5 font-mono text-[11px] text-texte-discret">{{ __('bibliotheque.filtres.plateforme') }}</legend>
+                                        <div class="inline-flex flex-wrap gap-0.5 rounded-pilule border border-filet-contour bg-fond p-0.5">
+                                            <label class="relative">
+                                                <input type="radio" name="plateforme" value="" @checked($filtre['plateforme'] === null) class="peer sr-only">
+                                                <span class="inline-flex min-h-8 cursor-pointer items-center rounded-pilule px-3 text-[13px] text-texte-secondaire transition-colors hover:text-texte peer-checked:bg-accent peer-checked:font-semibold peer-checked:text-sur-accent peer-focus-visible:outline-2 peer-focus-visible:outline-accent">{{ __('bibliotheque.filtres.plateforme_toutes') }}</span>
+                                            </label>
+                                            @foreach (SourceTranscription::cases() as $source)
+                                                <label class="relative">
+                                                    <input type="radio" name="plateforme" value="{{ $source->value }}" @checked($filtre['plateforme'] === $source->value) class="peer sr-only">
+                                                    <span class="inline-flex min-h-8 cursor-pointer items-center rounded-pilule px-3 text-[13px] text-texte-secondaire transition-colors hover:text-texte peer-checked:bg-accent peer-checked:font-semibold peer-checked:text-sur-accent peer-focus-visible:outline-2 peer-focus-visible:outline-accent">{{ __('historique.plateformes.'.$source->value) }}</span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </fieldset>
+                                </div>
                             </div>
 
                             <fieldset class="m-0 grid min-w-0 gap-1.5 border-0 p-0 sm:col-span-2 lg:col-span-2">

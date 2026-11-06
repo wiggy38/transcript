@@ -32,6 +32,7 @@ it('affiche Toutes, Non classé, les dossiers, les chaînes et les étiquettes p
 it('ne propose dans le formulaire que trois filtres : Étiquette, Produit et Plateforme', function () {
     $utilisateur = bibPro();
     bibEtiquette($utilisateur, TypeEtiquette::Produit, 'Lampe LED');
+    bibEtiquette($utilisateur, TypeEtiquette::Niche, 'Café filtre');
 
     $this->actingAs($utilisateur)
         ->get(route('historique'))
@@ -97,8 +98,21 @@ it('garde les filtres dans l’URL : le formulaire réaffiche la valeur choisie'
     $this->actingAs($utilisateur)
         ->get(route('historique', ['produit' => $produit->getKey(), 'plateforme' => 'tiktok']))
         ->assertOk()
-        ->assertSee('value="'.$produit->getKey().'" selected', false)
-        ->assertSee('value="tiktok" selected', false);
+        ->assertSee('value="'.$produit->getKey().'" checked', false)
+        ->assertSee('value="tiktok" checked', false);
+});
+
+it('garde cochées les étiquettes choisies et affiche leur nombre dans le menu', function () {
+    $utilisateur = bibPro();
+    $niche = bibEtiquette($utilisateur, TypeEtiquette::Niche, 'Café filtre');
+    $libre = bibEtiquette($utilisateur, TypeEtiquette::Libre, 'À revoir');
+
+    $this->actingAs($utilisateur)
+        ->get(route('historique', ['etiquettes' => [$niche->getKey(), $libre->getKey()]]))
+        ->assertOk()
+        ->assertSee('value="'.$niche->getKey().'" checked', false)
+        ->assertSee('value="'.$libre->getKey().'" checked', false)
+        ->assertSee(__('bibliotheque.filtres.etiquettes_nombre', ['nombre' => 2]));
 });
 
 it('filtre par « Non classé » avec la valeur aucun', function () {

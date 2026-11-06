@@ -363,13 +363,13 @@ Décisions :
 - [x] Performance : liste filtrée sur 500 transcriptions sous une seconde (SQLite, index `(user_id, dossier_id, created_at)`, `(user_id, source, created_at)`, `(user_id, chaine)`). *(PerformanceBibliothequeTest)*
 - [ ] Vérification dans un navigateur (colonne latérale, tiroir mobile, barre d'actions, thème clair et sombre, 375 px) : non faite (P167).
 - [ ] Recherche dans une vue filtrée sur PostgreSQL : le test est écrit mais ignoré sur SQLite (P168).
-- Dernier passage complet : `php artisan test` : 755 tests, 738 réussis, 17 ignorés (PostgreSQL), 0 échec. `./vendor/bin/pint` appliqué aux fichiers modifiés.
+- Dernier passage complet : `php artisan test` : 756 tests, 739 réussis, 17 ignorés (PostgreSQL), 0 échec. `./vendor/bin/pint` appliqué aux fichiers modifiés.
 
 Décisions (réponses données à la demande « décide pour moi ») :
 - **Dossier** : colonne `transcriptions.dossier_id` (nullable, `nullOnDelete`), et non une table de liaison : une transcription est dans un dossier au plus.
 - **Étiquettes** : unicité par `(compte, type, nom normalisé)`. Le même nom peut exister dans deux types.
 - **Compte d'origine** : on regroupe sur `chaine` (channel ou uploader de yt-dlp), sans nouvelle colonne (P169).
-- **Filtres** (refonte du formulaire) : seuls Étiquette, Produit et Plateforme. Intersection : plusieurs étiquettes choisies = la transcription doit toutes les porter. Période, analyse de script, résumé et chaîne sont retirés du formulaire ; dossier et chaîne restent des liens de la colonne latérale. Étiquette exclut les types produit pour éviter le doublon avec Produit.
+- **Filtres** (refonte du formulaire) : seuls Étiquette, Produit et Plateforme. Intersection : plusieurs étiquettes choisies = la transcription doit toutes les porter. Période, analyse de script, résumé et chaîne sont retirés du formulaire ; dossier et chaîne restent des liens de la colonne latérale. Étiquette exclut les types produit pour éviter le doublon avec Produit. Présentation : Étiquettes et Produit sont des menus déroulants (`details`, cases ou choix unique, fonctionnent sans JavaScript) ; Plateforme est un sélecteur segmenté.
 - **Recherche** : portée « toute la bibliothèque » par défaut ; la bascule « seulement la liste filtrée » passe une sous-requête d'identifiants à la recherche.
 - **Retour au Gratuit** : lecture seule. Sortir une transcription de son dossier est un classement, donc interdit ; supprimer reste permis.
 - **Actions groupées sans JavaScript** : formulaire POST à boutons, filtres en GET (URL partageable). Les fenêtres de classement sont des pages, pas des modales.
