@@ -236,6 +236,12 @@ class PlanFeatures
         return (int) config("voxia.plans.{$plan->value}.batch_links", 0);
     }
 
+    /** Vrai si le compte peut lancer un lot de liens (plan Business seulement, voxia.plans.*.batch_links). */
+    public function peutLot(User $utilisateur): bool
+    {
+        return $this->limiteLots($this->planDe($utilisateur)) > 0;
+    }
+
     private function cle(User $utilisateur): string
     {
         return $this->planDe($utilisateur)->value;

@@ -129,6 +129,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Traitement par lots (Business, V2)
+    |--------------------------------------------------------------------------
+    |
+    | Nombre de liens par lot : voxia.plans.*.batch_links. Les limites ci-dessous
+    | protègent les proxys de téléchargement : au plus N téléchargements par
+    | utilisateur et M au total, tous lots confondus.
+    |
+    */
+
+    'lots' => [
+        'telechargements_par_utilisateur' => (int) env('VOXIA_LOTS_TELECHARGEMENTS_PAR_UTILISATEUR', 3),
+        'telechargements_global' => (int) env('VOXIA_LOTS_TELECHARGEMENTS_GLOBAL', 10),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Paiement (fournisseur derrière App\Contracts\BillingProvider)
     |--------------------------------------------------------------------------
     |
