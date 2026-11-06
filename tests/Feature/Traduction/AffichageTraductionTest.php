@@ -36,6 +36,17 @@ it('affiche le coût avant lancement et lance les langues cochées', function ()
     Queue::assertPushed(GenererTraduction::class, 2);
 });
 
+it('synchronise les langues cochées à chaque clic, sinon le bouton reste désactivé', function () {
+    // wire:model seul est différé : le bouton, désactivé sans langue, ne pourrait jamais envoyer la sélection.
+    $utilisateur = resumeUtilisateur(Plan::Pro);
+    $transcription = traductionTranscription($utilisateur);
+
+    $this->actingAs($utilisateur);
+
+    Livewire::test(TraduireTranscription::class, ['transcription' => $transcription])
+        ->assertSee('wire:model.live="langues"', false);
+});
+
 it('affiche le motif quand le solde ne couvre pas les langues, et ne lance rien', function () {
     config(['voxia.plans.pro.ai_credits_per_month' => 1]);
     $utilisateur = resumeUtilisateur(Plan::Pro);

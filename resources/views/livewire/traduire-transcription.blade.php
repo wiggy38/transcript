@@ -16,7 +16,7 @@
                 <div class="grid gap-2 sm:grid-cols-2">
                     @foreach ($languesCibles as $code)
                         <label class="flex min-h-11 cursor-pointer items-center gap-3 rounded-champ border border-filet bg-fond px-4 text-sm text-texte has-[:checked]:border-accent">
-                            <input type="checkbox" wire:model="langues" value="{{ $code }}" class="size-4 accent-accent">
+                            <input type="checkbox" wire:model.live="langues" value="{{ $code }}" class="size-4 accent-accent">
                             <span>{{ $libelleLangue($code) }}</span>
                             @if (($sorties[$code] ?? null)?->statut === \App\Enums\StatutSortieIa::Termine)
                                 <span class="ms-auto font-mono text-[11px] text-texte-discret">{{ __('traduction.statut.termine') }}</span>
