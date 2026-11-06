@@ -125,7 +125,7 @@
                                  class="absolute top-1/2 left-3.5 -translate-y-1/2 text-texte-discret">
                                 <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
                             </svg>
-                            <input id="recherche-historique" name="q" type="search" value="{{ $terme }}" aria-describedby="aide-recherche"
+                            <input id="recherche-historique" name="q" type="search" value="{{ $terme }}" placeholder="{{ __('historique.recherche.aide') }}"
                                    class="min-h-11 w-full min-w-0 rounded-bouton border border-filet-contour bg-fond py-0 pr-3.5 pl-10 text-[15px] text-texte outline-none focus-visible:border-accent">
                         </div>
                     </div>
@@ -140,15 +140,27 @@
                     </div>
 
                     <button type="submit"
-                            class="min-h-11 flex-none cursor-pointer rounded-bouton border border-filet-contour bg-transparent px-5 text-sm font-semibold text-texte hover:border-accent-texte hover:text-accent-texte">
+                            class="min-h-11 flex-none cursor-pointer rounded-bouton bg-accent px-6 text-sm font-semibold text-sur-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-accent">
                         {{ __('historique.recherche.bouton') }}
                     </button>
 
-                    <p id="aide-recherche" class="m-0 flex-[1_1_100%] text-[13px] text-texte-discret">{{ __('historique.recherche.aide') }}</p>
-
                     @if ($bibliotheque)
-                        <fieldset class="m-0 grid w-full min-w-0 gap-3 border-0 p-0 sm:grid-cols-2 lg:grid-cols-3">
-                            <legend class="mb-1 font-mono text-xs text-texte-discret">{{ __('bibliotheque.filtres.legende') }}</legend>
+                        @php
+                            // Nombre de filtres actifs, affiché sur le résumé replié.
+                            $nombreFiltres = count($filtre['etiquettes']) + ($filtre['produit'] !== null ? 1 : 0) + ($filtre['plateforme'] !== null ? 1 : 0);
+                        @endphp
+                        <details class="group w-full min-w-0" @if ($filtresActifs) open @endif>
+                            <summary class="flex min-h-10 w-full cursor-pointer list-none items-center justify-between gap-3 rounded-bouton border border-filet-contour bg-fond px-3.5 text-sm font-semibold text-texte transition-colors hover:border-accent-texte focus-visible:outline-2 focus-visible:outline-accent [&::-webkit-details-marker]:hidden">
+                                <span>{{ __('bibliotheque.filtres.legende') }}</span>
+                                <span class="flex items-center gap-2">
+                                    @if ($nombreFiltres > 0)
+                                        <span class="grid min-w-5 place-items-center rounded-pilule bg-accent px-1.5 font-mono text-[11px] font-semibold text-sur-accent">{{ $nombreFiltres }}</span>
+                                    @endif
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false" class="text-texte-discret transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6"></path></svg>
+                                </span>
+                            </summary>
+                            <fieldset class="m-0 mt-3 grid w-full min-w-0 gap-3 border-0 p-0 sm:grid-cols-2 lg:grid-cols-3">
+                            <legend class="sr-only">{{ __('bibliotheque.filtres.legende') }}</legend>
 
                             @php
                                 // Étiquettes de niche, concurrent et libre ; les produits ont leur propre filtre.
@@ -257,6 +269,7 @@
                                 <a href="{{ route('historique') }}" class="inline-flex min-h-11 items-center text-sm text-texte-secondaire no-underline hover:text-accent-texte">{{ __('bibliotheque.filtres.reinitialiser') }}</a>
                             </div>
                         </fieldset>
+                        </details>
                     @endif
                 </form>
 

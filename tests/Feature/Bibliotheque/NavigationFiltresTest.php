@@ -115,6 +115,29 @@ it('garde cochées les étiquettes choisies et affiche leur nombre dans le menu'
         ->assertSee(__('bibliotheque.filtres.etiquettes_nombre', ['nombre' => 2]));
 });
 
+it('affiche l’aide de recherche en placeholder du champ « Chercher dans mes transcriptions »', function () {
+    $utilisateur = bibPro();
+
+    $this->actingAs($utilisateur)
+        ->get(route('historique'))
+        ->assertOk()
+        ->assertSee('placeholder="'.__('historique.recherche.aide').'"', false);
+});
+
+it('replie la section des filtres, ouverte seulement quand un filtre est actif', function () {
+    $utilisateur = bibPro();
+    $produit = bibEtiquette($utilisateur, TypeEtiquette::Produit, 'Lampe LED');
+
+    $repliee = $this->actingAs($utilisateur)->get(route('historique'))->assertOk()->getContent();
+    expect($repliee)->toMatch('/<details class="group w-full min-w-0"\s*>/');
+
+    $ouverte = $this->actingAs($utilisateur)
+        ->get(route('historique', ['produit' => $produit->getKey()]))
+        ->assertOk()
+        ->getContent();
+    expect($ouverte)->toMatch('/<details class="group w-full min-w-0"\s+open\s*>/');
+});
+
 it('filtre par « Non classé » avec la valeur aucun', function () {
     $utilisateur = bibPro();
     $dossier = bibDossier($utilisateur, 'Niche café');
