@@ -21,7 +21,7 @@ const BIB_NOMBRE_TRANSCRIPTIONS = 500;
  * 500 transcriptions : un dossier sur cinq (indice modulo 5), une étiquette sur deux (indice pair).
  * Les insertions passent par le constructeur de requêtes pour rester rapides.
  *
- * @return array{dossiers: list<int>, etiquette: int}
+ * @return array{dossiers: list<int>, etiquette: int, produit: int}
  */
 function bibRemplirBibliotheque(User $utilisateur): array
 {
@@ -43,6 +43,15 @@ function bibRemplirBibliotheque(User $utilisateur): array
         'type' => TypeEtiquette::Niche->value,
         'nom' => 'Café',
         'nom_normalise' => 'café',
+        'created_at' => $maintenant,
+        'updated_at' => $maintenant,
+    ]);
+
+    $produit = DB::table('etiquettes')->insertGetId([
+        'user_id' => $utilisateur->getKey(),
+        'type' => TypeEtiquette::Produit->value,
+        'nom' => 'Lampe LED',
+        'nom_normalise' => 'lampe led',
         'created_at' => $maintenant,
         'updated_at' => $maintenant,
     ]);
@@ -71,30 +80,35 @@ function bibRemplirBibliotheque(User $utilisateur): array
                 'etiquette_id' => $etiquette,
             ]);
         }
+
+        if ($i % 5 === 0) {
+            DB::table('etiquette_transcription')->insert([
+                'transcription_id' => $identifiant,
+                'etiquette_id' => $produit,
+            ]);
+        }
     }
 
-    return ['dossiers' => $dossiers, 'etiquette' => $etiquette];
+    return ['dossiers' => $dossiers, 'etiquette' => $etiquette, 'produit' => $produit];
 }
 
 it('filtre une bibliothèque de 500 transcriptions en moins d’une seconde, avec des filtres combinés', function () {
     $utilisateur = bibPro();
-    ['dossiers' => $dossiers, 'etiquette' => $etiquette] = bibRemplirBibliotheque($utilisateur);
+    ['etiquette' => $etiquette, 'produit' => $produit] = bibRemplirBibliotheque($utilisateur);
 
     $debut = microtime(true);
 
     $reponse = $this->actingAs($utilisateur)
         ->get(route('historique', [
-            'dossier' => $dossiers[0],
             'etiquettes' => [$etiquette],
+            'produit' => $produit,
             'plateforme' => 'youtube',
-            'periode' => 365,
-            'analyse' => 'non',
         ]))
         ->assertOk();
 
     $duree = microtime(true) - $debut;
 
-    // Dossier 0 (indices multiples de 5) et étiquette (indices pairs) : les multiples de 10, soit 50.
+    // Étiquette niche (indices pairs) et produit (indices multiples de 5) : les multiples de 10, soit 50.
     expect($reponse->viewData('transcriptions')->total())->toBe(50);
     expect($duree)->toBeLessThan(1.0);
 });

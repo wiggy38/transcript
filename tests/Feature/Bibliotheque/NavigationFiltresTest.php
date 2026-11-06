@@ -1,11 +1,10 @@
 <?php
 
-// Colonne latérale et filtres combinables (V2). Les filtres sont lus dans l'URL.
+// Colonne latérale et filtres (V2) : Étiquette, Plateforme et Produit, lus dans l'URL.
 
 require_once __DIR__.'/AideBibliotheque.php';
 
 use App\Enums\TypeEtiquette;
-use App\Models\ScriptAnalysis;
 use App\Models\Transcription;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -30,49 +29,76 @@ it('affiche Toutes, Non classé, les dossiers, les chaînes et les étiquettes p
         ->assertSee('Café filtre');
 });
 
-it('combine les filtres : dossier, étiquette, plateforme et analyse de script', function () {
+it('ne propose dans le formulaire que trois filtres : Étiquette, Produit et Plateforme', function () {
     $utilisateur = bibPro();
-    $dossier = bibDossier($utilisateur, 'Niche café');
-    $etiquette = bibEtiquette($utilisateur, TypeEtiquette::Niche, 'Café filtre');
+    bibEtiquette($utilisateur, TypeEtiquette::Produit, 'Lampe LED');
 
-    $cible = bibTranscription($utilisateur, ['titre' => 'Titre retenu', 'source' => 'tiktok', 'dossier' => $dossier]);
-    $cible->etiquettes()->attach($etiquette->getKey());
-    ScriptAnalysis::factory()->termine()->for($cible)->create();
+    $this->actingAs($utilisateur)
+        ->get(route('historique'))
+        ->assertOk()
+        ->assertSee('name="etiquettes[]"', false)
+        ->assertSee('name="produit"', false)
+        ->assertSee('name="plateforme"', false)
+        ->assertDontSee('name="periode"', false)
+        ->assertDontSee('name="analyse"', false)
+        ->assertDontSee('name="resume"', false)
+        ->assertDontSee('name="chaine"', false)
+        ->assertDontSee('name="dossier"', false);
+});
 
-    $autrePlateforme = bibTranscription($utilisateur, ['titre' => 'Titre youtube', 'source' => 'youtube', 'dossier' => $dossier]);
-    $autrePlateforme->etiquettes()->attach($etiquette->getKey());
-    ScriptAnalysis::factory()->termine()->for($autrePlateforme)->create();
+it('combine les filtres : étiquette, produit et plateforme', function () {
+    $utilisateur = bibPro();
+    $niche = bibEtiquette($utilisateur, TypeEtiquette::Niche, 'Café filtre');
+    $produit = bibEtiquette($utilisateur, TypeEtiquette::Produit, 'Lampe LED');
+    $autreProduit = bibEtiquette($utilisateur, TypeEtiquette::Produit, 'Tapis');
 
-    $sansAnalyse = bibTranscription($utilisateur, ['titre' => 'Titre sans analyse', 'source' => 'tiktok', 'dossier' => $dossier]);
-    $sansAnalyse->etiquettes()->attach($etiquette->getKey());
+    $cible = bibTranscription($utilisateur, ['titre' => 'Titre retenu', 'source' => 'tiktok']);
+    $cible->etiquettes()->attach([$niche->getKey(), $produit->getKey()]);
 
-    $horsDossier = bibTranscription($utilisateur, ['titre' => 'Titre hors dossier', 'source' => 'tiktok']);
-    $horsDossier->etiquettes()->attach($etiquette->getKey());
-    ScriptAnalysis::factory()->termine()->for($horsDossier)->create();
+    $autrePlateforme = bibTranscription($utilisateur, ['titre' => 'Titre youtube', 'source' => 'youtube']);
+    $autrePlateforme->etiquettes()->attach([$niche->getKey(), $produit->getKey()]);
+
+    $sansProduit = bibTranscription($utilisateur, ['titre' => 'Titre sans produit', 'source' => 'tiktok']);
+    $sansProduit->etiquettes()->attach($niche->getKey());
+
+    $autreProduitTranscription = bibTranscription($utilisateur, ['titre' => 'Titre autre produit', 'source' => 'tiktok']);
+    $autreProduitTranscription->etiquettes()->attach([$niche->getKey(), $autreProduit->getKey()]);
 
     $this->actingAs($utilisateur)
         ->get(route('historique', [
-            'dossier' => $dossier->getKey(),
-            'etiquettes' => [$etiquette->getKey()],
+            'etiquettes' => [$niche->getKey()],
+            'produit' => $produit->getKey(),
             'plateforme' => 'tiktok',
-            'analyse' => 'oui',
         ]))
         ->assertOk()
         ->assertSee('Titre retenu')
         ->assertDontSee('Titre youtube')
-        ->assertDontSee('Titre sans analyse')
-        ->assertDontSee('Titre hors dossier');
+        ->assertDontSee('Titre sans produit')
+        ->assertDontSee('Titre autre produit');
+});
+
+it('réserve le filtre Produit aux étiquettes de type produit', function () {
+    $utilisateur = bibPro();
+    $niche = bibEtiquette($utilisateur, TypeEtiquette::Niche, 'Café filtre');
+    $transcription = bibTranscription($utilisateur, ['titre' => 'Titre niche']);
+    $transcription->etiquettes()->attach($niche->getKey());
+
+    // Une étiquette de type niche passée au filtre Produit ne ramène rien.
+    $this->actingAs($utilisateur)
+        ->get(route('historique', ['produit' => $niche->getKey()]))
+        ->assertOk()
+        ->assertDontSee('Titre niche');
 });
 
 it('garde les filtres dans l’URL : le formulaire réaffiche la valeur choisie', function () {
     $utilisateur = bibPro();
-    $dossier = bibDossier($utilisateur, 'Niche café');
+    $produit = bibEtiquette($utilisateur, TypeEtiquette::Produit, 'Lampe LED');
 
     $this->actingAs($utilisateur)
-        ->get(route('historique', ['dossier' => $dossier->getKey(), 'periode' => 30]))
+        ->get(route('historique', ['produit' => $produit->getKey(), 'plateforme' => 'tiktok']))
         ->assertOk()
-        ->assertSee('value="'.$dossier->getKey().'" selected', false)
-        ->assertSee('value="30" selected', false);
+        ->assertSee('value="'.$produit->getKey().'" selected', false)
+        ->assertSee('value="tiktok" selected', false);
 });
 
 it('filtre par « Non classé » avec la valeur aucun', function () {
@@ -88,18 +114,16 @@ it('filtre par « Non classé » avec la valeur aucun', function () {
         ->assertDontSee('Titre rangé');
 });
 
-it('filtre par chaîne et par période', function () {
+it('filtre par chaîne, lien de la colonne latérale', function () {
     $utilisateur = bibPro();
-    bibTranscription($utilisateur, ['titre' => 'Titre récent', 'chaine' => 'Marque Lune'], now()->subDays(2));
-    bibTranscription($utilisateur, ['titre' => 'Titre ancien', 'chaine' => 'Marque Lune'], now()->subDays(90));
-    bibTranscription($utilisateur, ['titre' => 'Titre autre chaîne', 'chaine' => 'Marque Soleil'], now()->subDays(2));
+    bibTranscription($utilisateur, ['titre' => 'Titre lune', 'chaine' => 'Marque Lune']);
+    bibTranscription($utilisateur, ['titre' => 'Titre soleil', 'chaine' => 'Marque Soleil']);
 
     $this->actingAs($utilisateur)
-        ->get(route('historique', ['chaine' => 'Marque Lune', 'periode' => 30]))
+        ->get(route('historique', ['chaine' => 'Marque Lune']))
         ->assertOk()
-        ->assertSee('Titre récent')
-        ->assertDontSee('Titre ancien')
-        ->assertDontSee('Titre autre chaîne');
+        ->assertSee('Titre lune')
+        ->assertDontSee('Titre soleil');
 });
 
 it('ignore les valeurs de filtre inconnues plutôt que de planter', function () {
@@ -107,7 +131,7 @@ it('ignore les valeurs de filtre inconnues plutôt que de planter', function () 
     bibTranscription($utilisateur, ['titre' => 'Titre visible']);
 
     $this->actingAs($utilisateur)
-        ->get(route('historique', ['dossier' => 'n-importe-quoi', 'plateforme' => 'myspace', 'periode' => 999, 'analyse' => 'peut-etre', 'portee' => 'autre']))
+        ->get(route('historique', ['dossier' => 'n-importe-quoi', 'plateforme' => 'myspace', 'produit' => 'abc', 'portee' => 'autre']))
         ->assertOk()
         ->assertSee('Titre visible');
 });

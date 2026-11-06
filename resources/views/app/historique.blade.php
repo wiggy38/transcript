@@ -150,22 +150,11 @@
                             <legend class="mb-1 font-mono text-xs text-texte-discret">{{ __('bibliotheque.filtres.legende') }}</legend>
 
                             <div class="grid min-w-0 gap-1.5">
-                                <label for="filtre-dossier" class="text-sm font-semibold">{{ __('bibliotheque.filtres.dossier') }}</label>
-                                <select id="filtre-dossier" name="dossier" class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
-                                    <option value="toutes" @selected($filtre['dossier'] === 'toutes')>{{ __('bibliotheque.filtres.dossier_toutes') }}</option>
-                                    <option value="aucun" @selected($filtre['dossier'] === 'aucun')>{{ __('bibliotheque.filtres.dossier_aucun') }}</option>
-                                    @foreach ($navigation['dossiers'] as $dossier)
-                                        <option value="{{ $dossier->id }}" @selected((string) $filtre['dossier'] === (string) $dossier->id)>{{ $dossier->nom }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="grid min-w-0 gap-1.5">
                                 <label for="filtre-etiquettes" class="text-sm font-semibold">{{ __('bibliotheque.filtres.etiquettes') }}</label>
                                 <select id="filtre-etiquettes" name="etiquettes[]" multiple size="4" aria-describedby="aide-etiquettes"
                                         class="rounded-bouton border border-filet-contour bg-fond px-3 py-1 text-sm text-texte">
                                     @foreach ($etiquettesTypes as $type)
-                                        @if ($navigation['etiquettes'][$type->value]->isNotEmpty())
+                                        @if ($type !== \App\Enums\TypeEtiquette::Produit && $navigation['etiquettes'][$type->value]->isNotEmpty())
                                             <optgroup label="{{ $type->libelle() }}">
                                                 @foreach ($navigation['etiquettes'][$type->value] as $etiquette)
                                                     <option value="{{ $etiquette->id }}" @selected(in_array($etiquette->id, $filtre['etiquettes'], true))>{{ $etiquette->nom }}</option>
@@ -178,54 +167,22 @@
                             </div>
 
                             <div class="grid min-w-0 gap-1.5">
+                                <label for="filtre-produit" class="text-sm font-semibold">{{ __('bibliotheque.filtres.produit') }}</label>
+                                <select id="filtre-produit" name="produit" class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
+                                    <option value="">{{ __('bibliotheque.filtres.produit_tous') }}</option>
+                                    @foreach ($navigation['etiquettes'][\App\Enums\TypeEtiquette::Produit->value] as $produit)
+                                        <option value="{{ $produit->id }}" @selected($filtre['produit'] === $produit->id)>{{ $produit->nom }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="grid min-w-0 gap-1.5">
                                 <label for="filtre-plateforme" class="text-sm font-semibold">{{ __('bibliotheque.filtres.plateforme') }}</label>
                                 <select id="filtre-plateforme" name="plateforme" class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
                                     <option value="">{{ __('bibliotheque.filtres.plateforme_toutes') }}</option>
                                     @foreach (SourceTranscription::cases() as $source)
                                         <option value="{{ $source->value }}" @selected($filtre['plateforme'] === $source->value)>{{ __('historique.plateformes.'.$source->value) }}</option>
                                     @endforeach
-                                </select>
-                            </div>
-
-                            <div class="grid min-w-0 gap-1.5">
-                                <label for="filtre-chaine" class="text-sm font-semibold">{{ __('bibliotheque.filtres.chaine') }}</label>
-                                <input id="filtre-chaine" name="chaine" type="text" list="chaines-suggerees" value="{{ $filtre['chaine'] }}" aria-describedby="aide-chaine"
-                                       class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
-                                <datalist id="chaines-suggerees">
-                                    @foreach ($navigation['chaines'] as $chaine)
-                                        <option value="{{ $chaine->chaine }}"></option>
-                                    @endforeach
-                                </datalist>
-                                <p id="aide-chaine" class="m-0 text-[12px] text-texte-discret">{{ __('bibliotheque.filtres.chaine_aide') }}</p>
-                            </div>
-
-                            <div class="grid min-w-0 gap-1.5">
-                                <label for="filtre-periode" class="text-sm font-semibold">{{ __('bibliotheque.filtres.periode') }}</label>
-                                <select id="filtre-periode" name="periode" class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
-                                    <option value="">{{ __('bibliotheque.filtres.periode_toutes') }}</option>
-                                    @foreach (config('voxia.bibliotheque.periodes_jours') as $jours)
-                                        <option value="{{ $jours }}" @selected($filtre['periode'] === $jours)>
-                                            {{ $jours === 365 ? __('bibliotheque.filtres.periode_annee') : __('bibliotheque.filtres.periode_jours', ['nombre' => $jours]) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="grid min-w-0 gap-1.5">
-                                <label for="filtre-analyse" class="text-sm font-semibold">{{ __('bibliotheque.filtres.analyse') }}</label>
-                                <select id="filtre-analyse" name="analyse" class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
-                                    <option value="">{{ __('bibliotheque.filtres.tous') }}</option>
-                                    <option value="oui" @selected($filtre['analyse'] === 'oui')>{{ __('bibliotheque.filtres.oui') }}</option>
-                                    <option value="non" @selected($filtre['analyse'] === 'non')>{{ __('bibliotheque.filtres.non') }}</option>
-                                </select>
-                            </div>
-
-                            <div class="grid min-w-0 gap-1.5">
-                                <label for="filtre-resume" class="text-sm font-semibold">{{ __('bibliotheque.filtres.resume') }}</label>
-                                <select id="filtre-resume" name="resume" class="min-h-11 rounded-bouton border border-filet-contour bg-fond px-3 text-sm text-texte">
-                                    <option value="">{{ __('bibliotheque.filtres.tous') }}</option>
-                                    <option value="oui" @selected($filtre['resume'] === 'oui')>{{ __('bibliotheque.filtres.oui') }}</option>
-                                    <option value="non" @selected($filtre['resume'] === 'non')>{{ __('bibliotheque.filtres.non') }}</option>
                                 </select>
                             </div>
 

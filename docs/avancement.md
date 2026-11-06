@@ -355,7 +355,7 @@ Décisions :
 - [x] Sélection multiple : déplacer, étiqueter, supprimer ; seules les transcriptions du compte sont touchées. *(ActionsGroupeesTest, DroitsBibliothequeTest)*
 - [x] Renommer et supprimer un dossier ou une étiquette ; supprimer une étiquette la retire des transcriptions sans les supprimer. *(ClassementTest)*
 - [x] Colonne latérale : Toutes, Non classé, dossiers, chaînes, étiquettes par type, avec effectifs. *(NavigationFiltresTest)*
-- [x] Filtres combinables (dossier, étiquettes, plateforme, chaîne, période, analyse de script, résumé), lus dans l'URL. *(NavigationFiltresTest)*
+- [x] Filtres combinables du formulaire : Étiquette (niche, concurrent, libre), Produit (étiquettes de type produit) et Plateforme, lus dans l'URL. La colonne latérale garde les liens Dossier et Chaîne. *(NavigationFiltresTest, PerformanceBibliothequeTest)*
 - [x] Recherche plein texte limitée à la vue filtrée (portée « filtre »). *(PerformanceBibliothequeTest : PostgreSQL uniquement, ignoré sur SQLite)*
 - [x] Droits : Pro et Business complets ; Gratuit et Pack gardent la liste du MVP, « Classer » ouvre la proposition d'upgrade. *(DroitsBibliothequeTest, NavigationFiltresTest)*
 - [x] Retour au Gratuit : dossiers et étiquettes conservés en lecture seule (visibles, filtrables, sans création, modification ni sortie de dossier ; suppression permise). *(DroitsBibliothequeTest)*
@@ -363,13 +363,13 @@ Décisions :
 - [x] Performance : liste filtrée sur 500 transcriptions sous une seconde (SQLite, index `(user_id, dossier_id, created_at)`, `(user_id, source, created_at)`, `(user_id, chaine)`). *(PerformanceBibliothequeTest)*
 - [ ] Vérification dans un navigateur (colonne latérale, tiroir mobile, barre d'actions, thème clair et sombre, 375 px) : non faite (P167).
 - [ ] Recherche dans une vue filtrée sur PostgreSQL : le test est écrit mais ignoré sur SQLite (P168).
-- Dernier passage complet : `php artisan test` : 752 tests, 735 réussis, 17 ignorés (PostgreSQL), 0 échec. `./vendor/bin/pint` appliqué aux fichiers modifiés.
+- Dernier passage complet : `php artisan test` : 755 tests, 738 réussis, 17 ignorés (PostgreSQL), 0 échec. `./vendor/bin/pint` appliqué aux fichiers modifiés.
 
 Décisions (réponses données à la demande « décide pour moi ») :
 - **Dossier** : colonne `transcriptions.dossier_id` (nullable, `nullOnDelete`), et non une table de liaison : une transcription est dans un dossier au plus.
 - **Étiquettes** : unicité par `(compte, type, nom normalisé)`. Le même nom peut exister dans deux types.
 - **Compte d'origine** : on regroupe sur `chaine` (channel ou uploader de yt-dlp), sans nouvelle colonne (P169).
-- **Filtres** : intersection. Plusieurs étiquettes choisies = la transcription doit toutes les porter.
+- **Filtres** (refonte du formulaire) : seuls Étiquette, Produit et Plateforme. Intersection : plusieurs étiquettes choisies = la transcription doit toutes les porter. Période, analyse de script, résumé et chaîne sont retirés du formulaire ; dossier et chaîne restent des liens de la colonne latérale. Étiquette exclut les types produit pour éviter le doublon avec Produit.
 - **Recherche** : portée « toute la bibliothèque » par défaut ; la bascule « seulement la liste filtrée » passe une sous-requête d'identifiants à la recherche.
 - **Retour au Gratuit** : lecture seule. Sortir une transcription de son dossier est un classement, donc interdit ; supprimer reste permis.
 - **Actions groupées sans JavaScript** : formulaire POST à boutons, filtres en GET (URL partageable). Les fenêtres de classement sont des pages, pas des modales.

@@ -173,13 +173,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | « chaines_affichees » : nombre de chaînes ou comptes listés dans la colonne latérale
-    | (le reste est accessible par le filtre). « periodes_jours » : préréglages du filtre période.
+    | (les autres ne sont pas listées : le filtre chaîne du formulaire a été retiré).
     |
     */
 
     'bibliotheque' => [
         'chaines_affichees' => (int) env('VOXIA_BIBLIOTHEQUE_CHAINES_AFFICHEES', 10),
-        'periodes_jours' => [7, 30, 365],
     ],
 
     /*
